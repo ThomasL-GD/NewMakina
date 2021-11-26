@@ -58,9 +58,19 @@ public class InputMovement : MonoBehaviour
     private Vector3 m_pullSource;
     [SerializeField] private float m_actionBailTime = 1f;
 
+    public bool m_isDead = false;
+
+    public static InputMovement instance;
+    
     // Start is called before the first frame update
     void Start()
     {
+        if (instance == null) instance = this;
+        else
+        {
+            Debug.LogWarning("there are more than one input movement class in this scene",this);
+            gameObject.SetActive(false);
+        }
         if (!TryGetComponent(out m_characterController))
             Debug.LogWarning("<color=red>Error: </color>This Object has a PlayerMovementV25 Script but no Character Controller", gameObject);
         else if (!m_characterController.enabled)
@@ -70,6 +80,12 @@ public class InputMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(m_isDead)
+        {
+            m_velocity = Vector3.zero;
+            return;
+        }
+        
         if (m_doingAction)
         {
             PullToPoint();
@@ -244,7 +260,10 @@ public class InputMovement : MonoBehaviour
     
     private void FixedUpdate()
     {
+        if (m_isDead) return;
+        
         // if (m_doingAction) return;
+        
         // Normalizing the input and velocity... No shit *shrug*
         Vector2 normalizedVelocity = new Vector2(m_velocity.x,m_velocity.z).normalized;
         Vector2 normalizedInput = new Vector2(m_playerInput.x,m_playerInput.z).normalized;

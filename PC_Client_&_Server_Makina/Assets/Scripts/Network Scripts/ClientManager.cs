@@ -1,6 +1,7 @@
 using Mirror;
 using UnityEngine;
 using CustomMessages;
+using Synchronizers;
 
 
 /// <summary>
@@ -131,6 +132,7 @@ public class ClientManager : MonoBehaviour
             case LaserState.Shooting:
         
                 OnReceiveLaser?.Invoke(p_laser);
+                if (p_laser.hit) SynchronizeRespawn.OnPlayerDeath?.Invoke();
                 break;
             
             default:
