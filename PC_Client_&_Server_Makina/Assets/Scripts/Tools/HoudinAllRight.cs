@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[SelectionBase]
 public class HoudinAllRight : MonoBehaviour
 {
     public GameObject[] m_children;

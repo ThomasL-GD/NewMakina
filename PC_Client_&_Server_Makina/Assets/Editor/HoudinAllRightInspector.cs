@@ -53,6 +53,27 @@ public class HoudinAllRightInspector : Editor
         //Adding a refresh button
         GUILayout.Space(20);
         if (GUILayout.Button("Refresh")) ResetArray();
+        
+        
+        GUILayout.Space(40);
+        if (GUILayout.Button("Destroy")) DestroyEverything();
+    }
+
+    private void DestroyEverything()
+    {
+        // For each instance of Houdinallright in the m_instances
+        foreach (HoudinAllRight instance in m_instances)
+        {
+            // PrefabUtility.UnpackPrefabInstance(instance.gameObject);
+            foreach (GameObject go in instance.m_children)
+            {
+                if (!go.activeSelf)
+                {
+                    DestroyImmediate(go);
+                }
+            }
+            DestroyImmediate(instance);
+        }
     }
 
     /// <summary>
@@ -69,18 +90,13 @@ public class HoudinAllRightInspector : Editor
             // Adding the modification to the CTRL Z List
             Undo.RecordObject(instance.m_children[p_index], "Change GameObject with HoudinAllRight");
             instance.m_children[p_index].SetActive(p_active);
-            if (p_active) instance.m_children[p_index].tag = "Untagged";
-            else instance.m_children[p_index].tag = "EditorOnly";
         }
         else
         {
             instance.Refresh();
             // Adding the modification to the CTRL Z List
             Undo.RecordObject(instance.m_children[p_index], "Change GameObject with HoudinAllRight");
-            if (instance.m_children[p_index] == null) return;
-            instance.m_children[p_index].SetActive(p_active);
-            if (p_active) instance.m_children[p_index].tag = "Untagged";
-            else instance.m_children[p_index].tag = "EditorOnly";
+            if (instance.m_children[p_index] != null) instance.m_children[p_index].SetActive(p_active);
         }
     }
     
