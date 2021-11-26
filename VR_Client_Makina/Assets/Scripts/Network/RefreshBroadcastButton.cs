@@ -1,31 +1,27 @@
 using System.Collections.Generic;
-using Mirror;
 using Mirror.Discovery;
 using UnityEngine;
 
-public class RefreshBroadcastButton : LaserSensitiveButtonBehavior {
-    
-    private readonly Dictionary<long, ServerResponse> discoveredServers = new Dictionary<long, ServerResponse>();
+namespace Network {
 
-    [HideInInspector] public NetworkDiscovery networkDiscovery;
-    
-    // Start is called before the first frame update
-    void Start() {
+    public class RefreshBroadcastButton : LaserSensitiveButtonBehavior {
+
+        [SerializeField] private MyNetworkDiscovery m_networkDiscovery = null;
+        
+        // Start is called before the first frame update
+        void Start() {
+            if(m_networkDiscovery == null)Debug.LogError("No network discorvery serialized", this);
+        }
+        
+
+        /// <summary>
+        /// Overriden to start broadcast when the button is hit
+        /// </summary>
+        public override void OnBeingShot() {
+            MyNetworkDiscovery.DiscoveredServers.Clear();
+            m_networkDiscovery.StartDiscovery();
+        }
+        
         
     }
-
-    // Update is called once per frame
-    void Update() {
-        
-    }
-
-    /// <summary>
-    /// Overriden to start broadcast when the button is hit
-    /// </summary>
-    public override void OnBeingShot() {
-        discoveredServers.Clear();
-        networkDiscovery.StartDiscovery();
-    }
-    
-    
 }
