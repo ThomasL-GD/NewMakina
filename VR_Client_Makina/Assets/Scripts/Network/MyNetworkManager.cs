@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using CustomMessages;
 using Mirror;
 using UnityEngine;
@@ -56,7 +57,10 @@ namespace Network {
         /// <summary> The delegate that will be called each time the server sends a GameEnd message </summary>
         public delegate void GameEndDelegator(GameEnd p_gameEnd);
         public static GameEndDelegator OnReceiveGameEnd;
-
+        
+        /// <summary> The delegate that will be called each time the server sends a InitialData message </summary>
+        public delegate void InitialDataDelegator(InitialData p_initialData);
+        public static InitialDataDelegator OnReceiveInitialData;
     
         /// <summary>
         /// Is that... a singleton setup ?
@@ -109,10 +113,13 @@ namespace Network {
             NetworkClient.RegisterHandler<DestroyedBeacon>(ReceiveDestroyedBeacon);
             NetworkClient.RegisterHandler<BeaconDetectionUpdate>(ReceiveBeaconDetectionUpdate);
             NetworkClient.RegisterHandler<GameEnd>(ReceiveGameEnd);
+            NetworkClient.RegisterHandler<InitialData>(ReceiveInitialData);
         
             OnConnection?.Invoke();
         }
-    
+
+        private void ReceiveInitialData(InitialData p_initialData) => OnReceiveInitialData?.Invoke(p_initialData);
+
         /// <summary>
         /// The function called when the client receives a message of type HeartTransforms
         /// </summary>

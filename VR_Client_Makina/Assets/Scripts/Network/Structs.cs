@@ -14,6 +14,14 @@ namespace CustomMessages
         public Quaternion rotation;
     }
 
+    /// <summary>
+    /// The initial data that will went to the clients as they connect
+    /// </summary>
+    public struct InitialData : NetworkMessage
+    {
+        public int healthPcPlayer;
+        public int healthVrPlayer;
+    }
     
     /// <summary>
     /// The ping sent to the server telling it if the players is visible or invisible
@@ -95,9 +103,7 @@ namespace CustomMessages
         public bool playerDetected;
         public int index;
     }
-    
-    
-    
+
     public enum ClientConnection
     {
         PcPlayer,

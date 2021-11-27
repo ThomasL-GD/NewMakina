@@ -51,6 +51,10 @@ namespace Synchronizers
         /// Destroying the objects localy when the server tells this client to do it
         /// </summary>
         /// <param name="p_heartbreak"> the network message </param>
-        private void SynchronizeHeartBreak(HeartBreak p_heartbreak) => Destroy(m_hearts[p_heartbreak.index]); 
+        private void SynchronizeHeartBreak(HeartBreak p_heartbreak)
+        {
+            Destroy(m_hearts[p_heartbreak.index]);
+            SynchronizeInitialData.instance.LoseVrHealth();
+        }
     }
 }

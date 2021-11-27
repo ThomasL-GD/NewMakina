@@ -50,6 +50,8 @@ namespace Synchronizers
             
             Destroy(m_hearts[p_heartbreak.index]); 
             
+            SynchronizeInitialData.instance.LoseVrHealth();
+            
             m_audioSource.Stop();
             m_audioSource.clip = m_heartDestroyedSound;
             m_audioSource.Play();

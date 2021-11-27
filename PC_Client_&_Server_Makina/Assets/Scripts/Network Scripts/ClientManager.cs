@@ -51,6 +51,10 @@ public class ClientManager : MonoBehaviour
     public delegate void GameEndDelegator(GameEnd p_gameEnd);
     public static GameEndDelegator OnReceiveGameEnd;
     
+    /// <summary> The delegate that will be called each time the server sends a InitialData message </summary>
+    public delegate void InitialDataDelegator(InitialData p_initialData);
+    public static InitialDataDelegator OnReceiveInitialData;
+    
     #endregion
     
     [SerializeField][Tooltip("The player Object to be enabled on connection")] private GameObject m_player;
@@ -82,15 +86,17 @@ public class ClientManager : MonoBehaviour
         NetworkClient.RegisterHandler<DestroyedBeacon>(ReceiveDestroyedBeacon);
         NetworkClient.RegisterHandler<BeaconDetectionUpdate>(ReceiveBeaconDetectionUpdate);
         NetworkClient.RegisterHandler<GameEnd>(ReceiveGameEnd);
+        NetworkClient.RegisterHandler<InitialData>(ReceiveInitialData);
     }
-
-
 
     private void StartClient()
     {
         m_player.SetActive(true);
     }
     #region CLIENT HANDLERS
+
+    private void ReceiveInitialData(InitialData p_initialData) => OnReceiveInitialData?.Invoke(p_initialData);
+    
 
     private void ReceiveGameEnd(GameEnd p_gameEnd) => OnReceiveGameEnd?.Invoke(p_gameEnd);
     private void ReceiveBeaconDetectionUpdate(BeaconDetectionUpdate p_beaconDetectionUpdate) => OnReceiveBeaconDetectionUpdate?.Invoke(p_beaconDetectionUpdate);

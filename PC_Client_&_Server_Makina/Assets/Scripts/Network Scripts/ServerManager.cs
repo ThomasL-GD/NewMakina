@@ -254,6 +254,7 @@ public class ServerManager : MonoBehaviour
         else if (client.client == ClientConnection.PcPlayer) m_pcNetworkConnection = p_conn;
         
         p_conn.Send(new HeartTransforms(){positions = m_heartPositions, rotations = m_heartRotations});
+        p_conn.Send(new InitialData(){healthPcPlayer = m_pcPlayerHealth, healthVrPlayer = m_vrPlayerHealth});
     }
 
     /// <summary>
