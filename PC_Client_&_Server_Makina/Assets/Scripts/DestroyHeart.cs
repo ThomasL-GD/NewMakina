@@ -6,23 +6,27 @@ using UnityEngine;
 public class DestroyHeart : MonoBehaviour
 {
 
-    [SerializeField] private LayerMask m_layerMask;
+    [SerializeField][Tooltip("the hearts layer mask")] private LayerMask m_layerMask;
 
-    [SerializeField] private Transform m_cameraTransform;
+    [SerializeField][Tooltip("the Pc player's camera Transform")] private Transform m_cameraTransform;
     
-    [SerializeField] private TextMeshProUGUI m_text;
-    [SerializeField] private KeyCode m_destroyKey;
+    [SerializeField][Tooltip("the UI feedback when the players can interact with a heart")] private TextMeshProUGUI m_text;
+    [SerializeField][Tooltip("the Key the players should press to destroy a heart")] private KeyCode m_destroyKey;
     
-    [SerializeField] private float m_range = 20f;
+    [SerializeField][Tooltip("the range at which the players can break a heart")] private float m_range = 20f;
     
-    // Update is called once per frame
+    /// <summary/> Checking on the update if the player can break a heart and doing so if he can
     void Update()
     {
-        // Checking the raycast for objects of the heart layer
+        // Checking the raycast
         bool lookingAtHeart = Physics.Raycast(m_cameraTransform.position, m_cameraTransform.forward, out RaycastHit hit, m_range);
 
-        if (lookingAtHeart) lookingAtHeart = hit.transform.gameObject.layer == (hit.transform.gameObject.layer | (1 << m_layerMask));
+        GameObject heart = hit.transform.gameObject;
         
+        // Checking if the hit object is a heart
+        if (lookingAtHeart) lookingAtHeart = heart.layer == (heart.layer | (1 << m_layerMask));
+        
+        //Enabling or Disabling the feedback
         m_text.enabled = lookingAtHeart;
         
         if (!lookingAtHeart) return;
@@ -30,7 +34,7 @@ public class DestroyHeart : MonoBehaviour
         //If the item is in sight and range and the key is down
         if (lookingAtHeart && Input.GetKeyDown(m_destroyKey))
             // Tell the server to destroy it
-            if(hit.transform.gameObject.TryGetComponent(out HeartIdentifier hi))
+            if(heart.TryGetComponent(out HeartIdentifier hi))
             {
                 int heartIndex = hi.heartIndex;
                 NetworkClient.Send(new HeartBreak(){index = heartIndex});

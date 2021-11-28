@@ -8,7 +8,6 @@ namespace Synchronizers
 {
     public class SynchronizeRespawn : Synchronizer
     {
-        ///<summary/> Start is called before the first frame update
         [SerializeField] [Tooltip("The PC player")]
         private GameObject m_player;
 

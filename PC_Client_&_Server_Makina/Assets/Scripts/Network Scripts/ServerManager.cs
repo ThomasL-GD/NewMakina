@@ -38,35 +38,37 @@ public class ServerManager : MonoBehaviour
     [SerializeField][Range(1,120)][Tooltip("the server's tick rate in Hz")] private int m_tickrate = 30;
     private float m_tickDelta = 1f;
     
-    /// <summary> The custom variables added onto the Network Manager </summary>
+    /// <summary/> The custom variables added onto the Network Manager
     [Header("Laser :")]
     [Header("Game Settings")]
-    [SerializeField] private float m_laserRadius = 20f;
-    [SerializeField] private float m_laserChargeTime = 1f;
+    [SerializeField][Tooltip("The radius of the VR laser")] private float m_laserRadius = 20f;
+    [SerializeField][Tooltip("The charge time of the VR laser")] private float m_laserChargeTime = 1f;
     
 
     [Header("Hearts")]
     [Header(" ")]
-    [SerializeField] private Transform[] m_heartTransforms;
-    [SerializeField] private int m_vrPlayerHealth = 3;
-    [SerializeField] private int m_pcPlayerHealth = 3;
+    [SerializeField][Tooltip("The positions of the hearts on the map")] private Transform[] m_heartTransforms;
+    [SerializeField][Tooltip("The amount of hearts that need to be destroyed for the VR player to lose")] private int m_vrPlayerHealth = 3;
+    [SerializeField][Tooltip("The amount of times the PC player has to eliminated to lose")] private int m_pcPlayerHealth = 3;
+    [SerializeField][Tooltip("The possible spawn positions of the PC player on the map")] private Transform[] m_beaconSpawnPositions;
 
     
     [Header("Beacons")]
     [Header(" ")]
-    [SerializeField] private Transform[] m_beaconSpawnPositions;
-    [SerializeField] private int m_beaconRespawnTime = 30;
-    [SerializeField] private int m_beaconLifeTime = 10;
-    [SerializeField] private float m_beaconRange = 400;
+    [SerializeField][Tooltip("The interval at which the beacons spawn")] private int m_beaconRespawnTime = 30;
+    [SerializeField][Tooltip("The lifetime of a beacon")] private int m_beaconLifeTime = 10;
+    [SerializeField][Tooltip("The range of the beacons")] private float m_beaconRange = 400;
+    
+    /// <summary/> The list of beacons that detected the PC player
     private List<bool> m_playerDetected = new List<bool>();
     
-    
+    /// <summary/> The positions of the hearts
     private Vector3[] m_heartPositions;
+    
+    /// <summary/> The rotations of the hearts
     private Quaternion[] m_heartRotations;
     
-    private float m_laserChargeTimeStamp = -1f;
-    
-    /// <summary> The connection adresses of the players </summary>
+    /// <summary/> The connection adresses of the players
     private NetworkConnection m_vrNetworkConnection = null;
     private NetworkConnection m_pcNetworkConnection = null;
 
@@ -99,7 +101,6 @@ public class ServerManager : MonoBehaviour
         onSendDataToClients += BeaconDetectionCheck;
         onSendDataToClients += CheckHealths;
     }
-    
     
     
     /// <summary>
@@ -139,10 +140,7 @@ public class ServerManager : MonoBehaviour
         if (m_vrPlayerHealth > m_heartTransforms.Length) Debug.LogWarning("the Vr Player has more health than there are hearts... Big L?",this);
     }
 
-    /// <summary>
-    /// The Server Loop
-    /// </summary>
-    /// <returns></returns>
+    /// <summary/> The Server Loop
     IEnumerator ServerTick()
     {
         while (NetworkServer.active)
@@ -152,10 +150,8 @@ public class ServerManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Spawns the beacons
-    /// </summary>
-    /// <returns></returns>
+    
+    /// <summary/> Spawns the beacons
     IEnumerator SpawnBeacon()
     {
         while (NetworkServer.active)
@@ -170,11 +166,9 @@ public class ServerManager : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Despawns the beacon at the selected index
-    /// </summary>
-    /// <param name="p_index"> the selected index  </param>
-    /// <returns></returns>
+    
+    /// <summary/> Despawns the beacon at the selected index
+    /// <param name="p_index"/> the selected index
     IEnumerator Despawnbeacon(int p_index)
     {
         yield return new WaitForSeconds(m_beaconLifeTime);
@@ -188,9 +182,8 @@ public class ServerManager : MonoBehaviour
 
     #region SERVER ACTIONS
 
-    /// <summary>
-    /// The function that is called when the server is hosted.
-    /// </summary>
+    
+    /// <summary/> The function that is called when the server is hosted.
     private void OnStartServer()
     {
         StartCoroutine(SpawnBeacon());
@@ -208,9 +201,8 @@ public class ServerManager : MonoBehaviour
         p_conn.Send( new ClientConnect());
     }
 
-    /// <summary>
-    /// The function that will be called
-    /// </summary>
+    
+    /// <summary/>The function that will be called to check the detection of all the beacons
     private void BeaconDetectionCheck()
     {
         for (int i = 0; i < m_beaconsPositionsBuffer.positions.Length; i++)
@@ -225,15 +217,16 @@ public class ServerManager : MonoBehaviour
         }
     }
 
+    /// <summary/> the function called to check the winning conditions
     private void CheckHealths()
     {
-        if (m_pcPlayerHealth == 0)
+        if (m_pcPlayerHealth <= 0)
         {
             SendToBothClients(new GameEnd(){winningClient = ClientConnection.VrPlayer});
             return;
         }
         
-        if (m_vrPlayerHealth == 0)
+        if (m_vrPlayerHealth <= 0)
             SendToBothClients(new GameEnd(){winningClient = ClientConnection.PcPlayer});
     }
     
@@ -373,6 +366,7 @@ public class ServerManager : MonoBehaviour
         onSendDataToClients += SendDestroyedBeacon;
     }
 
+    //TODO use this?
     private void OnServerReceiveVrPlayerInteractWithBeacon(NetworkConnection p_conn, VrPlayerInteractWithBeacon p_vrPlayerInteractWithBeacon)
     {
         m_vrPlayerInteractWithBeaconBuffer = p_vrPlayerInteractWithBeacon;
