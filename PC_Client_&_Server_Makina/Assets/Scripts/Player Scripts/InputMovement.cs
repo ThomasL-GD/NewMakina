@@ -8,7 +8,9 @@ public class InputMovement : MonoBehaviour
     [SerializeField] private CharacterController m_characterController = null;
     
     [SerializeField] [Tooltip("The horizontal input acceleration of the player on ground in m/s²")]
-    private float m_acceleration = 20f;
+    private float m_groundedAcceleration = 20f;
+    [SerializeField] [Tooltip("The horizontal input acceleration of the player in the air in m/s²")]
+    private float m_airAcceleration = 20f;
     
 
     [SerializeField] [Tooltip("The max running speed of the player in m/s")]
@@ -17,8 +19,11 @@ public class InputMovement : MonoBehaviour
     [SerializeField] [Tooltip("The max running speed of the player in m/s")]
     private float m_maxSprintSpeed = 20f;
 
-    [SerializeField][Range(0f,1f)] private float m_minDrag = 0.9f;
-    [SerializeField][Range(0f,1f)] private float m_maxDrag = 1f;
+    [SerializeField][Range(0f,1f)] private float m_minDragGrounded = 0.9f;
+    [SerializeField][Range(0f,1f)] private float m_maxDragGrounded = 1f;
+    
+    [SerializeField][Range(0f,1f)] private float m_minDragInAir = 0.9f;
+    [SerializeField][Range(0f,1f)] private float m_maxDragInAir = 1f;
     
     [SerializeField][Tooltip("Gravitational pull acceleration in m/s² +- 0.05f")]private float m_gravity = 9.8f;
     
@@ -61,6 +66,8 @@ public class InputMovement : MonoBehaviour
     public bool m_isDead = false;
 
     public static InputMovement instance;
+
+    private bool m_grounded;
     
     // Start is called before the first frame update
     void Start()
@@ -106,8 +113,8 @@ public class InputMovement : MonoBehaviour
         if( touchingCeiling && m_velocity.y>0f)m_velocity.y = 0f;
         
         //GroundChecking
-        bool grounded = Physics.SphereCast(origin, radius, Vector3.down, out RaycastHit hit, m_groundCheckRange);
-
+        m_grounded = Physics.SphereCast(origin, radius, Vector3.down, out RaycastHit hit, m_groundCheckRange);
+        
         // Player input
         m_playerInput = GetPlayerInput();
         
@@ -134,10 +141,10 @@ public class InputMovement : MonoBehaviour
         else m_velocity += Vector3.down * (m_gravity * Time.deltaTime);
         
         //Jump
-        if(grounded && Input.GetKeyDown(m_jumpKey)) m_velocity.y = Mathf.Sqrt(m_jumpHeight * 2f * m_gravity);
+        if(m_grounded && Input.GetKeyDown(m_jumpKey)) m_velocity.y = Mathf.Sqrt(m_jumpHeight * 2f * m_gravity);
         
         //Edge Grab
-        LedgeClimb(grounded);
+        LedgeClimb(m_grounded);
         
         //TODO Little step
         //TODO Vault
@@ -270,9 +277,13 @@ public class InputMovement : MonoBehaviour
         
         // Calculating the the normalized do product
         float normalizedDotProduct = (Vector3.Dot(normalizedVelocity, normalizedInput) + 1f)/2f;
-        
-        // Clamping the drag
-        float drag = Mathf.Clamp(m_minDrag + (1f - m_minDrag) * normalizedDotProduct, m_minDrag, m_maxDrag);
+
+        float drag = 1f;
+        // Clamping the drag based on whether the player is grounded or not
+        if (m_grounded)
+            drag = Mathf.Clamp(m_minDragGrounded + (1f - m_minDragGrounded) * normalizedDotProduct, m_minDragGrounded, m_maxDragGrounded);
+        else
+            drag = Mathf.Clamp(m_minDragInAir + (1f - m_minDragInAir) * normalizedDotProduct, m_minDragInAir, m_maxDragInAir);
         
         // Applying the drag
         m_velocity = MultiplyVectorXandZ(m_velocity, drag);
@@ -298,7 +309,7 @@ public class InputMovement : MonoBehaviour
 
         playerInput = Vector3.ClampMagnitude(playerInput, 1);
 
-        playerInput *= m_acceleration;
+        playerInput *= m_grounded?m_groundedAcceleration:m_airAcceleration;
 
         return playerInput;
     }
