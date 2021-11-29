@@ -128,7 +128,6 @@ GameObject:
   - component: {fileID: 6155242554472323488}
   - component: {fileID: 6155242554472323489}
   - component: {fileID: 6155242554472323518}
-  - component: {fileID: 6496203097457560419}
   - component: {fileID: 6155242554472323492}
   - component: {fileID: 1063497814}
   - component: {fileID: 1343264892}
@@ -200,6 +199,7 @@ MonoBehaviour:
   m_climbSpeed: 15
   m_endClimbTolerance: 0.25
   m_actionBailTime: 1
+  m_isDead: 0
 --- !u!114 &6155242554472323518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,7 +207,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6155242554472323495}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd0bd31c09edf1842a183c56f50cd9ec, type: 3}
   m_Name: 
@@ -222,20 +222,6 @@ MonoBehaviour:
     m_Bits: 4294967295
   m_coolDown: 5
   m_timeStop: 0
---- !u!114 &6496203097457560419
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6155242554472323495}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e722ca3a6bd52854c977d6c1d4f851db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_spawnPoints:
-  - {fileID: 0}
 --- !u!143 &6155242554472323492
 CharacterController:
   m_ObjectHideFlags: 0
@@ -267,9 +253,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_inputInvisibility: 324
-  m_cooldown: 30
-  m_upTime: 10
-  m_timer: {fileID: 0}
+  m_invisibilityTime: 10
+  m_timerText: {fileID: 0}
 --- !u!114 &1343264892
 MonoBehaviour:
   m_ObjectHideFlags: 0

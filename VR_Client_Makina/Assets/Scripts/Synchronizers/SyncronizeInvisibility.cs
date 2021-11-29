@@ -1,5 +1,6 @@
 using UnityEngine;
 using CustomMessages;
+using Network;
 
 public class SyncronizeInvisibility : MonoBehaviour
 {
