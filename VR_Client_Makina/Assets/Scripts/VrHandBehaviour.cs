@@ -26,8 +26,8 @@ public class VrHandBehaviour : MonoBehaviour {
 
     private bool m_isPressed = false;
 
-    public List<CatchableObject> m_objectsInRange = new List<CatchableObject>();
-    public List<CatchableObject> m_objectsGrabbed = new List<CatchableObject>();
+    public List<GrabbableObject> m_objectsInRange = new List<GrabbableObject>();
+    public List<GrabbableObject> m_objectsGrabbed = new List<GrabbableObject>();
 
 
     private void Start() {
@@ -40,8 +40,8 @@ public class VrHandBehaviour : MonoBehaviour {
         if (!m_isPressed && OVRInput.Get(m_grabInput) >= m_triggerSensitivity) { // If the player press the trigger hard enough
             m_isPressed = true;
             
-            foreach (CatchableObject script in m_objectsInRange) {
-                if(!script.m_isGrabable) continue;
+            foreach (GrabbableObject script in m_objectsInRange) {
+                if(!script.m_isGrabbable) continue;
                 
                 m_objectsGrabbed.Add(script);
                 script.m_originalParent.Add(transform);
@@ -51,7 +51,7 @@ public class VrHandBehaviour : MonoBehaviour {
         else if (m_isPressed && OVRInput.Get(m_grabInput) < m_triggerSensitivity) { //If the player let go enough
             m_isPressed = false;
             
-            foreach (CatchableObject script in m_objectsInRange) {
+            foreach (GrabbableObject script in m_objectsInRange) {
                 m_objectsGrabbed.Remove(script);
                 script.m_originalParent.Remove(transform);
                 script.ActualiseParent();
@@ -60,14 +60,14 @@ public class VrHandBehaviour : MonoBehaviour {
     }
 
     private void OnTriggerEnter(Collider p_other) {
-        if (p_other.gameObject.layer == 6 && p_other.gameObject.TryGetComponent(out CatchableObject script)) { // The Catchable Object layer
+        if (p_other.gameObject.layer == 6 && p_other.gameObject.TryGetComponent(out GrabbableObject script)) { // The Catchable Object layer
             
             m_objectsInRange.Add(script);
         }
     }
 
     private void OnTriggerExit(Collider p_other) {
-        if (p_other.gameObject.layer == 6 && p_other.gameObject.TryGetComponent(out CatchableObject script)) { // The Catchable Object layer
+        if (p_other.gameObject.layer == 6 && p_other.gameObject.TryGetComponent(out GrabbableObject script)) { // The Catchable Object layer
             
             m_objectsInRange.Remove(script);
         }
@@ -76,25 +76,25 @@ public class VrHandBehaviour : MonoBehaviour {
     /// <summary>
     /// Will remove a catchable object from this hand, so it doesn't exist anymore for this object
     /// </summary>
-    /// <param name="p_catchableObject">The script of the object you want to remove</param>
-    private void RemoveObjectFromExistence(CatchableObject p_catchableObject) {
-        p_catchableObject.OnDestroyCatchable -= RemoveObjectFromExistence;
+    /// <param name="p_grabbableObject">The script of the object you want to remove</param>
+    private void RemoveObjectFromExistence(GrabbableObject p_grabbableObject) {
+        p_grabbableObject.OnDestroyGrabbable -= RemoveObjectFromExistence;
         Debug.Log($"My list is : {m_objectsInRange} have {m_objectsInRange.Count} cells");
 
         for (int i = 0; i < m_objectsInRange.Count; i++) {
-            if (m_objectsInRange[i] == p_catchableObject) m_objectsInRange.RemoveAt(i);
+            if (m_objectsInRange[i] == p_grabbableObject) m_objectsInRange.RemoveAt(i);
         }
         
         for (int i = 0; i < m_objectsGrabbed.Count; i++) {
-            if (m_objectsGrabbed[i] == p_catchableObject) m_objectsGrabbed.RemoveAt(i);
+            if (m_objectsGrabbed[i] == p_grabbableObject) m_objectsGrabbed.RemoveAt(i);
         }
     }
 
     /// <summary>
     /// Will subscribe to the OnDestroyCatchable delegate from a CatchableObject
     /// </summary>
-    /// <param name="p_catchableObject">The script from which we will subscribe</param>
-    private void Subscribe(CatchableObject p_catchableObject) {
-        p_catchableObject.OnDestroyCatchable += RemoveObjectFromExistence;
+    /// <param name="p_grabbableObject">The script from which we will subscribe</param>
+    private void Subscribe(GrabbableObject p_grabbableObject) {
+        p_grabbableObject.OnDestroyGrabbable += RemoveObjectFromExistence;
     }
 }

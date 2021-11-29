@@ -79,7 +79,7 @@ namespace Synchronizers {
         {
             Debug.Log(m_beacons.Count);
             int index = p_destroyedBeacon.index;
-            m_beacons[index].gameObject.GetComponent<CatchableObject>().DestroyMaSoul();
+            m_beacons[index].gameObject.GetComponent<GrabbableObject>().DestroyMaSoul();
             m_beacons.RemoveAt(index);
             Debug.Log(m_beacons.Count);
         }

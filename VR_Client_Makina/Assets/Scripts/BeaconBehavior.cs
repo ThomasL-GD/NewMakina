@@ -6,7 +6,7 @@ using Synchronizers;
 using UnityEngine;
 
 [RequireComponent(typeof(SphereCollider))]
-public class BeaconBehavior : CatchableObject {
+public class BeaconBehavior : GrabbableObject {
 
     [HideInInspector] public int m_index;
     public SynchronizeBeacons m_synchronizer;
