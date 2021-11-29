@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using CustomMessages;
+using Network;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -65,6 +66,8 @@ namespace Synchronizers {
             if(p_laser.hit){ //If the player is hit, we make a cool FX coz player rewarding and other arguable design reasons
                 GameObject particles = Instantiate(m_prefabParticles, p_laser.hitPosition, new Quaternion(0, 0, 0, 0));
                 StartCoroutine(ParticleStopper(particles));
+                
+                SynchronizeInitialData.instance.LosePcHealth();
             }
         }
 

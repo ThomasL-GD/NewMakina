@@ -1,6 +1,7 @@
 using Mirror;
 using UnityEngine;
 using CustomMessages;
+using Synchronizers;
 
 
 /// <summary>
@@ -50,10 +51,15 @@ public class ClientManager : MonoBehaviour
     public delegate void GameEndDelegator(GameEnd p_gameEnd);
     public static GameEndDelegator OnReceiveGameEnd;
     
+    /// <summary> The delegate that will be called each time the server sends a InitialData message </summary>
+    public delegate void InitialDataDelegator(InitialData p_initialData);
+    public static InitialDataDelegator OnReceiveInitialData;
+    
     #endregion
     
     [SerializeField][Tooltip("The player Object to be enabled on connection")] private GameObject m_player;
     
+    /// <summary/> Singleton type beat
     private void Awake()
     {
         // Disabling the player to 
@@ -69,6 +75,7 @@ public class ClientManager : MonoBehaviour
         MyNetworkManager.del_onConnectAsClient += StartClient;
     }
     
+    /// <summary/> Registering all the client side handlers
     private void Start()
     {
         NetworkClient.RegisterHandler<VrTransform>(ReceiveVrTransform);
@@ -81,9 +88,8 @@ public class ClientManager : MonoBehaviour
         NetworkClient.RegisterHandler<DestroyedBeacon>(ReceiveDestroyedBeacon);
         NetworkClient.RegisterHandler<BeaconDetectionUpdate>(ReceiveBeaconDetectionUpdate);
         NetworkClient.RegisterHandler<GameEnd>(ReceiveGameEnd);
+        NetworkClient.RegisterHandler<InitialData>(ReceiveInitialData);
     }
-
-
 
     private void StartClient()
     {
@@ -91,38 +97,42 @@ public class ClientManager : MonoBehaviour
     }
     #region CLIENT HANDLERS
 
+    /// <summary/> The function called when the client receives a message of type InitialData
+    /// <param name="p_initialData"> The message sent by the Server to the Client </param>
+    private void ReceiveInitialData(InitialData p_initialData) => OnReceiveInitialData?.Invoke(p_initialData);
+    
+    
+    /// <summary/> The function called when the client receives a message of type GameEnd
+    /// <param name="p_gameEnd"> The message sent by the Server to the Client </param>
     private void ReceiveGameEnd(GameEnd p_gameEnd) => OnReceiveGameEnd?.Invoke(p_gameEnd);
+    
+    
+    /// <summary/> The function called when the client receives a message of type BeaconDetectionUpdate
+    /// <param name="p_beaconDetectionUpdate"> The message sent by the Server to the Client </param>
     private void ReceiveBeaconDetectionUpdate(BeaconDetectionUpdate p_beaconDetectionUpdate) => OnReceiveBeaconDetectionUpdate?.Invoke(p_beaconDetectionUpdate);
 
-    /// <summary>
-    /// The function called when the client receives a message of type HeartTransforms
-    /// </summary>
+    
+    /// <summary/> The function called when the client receives a message of type HeartTransforms
     /// <param name="p_heartTransforms"> The message sent by the Server to the Client </param>
     private void ReceiveHeartTranforms(HeartTransforms p_heartTransforms) => OnReceiveHeartTransforms?.Invoke(p_heartTransforms); 
     
-    /// <summary>
-    /// The function called when the client receives a message of type HeartTransforms
-    /// </summary>
+    
+    /// <summary/> The function called when the client receives a message of type HeartTransforms
     /// <param name="p_heartBreak"> The message sent by the Server to the Client </param>
     private void ReceiveHeartBreak(HeartBreak p_heartBreak) => OnReceiveHeartBreak?.Invoke(p_heartBreak); 
     
     
-    /// <summary>
-    /// The function called when the client receives a message of type ClientConnect
-    /// </summary>
+    /// <summary/> The function called when the client receives a message of type ClientConnect
     /// <param name="p_clientConnect"> The message sent by the Server to the Client </param>
     private void ReceiveClientConnect(ClientConnect p_clientConnect) => NetworkClient.Send(new ClientConnect(){client = ClientConnection.PcPlayer});
     
-    /// <summary>
-    /// The function called when the client receives a message of type VrTransform
-    /// </summary>
+    
+    /// <summary/> The function called when the client receives a message of type VrTransform
     /// <param name="p_vrTransform"> The message sent by the Server to the Client </param>
     private void ReceiveVrTransform(VrTransform p_vrTransform) => OnReceiveVrTransform?.Invoke(p_vrTransform);
-
     
-    /// <summary>
-    /// The function called when the client receives a message of type Laser
-    /// </summary>
+    
+    /// <summary/> The function called when the client receives a message of type Laser
     /// <param name="p_laser"> The message sent by the Server to the Client </param>
     private void ReceiveLaser(Laser p_laser)
     {
@@ -131,6 +141,7 @@ public class ClientManager : MonoBehaviour
             case LaserState.Shooting:
         
                 OnReceiveLaser?.Invoke(p_laser);
+                if (p_laser.hit) SynchronizeRespawn.OnPlayerDeath?.Invoke();
                 break;
             
             default:
@@ -141,21 +152,17 @@ public class ClientManager : MonoBehaviour
     }
     
     
-    /// <summary>
-    /// The function called when the client receives a message of type VrTransform
-    /// </summary>
+    /// <summary/> The function called when the client receives a message of type VrTransform
     /// <param name="p_pcInvisibility"> The message sent by the Server to the Client </param>
     private void ReceiveInvisibility(PcInvisibility p_pcInvisibility) => OnReceiveInvisibility?.Invoke(p_pcInvisibility);
     
-    /// <summary>
-    /// The function called when the client receives a message of type BeaconsPositions
-    /// </summary>
+    
+    /// <summary/>The function called when the client receives a message of type BeaconsPositions
     /// <param name="p_beaconsPositions"> The message sent by the Server to the Client </param>
     private void ReceiveBeaconsPositions(BeaconsPositions p_beaconsPositions) => OnReceiveBeaconsPositions?.Invoke(p_beaconsPositions); 
     
-    /// <summary>
-    /// The function called when the client receives a message of type DestroyedBeacon
-    /// </summary>
+    
+    /// <summary/> The function called when the client receives a message of type DestroyedBeacon
     /// <param name="p_destroyedBeacon"> The message sent by the Server to the Client </param>
     private void ReceiveDestroyedBeacon(DestroyedBeacon p_destroyedBeacon) => OnReceiveDestroyedBeacon?.Invoke(p_destroyedBeacon);
 

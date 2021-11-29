@@ -20,6 +20,8 @@ public class InvisibilityByInput : MonoBehaviour {
     ///<summary/> The bool that keeps the player's invisibility status 
     private bool m_invisible = false;
 
+    public bool m_canTurnInvisible = true;
+    
     /// <summary>
     /// Update is called before Start()
     /// It is used to add timer reset functions to the OnReceiveHeartBreak & OnReceiveLaser delegates
@@ -70,6 +72,11 @@ public class InvisibilityByInput : MonoBehaviour {
     /// </summary>
     void Update()
     {
+        if (!m_canTurnInvisible)
+        {
+            return;
+        }
+        
         // Checking if the timer has expired
         if (m_invisibilityTime<0f)
         {
