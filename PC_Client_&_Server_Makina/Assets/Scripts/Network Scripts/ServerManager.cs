@@ -156,28 +156,40 @@ public class ServerManager : MonoBehaviour
     {
         while (NetworkServer.active)
         {
+            yield return new WaitForSeconds(m_beaconRespawnTime);
+            
             List<Vector3> beaconPositionList = new List<Vector3>();
+            
             if(m_beaconsPositionsBuffer.positions != null) beaconPositionList = m_beaconsPositionsBuffer.positions.ToList();
+            
             beaconPositionList.Add(m_beaconSpawnPositions[Random.Range(0,m_beaconSpawnPositions.Length)].position);
             m_beaconsPositionsBuffer.positions = beaconPositionList.ToArray();
+            // Debug.Log($"spawn : { m_beaconsPositionsBuffer.positions.Length}");
             m_playerDetected.Add(false);
-            StartCoroutine(Despawnbeacon(m_beaconsPositionsBuffer.positions.Length-1));
-            yield return new WaitForSeconds(m_beaconRespawnTime);
+            if(m_beaconDestroyIndexModification.Count < m_beaconsPositionsBuffer.positions.Length)
+                m_beaconDestroyIndexModification.Add(0);
+            StartCoroutine(DespawnBeacon(m_beaconsPositionsBuffer.positions.Length-1));
+            m_beaconDestroyIndexModification[m_beaconsPositionsBuffer.positions.Length - 1] = 0;
         }
     }
-    
-    
-    /// <summary/> Despawns the beacon at the selected index
+
+    private List<int> m_beaconDestroyIndexModification = new List<int>();
+
+    /// <summary/> Despawns the beacon at the selected index with an offset defined by the previous despawns
     /// <param name="p_index"/> the selected index
-    IEnumerator Despawnbeacon(int p_index)
+    IEnumerator DespawnBeacon(int p_index)
     {
+        int index = p_index - m_beaconDestroyIndexModification[p_index];
         yield return new WaitForSeconds(m_beaconLifeTime);
         List<Vector3> poses = m_beaconsPositionsBuffer.positions.ToList();
-        poses.RemoveAt(p_index);
-        m_playerDetected.RemoveAt(p_index);
+        poses.RemoveAt(index);
+        m_playerDetected.RemoveAt(index);
         
         m_beaconsPositionsBuffer.positions = poses.ToArray();
-        SendToBothClients(new DestroyedBeacon(){index = p_index});
+        SendToBothClients(new DestroyedBeacon(){index = index});
+
+        for (int i = index+1; i < m_beaconDestroyIndexModification.Count; i++)
+            m_beaconDestroyIndexModification[i]++;
     }
 
     #region SERVER ACTIONS
@@ -205,6 +217,7 @@ public class ServerManager : MonoBehaviour
     /// <summary/>The function that will be called to check the detection of all the beacons
     private void BeaconDetectionCheck()
     {
+        if (m_beaconsPositionsBuffer.positions == null) return;
         for (int i = 0; i < m_beaconsPositionsBuffer.positions.Length; i++)
         {
             bool detected;
@@ -248,6 +261,7 @@ public class ServerManager : MonoBehaviour
         
         p_conn.Send(new HeartTransforms(){positions = m_heartPositions, rotations = m_heartRotations});
         p_conn.Send(new InitialData(){healthPcPlayer = m_pcPlayerHealth, healthVrPlayer = m_vrPlayerHealth});
+        if(m_beaconsPositionsBuffer.positions != null)p_conn.Send(m_beaconsPositionsBuffer);
     }
 
     /// <summary>
