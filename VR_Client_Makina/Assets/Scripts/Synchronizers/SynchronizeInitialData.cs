@@ -64,8 +64,8 @@ namespace Synchronizers
         /// <summary/> Updates both player's health on the PC GUI based on the local variables
         private void UpdateHealthText()
         {
-            m_pcPlayerHealthText.text = $"Health : {m_pcHealth}";
-            m_vrPlayerHealthText.text = $"Enemy Health : {m_vrHealth}";
+            m_pcPlayerHealthText.text = $"Health : {m_vrHealth}";
+            m_vrPlayerHealthText.text = $"Enemy Health : {m_pcHealth}";
         }
     }
 }
