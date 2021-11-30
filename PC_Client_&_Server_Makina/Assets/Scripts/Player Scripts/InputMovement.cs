@@ -51,6 +51,7 @@ public class InputMovement : MonoBehaviour
 
     [SerializeField]private float m_ledgeGrabDistance = 2f;
     [SerializeField]private float m_maxLedgeGrabHeight = 2f;
+    [SerializeField]private float m_maxLedgeGrabHeightGrounded = 2f;
 
     private bool m_doingAction = false;
     [SerializeField]private float m_ledgeGrabOffset;
@@ -188,9 +189,11 @@ public class InputMovement : MonoBehaviour
             Vector3 pos = transform.position;
             float height = m_characterController.height/2;
             float radius = m_characterController.radius;
+
+            float grabHeight = p_grounded ? m_maxLedgeGrabHeightGrounded : m_ledgeCheckMinHeight;
             
             // Forward face detection
-            if (Physics.CapsuleCast(pos + Vector3.down * m_ledgeCheckMinHeight,pos + Vector3.up * (m_maxLedgeGrabHeight + height - radius),  radius,transform.forward, out RaycastHit hit, m_ledgeGrabDistance))
+            if (Physics.CapsuleCast(pos + Vector3.down * grabHeight,pos + Vector3.up * (m_maxLedgeGrabHeight + height - radius),  radius,transform.forward, out RaycastHit hit, m_ledgeGrabDistance))
             {
                 pos = new Vector3(hit.point.x, transform.position.y - height + radius, hit.point.z);
                 Vector3 horizontalHitPoint = new Vector3(hit.point.x, pos.y, hit.point.z);

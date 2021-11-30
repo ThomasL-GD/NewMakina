@@ -6,9 +6,9 @@ using UnityEngine;
 public class HoudinAllRight : MonoBehaviour
 {
     public GameObject[] m_children;
-
-
-
+    
+    
+    
     /// <summary/>
     /// Refreshing the list of m_children Array
     public void Refresh()
