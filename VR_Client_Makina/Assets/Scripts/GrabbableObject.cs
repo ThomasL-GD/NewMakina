@@ -6,8 +6,9 @@ public abstract class GrabbableObject : MonoBehaviour {
     
     protected bool m_isCaught = false;
     protected bool m_hasBeenCaughtInLifetime = false;
-    [HideInInspector] public bool m_isGrabbable = true;
-    [HideInInspector] public List<Transform> m_originalParent = new List<Transform>(); //TODO : comment this variable cuz it's a mess
+    [HideInInspector] public bool m_isGrabbable = true; 
+    
+    /*[HideInInspector] /**/public List<Transform> m_originalParent = new List<Transform>(); //TODO : comment this variable cuz it's a mess
 
     protected bool m_isPuttableOnlyOnce = false; // If true, once this object is let go somewhere, it can NOT be picked up again
 

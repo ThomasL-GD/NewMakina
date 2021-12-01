@@ -33,8 +33,6 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
         m_rb = GetComponent<Rigidbody>();
         m_lastCoordinates = new AmputatedTransform[m_throwValuesNumber];
     }
-
-    [SerializeField] private float wasssss = 150f;
     
     public override void ActualiseParent() {
         base.ActualiseParent();
@@ -44,9 +42,9 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
         }
         else { //If the item is let go
             m_rb.isKinematic = false;
-            //m_rb.velocity = (m_lastCoordinates[0].position - m_lastCoordinates[m_lastCoordinates.Length - 1].position) * ((1 / Time.deltaTime) / m_lastCoordinates.Length);
+            m_rb.velocity = (m_lastCoordinates[0].position - m_lastCoordinates[m_lastCoordinates.Length - 1].position) * ((1 / Time.fixedDeltaTime) / m_lastCoordinates.Length);
             //m_rb.angularVelocity += m_lastCoordinates[0].rotation.eulerAngles - m_lastCoordinates[m_lastCoordinates.Length - 1].rotation.eulerAngles;
-            m_rb.velocity = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch) * wasssss;
+            // m_rb.velocity = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);
             m_rb.angularVelocity = OVRInput.GetLocalControllerAngularVelocity(OVRInput.Controller.RTouch);
             
             //Debug.Log(OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch));

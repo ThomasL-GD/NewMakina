@@ -13,11 +13,11 @@ public class PhysicsGrabScaleTestScriptSkibidip : GrabbablePhysickedObject {
         base.Start();
 
             //We just get a random number of values stored and change the color according to that
-        int rand = Random.Range(2, 50);
+        int rand = Random.Range(2, 4);
 
         m_lastCoordinates = new AmputatedTransform[rand];
 
-        float frand = (rand - 2) / 48f;
+        float frand = (rand - 2f) / 2f;
         Color grayscale = new Color(frand, frand, frand);
         GetComponent<MeshRenderer>().material.color = grayscale;
 

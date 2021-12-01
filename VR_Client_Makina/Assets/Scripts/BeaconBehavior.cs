@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using CustomMessages;
+using Network;
 using Synchronizers;
 using UnityEngine;
 
@@ -22,6 +23,8 @@ public class BeaconBehavior : GrabbableObject {
     public override void ActualiseParent() {
         base.ActualiseParent();
 
+        if(!MyNetworkManager.singleton.m_canSend) return;
+        
         if (m_isCaught) m_synchronizer.BeaconGrabbed(m_index);
         else if (!m_isCaught) m_synchronizer.BeaconLetGo(m_index);
     }
