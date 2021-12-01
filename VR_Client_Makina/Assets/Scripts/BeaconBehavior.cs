@@ -14,7 +14,7 @@ public class BeaconBehavior : GrabbableObject {
 
     protected override void Start() {
         base.Start();
-        m_isPuttableOnlyOnce = true;
+        //m_isPuttableOnlyOnce = true;
     }
 
     /// <summary>

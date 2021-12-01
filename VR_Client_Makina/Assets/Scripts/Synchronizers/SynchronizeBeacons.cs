@@ -9,6 +9,7 @@ namespace Synchronizers {
     public class SynchronizeBeacons : Synchronizer {
 
         [SerializeField] private GameObject m_prefabBeacon = null;
+        private float m_range = 20f;
 
         [SerializeField] private Color m_undetectedColor = Color.red;
         [SerializeField] private Color m_detectedColor = Color.green;
@@ -40,6 +41,7 @@ namespace Synchronizers {
         private void Start() {
             MyNetworkManager.OnReceiveBeaconDetectionUpdate += UpdateDetection;
             MyNetworkManager.OnReceiveDestroyedBeacon += DestroyBeacon;
+            MyNetworkManager.OnReceiveInitialData += SetRangeOfBeacons;
         }
 
         private void Update() {
@@ -54,7 +56,7 @@ namespace Synchronizers {
         }
 
         private void UpdatePositions(BeaconsPositions p_beaconsPositions) {
-            //
+            
             // for(int i = 0; i < m_beacons.Count; i++) {
             //     GameObject beacon = m_beacons[i];
             //     if(beacon.transform.position != p_beaconsPositions.positions[i]) beacon.transform.position = p_beaconsPositions.positions[i];
@@ -66,10 +68,13 @@ namespace Synchronizers {
                 int prevCount = m_beacons.Count;
                 for (int i = 0; i < p_beaconsPositions.positions.Length - prevCount; i++) {
                     GameObject go = Instantiate(m_prefabBeacon, p_beaconsPositions.positions[prevCount + i], new Quaternion(0, 0, 0, 0));
+                    foreach (Transform child in go.transform) { child.localScale *= (m_range * 2f) / go.transform.localScale.x; }
                     m_beacons.Add(new BeaconInfo(go));
+                    
                     BeaconBehavior script = go.GetComponent<BeaconBehavior>();
                     script.m_index = m_beacons.Count - 1;
                     script.m_synchronizer = this;
+                    
                     OnNewBeacon?.Invoke(go.GetComponent<BeaconBehavior>());
                 }
             }
@@ -114,6 +119,10 @@ namespace Synchronizers {
 
             m_beacons[p_index].gameObject.GetComponent<MeshRenderer>().material.color = p_color;
             
+        }
+
+        private void SetRangeOfBeacons(InitialData p_initialData) {
+            m_range = p_initialData.beaconRange;
         }
     }
 }

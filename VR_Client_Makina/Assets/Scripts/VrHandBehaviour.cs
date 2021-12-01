@@ -27,17 +27,18 @@ public class VrHandBehaviour : MonoBehaviour {
     private bool m_isPressed = false;
 
     //public List<GrabbableObject> m_objectsInRange = new List<GrabbableObject>();
-    [HideInInspector] public List<GrabbableObject> m_objectsGrabbed = new List<GrabbableObject>();
+    /*[HideInInspector]/**/ public List<GrabbableObject> m_objectsGrabbed = new List<GrabbableObject>();
     
     private void Start() {
         SynchronizeBeacons.OnNewBeacon += Subscribe;
         if (m_triggerGrabSensitivity < m_triggerLetGoSensitivity) Debug.LogWarning("What the fuck is that balancing ?!", this);
     }
-
-    /// <summary/> Update is called once per frame
+    
+    
     private void OnTriggerStay(Collider p_other) {
 
         GameObject other = p_other.gameObject;
+        Debug.Log("OnTriggerStay");
 
         if (other.layer == 6 && other.TryGetComponent(out GrabbableObject script)) { // The Catchable Object layer
 
@@ -52,6 +53,8 @@ public class VrHandBehaviour : MonoBehaviour {
             }
             
             if (m_isPressed && OVRInput.Get(m_grabInput) < m_triggerLetGoSensitivity) { //If the player let go enough
+                
+                Debug.Log("I'm letting go");
                 m_isPressed = false;
 
                 m_objectsGrabbed.Remove(script);
