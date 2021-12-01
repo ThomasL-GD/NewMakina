@@ -21,6 +21,7 @@ namespace CustomMessages
     {
         public int healthPcPlayer;
         public int healthVrPlayer;
+        public float beaconRange;
     }
     
     /// <summary>

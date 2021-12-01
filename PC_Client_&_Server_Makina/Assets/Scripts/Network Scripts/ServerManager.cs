@@ -258,9 +258,18 @@ public class ServerManager : MonoBehaviour
     {
         if (client.client == ClientConnection.VrPlayer) m_vrNetworkConnection = p_conn;
         else if (client.client == ClientConnection.PcPlayer) m_pcNetworkConnection = p_conn;
-        
+
         p_conn.Send(new HeartTransforms(){positions = m_heartPositions, rotations = m_heartRotations});
-        p_conn.Send(new InitialData(){healthPcPlayer = m_pcPlayerHealth, healthVrPlayer = m_vrPlayerHealth});
+
+        
+        InitialData initialData = new InitialData() {
+            healthPcPlayer = m_pcPlayerHealth,
+            healthVrPlayer = m_vrPlayerHealth,
+            beaconRange = m_beaconRange
+        };
+        
+        p_conn.Send(initialData);
+        
         if(m_beaconsPositionsBuffer.positions != null)p_conn.Send(m_beaconsPositionsBuffer);
     }
 
