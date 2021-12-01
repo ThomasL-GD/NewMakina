@@ -13,13 +13,20 @@ namespace Synchronizers {
         /// <summary/> The beacons of the player that are stored away
         private List<GameObject> m_beacons = new List<GameObject>();
 
+        private float m_beaconRange;
+
         /// <summary/> Initiating the class by adding the right functions to the Client delegates
         private void Awake() {
             // Adding the right functions to the delegate
             ClientManager.OnReceiveBeaconsPositions += UpdatePositions;
             ClientManager.OnReceiveDestroyedBeacon += DestroyBeacon;
             ClientManager.OnReceiveBeaconDetectionUpdate += UpdateDetection;
+            ClientManager.OnReceiveInitialData += UpdateBeaconRange;
         }
+
+        /// <summary/> Updating the beacon range
+        /// <param name="p_initialdata"></param>
+        private void UpdateBeaconRange(InitialData p_initialdata) => m_beaconRange = p_initialdata.beaconRange;
 
         /// <summary/> Updating the beacon positions
         /// <param name="p_beaconsPositions"></param>
@@ -37,7 +44,7 @@ namespace Synchronizers {
                 int prevCount = m_beacons.Count;
                 for (int i = 0; i < p_beaconsPositions.positions.Length - prevCount; i++) {
                     GameObject go = Instantiate(m_prefabBeacon, p_beaconsPositions.positions[prevCount + i], new Quaternion(0, 0, 0, 0));
-
+                    go.transform.localScale *= m_beaconRange * 2f;
                     m_beacons.Add(go);
                     go.name += Time.time;
                 }
