@@ -180,11 +180,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_characterController: {fileID: 6155242554472323492}
-  m_acceleration: 120
+  m_groundedAcceleration: 150
+  m_airAcceleration: 20
   m_maxRunSpeed: 10
   m_maxSprintSpeed: 16
-  m_minDrag: 0.768
-  m_maxDrag: 0.863
+  m_minDragGrounded: 0.768
+  m_maxDragGrounded: 0.863
+  m_minDragInAir: 0.94
+  m_maxDragInAir: 1
   m_gravity: 40
   m_radiusMultiplier: 0.995
   m_groundCheckRange: 0.2
@@ -255,6 +258,7 @@ MonoBehaviour:
   m_inputInvisibility: 324
   m_invisibilityTime: 10
   m_timerText: {fileID: 0}
+  m_canTurnInvisible: 1
 --- !u!114 &1343264892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,3 +278,5 @@ MonoBehaviour:
   m_text: {fileID: 0}
   m_destroyKey: 102
   m_range: 5
+  m_yeetStrength: 20
+  m_upYeetStrength: 20

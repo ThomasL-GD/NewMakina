@@ -51,11 +51,13 @@ public class InputMovement : MonoBehaviour
 
     [SerializeField]private float m_ledgeGrabDistance = 2f;
     [SerializeField]private float m_maxLedgeGrabHeight = 2f;
+    [SerializeField]private float m_maxLedgeGrabHeightGrounded = 2f;
 
     private bool m_doingAction = false;
     [SerializeField]private float m_ledgeGrabOffset;
     [SerializeField] private float m_climbSpeed = 30f;
     [SerializeField] private float m_endClimbTolerance = .25f;
+    [SerializeField]private float m_ledgeCheckMinHeight = .25f;
     
     private delegate void ActionUpdate();
     private ActionUpdate onActionUpdate;
@@ -68,7 +70,7 @@ public class InputMovement : MonoBehaviour
     public static InputMovement instance;
 
     private bool m_grounded;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -140,11 +142,14 @@ public class InputMovement : MonoBehaviour
         if (m_characterController.isGrounded) m_velocity.y *= .95f;
         else m_velocity += Vector3.down * (m_gravity * Time.deltaTime);
         
+        //Edge Grab
+        LedgeClimb(m_grounded);
+
+        if (m_doingAction) return;
+        
         //Jump
         if(m_grounded && Input.GetKeyDown(m_jumpKey)) m_velocity.y = Mathf.Sqrt(m_jumpHeight * 2f * m_gravity);
         
-        //Edge Grab
-        LedgeClimb(m_grounded);
         
         //TODO Little step
         //TODO Vault
@@ -179,14 +184,16 @@ public class InputMovement : MonoBehaviour
     private void LedgeClimb(bool p_grounded)
     {
         // Checking that the player is not grounded and pressing the jump/grab key
-        if (!p_grounded && Input.GetKey(m_jumpKey))
+        if (!p_grounded && Input.GetKey(m_jumpKey) || p_grounded && Input.GetKeyDown(m_jumpKey))
         {
             Vector3 pos = transform.position;
             float height = m_characterController.height/2;
             float radius = m_characterController.radius;
+
+            float grabHeight = p_grounded ? m_maxLedgeGrabHeightGrounded : m_ledgeCheckMinHeight;
             
             // Forward face detection
-            if (Physics.CapsuleCast(pos + Vector3.down * (height - radius),pos + Vector3.up * (m_maxLedgeGrabHeight + height - radius),  radius,transform.forward, out RaycastHit hit, m_ledgeGrabDistance))
+            if (Physics.CapsuleCast(pos + Vector3.down * grabHeight,pos + Vector3.up * (m_maxLedgeGrabHeight + height - radius),  radius,transform.forward, out RaycastHit hit, m_ledgeGrabDistance))
             {
                 pos = new Vector3(hit.point.x, transform.position.y - height + radius, hit.point.z);
                 Vector3 horizontalHitPoint = new Vector3(hit.point.x, pos.y, hit.point.z);
@@ -333,11 +340,11 @@ public class InputMovement : MonoBehaviour
         float height = cc.height/2;
         radius = cc.radius;
         // Forward face detection
-        if (Physics.CapsuleCast(pos + Vector3.down * (height - radius),pos + Vector3.up * (m_maxLedgeGrabHeight + height - radius),  radius,transform.forward, out RaycastHit hit, m_ledgeGrabDistance))
+        if (Physics.CapsuleCast(pos + Vector3.down * m_ledgeCheckMinHeight,pos + Vector3.up * (m_maxLedgeGrabHeight + height - radius),  radius,transform.forward, out RaycastHit hit, m_ledgeGrabDistance))
         {
             Gizmos.color = Color.magenta;
             pos = new Vector3(hit.point.x, transform.position.y - height + radius, hit.point.z);
-            Gizmos.DrawWireSphere(pos ,radius);
+            Gizmos.DrawWireSphere(pos + Vector3.down * m_ledgeCheckMinHeight ,radius);
             Gizmos.DrawWireSphere(pos + Vector3.up * (m_maxLedgeGrabHeight + height - radius),radius);
             
             Gizmos.color = Color.yellow;

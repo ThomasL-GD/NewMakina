@@ -10,14 +10,10 @@ public class HoudinAllRightInspector : Editor
     // The instances of all the selected HoudinAllRight classes
     private HoudinAllRight[] m_instances;
         
-    /// <summary>
-    /// Called when the script is added onto the object and enabled
-    /// </summary>
+    /// <summary/> Called when the script is added onto the object and enabled
     public void OnEnable() => ResetArray();
 
-    /// <summary>
-    /// Called every frame the GUI is visible
-    /// </summary>
+    /// <summary/> Called every frame the GUI is visible
     public override void OnInspectorGUI()
     {
         // Cycling through all the istances of the first indexed gameObject of m_instances
@@ -53,11 +49,20 @@ public class HoudinAllRightInspector : Editor
         //Adding a refresh button
         GUILayout.Space(20);
         if (GUILayout.Button("Refresh")) ResetArray();
+        
+        //Adding a refresh button
+        GUILayout.Space(20);
+        if (GUILayout.Button("Reset Edtor Only Children"))
+        {
+            foreach (HoudinAllRight script in m_instances)
+            {
+                script.ResetEditorOnly();
+            }
+        }
     }
+    
 
-    /// <summary>
-    /// Sets the children of a HoudinAllRight class to active or inactive while avoiding null index issues
-    /// </summary>
+    /// <summary/> Sets the children of a HoudinAllRight class to active or inactive while avoiding null index issues
     /// <param name="p_active"> the vakue to which the gameObject will be set (active or inactive) </param>
     /// <param name="instance"> the HoudinAllRight instance itself </param>
     /// <param name="p_index"> the gameObject index in the HoudinAllRight class </param>
@@ -69,24 +74,22 @@ public class HoudinAllRightInspector : Editor
             // Adding the modification to the CTRL Z List
             Undo.RecordObject(instance.m_children[p_index], "Change GameObject with HoudinAllRight");
             instance.m_children[p_index].SetActive(p_active);
-            if (p_active) instance.m_children[p_index].tag = "Untagged";
-            else instance.m_children[p_index].tag = "EditorOnly";
+            instance.m_children[p_index].tag = p_active?"Untagged":"EditorOnly";
         }
         else
         {
             instance.Refresh();
             // Adding the modification to the CTRL Z List
             Undo.RecordObject(instance.m_children[p_index], "Change GameObject with HoudinAllRight");
-            if (instance.m_children[p_index] == null) return;
-            instance.m_children[p_index].SetActive(p_active);
-            if (p_active) instance.m_children[p_index].tag = "Untagged";
-            else instance.m_children[p_index].tag = "EditorOnly";
+            if (instance.m_children[p_index] != null)
+            {
+                instance.m_children[p_index].SetActive(p_active);
+                instance.m_children[p_index].tag = p_active?"Untagged":"EditorOnly";
+            }
         }
     }
     
-    /// <summary>
-    /// Resets the Array of HoudinAllRight Selected scripts
-    /// </summary>
+    /// <summary/> Resets the Array of HoudinAllRight Selected scripts
     private void ResetArray()
     {
         // Creating the list that will contain all the selected HoudinAllRight classes
@@ -102,4 +105,6 @@ public class HoudinAllRightInspector : Editor
         // Refreshing all the instances
         foreach (HoudinAllRight instance in m_instances) instance.Refresh();
     }
+
+    
 }
