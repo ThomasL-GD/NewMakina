@@ -5,6 +5,7 @@ using UnityEngine.PlayerLoop;
 [RequireComponent(typeof(Rigidbody))]
 public abstract class GrabbablePhysickedObject : GrabbableObject {
 
+    /// <summary>Well, it was a transform but... err... I kinda amputated it so... it's just a position and rotation sticked together now... (￣ー￣; )ゞ</summary>
     [Serializable]
     protected struct AmputatedTransform {
         public Vector3 position;
@@ -18,12 +19,12 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
         }
     }
 
-    [SerializeField] [Range(1, 20)] [Tooltip("The number of values used to calculate the direction of the throw.\nUnit : values, can be seen as 1 value = 1 frame")] private int m_throwValuesNumber = 4;
+    [SerializeField] [Range(1, 50)] [Tooltip("The number of values used to calculate the direction of the throw.\nUnit : values, can be seen as 1 value = 1 frame")] private int m_throwValuesNumber = 4;
 
     /// <summary/>The last positions & rotations of this object, its length depends on m_throwValuesNumber
     protected AmputatedTransform[] m_lastCoordinates = null;
     
-    private Rigidbody m_rb = null;
+    protected Rigidbody m_rb = null;
     
     // Start is called before the first frame update
     protected override void Start() {
@@ -33,6 +34,8 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
         m_lastCoordinates = new AmputatedTransform[m_throwValuesNumber];
     }
 
+    [SerializeField] private float wasssss = 150f;
+    
     public override void ActualiseParent() {
         base.ActualiseParent();
 
@@ -41,8 +44,12 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
         }
         else { //If the item is let go
             m_rb.isKinematic = false;
-            m_rb.AddForce((m_lastCoordinates[0].position - m_lastCoordinates[m_lastCoordinates.Length - 1].position) * ((1 / Time.deltaTime) / m_lastCoordinates.Length));
-            m_rb.angularVelocity += m_lastCoordinates[0].rotation.eulerAngles - m_lastCoordinates[m_lastCoordinates.Length - 1].rotation.eulerAngles;
+            //m_rb.velocity = (m_lastCoordinates[0].position - m_lastCoordinates[m_lastCoordinates.Length - 1].position) * ((1 / Time.deltaTime) / m_lastCoordinates.Length);
+            //m_rb.angularVelocity += m_lastCoordinates[0].rotation.eulerAngles - m_lastCoordinates[m_lastCoordinates.Length - 1].rotation.eulerAngles;
+            m_rb.velocity = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch) * wasssss;
+            m_rb.angularVelocity = OVRInput.GetLocalControllerAngularVelocity(OVRInput.Controller.RTouch);
+            
+            //Debug.Log(OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch));
         }
     }
 
