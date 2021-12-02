@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CustomMessages;
 using UnityEngine;
@@ -11,17 +12,31 @@ namespace Synchronizers {
         [SerializeField][Tooltip("The color of the beacon when the player is detected")] private Color m_detectedColor = Color.green;
         
         /// <summary/> The beacons of the player that are stored away
-        private List<GameObject> m_beacons = new List<GameObject>();
+        private List<Beacons> m_beacons = new List<Beacons>();
 
+        [Serializable]
+        private struct Beacons
+        {
+            public GameObject gameObject;
+            public float ID;
+        }
         private float m_beaconRange;
 
         /// <summary/> Initiating the class by adding the right functions to the Client delegates
         private void Awake() {
             // Adding the right functions to the delegate
+            ClientManager.OnReceiveSpawnBeacon += SpawnBeacons; 
             ClientManager.OnReceiveBeaconsPositions += UpdatePositions;
             ClientManager.OnReceiveDestroyedBeacon += DestroyBeacon;
             ClientManager.OnReceiveBeaconDetectionUpdate += UpdateDetection;
             ClientManager.OnReceiveInitialData += UpdateBeaconRange;
+        }
+
+        private void SpawnBeacons(SpawnBeacon p_spawnbeacon)
+        {
+            GameObject bc  = Instantiate(m_prefabBeacon);
+            bc.transform.localScale *= m_beaconRange;
+            m_beacons.Add(new Beacons(){gameObject = bc,ID = p_spawnbeacon.beaconID});
         }
 
         /// <summary/> Updating the beacon range
@@ -32,21 +47,17 @@ namespace Synchronizers {
         /// <param name="p_beaconsPositions"></param>
         private void UpdatePositions(BeaconsPositions p_beaconsPositions) {
 
-            // Updating the local beacon positions
-            for(int i = 0; i < m_beacons.Count; i++) {
-                GameObject beacon = m_beacons[i];
-                if(beacon.transform.position != p_beaconsPositions.positions[i]) beacon.transform.position = p_beaconsPositions.positions[i];
-            }
+            Debug.Log("hey");
             
-            
-            //Adding a new beacon if we find new ones in the data
-            if (p_beaconsPositions.positions.Length > m_beacons.Count) {
-                int prevCount = m_beacons.Count;
-                for (int i = 0; i < p_beaconsPositions.positions.Length - prevCount; i++) {
-                    GameObject go = Instantiate(m_prefabBeacon, p_beaconsPositions.positions[prevCount + i], new Quaternion(0, 0, 0, 0));
-                    go.transform.localScale *= m_beaconRange * 2f;
-                    m_beacons.Add(go);
-                    go.name += Time.time;
+            for (int i = 0; i < m_beacons.Count; i++)
+            {
+                if(m_beacons[i].ID == p_beaconsPositions.data[i].beaconID)
+                    m_beacons[i].gameObject.transform.position = p_beaconsPositions.data[i].position;
+
+                for (int j = 0; j < m_beacons.Count; j++)
+                {
+                    if(m_beacons[j].ID == p_beaconsPositions.data[i].beaconID)
+                        m_beacons[j].gameObject.transform.position = p_beaconsPositions.data[i].position;
                 }
             }
         }
@@ -55,8 +66,28 @@ namespace Synchronizers {
         /// <param name="p_beaconDetectionUpdate"></param>
         private void UpdateDetection(BeaconDetectionUpdate p_beaconDetectionUpdate)
         {
-            Material mat = m_beacons[p_beaconDetectionUpdate.index].GetComponent<MeshRenderer>().material;
-            mat.SetColor("_Beacon_Color", p_beaconDetectionUpdate.playerDetected?m_detectedColor:m_undetectedColor); 
+            return;
+            int index = p_beaconDetectionUpdate.index;
+            float ID = p_beaconDetectionUpdate.beaconID;
+            if ( index < m_beacons.Count|| m_beacons[index].ID == ID)
+            {
+                Material mat = m_beacons[p_beaconDetectionUpdate.index].gameObject.GetComponent<MeshRenderer>().material;
+                mat.SetColor("_Beacon_Color", p_beaconDetectionUpdate.playerDetected?m_detectedColor:m_undetectedColor);
+                return;
+            }
+
+            for (int i = 0; i < m_beacons.Count; i++)
+            {
+                if (m_beacons[i].ID == ID)
+                {
+                    Material mat = m_beacons[p_beaconDetectionUpdate.index].gameObject.GetComponent<MeshRenderer>().material;
+                    mat.SetColor("_Beacon_Color", p_beaconDetectionUpdate.playerDetected?m_detectedColor:m_undetectedColor);
+                    return;
+                }
+            }
+            
+            // How did you get here
+            Debug.LogWarning("I couldn't find the ID brother",this);
         }
 
         /// <summary/> Destroying the beacon based in the server info
@@ -64,7 +95,7 @@ namespace Synchronizers {
         private void DestroyBeacon(DestroyedBeacon p_destroyedBeacon)
         {
             int index = p_destroyedBeacon.index;
-            Destroy(m_beacons[index]);
+            Destroy(m_beacons[index].gameObject);
             m_beacons.RemoveAt(index);
         }
     }

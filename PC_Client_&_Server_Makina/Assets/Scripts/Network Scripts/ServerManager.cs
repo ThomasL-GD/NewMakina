@@ -4,10 +4,10 @@ using System.Linq;
 using Mirror;
 using UnityEngine;
 using CustomMessages;
+using Unity.Mathematics;
+using UnityEditor;
 
-/// <summary>
-/// The server side manager will handle all of the server side network dealings of the game
-/// </summary>
+/// <summary/> The server side manager will handle all of the server side network dealings of the game
 
 public class ServerManager : MonoBehaviour
 {
@@ -16,7 +16,7 @@ public class ServerManager : MonoBehaviour
     
     /// <summary/> The delegate that will be called on each server Ticks
     private delegate void OnSendDataToClients();
-    private OnSendDataToClients onSendDataToClients;
+    private OnSendDataToClients OnServerTick;
 
     #region Buffers
 
@@ -27,8 +27,10 @@ public class ServerManager : MonoBehaviour
     private HeartBreak m_heartBreakBuffer = new HeartBreak();
     private BeaconsPositions m_beaconsPositionsBuffer = new BeaconsPositions();
     private DestroyedBeacon m_destroyedBeaconBuffer = new DestroyedBeacon();
-    private VrPlayerInteractWithBeacon m_vrPlayerInteractWithBeaconBuffer = new VrPlayerInteractWithBeacon();
+
     #endregion
+
+
 
     
     #region Server Data
@@ -42,7 +44,6 @@ public class ServerManager : MonoBehaviour
     [Header("Laser :")]
     [Header("Game Settings")]
     [SerializeField][Tooltip("The radius of the VR laser")] private float m_laserRadius = 20f;
-    [SerializeField][Tooltip("The charge time of the VR laser")] private float m_laserChargeTime = 1f;
     
 
     [Header("Hearts")]
@@ -55,13 +56,16 @@ public class ServerManager : MonoBehaviour
     
     [Header("Beacons")]
     [Header(" ")]
-    [SerializeField][Tooltip("The interval at which the beacons spawn")] private int m_beaconRespawnTime = 30;
-    [SerializeField][Tooltip("The lifetime of a beacon")] private int m_beaconLifeTime = 10;
-    [SerializeField][Tooltip("The range of the beacons")] private float m_beaconRange = 400;
-    
-    /// <summary/> The list of beacons that detected the PC player
-    private List<bool> m_playerDetected = new List<bool>();
-    
+    [SerializeField][Tooltip("The amount of beacons that will spawn at the start of the game")]private int m_initialBeacons = 2;
+    [SerializeField][Tooltip("The time after which the initial beacons will spawn")]private float m_initialBeaconSpawnDelay = 10f;
+    [Header(" ")]
+    [SerializeField][Tooltip("The interval at which the beacons spawn")] private float m_beaconRespawnTime = 30f;
+    [SerializeField][Tooltip("The lifetime of a beacon")] private float m_beaconLifeTime = 10f;
+    [SerializeField][Tooltip("The maximum amount of beacons")] private int m_maxBeacons = 3; 
+    private int m_currentBeaconAmount = 3;
+    [Header(" ")]
+    [SerializeField][Tooltip("The range of the beacons")] private float m_beaconRange = 400f;
+
     /// <summary/> The positions of the hearts
     private Vector3[] m_heartPositions;
     
@@ -93,13 +97,13 @@ public class ServerManager : MonoBehaviour
         MyNetworkManager.del_onClientConnection += OnServerConnect;
         
         //Setting up senders
-        onSendDataToClients += SendVrTransform;
-        onSendDataToClients += SendPcTransform;
-        onSendDataToClients += SendLaser;
-        onSendDataToClients += SendPcInvisbility;
-        onSendDataToClients += SendBeaconsPositions;
-        onSendDataToClients += BeaconDetectionCheck;
-        onSendDataToClients += CheckHealths;
+        OnServerTick += SendVrTransform;
+        OnServerTick += SendPcTransform;
+        OnServerTick += SendLaser;
+        OnServerTick += SendPcInvisbility;
+        OnServerTick += BeaconDetectionCheck;
+        OnServerTick += SendBeaconsPositions;
+        OnServerTick += CheckHealths;
     }
     
     
@@ -111,7 +115,7 @@ public class ServerManager : MonoBehaviour
     private void Start()
     {
         // making the tick delta constant
-        m_tickDelta = 1 / m_tickrate;
+        m_tickDelta = 1f / m_tickrate;
         
         // Setting up buffers
         NetworkServer.RegisterHandler<VrTransform>(OnServerReceiveVrTransforms);
@@ -122,6 +126,7 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<HeartBreak>(OnServerReceiveHeartBreak);
         NetworkServer.RegisterHandler<BeaconsPositions>(OnServerReceiveBeaconsPositions);
         NetworkServer.RegisterHandler<DestroyedBeacon>(OnServerReceiveDestroyedBeacon);
+        NetworkServer.RegisterHandler<ActivateBeacon>(OnServerReceiveActivateBeacon);
 
         //Unpacking the heart position values from the transforms to send through messages
         List<Vector3> heartPositions = new List<Vector3>();
@@ -145,52 +150,55 @@ public class ServerManager : MonoBehaviour
     {
         while (NetworkServer.active)
         {
-            onSendDataToClients?.Invoke();
+            OnServerTick?.Invoke();
             yield return new WaitForSeconds(m_tickDelta);
         }
     }
 
+    IEnumerator SpawnInitialBeacons()
+    {
+        yield return new WaitForSeconds(m_initialBeaconSpawnDelay);
+        for (int i = 0; i < m_initialBeacons; i++)
+        {
+            SpawnBeacon(-i-1);
+        }
+        
+        StartCoroutine(BeaconSpawnTimer());
+    }
     
     /// <summary/> Spawns the beacons
-    IEnumerator SpawnBeacon()
+    IEnumerator BeaconSpawnTimer()
     {
-        while (NetworkServer.active)
-        {
-            yield return new WaitForSeconds(m_beaconRespawnTime);
-            
-            List<Vector3> beaconPositionList = new List<Vector3>();
-            
-            if(m_beaconsPositionsBuffer.positions != null) beaconPositionList = m_beaconsPositionsBuffer.positions.ToList();
-            
-            beaconPositionList.Add(m_beaconSpawnPositions[Random.Range(0,m_beaconSpawnPositions.Length)].position);
-            m_beaconsPositionsBuffer.positions = beaconPositionList.ToArray();
-            // Debug.Log($"spawn : { m_beaconsPositionsBuffer.positions.Length}");
-            m_playerDetected.Add(false);
-            if(m_beaconDestroyIndexModification.Count < m_beaconsPositionsBuffer.positions.Length)
-                m_beaconDestroyIndexModification.Add(0);
-            StartCoroutine(DespawnBeacon(m_beaconsPositionsBuffer.positions.Length-1));
-            m_beaconDestroyIndexModification[m_beaconsPositionsBuffer.positions.Length - 1] = 0;
-        }
+        if (!NetworkServer.active || m_currentBeaconAmount >= m_maxBeacons) yield break;
+        
+        yield return new WaitForSeconds(m_beaconRespawnTime);
+
+        if (!NetworkServer.active || m_currentBeaconAmount >= m_maxBeacons) yield break;
+        
+        SpawnBeacon();
+        
+        if(m_currentBeaconAmount < m_maxBeacons) StartCoroutine(BeaconSpawnTimer());
     }
 
     private List<int> m_beaconDestroyIndexModification = new List<int>();
 
     /// <summary/> Despawns the beacon at the selected index with an offset defined by the previous despawns
-    /// <param name="p_index"/> the selected index
-    IEnumerator DespawnBeacon(int p_index)
-    {
-        int index = p_index - m_beaconDestroyIndexModification[p_index];
-        yield return new WaitForSeconds(m_beaconLifeTime);
-        List<Vector3> poses = m_beaconsPositionsBuffer.positions.ToList();
-        poses.RemoveAt(index);
-        m_playerDetected.RemoveAt(index);
-        
-        m_beaconsPositionsBuffer.positions = poses.ToArray();
-        SendToBothClients(new DestroyedBeacon(){index = index});
-
-        for (int i = index+1; i < m_beaconDestroyIndexModification.Count; i++)
-            m_beaconDestroyIndexModification[i]++;
-    }
+    /// <param name="p_index"/> the selected
+    /// 
+    // IEnumerator DespawnBeacon(int p_index)
+    // {
+    //     int index = p_index - m_beaconDestroyIndexModification[p_index];
+    //     yield return new WaitForSeconds(m_beaconLifeTime);
+    //     List<Vector3> poses = m_beaconsPositionsBuffer.positions.ToList();
+    //     poses.RemoveAt(index);
+    //     m_playerDetected.RemoveAt(index);
+    //     
+    //     m_beaconsPositionsBuffer.positions = poses.ToArray();
+    //     SendToBothClients(new DestroyedBeacon(){index = index});
+    //
+    //     for (int i = index+1; i < m_beaconDestroyIndexModification.Count; i++)
+    //         m_beaconDestroyIndexModification[i]++;
+    // }
 
     #region SERVER ACTIONS
 
@@ -198,9 +206,10 @@ public class ServerManager : MonoBehaviour
     /// <summary/> The function that is called when the server is hosted.
     private void OnStartServer()
     {
-        StartCoroutine(SpawnBeacon());
         StartCoroutine(ServerTick());
+        StartCoroutine(SpawnInitialBeacons());
     }
+
 
 
     /// <summary>
@@ -217,15 +226,21 @@ public class ServerManager : MonoBehaviour
     /// <summary/>The function that will be called to check the detection of all the beacons
     private void BeaconDetectionCheck()
     {
-        if (m_beaconsPositionsBuffer.positions == null) return;
-        for (int i = 0; i < m_beaconsPositionsBuffer.positions.Length; i++)
+        if (m_beaconsPositionsBuffer.data == null) return;
+
+        Debug.Log(m_beaconsPositionsBuffer.data.Length);
+        for (int i = 0; i < m_beaconsPositionsBuffer.data.Length; i++)
         {
-            bool detected;
-            detected = Vector3.Distance(m_pcTransformBuffer.position, m_beaconsPositionsBuffer.positions[i]) < m_beaconRange;
-            if (m_playerDetected[i] != detected)
+            BeaconData data = m_beaconsPositionsBuffer.data[i];
+            bool detected = Vector3.Distance(data.position, m_pcTransformBuffer.position) < m_beaconRange;
+
+            if (data.detectingPlayer != detected)
             {
-                m_playerDetected[i] = detected;
-                SendToBothClients(new BeaconDetectionUpdate(){playerDetected = detected, index = i});
+                SendToBothClients(new BeaconDetectionUpdate(){beaconID = data.beaconID,index = i, playerDetected = detected});
+                
+                m_beaconsPositionsBuffer.data[i].detectingPlayer = detected;
+                
+                Debug.Log($"detection has been done on beacon {i} :  detected : {detected}");
             }
         }
     }
@@ -243,6 +258,68 @@ public class ServerManager : MonoBehaviour
             SendToBothClients(new GameEnd(){winningClient = ClientConnection.PcPlayer});
     }
     
+    /// <summary/> The function called when the server has to spawn a beacon
+    /// <param name="p_customID"/> Only set a custom ID if you have to, if you don't it will by default be Time.time
+    void SpawnBeacon(float? p_customID = null)
+    {
+        m_currentBeaconAmount++;
+        SpawnBeacon spawnBeacon = new SpawnBeacon() {beaconID = p_customID ?? Time.time};
+        
+        AddBeacon(spawnBeacon.beaconID);
+        SendToBothClients(spawnBeacon);
+    }
+
+    /// <summary/> Function called to add a beacon to the servers local list of beacons
+    /// <param name="p_ID"> The unique ID of the beacon </param>
+    void AddBeacon(float p_ID)
+    {
+        List<BeaconData> beaconList = (m_beaconsPositionsBuffer.data == null) ? new List<BeaconData>() :m_beaconsPositionsBuffer.data.ToList() ;
+        
+        beaconList.Add(new BeaconData(){beaconID = p_ID,detectingPlayer = false});
+
+        m_beaconsPositionsBuffer.data = beaconList.ToArray();
+    }
+
+    
+    /// <summary/> Function called to remove a beacon from the servers local list of beacons 
+    /// <param name="p_index"> The index of the beacon on the client (for helping) </param>
+    /// <param name="p_ID"> The ID of the beacon on the client (brute force) </param>
+    void RemoveBeacon(int p_index, float p_ID)
+    {
+        List<BeaconData> beaconList = m_beaconsPositionsBuffer.data.ToList();
+
+
+        // Removing the beacon at the right index
+        BeaconData beacon;
+        if(p_index < beaconList.Count)
+        {
+            beacon = beaconList[p_index];
+
+            if (beacon.beaconID == p_ID)
+            {
+                beaconList.RemoveAt(p_index);
+                m_beaconsPositionsBuffer.data = beaconList.ToArray();
+                return;
+            }
+        }
+
+        // Brute forcing it
+        for (int i = 0; i < beaconList.Count; i++)
+        {
+            beacon = beaconList[i];
+            
+            if (beacon.beaconID == p_ID)
+            {
+                beaconList.RemoveAt(p_index);
+                m_beaconsPositionsBuffer.data = beaconList.ToArray();
+                return;
+            }
+        }
+        
+        // How did you get here
+        Debug.LogWarning("I couldn't find the ID brother",this);
+    }
+
     #endregion
     
 
@@ -265,17 +342,27 @@ public class ServerManager : MonoBehaviour
         InitialData initialData = new InitialData() {
             healthPcPlayer = m_pcPlayerHealth,
             healthVrPlayer = m_vrPlayerHealth,
-            beaconRange = m_beaconRange
+            beaconRange = m_beaconRange,
+            maximumBeaconCount = m_maxBeacons
         };
         
         p_conn.Send(initialData);
         
-        if(m_beaconsPositionsBuffer.positions != null)p_conn.Send(m_beaconsPositionsBuffer);
+        if(m_beaconsPositionsBuffer.data != null)
+            foreach (BeaconData data in m_beaconsPositionsBuffer.data)
+                p_conn.Send(new SpawnBeacon(){beaconID = data.beaconID});
+        
     }
-
-    /// <summary>
-    /// function called when the server receives a message of type VrTransform
-    /// </summary>
+    
+    /// <summary/> function called when the server receives a message of type ActivateBeacon
+    /// <param name="p_conn"> The connection from which originated the message </param>
+    /// <param name="p_ativateBeacon"> The message sent by the Client to the Server  </param>
+    private void OnServerReceiveActivateBeacon(NetworkConnection p_conn, ActivateBeacon p_ativateBeacon)
+    {
+        
+    }
+    
+    /// <summary/> function called when the server receives a message of type VrTransform
     /// <param name="p_conn"> The connection from which originated the message </param>
     /// <param name="p_vrTransform"> The message sent by the Client to the Server  </param>
     private void OnServerReceiveVrTransforms(NetworkConnection p_conn,VrTransform p_vrTransform)
@@ -333,8 +420,8 @@ public class ServerManager : MonoBehaviour
             m_laserBuffer.hit = hit;
         }
         //preparing to send the message
-        onSendDataToClients -= SendLaser;
-        onSendDataToClients += SendLaser;
+        OnServerTick -= SendLaser;
+        OnServerTick += SendLaser;
     }
 
     /// <summary>
@@ -345,8 +432,8 @@ public class ServerManager : MonoBehaviour
     private void OnServerReceiveInvisibility(NetworkConnection p_conn, PcInvisibility p_pcInvisibility) {
 
         m_pcInvisibilityBuffer = p_pcInvisibility;
-        onSendDataToClients -= SendPcInvisbility;
-        onSendDataToClients += SendPcInvisbility;
+        OnServerTick -= SendPcInvisbility;
+        OnServerTick += SendPcInvisbility;
     }
 
     /// <summary>
@@ -361,8 +448,8 @@ public class ServerManager : MonoBehaviour
         m_vrPlayerHealth--;
         
         m_heartBreakBuffer = p_heartBreak;
-        onSendDataToClients -= SendHeartBreak;
-        onSendDataToClients += SendHeartBreak;
+        OnServerTick -= SendHeartBreak;
+        OnServerTick += SendHeartBreak;
     }
 
     /// <summary>
@@ -372,10 +459,14 @@ public class ServerManager : MonoBehaviour
     /// <param name="p_beaconsPositions">The message sent by the Client to the Server</param>
     private void OnServerReceiveBeaconsPositions(NetworkConnection p_conn, BeaconsPositions p_beaconsPositions)
     {
-        int length = p_beaconsPositions.positions.Length < m_beaconsPositionsBuffer.positions.Length ? p_beaconsPositions.positions.Length : m_beaconsPositionsBuffer.positions.Length;
-        
-        for (int i=0; i<length;i++)
-            m_beaconsPositionsBuffer.positions[i] = p_beaconsPositions.positions[i];
+        m_beaconsPositionsBuffer = p_beaconsPositions;
+        int count = p_beaconsPositions.data.Length;
+
+        for (int i = 0; i < count; i++)
+        {
+            m_beaconsPositionsBuffer.data[i].position = p_beaconsPositions.data[i].position;
+            m_beaconsPositionsBuffer.data[i].beaconID = p_beaconsPositions.data[i].beaconID;
+        }
     }
 
     /// <summary>
@@ -385,16 +476,10 @@ public class ServerManager : MonoBehaviour
     /// <param name="p_destroyedBeacon"> The message sent by the Client to the Server  </param>
     private void OnServerReceiveDestroyedBeacon(NetworkConnection p_conn, DestroyedBeacon p_destroyedBeacon) {
         m_destroyedBeaconBuffer = p_destroyedBeacon;
-        onSendDataToClients -= SendDestroyedBeacon;
-        onSendDataToClients += SendDestroyedBeacon;
+        OnServerTick -= SendDestroyedBeacon;
+        OnServerTick += SendDestroyedBeacon;
     }
 
-    //TODO use this?
-    private void OnServerReceiveVrPlayerInteractWithBeacon(NetworkConnection p_conn, VrPlayerInteractWithBeacon p_vrPlayerInteractWithBeacon)
-    {
-        m_vrPlayerInteractWithBeaconBuffer = p_vrPlayerInteractWithBeacon;
-    }
-    
     #endregion
 
 
@@ -419,7 +504,7 @@ public class ServerManager : MonoBehaviour
     private void SendLaser()
     {
         SendToBothClients(m_laserBuffer);
-        onSendDataToClients -= SendLaser;
+        OnServerTick -= SendLaser;
     }
 
     /// <summary>
@@ -428,7 +513,7 @@ public class ServerManager : MonoBehaviour
     private void SendPcInvisbility()
     {
         SendToBothClients(m_pcInvisibilityBuffer);
-        onSendDataToClients -= SendPcInvisbility;
+        OnServerTick -= SendPcInvisbility;
     }
     
     /// <summary>
@@ -437,16 +522,16 @@ public class ServerManager : MonoBehaviour
     private void SendHeartBreak()
     {
         SendToBothClients(m_heartBreakBuffer);
-        onSendDataToClients -= SendHeartBreak;
+        OnServerTick -= SendHeartBreak;
     }
 
     /// <summary>
     /// The function that send the BeaconsPositions (if not empty) to the pc client
     /// </summary>
     private void SendBeaconsPositions() {
-        if(m_beaconsPositionsBuffer.positions != null && m_beaconsPositionsBuffer.positions.Length > 0)
+        if(m_beaconsPositionsBuffer.data != null && m_beaconsPositionsBuffer.data.Length > 0)
         {
-            SendToBothClients(m_beaconsPositionsBuffer);
+            m_pcNetworkConnection.Send(m_beaconsPositionsBuffer);
         }
     }
     
@@ -455,7 +540,7 @@ public class ServerManager : MonoBehaviour
     /// </summary>
     private void SendDestroyedBeacon() {
         m_pcNetworkConnection?.Send(m_destroyedBeaconBuffer);
-        onSendDataToClients -= SendDestroyedBeacon;
+        OnServerTick -= SendDestroyedBeacon;
     }
     
     #endregion
