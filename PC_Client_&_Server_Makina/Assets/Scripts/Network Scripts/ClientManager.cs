@@ -4,9 +4,7 @@ using CustomMessages;
 using Synchronizers;
 
 
-/// <summary>
-/// The client side manager will handle all of the client side network dealing of the game
-/// </summary>
+/// <summary/> The client side manager will handle all of the client side network dealing of the game
 
 public class ClientManager : MonoBehaviour
 {
@@ -53,7 +51,12 @@ public class ClientManager : MonoBehaviour
     
     /// <summary> The delegate that will be called each time the server sends a InitialData message </summary>
     public delegate void InitialDataDelegator(InitialData p_initialData);
+
     public static InitialDataDelegator OnReceiveInitialData;
+    
+    /// <summary> The delegate that will be called each time the server sends a InitialData message </summary>
+    public delegate void SpawnBeaconDelegator(SpawnBeacon p_spawnBeacon);
+    public static SpawnBeaconDelegator OnReceiveSpawnBeacon;
     
     #endregion
     
@@ -89,7 +92,10 @@ public class ClientManager : MonoBehaviour
         NetworkClient.RegisterHandler<BeaconDetectionUpdate>(ReceiveBeaconDetectionUpdate);
         NetworkClient.RegisterHandler<GameEnd>(ReceiveGameEnd);
         NetworkClient.RegisterHandler<InitialData>(ReceiveInitialData);
+        NetworkClient.RegisterHandler<SpawnBeacon>(ReceiveSpawnBeacon);
     }
+
+    private void ReceiveSpawnBeacon(SpawnBeacon p_spawnBeacon) => OnReceiveSpawnBeacon?.Invoke(p_spawnBeacon);
 
     private void StartClient()
     {
