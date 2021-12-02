@@ -8,11 +8,6 @@ namespace CatchThoseHands {
         Left = 0,
         Right = 1
     }
-
-    public struct HandRelationship {
-        public Transform handTransform;
-        public bool isGrabbedByThis;
-    }
 }
 
 [RequireComponent(typeof(SphereCollider), typeof(Rigidbody))]
@@ -38,7 +33,6 @@ public class VrHandBehaviour : MonoBehaviour {
     private void OnTriggerStay(Collider p_other) {
 
         GameObject other = p_other.gameObject;
-        Debug.Log("OnTriggerStay");
 
         if (other.layer == 6 && other.TryGetComponent(out GrabbableObject script)) { // The Catchable Object layer
 
@@ -54,7 +48,6 @@ public class VrHandBehaviour : MonoBehaviour {
             
             if (m_isPressed && OVRInput.Get(m_grabInput) < m_triggerLetGoSensitivity) { //If the player let go enough
                 
-                Debug.Log("I'm letting go");
                 m_isPressed = false;
 
                 m_objectsGrabbed.Remove(script);
@@ -72,8 +65,6 @@ public class VrHandBehaviour : MonoBehaviour {
         
         // Checking if it's in the Catchable Object layer and has a GrabbableObject component
         if (other.layer == 6 && other.TryGetComponent(out GrabbableObject script)) { 
-            
-            Debug.Log("OnTrigger exit", this);
         
             for (int i = 0; i < m_objectsGrabbed.Count; i++) {
                 if (m_objectsGrabbed[i] == script) {

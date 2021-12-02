@@ -30,6 +30,8 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
     protected override void Start() {
         base.Start();
 
+        m_originalParent[0] = null;
+
         m_rb = GetComponent<Rigidbody>();
         m_lastCoordinates = new AmputatedTransform[m_throwValuesNumber];
     }

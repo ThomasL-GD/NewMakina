@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using CustomMessages;
 using Mirror;
 using UnityEngine;
@@ -9,10 +10,8 @@ namespace Network {
     
         //Singleton time ! 	(˵ ͡° ͜ʖ ͡°˵)
         public new static MyNetworkManager singleton { get; private set; }
-    
-        [Header("ServerVariables")]
-        [SerializeField][Tooltip("The prefab of the hearts that will be spawned on server connection")] private GameObject m_heartPrefabs;
-        public bool m_canSend = false;
+
+        [HideInInspector] public bool m_canSend { get; private set; } = false;
 
         [Header("AutoConnexion type beat")]
         [SerializeField] private bool m_localHost = false;
@@ -46,8 +45,8 @@ namespace Network {
         public static HeartBreakDelegator OnReceiveHeartBreak;
     
         /// <summary/> The delegates that will be called each time the server updates the beacons
-        public delegate void BeaconsPositionsDelegator(BeaconsPositions p_beaconsPositions);
-        public static BeaconsPositionsDelegator OnReceiveBeaconsPositions;
+        public delegate void SpawnBeaconDelegator(SpawnBeacon p_spawnBeacon);
+        public static SpawnBeaconDelegator OnReceiveSpawnBeacon;
     
         public delegate void DestroyedBeaconsDelegator(DestroyedBeacon p_beaconsPositions);
         public static DestroyedBeaconsDelegator OnReceiveDestroyedBeacon;
@@ -108,7 +107,7 @@ namespace Network {
             NetworkClient.RegisterHandler<ClientConnect>(ReceiveClientConnect);
             NetworkClient.RegisterHandler<HeartTransforms>(ReceiveHeartTranforms);
             NetworkClient.RegisterHandler<HeartBreak>(ReceiveHeartBreak);
-            NetworkClient.RegisterHandler<BeaconsPositions>(ReceiveBeaconsPositions);
+            NetworkClient.RegisterHandler<SpawnBeacon>(ReceiveSpawnBeacon);
             NetworkClient.RegisterHandler<DestroyedBeacon>(ReceiveDestroyedBeacon);
             NetworkClient.RegisterHandler<BeaconDetectionUpdate>(ReceiveBeaconDetectionUpdate);
             NetworkClient.RegisterHandler<GameEnd>(ReceiveGameEnd);
@@ -164,9 +163,9 @@ namespace Network {
         /// <param name="p_pcInvisibility">The actual data we received</param>
         private void ReceivePcInvisibility(PcInvisibility p_pcInvisibility) => OnInvisibilityUpdate?.Invoke(p_pcInvisibility);
     
-        /// <summary/> The function called when the client receives a message of type BeaconsPositions
-        /// <param name="p_beaconsPositions"> The message sent by the Server to the Client </param>
-        private void ReceiveBeaconsPositions(BeaconsPositions p_beaconsPositions) => OnReceiveBeaconsPositions?.Invoke(p_beaconsPositions); 
+        /// <summary/> The function called when the client receives a message of type SpawnBeacon
+        /// <param name="p_spawnBeacon"> The message sent by the Server to the Client </param>
+        private void ReceiveSpawnBeacon(SpawnBeacon p_spawnBeacon) => OnReceiveSpawnBeacon?.Invoke(p_spawnBeacon); 
     
         /// <summary/> The function called when the client receives a message of type DestroyedBeacon
         /// <param name="p_destroyedBeacon"> The message sent by the Server to the Client </param>
