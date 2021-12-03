@@ -8,27 +8,28 @@ using UnityEngine;
 namespace Synchronizers {
     public class SynchronizeBeacons : Synchronizer {
 
-        [SerializeField] private GameObject m_prefabBeacon = null;
+        [SerializeField] private GameObject m_prefabBeaconAmmo = null;
+        [SerializeField] private GameObject m_prefabBeaconSetUp = null;
         private float m_range = 20f;
 
         [Header("Colors")]
         [SerializeField] private Color m_undetectedColor = Color.red;
         [SerializeField] private Color m_detectedColor = Color.green;
-        [SerializeField] private Color m_grabbedColor = Color.blue;
+        [SerializeField] private Color m_unactiveColor = Color.blue;
 
+        /// <summary>
+        /// TODO this
+        /// </summary>
         private class BeaconInfo {
             public readonly GameObject gameObject;
             public bool isDetecting;
-            public bool isGrabbed;
-            public bool isLoaded;
-            public bool isUnactive => isGrabbed || isLoaded;
+            public bool isOnTheGroundAndSetUp;
 
             public float serverID;
 
             public BeaconInfo(GameObject p_go, float p_id) {
                 isDetecting = false;
-                isGrabbed = false;
-                isLoaded = false;
+                isOnTheGroundAndSetUp = false;
                 gameObject = p_go;
                 serverID = p_id;
             }
@@ -49,7 +50,7 @@ namespace Synchronizers {
         public static int maxSlotsForBeacons = 1;
 
         private void Awake() {
-            if(m_prefabBeacon == null) Debug.LogError("You forgot to serialize a beacon prefab here ! (╬ ಠ益ಠ)", this);
+            if(m_prefabBeaconAmmo == null) Debug.LogError("You forgot to serialize a beacon prefab here ! (╬ ಠ益ಠ)", this);
         }
 
         private void Start() {
@@ -88,7 +89,7 @@ namespace Synchronizers {
 
             BeaconLoading.s_synchronizer = this;
             
-            GameObject go = Instantiate(m_prefabBeacon);
+            GameObject go = Instantiate(m_prefabBeaconAmmo);
             
             m_beacons.Add(new BeaconInfo(go, p_spawnBeacon.beaconID));
             
@@ -104,11 +105,9 @@ namespace Synchronizers {
         /// <param name="p_destroyedBeacon">The message from the server</param>
         private void DestroyBeacon(DestroyedBeacon p_destroyedBeacon)
         {
-            Debug.Log(m_beacons.Count);
             int index = p_destroyedBeacon.index;
             m_beacons[index].gameObject.GetComponent<GrabbableObject>().DestroyMaSoul();
             m_beacons.RemoveAt(index);
-            Debug.Log(m_beacons.Count);
         }
         
         /// <summary>
@@ -120,34 +119,18 @@ namespace Synchronizers {
             
             m_beacons[p_beaconDetectionUpdate.index].isDetecting = p_beaconDetectionUpdate.playerDetected;
             
-            Debug.Log($"Is player detected ? actually the {p_beaconDetectionUpdate.index} is {(p_beaconDetectionUpdate.playerDetected? "REALLY" : "NOT" )} detecting", this);
+            //Debug.Log($"Is player detected ? actually the {p_beaconDetectionUpdate.index} is {(p_beaconDetectionUpdate.playerDetected? "REALLY" : "NOT" )} detecting", this);
             
             ActualiseColorOfBeacon(p_beaconDetectionUpdate.index);
-        }
-
-        /// <summary>Is called by a beacon when it gets grabbed to change the color of itself </summary>
-        /// <param name="p_beaconIndex">The index of the beacon</param>
-        public void BeaconGrabbed(int p_beaconIndex) {
-
-            m_beacons[p_beaconIndex].isGrabbed = true;
-            ActualiseColorOfBeacon(p_beaconIndex);
-        }
-
-        /// <summary> Is called by a beacon when it gets let go to change the color of itself according to its state </summary>
-        /// <param name="p_beaconIndex">The index of the beacon</param>
-        public void BeaconLetGo(int p_beaconIndex) {
-
-            m_beacons[p_beaconIndex].isGrabbed = false;
-            ActualiseColorOfBeacon(p_beaconIndex);
         }
         
         /// <summary> Will actualise the color of a beacon according to what it should display according to the beacon state </summary>
         /// <param name="p_index">The index of the beacon</param>
-        private void ActualiseColorOfBeacon(int p_index) {
+        public void ActualiseColorOfBeacon(int p_index) {
 
             Color newColor;
 
-            if (m_beacons[p_index].isUnactive) newColor = m_grabbedColor;
+            if (!m_beacons[p_index].isOnTheGroundAndSetUp) newColor = m_unactiveColor;
             else switch (m_beacons[p_index].isDetecting) {
                 case true:
                     newColor = m_detectedColor;
@@ -169,9 +152,23 @@ namespace Synchronizers {
         /// <param name="p_initialData">The message from the server</param>
         private void SetRangeOfBeacons(InitialData p_initialData) {
             m_range = p_initialData.beaconRange;
-            foreach (Transform child in m_prefabBeacon.transform) {
-                child.localScale = new Vector3(m_range, m_range, m_range);
+            foreach (Transform child in m_prefabBeaconAmmo.transform) {
+                child.localScale = (new Vector3(m_range, m_range, m_range) / m_prefabBeaconAmmo.transform.localScale.x) * 2f;
             }
+        }
+
+        /// <summary> Send to the network manager the ActivateBeacon message </summary>
+        /// <param name="p_index">The index of the beacon that gets activated</param>
+        public void SendBeaconActivation(int p_index) {
+            SetActivationOfABeacon(p_index, true);
+            MyNetworkManager.singleton.SendVrData(new ActivateBeacon(){index = p_index, beaconID = m_beacons[p_index].serverID});
+        }
+
+        /// <summary> Change the value of the isOnTheGroundAndSetUp of a beacon according to its index </summary>
+        /// <param name="p_index">The index of the beacon</param>
+        /// <param name="p_isOnTheGroundAndSetUp">If the beacon is loaded or not</param>
+        private void SetActivationOfABeacon(int p_index, bool p_isOnTheGroundAndSetUp) {
+            m_beacons[p_index].isOnTheGroundAndSetUp = p_isOnTheGroundAndSetUp;
         }
     }
 }

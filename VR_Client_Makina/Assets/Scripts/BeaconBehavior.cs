@@ -7,9 +7,11 @@ public class BeaconBehavior : GrabbablePhysickedObject {
 
     [HideInInspector] public int m_index;
     public SynchronizeBeacons m_synchronizer;
-
+    
     private BeaconLoading m_beaconLoading = null;
 
+    private bool m_isDeployed = false;
+    
     protected override void Start() {
         base.Start();
         //m_isPuttableOnlyOnce = true;
@@ -21,7 +23,12 @@ public class BeaconBehavior : GrabbablePhysickedObject {
             Debug.LogWarning("No BeaconLoading script attached on this object but don't worry i gotchu fam ( ͡° ͜ʖ ͡°)", this);
             m_beaconLoading = gameObject.AddComponent<BeaconLoading>();
         }
+
+        BeaconBehavior.OnDestroyBeacon += ActualiseIndex;
     }
+
+    public delegate void DestroyBeaconDelegator(BeaconBehavior p_beaconBehavior);
+    private static DestroyBeaconDelegator OnDestroyBeacon;
 
     /// <summary>
     /// We override ActualiseParent to let the SynchronizeBeacons know when beacons are grabbed or not
@@ -32,20 +39,37 @@ public class BeaconBehavior : GrabbablePhysickedObject {
         if(!MyNetworkManager.singleton.m_canSend) return;
         
         if (m_isCaught) {
-            m_synchronizer.BeaconGrabbed(m_index);
             m_beaconLoading.Unloading();
         }
-        else if (!m_isCaught) m_synchronizer.BeaconLetGo(m_index);
     }
     
     // private void OnDrawGizmos() {
     //     Gizmos.DrawWireSphere(transform.position, m_radius); // feedback magic ♪♪ ヽ(ˇ∀ˇ )ゞ
     // }
 
-    private void OnCollisionEnter(Collision p_other) {
-        if (p_other.gameObject.layer == 8) {
-            transform.rotation = Quaternion.Euler(0,0,0);
-            //TODO : m_rb.
-        }
+    protected override void OnFirstTimeTouchingGround() {
+
+        if (m_isDeployed) return;
+        base.OnFirstTimeTouchingGround();
+        
+        m_isGrabbable = false;
+        m_rb.isKinematic = true;
+        //Destroy(m_rb);
+        m_isDeployed = true;
+        transform.rotation = Quaternion.Euler(Vector3.zero);
+        
+        
+        
+        m_synchronizer.SendBeaconActivation(m_index);
+    }
+
+    protected override void BeingDestroyed() {
+        base.BeingDestroyed();
+        
+        OnDestroyBeacon?.Invoke(this); //Saying everyone we get destroyed
+    }
+
+    private void ActualiseIndex(BeaconBehavior p_grabbableObject) {
+        if (m_index > p_grabbableObject.m_index) m_index--;
     }
 }
