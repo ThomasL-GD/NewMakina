@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,12 +27,11 @@ public class ServerManager : MonoBehaviour
     private PcInvisibility m_pcInvisibilityBuffer = new PcInvisibility();
     private HeartBreak m_heartBreakBuffer = new HeartBreak();
     private BeaconsPositions m_beaconsPositionsBuffer = new BeaconsPositions();
+    private bool m_newPositions = false;
     private DestroyedBeacon m_destroyedBeaconBuffer = new DestroyedBeacon();
 
     #endregion
-
-
-
+    
     
     #region Server Data
 
@@ -62,7 +62,7 @@ public class ServerManager : MonoBehaviour
     [SerializeField][Tooltip("The interval at which the beacons spawn")] private float m_beaconRespawnTime = 30f;
     [SerializeField][Tooltip("The lifetime of a beacon")] private float m_beaconLifeTime = 10f;
     [SerializeField][Tooltip("The maximum amount of beacons")] private int m_maxBeacons = 3; 
-    private int m_currentBeaconAmount = 3;
+    private int m_currentBeaconAmount = 0;
     [Header(" ")]
     [SerializeField][Tooltip("The range of the beacons")] private float m_beaconRange = 400f;
 
@@ -169,36 +169,51 @@ public class ServerManager : MonoBehaviour
     /// <summary/> Spawns the beacons
     IEnumerator BeaconSpawnTimer()
     {
-        if (!NetworkServer.active || m_currentBeaconAmount >= m_maxBeacons) yield break;
+        if (/*!NetworkServer.active ||*/ m_currentBeaconAmount >= m_maxBeacons) yield break;
         
         yield return new WaitForSeconds(m_beaconRespawnTime);
 
-        if (!NetworkServer.active || m_currentBeaconAmount >= m_maxBeacons) yield break;
         
+        if (/*!NetworkServer.active ||*/ m_currentBeaconAmount >= m_maxBeacons) yield break;
+
         SpawnBeacon();
         
         if(m_currentBeaconAmount < m_maxBeacons) StartCoroutine(BeaconSpawnTimer());
     }
-
-    private List<int> m_beaconDestroyIndexModification = new List<int>();
-
+    
     /// <summary/> Despawns the beacon at the selected index with an offset defined by the previous despawns
-    /// <param name="p_index"/> the selected
-    /// 
-    // IEnumerator DespawnBeacon(int p_index)
-    // {
-    //     int index = p_index - m_beaconDestroyIndexModification[p_index];
-    //     yield return new WaitForSeconds(m_beaconLifeTime);
-    //     List<Vector3> poses = m_beaconsPositionsBuffer.positions.ToList();
-    //     poses.RemoveAt(index);
-    //     m_playerDetected.RemoveAt(index);
-    //     
-    //     m_beaconsPositionsBuffer.positions = poses.ToArray();
-    //     SendToBothClients(new DestroyedBeacon(){index = index});
-    //
-    //     for (int i = index+1; i < m_beaconDestroyIndexModification.Count; i++)
-    //         m_beaconDestroyIndexModification[i]++;
-    // }
+    /// <param name="p_index"/> the beacon index
+    /// <param name="p_beaconID"/> the beacon ID
+    IEnumerator DespawnBeacon(int p_index, float p_beaconID)
+    {
+        yield return new WaitForSeconds(m_beaconLifeTime);
+        List<BeaconData> datas = m_beaconsPositionsBuffer.data.ToList();
+
+        if (p_index < datas.Count && datas[p_index].beaconID == p_beaconID)
+        {
+            GetRidOfBeacon(p_index, p_beaconID);
+            yield break;
+        }
+
+        for (int i = 0; i < datas.Count; i++)
+        {
+            if (datas[i].beaconID == p_beaconID)
+            {
+                GetRidOfBeacon(i, p_beaconID);
+                yield break;
+            }
+        }
+    }
+
+    private void GetRidOfBeacon(int p_index, float p_beaconID)
+    {
+        List<BeaconData> datas = m_beaconsPositionsBuffer.data.ToList();
+        datas.RemoveAt(p_index);
+        m_beaconsPositionsBuffer.data = datas.ToArray();
+        m_currentBeaconAmount--;
+        SendToBothClients(new DestroyedBeacon(){index = p_index,beaconID = p_beaconID});
+        StartCoroutine(BeaconSpawnTimer());
+    }
 
     #region SERVER ACTIONS
 
@@ -228,10 +243,12 @@ public class ServerManager : MonoBehaviour
     {
         if (m_beaconsPositionsBuffer.data == null) return;
 
-        Debug.Log(m_beaconsPositionsBuffer.data.Length);
+        // Debug.Log(m_beaconsPositionsBuffer.data.Length);
         for (int i = 0; i < m_beaconsPositionsBuffer.data.Length; i++)
         {
             BeaconData data = m_beaconsPositionsBuffer.data[i];
+            if(!data.isActive)continue;
+            
             bool detected = Vector3.Distance(data.position, m_pcTransformBuffer.position) < m_beaconRange;
 
             if (data.detectingPlayer != detected)
@@ -239,8 +256,6 @@ public class ServerManager : MonoBehaviour
                 SendToBothClients(new BeaconDetectionUpdate(){beaconID = data.beaconID,index = i, playerDetected = detected});
                 
                 m_beaconsPositionsBuffer.data[i].detectingPlayer = detected;
-                
-                Debug.Log($"detection has been done on beacon {i} :  detected : {detected}");
             }
         }
     }
@@ -267,6 +282,8 @@ public class ServerManager : MonoBehaviour
         
         AddBeacon(spawnBeacon.beaconID);
         SendToBothClients(spawnBeacon);
+        
+        Debug.Log($"Beacon<color=grey>#{(p_customID ?? Time.time).ToString().Trim(',')}<color> just spawned");
     }
 
     /// <summary/> Function called to add a beacon to the servers local list of beacons
@@ -275,49 +292,9 @@ public class ServerManager : MonoBehaviour
     {
         List<BeaconData> beaconList = (m_beaconsPositionsBuffer.data == null) ? new List<BeaconData>() :m_beaconsPositionsBuffer.data.ToList() ;
         
-        beaconList.Add(new BeaconData(){beaconID = p_ID,detectingPlayer = false});
+        beaconList.Add(new BeaconData(){beaconID = p_ID,detectingPlayer = false,isActive = false});
 
         m_beaconsPositionsBuffer.data = beaconList.ToArray();
-    }
-
-    
-    /// <summary/> Function called to remove a beacon from the servers local list of beacons 
-    /// <param name="p_index"> The index of the beacon on the client (for helping) </param>
-    /// <param name="p_ID"> The ID of the beacon on the client (brute force) </param>
-    void RemoveBeacon(int p_index, float p_ID)
-    {
-        List<BeaconData> beaconList = m_beaconsPositionsBuffer.data.ToList();
-
-
-        // Removing the beacon at the right index
-        BeaconData beacon;
-        if(p_index < beaconList.Count)
-        {
-            beacon = beaconList[p_index];
-
-            if (beacon.beaconID == p_ID)
-            {
-                beaconList.RemoveAt(p_index);
-                m_beaconsPositionsBuffer.data = beaconList.ToArray();
-                return;
-            }
-        }
-
-        // Brute forcing it
-        for (int i = 0; i < beaconList.Count; i++)
-        {
-            beacon = beaconList[i];
-            
-            if (beacon.beaconID == p_ID)
-            {
-                beaconList.RemoveAt(p_index);
-                m_beaconsPositionsBuffer.data = beaconList.ToArray();
-                return;
-            }
-        }
-        
-        // How did you get here
-        Debug.LogWarning("I couldn't find the ID brother",this);
     }
 
     #endregion
@@ -359,7 +336,31 @@ public class ServerManager : MonoBehaviour
     /// <param name="p_ativateBeacon"> The message sent by the Client to the Server  </param>
     private void OnServerReceiveActivateBeacon(NetworkConnection p_conn, ActivateBeacon p_ativateBeacon)
     {
+        StartCoroutine(DespawnBeacon(p_ativateBeacon.index,p_ativateBeacon.beaconID));
         
+        BeaconData[] datas = m_beaconsPositionsBuffer.data;
+
+        float ID = p_ativateBeacon.beaconID;
+        int index = p_ativateBeacon.index;
+        
+        if (p_ativateBeacon.index < datas.Length && datas[index].beaconID == ID)
+        {
+            m_beaconsPositionsBuffer.data[index].isActive = true;
+        }
+        else
+        {
+            for (int i = 0; i < datas.Length; i++)
+            {
+                if (datas[i].beaconID == ID)
+                {
+                    m_beaconsPositionsBuffer.data[i].isActive = true;
+                    break;
+                }
+            }
+        }
+        
+        //TODO Add this to server loop
+        SendToBothClients(p_ativateBeacon);
     }
     
     /// <summary/> function called when the server receives a message of type VrTransform
@@ -459,14 +460,17 @@ public class ServerManager : MonoBehaviour
     /// <param name="p_beaconsPositions">The message sent by the Client to the Server</param>
     private void OnServerReceiveBeaconsPositions(NetworkConnection p_conn, BeaconsPositions p_beaconsPositions)
     {
-        m_beaconsPositionsBuffer = p_beaconsPositions;
-        int count = p_beaconsPositions.data.Length;
+        //m_beaconsPositionsBuffer = p_beaconsPositions; FUUUUUUUUUUUUUCK
+        int count = m_beaconsPositionsBuffer.data.Length;
 
         for (int i = 0; i < count; i++)
         {
+            if(i>=p_beaconsPositions.data.Length) break;
             m_beaconsPositionsBuffer.data[i].position = p_beaconsPositions.data[i].position;
             m_beaconsPositionsBuffer.data[i].beaconID = p_beaconsPositions.data[i].beaconID;
         }
+
+        m_newPositions = true;
     }
 
     /// <summary>
@@ -529,9 +533,10 @@ public class ServerManager : MonoBehaviour
     /// The function that send the BeaconsPositions (if not empty) to the pc client
     /// </summary>
     private void SendBeaconsPositions() {
-        if(m_beaconsPositionsBuffer.data != null && m_beaconsPositionsBuffer.data.Length > 0)
+        if(m_newPositions && m_beaconsPositionsBuffer.data != null && m_beaconsPositionsBuffer.data.Length > 0)
         {
             m_pcNetworkConnection.Send(m_beaconsPositionsBuffer);
+            m_newPositions = false;
         }
     }
     

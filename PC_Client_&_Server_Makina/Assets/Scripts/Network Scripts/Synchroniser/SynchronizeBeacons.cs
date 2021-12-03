@@ -30,12 +30,26 @@ namespace Synchronizers {
             ClientManager.OnReceiveDestroyedBeacon += DestroyBeacon;
             ClientManager.OnReceiveBeaconDetectionUpdate += UpdateDetection;
             ClientManager.OnReceiveInitialData += UpdateBeaconRange;
+            ClientManager.OnReceiveActivateBeacon += UpdateBeaconActivation;
+        }
+
+        private void UpdateBeaconActivation(ActivateBeacon p_activatebeacon)
+        {
+            int? index = FindBeaconFromID(p_activatebeacon.index, p_activatebeacon.beaconID);
+
+            if (index == null)
+            {
+                Debug.LogError("BEACON DETECTION UPDATE ID SEARCH FAILED");
+                return;
+            }
+            
+            Debug.Log($"Active Beacon{index}#<color=grey>#{p_activatebeacon.beaconID.ToString().Trim(',')}<color>");
         }
 
         private void SpawnBeacons(SpawnBeacon p_spawnbeacon)
         {
             GameObject bc  = Instantiate(m_prefabBeacon);
-            bc.transform.localScale *= m_beaconRange;
+            bc.transform.localScale *= m_beaconRange*2;
             m_beacons.Add(new Beacons(){gameObject = bc,ID = p_spawnbeacon.beaconID});
         }
 
@@ -45,20 +59,21 @@ namespace Synchronizers {
 
         /// <summary/> Updating the beacon positions
         /// <param name="p_beaconsPositions"></param>
-        private void UpdatePositions(BeaconsPositions p_beaconsPositions) {
-
-            Debug.Log("hey");
-            
+        private void UpdatePositions(BeaconsPositions p_beaconsPositions)
+        {
             for (int i = 0; i < m_beacons.Count; i++)
             {
-                if(m_beacons[i].ID == p_beaconsPositions.data[i].beaconID)
-                    m_beacons[i].gameObject.transform.position = p_beaconsPositions.data[i].position;
+                BeaconData data = p_beaconsPositions.data[i];
+                
+                int? index = FindBeaconFromID(i, data.beaconID);
 
-                for (int j = 0; j < m_beacons.Count; j++)
+                if (index == null)
                 {
-                    if(m_beacons[j].ID == p_beaconsPositions.data[i].beaconID)
-                        m_beacons[j].gameObject.transform.position = p_beaconsPositions.data[i].position;
+                    Debug.LogError("BEACON DETECTION UPDATE ID SEARCH FAILED");
+                    return;
                 }
+                
+                m_beacons[index??0].gameObject.transform.position = data.position;
             }
         }
 
@@ -66,37 +81,50 @@ namespace Synchronizers {
         /// <param name="p_beaconDetectionUpdate"></param>
         private void UpdateDetection(BeaconDetectionUpdate p_beaconDetectionUpdate)
         {
-            return;
-            int index = p_beaconDetectionUpdate.index;
-            float ID = p_beaconDetectionUpdate.beaconID;
-            if ( index < m_beacons.Count|| m_beacons[index].ID == ID)
+            int? index = FindBeaconFromID(p_beaconDetectionUpdate.index, p_beaconDetectionUpdate.beaconID);
+
+            if (index == null)
             {
-                Material mat = m_beacons[p_beaconDetectionUpdate.index].gameObject.GetComponent<MeshRenderer>().material;
-                mat.SetColor("_Beacon_Color", p_beaconDetectionUpdate.playerDetected?m_detectedColor:m_undetectedColor);
+                Debug.LogError("BEACON DETECTION UPDATE ID SEARCH FAILED");
                 return;
             }
-
-            for (int i = 0; i < m_beacons.Count; i++)
-            {
-                if (m_beacons[i].ID == ID)
-                {
-                    Material mat = m_beacons[p_beaconDetectionUpdate.index].gameObject.GetComponent<MeshRenderer>().material;
-                    mat.SetColor("_Beacon_Color", p_beaconDetectionUpdate.playerDetected?m_detectedColor:m_undetectedColor);
-                    return;
-                }
-            }
             
-            // How did you get here
-            Debug.LogWarning("I couldn't find the ID brother",this);
+            Material mat = m_beacons[index??0].gameObject.GetComponent<MeshRenderer>().material;
+            mat.SetColor("_Beacon_Color", p_beaconDetectionUpdate.playerDetected?m_detectedColor:m_undetectedColor);
         }
 
         /// <summary/> Destroying the beacon based in the server info
         /// <param name="p_destroyedBeacon"></param>
         private void DestroyBeacon(DestroyedBeacon p_destroyedBeacon)
         {
-            int index = p_destroyedBeacon.index;
-            Destroy(m_beacons[index].gameObject);
-            m_beacons.RemoveAt(index);
+
+            int? index = FindBeaconFromID(p_destroyedBeacon.index, p_destroyedBeacon.beaconID);
+            float id = p_destroyedBeacon.beaconID;
+
+            if (index == null)
+            {
+                Debug.LogError("DESTROY BEACON ID SEARCH FAILED");
+                return;
+            }
+            
+            Destroy(m_beacons[index??0].gameObject);
+            m_beacons.RemoveAt(index??0);
+        }
+
+        /// <summary/> A function to find the index of the beacon that matches the given ID
+        /// <param name="p_index"> the estimated index of the wanted beacon </param>
+        /// <param name="p_beaconID"> the ID of the wanted beacon </param>
+        /// <returns> returns the index of the beacon with the right ID if none are found, returns null </returns>
+        private int? FindBeaconFromID(int p_index, float p_beaconID)
+        {
+            int index = p_index;
+            float ID = p_beaconID;
+            if ( index < m_beacons.Count || m_beacons[index].ID == ID) return index;
+
+            for (int i = 0; i < m_beacons.Count; i++) if (m_beacons[i].ID == ID) return i;
+
+            Debug.LogWarning("I couldn't find the index matching this ID brother",this);
+            return null;
         }
     }
 }

@@ -58,6 +58,10 @@ public class ClientManager : MonoBehaviour
     public delegate void SpawnBeaconDelegator(SpawnBeacon p_spawnBeacon);
     public static SpawnBeaconDelegator OnReceiveSpawnBeacon;
     
+    /// <summary> The delegate that will be called each time the server sends a InitialData message </summary>
+    public delegate void SpawnActivateBeacon(ActivateBeacon p_activateBeacon);
+    public static SpawnActivateBeacon OnReceiveActivateBeacon;
+    
     #endregion
     
     [SerializeField][Tooltip("The player Object to be enabled on connection")] private GameObject m_player;
@@ -93,7 +97,10 @@ public class ClientManager : MonoBehaviour
         NetworkClient.RegisterHandler<GameEnd>(ReceiveGameEnd);
         NetworkClient.RegisterHandler<InitialData>(ReceiveInitialData);
         NetworkClient.RegisterHandler<SpawnBeacon>(ReceiveSpawnBeacon);
+        NetworkClient.RegisterHandler<ActivateBeacon>(ReceiveActivateBeacon);
     }
+
+    private void ReceiveActivateBeacon(ActivateBeacon p_activateBeacon) => OnReceiveActivateBeacon?.Invoke(p_activateBeacon);
 
     private void ReceiveSpawnBeacon(SpawnBeacon p_spawnBeacon) => OnReceiveSpawnBeacon?.Invoke(p_spawnBeacon);
 
