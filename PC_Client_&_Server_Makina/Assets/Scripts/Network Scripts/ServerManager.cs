@@ -189,28 +189,30 @@ public class ServerManager : MonoBehaviour
         yield return new WaitForSeconds(m_beaconLifeTime);
         List<BeaconData> datas = m_beaconsPositionsBuffer.data.ToList();
 
-        if (p_index < datas.Count && datas[p_index].beaconID == p_beaconID)
+        int? index = FindBeaconFromID(p_index,p_beaconID);
+        
+        if (index == null)
         {
-            GetRidOfBeacon(p_index, p_beaconID);
+            Debug.LogError("SERVER RECEIVE ACTIVATE BEACON ID SEARCH FAILED");
             yield break;
         }
-
-        for (int i = 0; i < datas.Count; i++)
-        {
-            if (datas[i].beaconID == p_beaconID)
-            {
-                GetRidOfBeacon(i, p_beaconID);
-                yield break;
-            }
-        }
+        
+        GetRidOfBeacon(index??0, p_beaconID);
     }
 
+    /// <summary>
+    /// Destroys the beacon and iterates the m_currentBeaconAmount variable and sends the message of destruction to the clients
+    /// </summary>
+    /// <param name="p_index"> the index indication of the beacon </param>
+    /// <param name="p_beaconID"> the beaconID od the beacon </param>
     private void GetRidOfBeacon(int p_index, float p_beaconID)
     {
         List<BeaconData> datas = m_beaconsPositionsBuffer.data.ToList();
         datas.RemoveAt(p_index);
+        
         m_beaconsPositionsBuffer.data = datas.ToArray();
         m_currentBeaconAmount--;
+        
         SendToBothClients(new DestroyedBeacon(){index = p_index,beaconID = p_beaconID});
         StartCoroutine(BeaconSpawnTimer());
     }
@@ -337,27 +339,16 @@ public class ServerManager : MonoBehaviour
     private void OnServerReceiveActivateBeacon(NetworkConnection p_conn, ActivateBeacon p_ativateBeacon)
     {
         StartCoroutine(DespawnBeacon(p_ativateBeacon.index,p_ativateBeacon.beaconID));
-        
-        BeaconData[] datas = m_beaconsPositionsBuffer.data;
 
-        float ID = p_ativateBeacon.beaconID;
-        int index = p_ativateBeacon.index;
+        int? index = FindBeaconFromID(p_ativateBeacon.index,p_ativateBeacon.beaconID);
         
-        if (p_ativateBeacon.index < datas.Length && datas[index].beaconID == ID)
+        if (index == null)
         {
-            m_beaconsPositionsBuffer.data[index].isActive = true;
+            Debug.LogError("SERVER RECEIVE ACTIVATE BEACON ID SEARCH FAILED");
+            return;
         }
-        else
-        {
-            for (int i = 0; i < datas.Length; i++)
-            {
-                if (datas[i].beaconID == ID)
-                {
-                    m_beaconsPositionsBuffer.data[i].isActive = true;
-                    break;
-                }
-            }
-        }
+        
+        m_beaconsPositionsBuffer.data[index??0].isActive = true;
         
         //TODO Add this to server loop
         SendToBothClients(p_ativateBeacon);
@@ -560,5 +551,22 @@ public class ServerManager : MonoBehaviour
     {
         m_pcNetworkConnection?.Send(p_msg);
         m_vrNetworkConnection?.Send(p_msg);
+    }
+    
+    /// <summary/> A function to find the index of the beacon that matches the given ID
+    /// <param name="p_index"> the estimated index of the wanted beacon </param>
+    /// <param name="p_beaconID"> the ID of the wanted beacon </param>
+    /// <returns> returns the index of the beacon with the right ID if none are found, returns null </returns>
+    private int? FindBeaconFromID(int p_index, float p_beaconID)
+    {
+        int index = p_index;
+        float ID = p_beaconID;
+        BeaconData[] data = m_beaconsPositionsBuffer.data;
+        if ( index < data.Length || data[index].beaconID == ID) return index;
+
+        for (int i = 0; i < data.Length; i++) if (data[i].beaconID == ID) return i;
+
+        Debug.LogWarning("I couldn't find the index matching this ID brother",this);
+        return null;
     }
 }
