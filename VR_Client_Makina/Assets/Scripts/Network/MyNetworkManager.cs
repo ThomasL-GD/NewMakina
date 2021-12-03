@@ -54,6 +54,9 @@ namespace Network {
         public delegate void BeaconDetectionUpdateDelegator(BeaconDetectionUpdate p_beaconsPositions);
         public static BeaconDetectionUpdateDelegator OnReceiveBeaconDetectionUpdate;
     
+        public delegate void ActivateBeaconDelegator(ActivateBeacon p_activateBeacon);
+        public static ActivateBeaconDelegator OnReceiveActivateBeacon;
+    
         /// <summary/> The delegate that will be called each time the server sends a GameEnd message
         public delegate void GameEndDelegator(GameEnd p_gameEnd);
         public static GameEndDelegator OnReceiveGameEnd;
@@ -110,6 +113,7 @@ namespace Network {
             NetworkClient.RegisterHandler<SpawnBeacon>(ReceiveSpawnBeacon);
             NetworkClient.RegisterHandler<DestroyedBeacon>(ReceiveDestroyedBeacon);
             NetworkClient.RegisterHandler<BeaconDetectionUpdate>(ReceiveBeaconDetectionUpdate);
+            NetworkClient.RegisterHandler<ActivateBeacon>(ReceiveActivateBeacon);
             NetworkClient.RegisterHandler<GameEnd>(ReceiveGameEnd);
             NetworkClient.RegisterHandler<InitialData>(ReceiveInitialData);
         
@@ -174,6 +178,10 @@ namespace Network {
         /// <summary/> The function called when the client receives a message of type BeaconDetectionUpdate
         /// <param name="p_beaconDetectionUpdate"> The message sent by the Server to the Client </param>
         private void ReceiveBeaconDetectionUpdate(BeaconDetectionUpdate p_beaconDetectionUpdate) => OnReceiveBeaconDetectionUpdate?.Invoke(p_beaconDetectionUpdate);
+    
+        /// <summary/> The function called when the client receives a message of type ActivateBeacon
+        /// <param name="p_activateBeacon"> The message sent by the Server to the Client </param>
+        private void ReceiveActivateBeacon(ActivateBeacon p_activateBeacon) => OnReceiveActivateBeacon?.Invoke(p_activateBeacon);
 
         /// <summary/> The function called when the client receives a message of type GameEnd
         /// <param name="p_gameEnd"> The message sent by the Server to the Client </param>

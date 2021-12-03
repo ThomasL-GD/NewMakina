@@ -29,8 +29,13 @@ public abstract class GrabbableObject : MonoBehaviour {
     /// </summary>
     public void DestroyMaSoul() {
         OnDestroyGrabbable?.Invoke(this);
-        gameObject.SetActive(false);
+        BeingDestroyed();
+        Destroy(gameObject);
     }
+    
+    /// <summary> This is called at the end of DestroyMaSoul but before the gameobject gets destroyed </summary>
+    /// <remarks> Override this to do code after the call of OnDestroyGrabbable but before the destruction of this gameobject </remarks>
+    protected virtual void BeingDestroyed(){}
 
     /// <summary>
     /// Will change the parent of this object to the latest correct one

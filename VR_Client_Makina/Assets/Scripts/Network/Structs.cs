@@ -122,6 +122,7 @@ namespace CustomMessages
         public Vector3 position;
         public float beaconID;
         public bool detectingPlayer; //TODO this for Blue
+        public bool isActive;
     }
     
     /// <summary/> The position of every beacon in the game

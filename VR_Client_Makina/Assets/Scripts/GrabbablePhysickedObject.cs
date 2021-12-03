@@ -5,7 +5,7 @@ using UnityEngine.PlayerLoop;
 [RequireComponent(typeof(Rigidbody))]
 public abstract class GrabbablePhysickedObject : GrabbableObject {
 
-    /// <summary>Well, it was a transform but... err... I kinda amputated it so... it's just a position and rotation sticked together now... (￣ー￣; )ゞ</summary>
+    /// <summary>Well, it was a transform but... err... I kinda amputated it so... it's just a position and rotation sticked together now... (￣ー￣; )ゞ </summary>
     [Serializable]
     protected struct AmputatedTransform {
         public Vector3 position;
@@ -63,4 +63,16 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
         //Then, we store the last position & rotation of this object
         m_lastCoordinates[0] = AmputatedTransform.AmputateTransform(transform);
     }
+
+    private void OnCollisionEnter(Collision p_other) {
+        if (p_other.gameObject.layer == 8) {
+            transform.rotation = Quaternion.Euler(0,0,0);
+            OnFirstTimeTouchingGround();
+        }
+    }
+
+    /// <summary>
+    /// Is called each time this objects touches the ground
+    /// </summary>
+    protected virtual void OnFirstTimeTouchingGround() { }
 }
