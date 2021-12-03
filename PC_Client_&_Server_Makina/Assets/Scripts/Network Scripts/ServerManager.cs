@@ -284,8 +284,6 @@ public class ServerManager : MonoBehaviour
         
         AddBeacon(spawnBeacon.beaconID);
         SendToBothClients(spawnBeacon);
-        
-        Debug.Log($"Beacon<color=grey>#{(p_customID ?? Time.time).ToString().Trim(',')}<color> just spawned");
     }
 
     /// <summary/> Function called to add a beacon to the servers local list of beacons

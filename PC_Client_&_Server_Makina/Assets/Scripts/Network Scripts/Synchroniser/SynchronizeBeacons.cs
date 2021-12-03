@@ -6,7 +6,8 @@ using UnityEngine;
 namespace Synchronizers {
     public class SynchronizeBeacons : Synchronizer {
 
-        [SerializeField][Tooltip("The beacon prefab that will be instantiated for each beacon")] private GameObject m_prefabBeacon = null;
+        [SerializeField][Tooltip("The beacon prefab that will be instantiated for each beacon")] private GameObject m_prefabBeaconInactive = null;
+        [SerializeField][Tooltip("The beacon prefab that will be instantiated for each beacon")] private GameObject m_prefabBeaconActive = null;
 
         [SerializeField][Tooltip("The color of the beacon when the player is undetected")] private Color m_undetectedColor = Color.red;
         [SerializeField][Tooltip("The color of the beacon when the player is detected")] private Color m_detectedColor = Color.green;
@@ -19,6 +20,13 @@ namespace Synchronizers {
         {
             public GameObject gameObject;
             public float ID;
+
+            public void ReplaceGameobject(GameObject p_gameobject, float p_beaconRange)
+            {
+                p_gameobject.transform.localScale *= p_beaconRange * 2;
+                Destroy(gameObject);
+                gameObject = Instantiate(p_gameobject);
+            }
         }
         private float m_beaconRange;
 
@@ -33,6 +41,11 @@ namespace Synchronizers {
             ClientManager.OnReceiveActivateBeacon += UpdateBeaconActivation;
         }
 
+        [ContextMenu("yay")]
+        private void yay() => UpdateBeaconActivation(new ActivateBeacon() {index = 0,beaconID = m_beacons[0].ID});
+        
+        /// <summary/> Updating a beacon to activate
+        /// <param name="p_activatebeacon"> the beacon data to activate </param>
         private void UpdateBeaconActivation(ActivateBeacon p_activatebeacon)
         {
             int? index = FindBeaconFromID(p_activatebeacon.index, p_activatebeacon.beaconID);
@@ -43,13 +56,14 @@ namespace Synchronizers {
                 return;
             }
             
-            Debug.Log($"Active Beacon{index}#<color=grey>#{p_activatebeacon.beaconID.ToString().Trim(',')}<color>");
+            //Debug.Log($"Activated Beacon{index}#<color=grey>#{p_activatebeacon.beaconID.ToString().Trim(',')}<color>");
+            
+            m_beacons[index??0].ReplaceGameobject(m_prefabBeaconActive, m_beaconRange);
         }
 
         private void SpawnBeacons(SpawnBeacon p_spawnbeacon)
         {
-            GameObject bc  = Instantiate(m_prefabBeacon);
-            bc.transform.localScale *= m_beaconRange*2;
+            GameObject bc  = Instantiate(m_prefabBeaconInactive);
             m_beacons.Add(new Beacons(){gameObject = bc,ID = p_spawnbeacon.beaconID});
         }
 
