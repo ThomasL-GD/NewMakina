@@ -53,7 +53,7 @@ GameObject:
   - component: {fileID: 7326766763776661540}
   - component: {fileID: 7326766763776661545}
   - component: {fileID: 7326766763776661546}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: pointer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 7326766763828582203}
   - component: {fileID: 7326766763828582200}
   - component: {fileID: 7326766763828582201}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,7 +183,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 58d820aaf564feb4994e0070838a1bd9, type: 2}
+  - {fileID: 2100000, guid: bf43d06a90611004f8c58dfe5059a4c4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -214,7 +214,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7326766764002876129}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: VR Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -228,14 +228,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7326766764002876130}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.32171628, y: -0, z: -0, w: 0.9468362}
+  m_LocalPosition: {x: 0, y: 48, z: 1.764401}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_Children:
   - {fileID: 7326766764477234786}
   m_Father: {fileID: 1446985087323601783}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 37.534, y: 0, z: 0}
 --- !u!1 &7326766764244455012
 GameObject:
   m_ObjectHideFlags: 0
@@ -247,7 +247,7 @@ GameObject:
   - component: {fileID: 7326766764244455016}
   - component: {fileID: 7326766764244455017}
   - component: {fileID: 7326766764244455018}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: LeftHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -329,7 +329,7 @@ GameObject:
   - component: {fileID: 7326766764392551922}
   - component: {fileID: 7326766764392551920}
   - component: {fileID: 7326766764392551921}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: pointer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -506,7 +506,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7326766764468014488}
   - component: {fileID: 7326766764468014495}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Spot Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -538,11 +538,11 @@ Light:
   serializedVersion: 10
   m_Type: 0
   m_Shape: 0
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 0.56078434}
   m_Intensity: 1000000
   m_Range: 1000
-  m_SpotAngle: 46.757446
-  m_InnerSpotAngle: 21.80208
+  m_SpotAngle: 74.85792
+  m_InnerSpotAngle: 0
   m_CookieSize: 10
   m_Shadows:
     m_Type: 1
@@ -600,7 +600,7 @@ GameObject:
   - component: {fileID: 7326766764477234786}
   - component: {fileID: 7326766764477234787}
   - component: {fileID: 7326766764477234812}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -834,7 +834,7 @@ GameObject:
   - component: {fileID: 7326766765795034192}
   - component: {fileID: 7326766765795034193}
   - component: {fileID: 7326766765795034194}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Righthand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -915,19 +915,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7405762300650092718, guid: 1f35df31a68d99f468dfd9ce47d78cb6, type: 3}
       propertyPath: m_beaconRange
-      value: 15
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 7405762300650092718, guid: 1f35df31a68d99f468dfd9ce47d78cb6, type: 3}
       propertyPath: m_beaconLifeTime
-      value: 30
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7405762300650092718, guid: 1f35df31a68d99f468dfd9ce47d78cb6, type: 3}
       propertyPath: m_initialBeacons
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7405762300650092718, guid: 1f35df31a68d99f468dfd9ce47d78cb6, type: 3}
       propertyPath: m_pcPlayerHealth
-      value: 10
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7405762300650092718, guid: 1f35df31a68d99f468dfd9ce47d78cb6, type: 3}
       propertyPath: m_vrPlayerHealth
@@ -935,11 +935,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7405762300650092718, guid: 1f35df31a68d99f468dfd9ce47d78cb6, type: 3}
       propertyPath: m_beaconRespawnTime
-      value: 15
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7405762300650092718, guid: 1f35df31a68d99f468dfd9ce47d78cb6, type: 3}
       propertyPath: m_initialBeaconSpawnDelay
-      value: 10
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7405762300650092718, guid: 1f35df31a68d99f468dfd9ce47d78cb6, type: 3}
       propertyPath: m_heartTransforms.Array.size
@@ -1199,6 +1199,10 @@ PrefabInstance:
       value: LaserPreshot
       objectReference: {fileID: 0}
     - target: {fileID: 4955901843613917572, guid: 55af39f650fecab4491713ca287fdbbd, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4955901843613917572, guid: 55af39f650fecab4491713ca287fdbbd, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -1318,7 +1322,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 886141219637608064, guid: 933f49e8e7f7d9443a95d8790ad6798a, type: 3}
       propertyPath: m_fontSize
-      value: 26.95
+      value: 14.05
       objectReference: {fileID: 0}
     - target: {fileID: 886141220200166097, guid: 933f49e8e7f7d9443a95d8790ad6798a, type: 3}
       propertyPath: m_Pivot.x
@@ -1410,7 +1414,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 886141220697841717, guid: 933f49e8e7f7d9443a95d8790ad6798a, type: 3}
       propertyPath: m_fontSize
-      value: 37.45
+      value: 19.5
       objectReference: {fileID: 0}
     - target: {fileID: 6602148936221583440, guid: 933f49e8e7f7d9443a95d8790ad6798a, type: 3}
       propertyPath: m_IsActive
@@ -1418,11 +1422,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6602148936221583454, guid: 933f49e8e7f7d9443a95d8790ad6798a, type: 3}
       propertyPath: m_fontSize
-      value: 65.85
+      value: 37.75
       objectReference: {fileID: 0}
     - target: {fileID: 6602148936273740814, guid: 933f49e8e7f7d9443a95d8790ad6798a, type: 3}
       propertyPath: m_fontSize
-      value: 65.85
+      value: 37.75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 933f49e8e7f7d9443a95d8790ad6798a, type: 3}
@@ -1507,6 +1511,14 @@ PrefabInstance:
       propertyPath: m_text
       value: 
       objectReference: {fileID: 7326766763765635941}
+    - target: {fileID: 586668069150170723, guid: c1d0f69dad19b50469b9df1f1e46bf20, type: 3}
+      propertyPath: m_prefabBeaconActive
+      value: 
+      objectReference: {fileID: 1494951941266285603, guid: c049ab8244cd5c849af13a5c274f7807, type: 3}
+    - target: {fileID: 586668069150170723, guid: c1d0f69dad19b50469b9df1f1e46bf20, type: 3}
+      propertyPath: m_prefabBeaconInactive
+      value: 
+      objectReference: {fileID: 3860077179760514079, guid: af8856b777c287845b48eaa6086ac6e4, type: 3}
     - target: {fileID: 586668069150170728, guid: c1d0f69dad19b50469b9df1f1e46bf20, type: 3}
       propertyPath: m_headVR
       value: 
@@ -1535,6 +1547,10 @@ PrefabInstance:
       propertyPath: m_deathFeedback
       value: 
       objectReference: {fileID: 3638442621238007049}
+    - target: {fileID: 586668069150170730, guid: c1d0f69dad19b50469b9df1f1e46bf20, type: 3}
+      propertyPath: m_spawnPoints.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 586668069150170730, guid: c1d0f69dad19b50469b9df1f1e46bf20, type: 3}
       propertyPath: m_spawnPoints.Array.data[0]
       value: 

@@ -6,8 +6,8 @@ using UnityEngine;
 namespace Synchronizers {
     public class SynchronizeBeacons : Synchronizer {
 
-        [SerializeField][Tooltip("The beacon prefab that will be instantiated for each beacon")] private GameObject m_prefabBeaconInactive = null;
         [SerializeField][Tooltip("The beacon prefab that will be instantiated for each beacon")] private GameObject m_prefabBeaconActive = null;
+        [SerializeField][Tooltip("The beacon prefab that will be instantiated for each beacon")] private GameObject m_prefabBeaconInactive = null;
 
         [SerializeField][Tooltip("The color of the beacon when the player is undetected")] private Color m_undetectedColor = Color.red;
         [SerializeField][Tooltip("The color of the beacon when the player is detected")] private Color m_detectedColor = Color.green;
@@ -41,8 +41,8 @@ namespace Synchronizers {
             ClientManager.OnReceiveActivateBeacon += UpdateBeaconActivation;
         }
 
-        [ContextMenu("yay")]
-        private void yay() => UpdateBeaconActivation(new ActivateBeacon() {index = 0,beaconID = m_beacons[0].ID});
+        // [ContextMenu("yay")]
+        // private void yay() => UpdateDetection(new BeaconDetectionUpdate() {playerDetected = true,index = 0,beaconID = m_beacons[0].ID});
         
         /// <summary/> Updating a beacon to activate
         /// <param name="p_activatebeacon"> the beacon data to activate </param>
@@ -102,6 +102,8 @@ namespace Synchronizers {
                 Debug.LogError("BEACON DETECTION UPDATE ID SEARCH FAILED");
                 return;
             }
+            
+            if(m_beacons[index??0].gameObject == m_prefabBeaconInactive) return;
             
             Material mat = m_beacons[index??0].gameObject.GetComponent<MeshRenderer>().material;
             mat.SetColor("_Beacon_Color", p_beaconDetectionUpdate.playerDetected?m_detectedColor:m_undetectedColor);
