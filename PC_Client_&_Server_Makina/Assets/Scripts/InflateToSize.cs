@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class InflateToSize : MonoBehaviour
 {
@@ -16,7 +13,6 @@ public class InflateToSize : MonoBehaviour
 
         transform.localScale = Vector3.zero;
         m_inflationSpeed =  m_targetScale/m_inflationTime;
-        Debug.Log(Time.time);
     }
 
     void Update()
@@ -26,7 +22,6 @@ public class InflateToSize : MonoBehaviour
         if (transform.localScale.x >= m_targetScale)
         {
             transform.localScale = new Vector3(1f, 1f, 1f) * m_targetScale;
-            Debug.Log(Time.time);
             Destroy(this);
         }
     }
