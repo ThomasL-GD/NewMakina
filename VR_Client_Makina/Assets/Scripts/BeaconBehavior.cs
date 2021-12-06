@@ -6,7 +6,7 @@ using UnityEngine;
 public class BeaconBehavior : GrabbablePhysickedObject {
 
     [HideInInspector] public int m_index;
-    public SynchronizeBeacons m_synchronizer;
+    [HideInInspector] public SynchronizeBeacons m_synchronizer;
     
     private BeaconLoading m_beaconLoading = null;
 
@@ -47,6 +47,7 @@ public class BeaconBehavior : GrabbablePhysickedObject {
     //     Gizmos.DrawWireSphere(transform.position, m_radius); // feedback magic ♪♪ ヽ(ˇ∀ˇ )ゞ
     // }
 
+    //TODO comment ! (╬ ಠ益ಠ)
     protected override void OnFirstTimeTouchingGround() {
 
         if (m_isDeployed) return;
@@ -57,9 +58,16 @@ public class BeaconBehavior : GrabbablePhysickedObject {
         //Destroy(m_rb);
         m_isDeployed = true;
         transform.rotation = Quaternion.Euler(Vector3.zero);
-        
-        
-        
+
+        //For each children of this object, make them inflate and add the script in the case they don't have it already
+        foreach (Transform child in transform) {
+            if (!child.gameObject.TryGetComponent(out InflateToSize script)){
+                script = child.gameObject.AddComponent<InflateToSize>();
+            }
+            
+            script.StartInflating();
+        }
+
         m_synchronizer.SendBeaconActivation(m_index);
     }
 
@@ -69,6 +77,8 @@ public class BeaconBehavior : GrabbablePhysickedObject {
         OnDestroyBeacon?.Invoke(this); //Saying everyone we get destroyed
     }
 
+    /// <summary> </summary>
+    /// <param name="p_grabbableObject"></param>
     private void ActualiseIndex(BeaconBehavior p_grabbableObject) {
         if (m_index > p_grabbableObject.m_index) m_index--;
     }

@@ -8,9 +8,11 @@ using UnityEngine;
 namespace Synchronizers {
     public class SynchronizeBeacons : Synchronizer {
 
+        [Header("Beacons")]
         [SerializeField] private GameObject m_prefabBeaconAmmo = null;
-        [SerializeField] private GameObject m_prefabBeaconSetUp = null;
-        private float m_range = 20f;
+        [HideInInspector] public float m_range = 20f;
+        [SerializeField] [Range(0f, 1f)] public float m_inflateTime = 0.2f;
+        
 
         [Header("Colors")]
         [SerializeField] private Color m_undetectedColor = Color.red;
@@ -38,9 +40,12 @@ namespace Synchronizers {
         private List<BeaconInfo> m_beacons = new List<BeaconInfo>();
         private BeaconBehavior[] m_beaconsInTheArm = null;
 
-        public delegate void NewBeaconDelegator(BeaconBehavior p_beaconBehavior);
+        public delegate void BeaconDelegator(BeaconBehavior p_beaconBehavior);
 
-        public static NewBeaconDelegator OnNewBeacon;
+        public static BeaconDelegator OnNewBeacon;
+        public static BeaconDelegator OnBeaconSetUp;
+        
+        
         private static readonly int CodeBeaconColor = Shader.PropertyToID("_Beacon_Color");
 
 
@@ -153,7 +158,10 @@ namespace Synchronizers {
         private void SetRangeOfBeacons(InitialData p_initialData) {
             m_range = p_initialData.beaconRange;
             foreach (Transform child in m_prefabBeaconAmmo.transform) {
-                child.localScale = (new Vector3(m_range, m_range, m_range) / m_prefabBeaconAmmo.transform.localScale.x) * 2f;
+                if (child.gameObject.TryGetComponent(out InflateToSize script)) {
+                    script.m_targetScale = (m_range * 2f) / m_prefabBeaconAmmo.transform.localScale.x;
+                    script.m_inflationTime = m_inflateTime;
+                }
             }
         }
 
@@ -161,6 +169,7 @@ namespace Synchronizers {
         /// <param name="p_index">The index of the beacon that gets activated</param>
         public void SendBeaconActivation(int p_index) {
             SetActivationOfABeacon(p_index, true);
+            OnBeaconSetUp?.Invoke(m_beacons[p_index].gameObject.GetComponent<BeaconBehavior>());
             MyNetworkManager.singleton.SendVrData(new ActivateBeacon(){index = p_index, beaconID = m_beacons[p_index].serverID});
         }
 
