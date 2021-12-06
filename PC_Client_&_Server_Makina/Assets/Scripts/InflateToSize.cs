@@ -7,7 +7,7 @@ public class InflateToSize : MonoBehaviour
     private float m_inflationSpeed;
     private float m_targetScale;
     
-    void Awake()
+    void Start()
     {
         m_targetScale = transform.localScale.x;
 
@@ -18,10 +18,11 @@ public class InflateToSize : MonoBehaviour
     void Update()
     {
         float inflation = m_inflationSpeed * Time.deltaTime;
-        transform.localScale += new Vector3(1f, 1f, 1f) * inflation;
+        transform.localScale += Vector3.one * inflation;
+        
         if (transform.localScale.x >= m_targetScale)
         {
-            transform.localScale = new Vector3(1f, 1f, 1f) * m_targetScale;
+            transform.localScale = Vector3.one * m_targetScale;
             Destroy(this);
         }
     }

@@ -18,18 +18,27 @@ namespace Synchronizers {
         [Serializable]
         private struct Beacons
         {
-            public GameObject gameObject;
+            public GameObject beaconPrefabInstance;
             public float ID;
 
-            public void ReplaceGameobject(GameObject p_gameobject, float p_beaconRange)
+            public Beacons(GameObject p_beaconPrefabInstance, float p_id, Vector3? p_position = null)
             {
-                p_gameobject.transform.localScale *= p_beaconRange * 2;
-                Destroy(gameObject);
-                gameObject = Instantiate(p_gameobject);
+                beaconPrefabInstance = Instantiate(p_beaconPrefabInstance);
+                beaconPrefabInstance.transform.position = p_position?? Vector3.zero;
+                
+                ID = p_id;
             }
         }
         private float m_beaconRange;
 
+        
+        /// <summary/> Spawning a beacon and adding it to the array
+        /// <param name="p_spawnbeacon"> the message sent by the server </param>
+        private void SpawnBeacons(SpawnBeacon p_spawnbeacon)
+        {
+            m_beacons.Add(new Beacons(m_prefabBeaconInactive, p_spawnbeacon.beaconID));
+        }
+        
         /// <summary/> Initiating the class by adding the right functions to the Client delegates
         private void Awake() {
             // Adding the right functions to the delegate
@@ -40,9 +49,6 @@ namespace Synchronizers {
             ClientManager.OnReceiveInitialData += UpdateBeaconRange;
             ClientManager.OnReceiveActivateBeacon += UpdateBeaconActivation;
         }
-
-        // [ContextMenu("yay")]
-        // private void yay() => UpdateDetection(new BeaconDetectionUpdate() {playerDetected = true,index = 0,beaconID = m_beacons[0].ID});
         
         /// <summary/> Updating a beacon to activate
         /// <param name="p_activatebeacon"> the beacon data to activate </param>
@@ -55,21 +61,19 @@ namespace Synchronizers {
                 Debug.LogError("BEACON DETECTION UPDATE ID SEARCH FAILED");
                 return;
             }
-            
-            //Debug.Log($"Activated Beacon{index}#<color=grey>#{p_activatebeacon.beaconID.ToString().Trim(',')}<color>");
-            
-            m_beacons[index??0].ReplaceGameobject(m_prefabBeaconActive, m_beaconRange);
+
+            GameObject oldBeacon = m_beacons[index ?? 0].beaconPrefabInstance;
+            m_beacons[index ?? 0] = new Beacons(m_prefabBeaconActive,m_beacons[index ?? 0].ID,oldBeacon.transform.position);
+            Destroy(oldBeacon);
         }
 
-        private void SpawnBeacons(SpawnBeacon p_spawnbeacon)
-        {
-            GameObject bc  = Instantiate(m_prefabBeaconInactive);
-            m_beacons.Add(new Beacons(){gameObject = bc,ID = p_spawnbeacon.beaconID});
-        }
+
 
         /// <summary/> Updating the beacon range
         /// <param name="p_initialdata"></param>
-        private void UpdateBeaconRange(InitialData p_initialdata) => m_beaconRange = p_initialdata.beaconRange;
+        private void UpdateBeaconRange(InitialData p_initialdata) {
+            m_prefabBeaconActive.transform.localScale = Vector3.one * (p_initialdata.beaconRange * 2f);
+        }
 
         /// <summary/> Updating the beacon positions
         /// <param name="p_beaconsPositions"></param>
@@ -86,8 +90,8 @@ namespace Synchronizers {
                     Debug.LogError("BEACON DETECTION UPDATE ID SEARCH FAILED");
                     return;
                 }
-                
-                m_beacons[index??0].gameObject.transform.position = data.position;
+
+                m_beacons[index ?? 0].beaconPrefabInstance.transform.position = data.position;
             }
         }
 
@@ -103,9 +107,8 @@ namespace Synchronizers {
                 return;
             }
             
-            if(m_beacons[index??0].gameObject == m_prefabBeaconInactive) return;
-            
-            Material mat = m_beacons[index??0].gameObject.GetComponent<MeshRenderer>().material;
+
+            Material mat = m_beacons[index ?? 0].beaconPrefabInstance.GetComponent<MeshRenderer>().material;
             mat.SetColor("_Beacon_Color", p_beaconDetectionUpdate.playerDetected?m_detectedColor:m_undetectedColor);
         }
 
@@ -123,7 +126,7 @@ namespace Synchronizers {
                 return;
             }
             
-            Destroy(m_beacons[index??0].gameObject);
+            Destroy(m_beacons[index??0].beaconPrefabInstance);
             m_beacons.RemoveAt(index??0);
         }
 
