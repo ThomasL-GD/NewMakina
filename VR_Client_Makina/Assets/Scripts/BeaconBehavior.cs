@@ -46,8 +46,7 @@ public class BeaconBehavior : GrabbablePhysickedObject {
     // private void OnDrawGizmos() {
     //     Gizmos.DrawWireSphere(transform.position, m_radius); // feedback magic ♪♪ ヽ(ˇ∀ˇ )ゞ
     // }
-
-    //TODO comment ! (╬ ಠ益ಠ)
+    
     protected override void OnFirstTimeTouchingGround() {
 
         if (m_isDeployed) return;

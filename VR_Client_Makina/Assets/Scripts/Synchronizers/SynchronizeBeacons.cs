@@ -19,21 +19,28 @@ namespace Synchronizers {
         [SerializeField] private Color m_detectedColor = Color.green;
         [SerializeField] private Color m_unactiveColor = Color.blue;
 
-        /// <summary>
-        /// TODO this
-        /// </summary>
+        /// <summary> Contains a gameobject of a beacon and its server ID, additionally contains booleans that explain the beacon state </summary>
         private class BeaconInfo {
+            /// <summary>The gameobject of the beacon</summary>
             public readonly GameObject gameObject;
+            
+            /// <summary> If true, the PC player is in the range of this beacon </summary>
             public bool isDetecting;
+            
+            /// <summary> If true, the beacon has touched the ground after being thrown, if false, the beacon is either loaded or in a hand of the player or in the air </summary>
             public bool isOnTheGroundAndSetUp;
 
+            /// <summary> The ID the server uses for verifications, basically don't touch this </summary>
             public float serverID;
 
-            public BeaconInfo(GameObject p_go, float p_id) {
+            /// <summary> The constructor of a beaconInfo class </summary>
+            /// <param name="p_go">The GameObject of the beacon</param>
+            /// <param name="p_serverID">The server id of the beacon</param>
+            public BeaconInfo(GameObject p_go, float p_serverID) {
                 isDetecting = false;
                 isOnTheGroundAndSetUp = false;
                 gameObject = p_go;
-                serverID = p_id;
+                serverID = p_serverID;
             }
         }
         
@@ -87,9 +94,10 @@ namespace Synchronizers {
         }
 
         /// <summary>
-        /// TODO this
+        /// Call this to create a new beacon.
+        /// The process of adding the beacon to every database that needs it is automated here.
         /// </summary>
-        /// <param name="p_spawnBeacon"></param>
+        /// <param name="p_spawnBeacon">The server message of the new beacon</param>
         private void CreateBeacon(SpawnBeacon p_spawnBeacon) {
 
             BeaconLoading.s_synchronizer = this;

@@ -65,7 +65,7 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
     }
 
     private void OnCollisionEnter(Collision p_other) {
-        if (p_other.gameObject.layer == 8) {
+        if (p_other.gameObject.layer == 8) { //The ground layer
             transform.rotation = Quaternion.Euler(0,0,0);
             OnFirstTimeTouchingGround();
         }
