@@ -101,9 +101,9 @@ public class ServerManager : MonoBehaviour
         OnServerTick += SendPcTransform;
         OnServerTick += SendLaser;
         OnServerTick += SendPcInvisbility;
-        OnServerTick += BeaconDetectionCheck;
         OnServerTick += SendBeaconsPositions;
         OnServerTick += CheckHealths;
+        OnServerTick += BeaconDetectionCheck;
     }
     
     
