@@ -6,7 +6,7 @@ using Network;
 using UnityEngine;
 
 namespace Synchronizers {
-    public class SynchronizeBeacons : Synchronizer {
+    public class SynchronizeBeacons : SynchronizeLoadedObjectsAbstract {
 
         [Header("Beacons")]
         [SerializeField] private GameObject m_prefabBeaconAmmo = null;
@@ -55,12 +55,6 @@ namespace Synchronizers {
         
         private static readonly int CodeBeaconColor = Shader.PropertyToID("_Beacon_Color");
 
-
-        [Header("Loading in Arm")]
-        [SerializeField] public Transform[] m_loadingPositions;
-        
-        public static int maxSlotsForBeacons = 1;
-
         private void Awake() {
             if(m_prefabBeaconAmmo == null) Debug.LogError("You forgot to serialize a beacon prefab here ! (╬ ಠ益ಠ)", this);
         }
@@ -76,9 +70,9 @@ namespace Synchronizers {
         /// <summary>Just sets maxSlotsForBeacons according to the server's InitialData</summary>
         /// <param name="p_initialData">The message sent by the server</param>
         private void SetMaxBeaconsSlots(InitialData p_initialData) {
-            maxSlotsForBeacons = p_initialData.maximumBeaconCount;
-            m_beaconsInTheArm = new BeaconBehavior[maxSlotsForBeacons];
-            if(m_loadingPositions.Length < maxSlotsForBeacons) Debug.LogWarning("There is more possible loaded beacons than loaded beacon position, so please do your game designer's job, we ain't paying you a SMIC for nothing", this);
+            m_maxSlotsLoading = p_initialData.maximumBeaconCount;
+            m_beaconsInTheArm = new BeaconBehavior[m_maxSlotsLoading];
+            if(m_loadingPositions.Length < m_maxSlotsLoading) Debug.LogWarning("There is more possible loaded beacons than loaded beacon position, so please do your game designer's job, we ain't paying you a SMIC for nothing", this);
         }
 
         private void Update() {
@@ -99,8 +93,6 @@ namespace Synchronizers {
         /// </summary>
         /// <param name="p_spawnBeacon">The server message of the new beacon</param>
         private void CreateBeacon(SpawnBeacon p_spawnBeacon) {
-
-            BeaconLoading.s_synchronizer = this;
             
             GameObject go = Instantiate(m_prefabBeaconAmmo);
             
