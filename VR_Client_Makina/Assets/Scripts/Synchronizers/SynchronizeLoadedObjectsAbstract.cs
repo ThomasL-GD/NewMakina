@@ -11,6 +11,8 @@ namespace Synchronizers {
         
         public int m_maxSlotsLoading = 1;
         
+        //protected static 
+        
     }
 
 }

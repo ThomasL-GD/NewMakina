@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using CustomMessages;
 using Network;
@@ -100,6 +98,7 @@ namespace Synchronizers {
             
             BeaconBehavior script = go.GetComponent<BeaconBehavior>();
             script.m_index = m_beacons.Count - 1;
+            script.m_serverID = p_spawnBeacon.beaconID;
             script.m_synchronizer = this;
 
             OnNewBeacon?.Invoke(script);
@@ -110,9 +109,14 @@ namespace Synchronizers {
         /// <param name="p_destroyedBeacon">The message from the server</param>
         private void DestroyBeacon(DestroyedBeacon p_destroyedBeacon)
         {
-            int index = p_destroyedBeacon.index;
-            m_beacons[index].gameObject.GetComponent<GrabbableObject>().DestroyMaSoul();
-            m_beacons.RemoveAt(index);
+            int? index = FindBeaconFromID(p_destroyedBeacon.index, p_destroyedBeacon.beaconID);
+            if (index == null) {
+                Debug.LogError($"What the fuck is that, horrible {p_destroyedBeacon.index} c'est und des selling point la du jeu {p_destroyedBeacon.beaconID}");
+                return;
+            }
+            
+            m_beacons[index??0].gameObject.GetComponent<GrabbableObject>().DestroyMaSoul();
+            m_beacons.RemoveAt(index??0);
         }
         
         /// <summary>
@@ -122,16 +126,21 @@ namespace Synchronizers {
         /// <param name="p_beaconDetectionUpdate">The message from the server</param>
         private void UpdateDetection(BeaconDetectionUpdate p_beaconDetectionUpdate) {
             
-            m_beacons[p_beaconDetectionUpdate.index].isDetecting = p_beaconDetectionUpdate.playerDetected;
+            int? index = FindBeaconFromID(p_beaconDetectionUpdate.index, p_beaconDetectionUpdate.beaconID);
+            if (index == null) {
+                return;
+            }
+            
+            m_beacons[index??0].isDetecting = p_beaconDetectionUpdate.playerDetected;
             
             //Debug.Log($"Is player detected ? actually the {p_beaconDetectionUpdate.index} is {(p_beaconDetectionUpdate.playerDetected? "REALLY" : "NOT" )} detecting", this);
             
-            ActualiseColorOfBeacon(p_beaconDetectionUpdate.index);
+            ActualiseColorOfBeacon(index??0);
         }
         
         /// <summary> Will actualise the color of a beacon according to what it should display according to the beacon state </summary>
         /// <param name="p_index">The index of the beacon</param>
-        public void ActualiseColorOfBeacon(int p_index) {
+        private void ActualiseColorOfBeacon(int p_index) {
 
             Color newColor;
 
@@ -157,6 +166,7 @@ namespace Synchronizers {
         /// <param name="p_initialData">The message from the server</param>
         private void SetRangeOfBeacons(InitialData p_initialData) {
             m_range = p_initialData.beaconRange;
+            
             foreach (Transform child in m_prefabBeaconAmmo.transform) {
                 if (child.gameObject.TryGetComponent(out InflateToSize script)) {
                     script.m_targetScale = (m_range * 2f) / m_prefabBeaconAmmo.transform.localScale.x;
@@ -167,10 +177,19 @@ namespace Synchronizers {
 
         /// <summary> Send to the network manager the ActivateBeacon message </summary>
         /// <param name="p_index">The index of the beacon that gets activated</param>
-        public void SendBeaconActivation(int p_index) {
-            SetActivationOfABeacon(p_index, true);
-            OnBeaconSetUp?.Invoke(m_beacons[p_index].gameObject.GetComponent<BeaconBehavior>());
-            MyNetworkManager.singleton.SendVrData(new ActivateBeacon(){index = p_index, beaconID = m_beacons[p_index].serverID});
+        /// <param name="p_serverID">The server ID of the beacon that gets activated</param>
+        public void SendBeaconActivation(int p_index, float p_serverID) {
+            
+            int? index = FindBeaconFromID(p_index, p_serverID);
+            if (index == null) {
+                Debug.LogError($"What the fuck is that, horrible {p_index} c'est und des selling point la du jeu {p_serverID}");
+                return;
+            }
+            
+            SetActivationOfABeacon(index??0, true);
+            OnBeaconSetUp?.Invoke(m_beacons[index??0].gameObject.GetComponent<BeaconBehavior>());
+            //Debug.LogWarning($"I'm sending a beacon activation, its index is : {index??0} and server id : {m_beacons[index??0].serverID}");
+            MyNetworkManager.singleton.SendVrData(new ActivateBeacon(){index = index??0, beaconID = m_beacons[index??0].serverID});
         }
 
         /// <summary> Change the value of the isOnTheGroundAndSetUp of a beacon according to its index </summary>
@@ -178,6 +197,25 @@ namespace Synchronizers {
         /// <param name="p_isOnTheGroundAndSetUp">If the beacon is loaded or not</param>
         private void SetActivationOfABeacon(int p_index, bool p_isOnTheGroundAndSetUp) {
             m_beacons[p_index].isOnTheGroundAndSetUp = p_isOnTheGroundAndSetUp;
+        }
+        
+        /// <summary/> A function to find the index of the beacon that matches the given ID
+        /// <param name="p_index"> the estimated index of the wanted beacon </param>
+        /// <param name="p_beaconID"> the ID of the wanted beacon </param>
+        /// <returns> returns the index of the beacon with the right ID if none are found, returns null </returns>
+        private int? FindBeaconFromID(int p_index, float p_beaconID)
+        {
+            int index = p_index;
+            float ID = p_beaconID;
+            List<BeaconInfo> data = m_beacons;
+            if ( index < data.Count && data[index].serverID == ID) return index;
+
+            for (int i = 0; i < data.Count; i++) if (data[i].serverID == ID) return i;
+
+#if UNITY_EDITOR
+            Debug.LogWarning("I couldn't find the index matching this ID brother",this);
+#endif
+            return null;
         }
     }
 }
