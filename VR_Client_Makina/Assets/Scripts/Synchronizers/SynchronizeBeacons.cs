@@ -70,7 +70,6 @@ namespace Synchronizers {
         private void SetMaxBeaconsSlots(InitialData p_initialData) {
             m_maxSlotsLoading = p_initialData.maximumBeaconCount;
             m_beaconsInTheArm = new BeaconBehavior[m_maxSlotsLoading];
-            if(m_loadingPositions.Length < m_maxSlotsLoading) Debug.LogWarning("There is more possible loaded beacons than loaded beacon position, so please do your game designer's job, we ain't paying you a SMIC for nothing", this);
         }
 
         private void Update() {
