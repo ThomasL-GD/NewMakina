@@ -8,7 +8,7 @@ public class BeaconBehavior : GrabbablePhysickedObject {
     [HideInInspector] public int m_index;
     [HideInInspector] public SynchronizeBeacons m_synchronizer;
     
-    private BeaconLoading m_beaconLoading = null;
+    private ObjectLoading m_beaconLoading = null;
 
     private bool m_isDeployed = false;
     
@@ -16,13 +16,16 @@ public class BeaconBehavior : GrabbablePhysickedObject {
         base.Start();
         //m_isPuttableOnlyOnce = true;
 
-        if (gameObject.TryGetComponent(out BeaconLoading script)) {
+        if (gameObject.TryGetComponent(out ObjectLoading script)) {
             m_beaconLoading = script;
         }
         else {
-            Debug.LogWarning("No BeaconLoading script attached on this object but don't worry i gotchu fam ( ͡° ͜ʖ ͡°)", this);
-            m_beaconLoading = gameObject.AddComponent<BeaconLoading>();
+            Debug.LogWarning("No ObjectLoading script attached on this object but don't worry i gotchu fam ( ͡° ͜ʖ ͡°)", this);
+            m_beaconLoading = gameObject.AddComponent<ObjectLoading>();
         }
+
+        m_beaconLoading.m_synchronizer = m_synchronizer;
+        m_beaconLoading.Initialization();
 
         BeaconBehavior.OnDestroyBeacon += ActualiseIndex;
     }

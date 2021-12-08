@@ -5,6 +5,8 @@ using UnityEngine.PlayerLoop;
 [RequireComponent(typeof(Rigidbody))]
 public abstract class GrabbablePhysickedObject : GrabbableObject {
 
+    private bool m_hasTouchedGround = false;
+
     /// <summary>Well, it was a transform but... err... I kinda amputated it so... it's just a position and rotation sticked together now... (￣ー￣; )ゞ </summary>
     [Serializable]
     protected struct AmputatedTransform {
@@ -67,12 +69,13 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
     private void OnCollisionEnter(Collision p_other) {
         if (p_other.gameObject.layer == 8) { //The ground layer
             transform.rotation = Quaternion.Euler(0,0,0);
-            OnFirstTimeTouchingGround();
+            if(!m_hasTouchedGround)OnFirstTimeTouchingGround();
         }
     }
 
-    /// <summary>
-    /// Is called each time this objects touches the ground
-    /// </summary>
-    protected virtual void OnFirstTimeTouchingGround() { }
+    /// <summary> Is called the first time this object touches the ground </summary>
+    /// <remarks> Override this to have things done at this moment </remarks>
+    protected virtual void OnFirstTimeTouchingGround() {
+        m_hasTouchedGround = true;
+    }
 }

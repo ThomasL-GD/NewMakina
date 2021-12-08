@@ -1,31 +1,35 @@
 using Synchronizers;
 using UnityEngine;
 
-[RequireComponent(typeof(BeaconBehavior))]
-public class BeaconLoading : MonoBehaviour {
+[RequireComponent(typeof(GrabbablePhysickedObject))]
+public class ObjectLoading : MonoBehaviour {
 
-    public static SynchronizeBeacons s_synchronizer;
+    public SynchronizeLoadedObjectsAbstract m_synchronizer;
     
-    [HideInInspector] private int m_indexInArm = 0;
+    [SerializeField] private int m_indexInArm = 0;
     private static int s_currentIndex = 0;
     
-    private delegate void UnloadingBeaconDelegator(int p_index);
+    private delegate void UnloadingLoadedItemDelegator(int p_index);
     /// <summary> Is called when a beacon is unloaded and gives the index of the unloaded beacon </summary>
-    private static UnloadingBeaconDelegator OnBeaconUnloaded;
+    private static UnloadingLoadedItemDelegator OnLoadedObjectUnloaded;
     
-    // Start is called before the first frame update
-    void OnEnable() {
+    /// <summary>
+    /// You MUST call this function to initialize the loading in arm.
+    /// It is used to set its index and subscribe to some internal delegates.
+    /// It also sets their position.
+    /// </summary>
+    public void Initialization() {
         m_indexInArm = s_currentIndex;
         s_currentIndex++; //We increase
-        OnBeaconUnloaded += SetBack;
+        OnLoadedObjectUnloaded += SetBack;
         SetPosition();
     }
 
     /// <summary> Call this to unload a beacon from the arm </summary>
     public void Unloading() {
         s_currentIndex--;
-        OnBeaconUnloaded -= SetBack;
-        OnBeaconUnloaded?.Invoke(m_indexInArm);
+        OnLoadedObjectUnloaded -= SetBack;
+        OnLoadedObjectUnloaded?.Invoke(m_indexInArm);
         Destroy(this);
     }
 
@@ -44,9 +48,9 @@ public class BeaconLoading : MonoBehaviour {
     /// <summary> Set the position and parent of this object according to its current index in the arm </summary>
     private void SetPosition() {
         
-        if(m_indexInArm > SynchronizeBeacons.maxSlotsForBeacons) Debug.LogWarning("wtf plzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz don't tell me this error occured", this);
+        if(m_indexInArm > m_synchronizer.m_maxSlotsLoading) Debug.LogWarning("wtf plzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz don't tell me this error occured", this);
         
-        Transform reference = s_synchronizer.m_loadingPositions[m_indexInArm];
+        Transform reference = m_synchronizer.m_loadingPositions[m_indexInArm];
         transform.position = reference.position;
         transform.SetParent(reference);
     }
