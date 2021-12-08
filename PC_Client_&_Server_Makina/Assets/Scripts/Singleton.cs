@@ -16,7 +16,7 @@ namespace GD2
         //Bool : est-ce que l'objet sera ajouté dans la catégories à ne pas décharger lors d'un changement de scene
         [SerializeField][Tooltip("est-ce que l'objet sera déchargé lors d'un changement de scene")] private bool m_dontDestroyOnLoad;
     
-        //String : nom que prendras la game object si vous voulez le changer
+        //String : nom que prendras le game object si vous voulez le changer
         [SerializeField][Tooltip("nom que prendras la game object si vous voulez le changer (garder vide si vous ne voulez pas le changer)")] private string m_name;
         
         //L'instance qui assurera que l'objet resteras un singleton
