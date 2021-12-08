@@ -15,12 +15,20 @@ public class SelectParent : MonoBehaviour
         for (int i = 0; i < Selection.objects.Length; i++)
         {
             GameObject go = ((GameObject) Selection.objects[i]);
+            
+            if (go.transform.parent == null || go.transform.parent.gameObject.CompareTag("HoudinAllRight Select Ignore"))
+            {
+                newSelection.Add(go);
+                continue;
+            }
+            
             if (go.TryGetComponent(out HoudinAllRight ha))
             {
-                if (go.transform.parent == null || go.transform.parent.gameObject.CompareTag("HoudinAllRight Select Ignore"))
-                    newSelection.Add(go);
-                else newSelection.Add(go.transform.parent.gameObject);
+                newSelection.Add(go.transform.parent.gameObject);
+                continue;
             }
+            
+            newSelection.Add(go);
         }
         
         // Setting the new selection

@@ -1,12 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 using UnityEngine;
 using CustomMessages;
-using Unity.Mathematics;
-using UnityEditor;
 
 /// <summary/> The server side manager will handle all of the server side network dealings of the game
 
@@ -125,7 +122,7 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<ClientConnect>(OnServerReceiveClientConnect);
         NetworkServer.RegisterHandler<HeartBreak>(OnServerReceiveHeartBreak);
         NetworkServer.RegisterHandler<BeaconsPositions>(OnServerReceiveBeaconsPositions);
-        NetworkServer.RegisterHandler<DestroyedBeacon>(OnServerReceiveDestroyedBeacon);
+        //NetworkServer.RegisterHandler<DestroyedBeacon>(OnServerReceiveDestroyedBeacon);
         NetworkServer.RegisterHandler<ActivateBeacon>(OnServerReceiveActivateBeacon);
 
         //Unpacking the heart position values from the transforms to send through messages
@@ -187,13 +184,12 @@ public class ServerManager : MonoBehaviour
     IEnumerator DespawnBeacon(int p_index, float p_beaconID)
     {
         yield return new WaitForSeconds(m_beaconLifeTime);
-        List<BeaconData> datas = m_beaconsPositionsBuffer.data.ToList();
 
         int? index = FindBeaconFromID(p_index,p_beaconID);
         
         if (index == null)
         {
-            Debug.LogError("SERVER RECEIVE ACTIVATE BEACON ID SEARCH FAILED");
+            Debug.LogWarning("SERVER RECEIVE DESPAWN BEACON ID SEARCH FAILED");
             yield break;
         }
         
@@ -336,7 +332,6 @@ public class ServerManager : MonoBehaviour
     /// <param name="p_ativateBeacon"> The message sent by the Client to the Server  </param>
     private void OnServerReceiveActivateBeacon(NetworkConnection p_conn, ActivateBeacon p_ativateBeacon)
     {
-        StartCoroutine(DespawnBeacon(p_ativateBeacon.index,p_ativateBeacon.beaconID));
 
         int? index = FindBeaconFromID(p_ativateBeacon.index,p_ativateBeacon.beaconID);
         
@@ -347,6 +342,7 @@ public class ServerManager : MonoBehaviour
         }
         
         m_beaconsPositionsBuffer.data[index??0].isActive = true;
+        StartCoroutine(DespawnBeacon(index??0,m_beaconsPositionsBuffer.data[index??0].beaconID));
         
         //TODO Add this to server loop
         SendToBothClients(p_ativateBeacon);
@@ -462,17 +458,6 @@ public class ServerManager : MonoBehaviour
         m_newPositions = true;
     }
 
-    /// <summary>
-    /// function called when the server receives a message of type DestroyedBeacon
-    /// </summary>
-    /// <param name="p_conn"> The connection from which originated the message </param>
-    /// <param name="p_destroyedBeacon"> The message sent by the Client to the Server  </param>
-    private void OnServerReceiveDestroyedBeacon(NetworkConnection p_conn, DestroyedBeacon p_destroyedBeacon) {
-        m_destroyedBeaconBuffer = p_destroyedBeacon;
-        OnServerTick -= SendDestroyedBeacon;
-        OnServerTick += SendDestroyedBeacon;
-    }
-
     #endregion
 
 
@@ -528,15 +513,7 @@ public class ServerManager : MonoBehaviour
             m_newPositions = false;
         }
     }
-    
-    /// <summary>
-    /// The function that send the destroyedBeacon to the clients
-    /// </summary>
-    private void SendDestroyedBeacon() {
-        m_pcNetworkConnection?.Send(m_destroyedBeaconBuffer);
-        OnServerTick -= SendDestroyedBeacon;
-    }
-    
+
     #endregion
 
 
@@ -560,11 +537,13 @@ public class ServerManager : MonoBehaviour
         int index = p_index;
         float ID = p_beaconID;
         BeaconData[] data = m_beaconsPositionsBuffer.data;
-        if ( index < data.Length || data[index].beaconID == ID) return index;
+        if ( index < data.Length && data[index].beaconID == ID) return index;
 
         for (int i = 0; i < data.Length; i++) if (data[i].beaconID == ID) return i;
 
+        #if UNITY_EDITOR
         Debug.LogWarning("I couldn't find the index matching this ID brother",this);
+        #endif
         return null;
     }
 }

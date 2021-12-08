@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using CustomMessages;
 using UnityEngine;
 
@@ -23,6 +24,7 @@ namespace Synchronizers {
 
             public Beacons(GameObject p_beaconPrefabInstance, float p_id, Vector3? p_position = null)
             {
+                p_beaconPrefabInstance.name += p_id.ToString();
                 beaconPrefabInstance = Instantiate(p_beaconPrefabInstance);
                 beaconPrefabInstance.transform.position = p_position?? Vector3.zero;
                 
@@ -87,7 +89,7 @@ namespace Synchronizers {
 
                 if (index == null)
                 {
-                    Debug.LogError("BEACON DETECTION UPDATE ID SEARCH FAILED");
+                    Debug.LogWarning($"BEACON DETECTION UPDATE ID ({data.beaconID}) SEARCH FAILED");
                     return;
                 }
 
@@ -103,7 +105,7 @@ namespace Synchronizers {
 
             if (index == null)
             {
-                Debug.LogError("BEACON DETECTION UPDATE ID SEARCH FAILED");
+                Debug.LogWarning("BEACON DETECTION UPDATE ID SEARCH FAILED");
                 return;
             }
             
@@ -118,13 +120,14 @@ namespace Synchronizers {
         {
 
             int? index = FindBeaconFromID(p_destroyedBeacon.index, p_destroyedBeacon.beaconID);
-            float id = p_destroyedBeacon.beaconID;
 
             if (index == null)
             {
                 Debug.LogError("DESTROY BEACON ID SEARCH FAILED");
                 return;
             }
+            
+            Debug.Log($"destroyed beacon id : {m_beacons[index??0].ID} using this id {p_destroyedBeacon.beaconID}");
             
             Destroy(m_beacons[index??0].beaconPrefabInstance);
             m_beacons.RemoveAt(index??0);
@@ -138,11 +141,11 @@ namespace Synchronizers {
         {
             int index = p_index;
             float ID = p_beaconID;
-            if ( index < m_beacons.Count || m_beacons[index].ID == ID) return index;
+            if ( index < m_beacons.Count && m_beacons[index].ID == ID) return index;
 
             for (int i = 0; i < m_beacons.Count; i++) if (m_beacons[i].ID == ID) return i;
 
-            Debug.LogWarning("I couldn't find the index matching this ID brother",this);
+            Debug.LogWarning($"I couldn't find the index matching this ID ({p_beaconID}) brother",this);
             return null;
         }
     }
