@@ -32,6 +32,11 @@ namespace Synchronizers {
 
         [SerializeField] private GameObject m_prefabParticles = null;
 
+        [Header("Sounds")]
+        [SerializeField] private AudioSource m_audioSource;
+        [SerializeField] [Tooltip("If true, nice shot :)\nIf false, crippling emptiness...")] private bool m_niceShotQuestionMark = true;
+        [SerializeField] private AudioClip m_niceShotSound = null;
+
         private bool m_isLoading = false;
 
         // Start is called before the first frame update
@@ -66,6 +71,12 @@ namespace Synchronizers {
             if(p_laser.hit){ //If the player is hit, we make a cool FX coz player rewarding and other arguable design reasons
                 GameObject particles = Instantiate(m_prefabParticles, p_laser.hitPosition, new Quaternion(0, 0, 0, 0));
                 StartCoroutine(ParticleStopper(particles));
+                
+                if (m_niceShotQuestionMark) { // Audio Feedback
+                    m_audioSource.Stop();
+                    m_audioSource.clip = m_niceShotSound;
+                    m_audioSource.Play();
+                }
                 
                 SynchronizeInitialData.instance.LosePcHealth();
             }
