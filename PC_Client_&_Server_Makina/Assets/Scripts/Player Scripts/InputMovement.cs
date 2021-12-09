@@ -149,8 +149,8 @@ public class InputMovement : MonoBehaviour
         }
         
         //Gravity
-         m_velocity.y *= .99f;
-        if(!m_grounded) m_velocity += Vector3.down * (m_gravity * Time.deltaTime);
+        if(m_grounded) m_velocity.y *= .99f;
+        else m_velocity += Vector3.down * (m_gravity * Time.deltaTime);
         
         //Edge Grab
         LedgeClimb(m_grounded);
