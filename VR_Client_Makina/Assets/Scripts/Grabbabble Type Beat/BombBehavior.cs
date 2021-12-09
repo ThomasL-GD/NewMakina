@@ -21,12 +21,12 @@ public class BombBehavior : GrabbablePhysickedObject {
         }
 
         //m_bombLoading.m_synchronizer = m_synchronizer;
-        m_bombLoading.Initialization();
+        m_synchronizer.LoadBombRandomly(m_bombLoading);
     }
 
     protected override void OnFirstTimeTouchingGround() {
         base.OnFirstTimeTouchingGround();
         
-        
+        m_synchronizer.ExplodeLol(transform.position);
     }
 }

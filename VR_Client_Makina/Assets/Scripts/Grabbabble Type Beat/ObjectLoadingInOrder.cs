@@ -1,12 +1,12 @@
-using Synchronizers;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(GrabbablePhysickedObject))]
-public class ObjectLoading : MonoBehaviour {
-
-    [HideInInspector] public SynchronizeLoadedObjectsAbstract m_synchronizer;
-    
-    [SerializeField] [Tooltip("For Debug Only.")] private int m_indexInArm = 0;
+/// <summary>
+/// Derives from ObjectLoading class.
+/// Will make sure all the objects that have this script will be placed in order.
+/// </summary>
+public class ObjectLoadingInOrder : ObjectLoading {
     
     private delegate void UnloadingLoadedItemDelegator(int p_index);
     /// <summary> Is called when a beacon is unloaded and gives the index of the unloaded beacon </summary>
@@ -15,9 +15,8 @@ public class ObjectLoading : MonoBehaviour {
     private static int s_currentNewIndex;
     
     /// <summary>
-    /// You MUST call this function to initialize the loading in arm.
-    /// It is used to set its index and subscribe to some internal delegates.
-    /// It also sets their position.
+    /// Alternate function from the one that requires an int as parameter.
+    /// Will set the new loaded object at the nearest position available and set everything up for the order to be preserved.
     /// </summary>
     public void Initialization() {
         m_indexInArm = s_currentNewIndex;
@@ -26,12 +25,11 @@ public class ObjectLoading : MonoBehaviour {
         SetPosition();
     }
 
-    /// <summary> Call this to unload a beacon from the arm </summary>
-    public void Unloading() {
+    public override void Unloading() {
         s_currentNewIndex--;
         OnLoadedObjectUnloaded -= SetBack;
         OnLoadedObjectUnloaded?.Invoke(m_indexInArm);
-        Destroy(this);
+        base.Unloading();
     }
 
     /// <summary>
@@ -44,15 +42,5 @@ public class ObjectLoading : MonoBehaviour {
 
         m_indexInArm--;
         SetPosition();
-    }
-
-    /// <summary> Set the position and parent of this object according to its current index in the arm </summary>
-    private void SetPosition() {
-        
-        if(m_indexInArm > m_synchronizer.m_maxSlotsLoading) Debug.LogWarning("wtf plzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz don't tell me this error occured", this);
-        
-        Transform reference = m_synchronizer.m_loadingPositions[m_indexInArm];
-        transform.position = reference.position;
-        transform.SetParent(reference);
     }
 }

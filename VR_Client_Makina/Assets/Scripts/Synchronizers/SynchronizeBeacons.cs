@@ -57,7 +57,9 @@ namespace Synchronizers {
             if(m_prefabBeaconAmmo == null) Debug.LogError("You forgot to serialize a beacon prefab here ! (╬ ಠ益ಠ)", this);
         }
 
-        private void Start() {
+        protected override void Start() {
+            base.Start();
+            
             MyNetworkManager.OnReceiveInitialData += SetMaxBeaconsSlots;
             MyNetworkManager.OnReceiveSpawnBeacon += CreateBeacon;
             MyNetworkManager.OnReceiveBeaconDetectionUpdate += UpdateDetection;
@@ -101,6 +103,16 @@ namespace Synchronizers {
             script.m_synchronizer = this;
 
             OnNewBeacon?.Invoke(script);
+        }
+
+        /// <summary> Will load a beacon in a random available position </summary>
+        /// <param name="p_script">The ObjectLoading script of the beacon you want to load</param>
+        public void LoadBeaconRandomly(ObjectLoading p_script) {
+            List<int> currentAvailablePositions = new List<int>();
+            for(int i = 0; i < m_availblePositions.Length; i++) if(m_availblePositions[i]) currentAvailablePositions.Add(i);
+
+            int random = Random.Range(0, currentAvailablePositions.Count);
+            LoadObjectFromIndex(p_script, currentAvailablePositions[random]);
         }
         
         

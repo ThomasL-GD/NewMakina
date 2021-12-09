@@ -26,7 +26,7 @@ public class BeaconBehavior : GrabbablePhysickedObject {
         }
 
         m_beaconLoading.m_synchronizer = m_synchronizer;
-        m_beaconLoading.Initialization();
+        m_synchronizer.LoadBeaconRandomly(m_beaconLoading);
 
         BeaconBehavior.OnDestroyBeacon += ActualiseIndex;
     }

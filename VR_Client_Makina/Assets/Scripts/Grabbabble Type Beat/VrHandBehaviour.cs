@@ -92,6 +92,6 @@ public class VrHandBehaviour : MonoBehaviour {
     /// </summary>
     /// <param name="p_grabbableObject">The script from which we will subscribe</param>
     private void Subscribe(GrabbableObject p_grabbableObject) {
-        p_grabbableObject.OnDestroyGrabbable += RemoveObjectFromExistence;
+        p_grabbableObject.OnDestroyGrabbable += RemoveObjectFromExistence; //TODO : I think this whole system is outdated if objects cannot be destroyed in the vr hand
     }
 }

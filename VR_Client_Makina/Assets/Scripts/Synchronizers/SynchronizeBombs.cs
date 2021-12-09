@@ -1,10 +1,9 @@
-using CustomMessages;
-using Unity.Mathematics;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Synchronizers {
 
-    public class SynchronizeBombs : Synchronizer {
+    public class SynchronizeBombs : SynchronizeLoadedObjectsAbstract {
 
         [SerializeField] private GameObject m_prefabBomb = null;
 
@@ -33,6 +32,16 @@ namespace Synchronizers {
             Destroy(gameObject);
         }
 
+        /// <summary> Will load a bomb in a random available position </summary>
+        /// <param name="p_script">The ObjectLoading script of the beacon you want to load</param>
+        public void LoadBombRandomly(ObjectLoading p_script) {
+            List<int> currentAvailablePositions = new List<int>();
+            for(int i = 0; i < m_availblePositions.Length; i++) if(m_availblePositions[i]) currentAvailablePositions.Add(i);
+
+            int random = Random.Range(0, currentAvailablePositions.Count);
+            LoadObjectFromIndex(p_script, currentAvailablePositions[random]);
+        }
+        
     }
 
 }
