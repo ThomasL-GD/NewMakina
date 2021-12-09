@@ -93,7 +93,9 @@ namespace Network {
         /// <typeparam name="T">Can be anything as long as its a struct deriving from VrData</typeparam>
         public void SendVrData<T>(T p_vrDataToSend) where T : struct, NetworkMessage {
             if (NetworkClient.active && m_canSend) {
-            
+                
+                if(p_vrDataToSend is DestroyedBeacon) Debug.LogError($"WTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+                
                 //Debug.Log($"I'm sending {p_vrDataToSend}");
                 NetworkClient.Send(p_vrDataToSend);
             }

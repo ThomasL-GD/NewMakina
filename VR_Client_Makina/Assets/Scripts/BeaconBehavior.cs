@@ -6,6 +6,7 @@ using UnityEngine;
 public class BeaconBehavior : GrabbablePhysickedObject {
 
     [HideInInspector] public int m_index;
+    [HideInInspector] public float m_serverID;
     [HideInInspector] public SynchronizeBeacons m_synchronizer;
     
     private ObjectLoading m_beaconLoading = null;
@@ -70,7 +71,7 @@ public class BeaconBehavior : GrabbablePhysickedObject {
             script.StartInflating();
         }
 
-        m_synchronizer.SendBeaconActivation(m_index);
+        m_synchronizer.SendBeaconActivation(m_index, m_serverID);
     }
 
     protected override void BeingDestroyed() {

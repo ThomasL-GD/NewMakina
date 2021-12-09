@@ -4,14 +4,15 @@ using UnityEngine;
 [RequireComponent(typeof(GrabbablePhysickedObject))]
 public class ObjectLoading : MonoBehaviour {
 
-    public SynchronizeLoadedObjectsAbstract m_synchronizer;
+    [HideInInspector] public SynchronizeLoadedObjectsAbstract m_synchronizer;
     
-    [SerializeField] private int m_indexInArm = 0;
-    private static int s_currentIndex = 0;
+    [SerializeField] [Tooltip("For Debug Only.")] private int m_indexInArm = 0;
     
     private delegate void UnloadingLoadedItemDelegator(int p_index);
     /// <summary> Is called when a beacon is unloaded and gives the index of the unloaded beacon </summary>
     private static UnloadingLoadedItemDelegator OnLoadedObjectUnloaded;
+
+    private static int s_currentNewIndex;
     
     /// <summary>
     /// You MUST call this function to initialize the loading in arm.
@@ -19,15 +20,15 @@ public class ObjectLoading : MonoBehaviour {
     /// It also sets their position.
     /// </summary>
     public void Initialization() {
-        m_indexInArm = s_currentIndex;
-        s_currentIndex++; //We increase
+        m_indexInArm = s_currentNewIndex;
+        s_currentNewIndex++; //We increase
         OnLoadedObjectUnloaded += SetBack;
         SetPosition();
     }
 
     /// <summary> Call this to unload a beacon from the arm </summary>
     public void Unloading() {
-        s_currentIndex--;
+        s_currentNewIndex--;
         OnLoadedObjectUnloaded -= SetBack;
         OnLoadedObjectUnloaded?.Invoke(m_indexInArm);
         Destroy(this);

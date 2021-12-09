@@ -6,7 +6,7 @@ using UnityEngine;
 public class RecenterVrRig : MonoBehaviour {
 
     [SerializeField] private Transform m_anchor = null;
-    public Vector3 m_startPos = Vector3.zero;
+    [HideInInspector] public Vector3 m_startPos = Vector3.zero;
 
     private void OnEnable() {
         m_startPos = transform.position;
