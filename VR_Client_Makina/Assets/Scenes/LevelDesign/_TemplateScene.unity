@@ -614,7 +614,7 @@ MonoBehaviour:
   autoCreatePlayer: 0
   playerSpawnMethod: 0
   spawnPrefabs: []
-  m_localHost: 0
+  m_localHost: 1
   m_IPadress: 10.31.241.108
 --- !u!4 &1425784625
 Transform:
@@ -929,9 +929,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1016540074}
     - target: {fileID: 5783733579950633033, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
+      propertyPath: m_audioSource
+      value: 
+      objectReference: {fileID: 7413916036529811003}
+    - target: {fileID: 5783733579950633033, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
       propertyPath: m_laserAiming
       value: 
       objectReference: {fileID: 1801718943}
+    - target: {fileID: 5783733579950633033, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
+      propertyPath: m_niceShotSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 096c2eeb437d590429b07b282afedc7f, type: 3}
     - target: {fileID: 5783733579950633034, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
       propertyPath: m_Name
       value: Synchronizer (plz let it be alone)
