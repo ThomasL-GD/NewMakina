@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using Synchronizers;
 using UnityEngine;
 
+[RequireComponent(typeof(SphereCollider))]
 public class BombBehavior : GrabbablePhysickedObject {
 
     private ObjectLoading m_bombLoading = null;
-    public SynchronizeBombs m_synchronizer = null;
+    [HideInInspector] public SynchronizeBombs m_synchronizer = null;
 
     protected override void Start() {
         base.Start();
@@ -20,7 +21,7 @@ public class BombBehavior : GrabbablePhysickedObject {
             m_bombLoading = gameObject.AddComponent<ObjectLoading>();
         }
 
-        //m_bombLoading.m_synchronizer = m_synchronizer;
+        m_bombLoading.m_synchronizer = m_synchronizer;
         m_synchronizer.LoadBombRandomly(m_bombLoading);
     }
 
@@ -28,5 +29,7 @@ public class BombBehavior : GrabbablePhysickedObject {
         base.OnFirstTimeTouchingGround();
         
         m_synchronizer.ExplodeLol(transform.position);
+            
+        Destroy(gameObject);
     }
 }

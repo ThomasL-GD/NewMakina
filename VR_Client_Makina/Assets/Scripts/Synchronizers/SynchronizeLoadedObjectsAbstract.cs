@@ -12,7 +12,7 @@ namespace Synchronizers {
 
         protected bool[] m_availblePositions = null;
         
-        public int m_maxSlotsLoading = 1;
+        [HideInInspector] public int m_maxSlotsLoading = 1;
 
         protected virtual void Start() {
             m_availblePositions = new bool[m_loadingPositions.Length];

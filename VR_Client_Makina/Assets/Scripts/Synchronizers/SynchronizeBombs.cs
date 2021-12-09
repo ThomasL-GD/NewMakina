@@ -26,10 +26,10 @@ namespace Synchronizers {
 
         public void ExplodeLol(Vector3 p_position) {
 
-            // GameObject go = Instantiate(m_prefabFxBoom, p_position, quaternion.Euler(0f, 0f, 0f));
-            // go.GetComponent<ParticleSystem>().Play();
+            GameObject go = Instantiate(m_prefabFxBoom, p_position, Quaternion.Euler(0f, 0f, 0f));
+            go.GetComponent<ParticleSystem>().Play();
             
-            Destroy(gameObject);
+            
         }
 
         /// <summary> Will load a bomb in a random available position </summary>
