@@ -132,15 +132,25 @@ public class InputMovement : MonoBehaviour
         m_playerInput *= Time.deltaTime;
         m_playerInput = Vector3.ClampMagnitude(m_playerInput, delta);
         
-        // Adding Slope
-        m_playerInput = Vector3.ProjectOnPlane(m_playerInput,hit.normal);
         
         //Adding the player input to the velocity
         m_velocity += m_playerInput;
 
+        
+        // Adding Slope
+        if(m_grounded)
+        {
+            RaycastHit slopeHit;
+            
+            Physics.Raycast(transform.position, Vector3.down, out slopeHit, Vector3.Distance(transform.position, origin)+ m_groundCheckRange +.1f);
+            m_velocity = Vector3.ProjectOnPlane(m_velocity, slopeHit.normal) +Vector3.up *.01f;
+
+            Debug.DrawRay(origin, Vector3.down * (m_groundCheckRange + .1f));
+        }
+        
         //Gravity
-        if (m_characterController.isGrounded) m_velocity.y *= .95f;
-        else m_velocity += Vector3.down * (m_gravity * Time.deltaTime);
+         m_velocity.y *= .99f;
+        if(!m_grounded) m_velocity += Vector3.down * (m_gravity * Time.deltaTime);
         
         //Edge Grab
         LedgeClimb(m_grounded);
@@ -159,6 +169,8 @@ public class InputMovement : MonoBehaviour
         m_speed = m_velocity.magnitude;
         
         #endregion
+        
+        Debug.DrawRay( transform.position, m_velocity.normalized *2, Color.magenta);
     }
 
     /// <summary>
