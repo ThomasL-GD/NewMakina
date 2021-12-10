@@ -9,6 +9,12 @@ public class BombBehavior : GrabbablePhysickedObject {
     private ObjectLoading m_bombLoading = null;
     [HideInInspector] public SynchronizeBombs m_synchronizer = null;
 
+    [HideInInspector] public int m_index;
+    [HideInInspector] public float m_serverID;
+
+    public delegate void DestroyBombDelegator(BombBehavior p_bombBehavior);
+    private static DestroyBombDelegator OnDestroyBomb;
+
     protected override void Start() {
         base.Start();
         //m_isPuttableOnlyOnce = true;
@@ -23,13 +29,22 @@ public class BombBehavior : GrabbablePhysickedObject {
 
         m_bombLoading.m_synchronizer = m_synchronizer;
         m_synchronizer.LoadBombRandomly(m_bombLoading);
+
+        OnDestroyBomb += ActualiseIndex;
     }
 
     protected override void OnFirstTimeTouchingGround() {
         base.OnFirstTimeTouchingGround();
         
-        m_synchronizer.ExplodeLol(transform.position);
+        m_synchronizer.ExplodeLol(m_index, m_serverID);
             
+        OnDestroyBomb?.Invoke(this);
         Destroy(gameObject);
+    }
+
+    /// <summary> </summary>
+    /// <param name="p_grabbableObject"></param>
+    private void ActualiseIndex(BombBehavior p_grabbableObject) {
+        if (m_index > p_grabbableObject.m_index) m_index--;
     }
 }

@@ -54,13 +54,17 @@ public class ClientManager : MonoBehaviour
 
     public static InitialDataDelegator OnReceiveInitialData;
     
-    /// <summary> The delegate that will be called each time the server sends a InitialData message </summary>
+    /// <summary> The delegate that will be called each time the server sends a SpawnBeacon message </summary>
     public delegate void SpawnBeaconDelegator(SpawnBeacon p_spawnBeacon);
     public static SpawnBeaconDelegator OnReceiveSpawnBeacon;
     
-    /// <summary> The delegate that will be called each time the server sends a InitialData message </summary>
+    /// <summary> The delegate that will be called each time the server sends a ActivateBeacon message </summary>
     public delegate void SpawnActivateBeacon(ActivateBeacon p_activateBeacon);
     public static SpawnActivateBeacon OnReceiveActivateBeacon;
+    
+    /// <summary> The delegate that will be called each time the server sends a BombExplosion message </summary>
+    public delegate void BombExplosionDelegator(BombExplosion p_activateBeacon);
+    public static BombExplosionDelegator OnReceiveBombExplosion;
     
     #endregion
     
@@ -98,6 +102,7 @@ public class ClientManager : MonoBehaviour
         NetworkClient.RegisterHandler<InitialData>(ReceiveInitialData);
         NetworkClient.RegisterHandler<SpawnBeacon>(ReceiveSpawnBeacon);
         NetworkClient.RegisterHandler<ActivateBeacon>(ReceiveActivateBeacon);
+        NetworkClient.RegisterHandler<BombExplosion>(ReceiveBombExplosion);
     }
 
     private void ReceiveActivateBeacon(ActivateBeacon p_activateBeacon) => OnReceiveActivateBeacon?.Invoke(p_activateBeacon);
@@ -162,6 +167,15 @@ public class ClientManager : MonoBehaviour
                 OnReceiveLaserPreview?.Invoke(p_laser);
                 break; //Turn off or on the aim
         }
+    }
+    
+    
+    /// <summary/> The function called when the client receives a message of type BombExplosion
+    /// <param name="p_bombExplosion"> The message sent by the Server to the Client </param>
+    private void ReceiveBombExplosion(BombExplosion p_bombExplosion) {
+        
+        OnReceiveBombExplosion?.Invoke(p_bombExplosion); //TODO : put something in this
+        if (p_bombExplosion.hit) SynchronizeRespawn.OnPlayerDeath?.Invoke();
     }
     
     

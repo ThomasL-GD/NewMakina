@@ -106,7 +106,7 @@ namespace Synchronizers {
                 m_laserAiming.enabled = true;
                 m_elapsedTime += Time.deltaTime;
                 float ratio = m_elapsedTime / m_laserLoadingTime;
-                Mathf.Clamp(ratio, 0f, 1f);
+                ratio = Mathf.Clamp(ratio, 0f, 1f);
                 m_laserAiming.materials[0].color = new Color(((m_firstColor.r * (1-ratio)) + (m_lastColor.r * ratio)), ((m_firstColor.g * (1-ratio)) + (m_lastColor.g * ratio)), ((m_firstColor.b * (1-ratio)) + (m_lastColor.b * ratio)));
 
                 m_laserAiming.widthMultiplier = m_initialLaserSize * (1 - ratio) + (m_endLaserSize * ratio);

@@ -12,6 +12,9 @@ public class BeaconBehavior : GrabbablePhysickedObject {
     private ObjectLoading m_beaconLoading = null;
 
     private bool m_isDeployed = false;
+
+    public delegate void DestroyBeaconDelegator(BeaconBehavior p_beaconBehavior);
+    private static DestroyBeaconDelegator OnDestroyBeacon;
     
     protected override void Start() {
         base.Start();
@@ -30,9 +33,6 @@ public class BeaconBehavior : GrabbablePhysickedObject {
 
         BeaconBehavior.OnDestroyBeacon += ActualiseIndex;
     }
-
-    public delegate void DestroyBeaconDelegator(BeaconBehavior p_beaconBehavior);
-    private static DestroyBeaconDelegator OnDestroyBeacon;
 
     /// <summary>
     /// We override ActualiseParent to let the SynchronizeBeacons know when beacons are grabbed or not

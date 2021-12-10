@@ -24,6 +24,7 @@ public class ServerManager : MonoBehaviour
     private PcInvisibility m_pcInvisibilityBuffer = new PcInvisibility();
     private HeartBreak m_heartBreakBuffer = new HeartBreak();
     private BeaconsPositions m_beaconsPositionsBuffer = new BeaconsPositions();
+    private BombsPositions m_bombsPositionsBuffer = new BombsPositions();
     private bool m_newPositions = false;
     private DestroyedBeacon m_destroyedBeaconBuffer = new DestroyedBeacon();
 
@@ -63,13 +64,20 @@ public class ServerManager : MonoBehaviour
     [Header(" ")]
     [SerializeField][Tooltip("The range of the beacons")] private float m_beaconRange = 400f;
 
+    [Header(" ")] [Header("Bombs")] [Header(" ")]
+    [SerializeField] [Tooltip("The interval at which the bomb spawn")] [Range(0f, 120f)] private float m_bombRespawnTime = 30f;
+    [SerializeField] [Tooltip("The maximum amount of bombs")] [Range(1, 5)] private int m_maxBombs = 1;
+    [SerializeField] [Tooltip("The range of the bomb's explosion")] [Range(1f, 100f)] private float m_bombExplosionRange = 50f;
+    private int m_currentBombAmount = 0;
+    
+
     /// <summary/> The positions of the hearts
     private Vector3[] m_heartPositions;
     
     /// <summary/> The rotations of the hearts
     private Quaternion[] m_heartRotations;
     
-    /// <summary/> The connection adresses of the players
+    /// <summary/> The connection addresses of the players
     private NetworkConnection m_vrNetworkConnection = null;
     private NetworkConnection m_pcNetworkConnection = null;
 
@@ -124,6 +132,8 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<BeaconsPositions>(OnServerReceiveBeaconsPositions);
         //NetworkServer.RegisterHandler<DestroyedBeacon>(OnServerReceiveDestroyedBeacon);
         NetworkServer.RegisterHandler<ActivateBeacon>(OnServerReceiveActivateBeacon);
+        NetworkServer.RegisterHandler<BombsPositions>(OnServerReceiveBombsPositions);
+        NetworkServer.RegisterHandler<BombExplosion>(OnServerReceiveBombExplosion);
 
         //Unpacking the heart position values from the transforms to send through messages
         List<Vector3> heartPositions = new List<Vector3>();
@@ -213,6 +223,20 @@ public class ServerManager : MonoBehaviour
         StartCoroutine(BeaconSpawnTimer());
     }
 
+    IEnumerator BombSpawnTimer() {
+        
+        if (/*!NetworkServer.active ||*/ m_currentBombAmount >= m_maxBombs) yield break;
+        
+        yield return new WaitForSeconds(m_bombRespawnTime);
+
+        
+        if (/*!NetworkServer.active ||*/ m_currentBombAmount >= m_maxBombs) yield break;
+
+        SpawnBomb();
+        
+        if(m_currentBombAmount < m_maxBombs) StartCoroutine(BombSpawnTimer());
+    }
+
     #region SERVER ACTIONS
 
     
@@ -291,6 +315,28 @@ public class ServerManager : MonoBehaviour
         beaconList.Add(new BeaconData(){beaconID = p_ID,detectingPlayer = false,isActive = false});
 
         m_beaconsPositionsBuffer.data = beaconList.ToArray();
+    }
+    
+    /// <summary/> The function called when the server has to spawn a bomb
+    /// <param name="p_customID"/> Only set a custom ID if you have to, if you don't it will by default be Time.time
+    void SpawnBomb(float? p_customID = null)
+    {
+        m_currentBombAmount++;
+        SpawnBomb spawnBomb = new SpawnBomb() {bombID = p_customID ?? Time.time};
+        
+        AddBomb(spawnBomb.bombID);
+        SendToBothClients(spawnBomb);
+    }
+
+    /// <summary/> Function called to add a bomb to the servers local list of bombs
+    /// <param name="p_ID"> The unique ID of the beacon </param>
+    void AddBomb(float p_ID)
+    {
+        List<BombData> bombList = (m_bombsPositionsBuffer.data == null) ? new List<BombData>() : m_bombsPositionsBuffer.data.ToList() ;
+        
+        bombList.Add(new BombData(){bombID = p_ID});
+
+        m_bombsPositionsBuffer.data = bombList.ToArray();
     }
 
     #endregion
@@ -457,6 +503,41 @@ public class ServerManager : MonoBehaviour
 
         m_newPositions = true;
     }
+
+    /// <summary>
+    /// function called when the server receives a message of type BombsPositions
+    /// </summary>
+    /// <param name="p_conn">The connection from which originated the message</param>
+    /// <param name="p_bombsPositions">The message sent by the Client to the Server</param>
+    private void OnServerReceiveBombsPositions(NetworkConnection p_conn, BombsPositions p_bombsPositions) {
+        
+        int count = m_beaconsPositionsBuffer.data.Length;
+
+        for (int i = 0; i < count; i++) { // We get only the position and ID in our buffers
+            if(i>=p_bombsPositions.data.Length) break;
+            m_bombsPositionsBuffer.data[i].position = p_bombsPositions.data[i].position;
+            m_bombsPositionsBuffer.data[i].bombID = p_bombsPositions.data[i].bombID;
+        }
+
+        m_newPositions = true;
+    }
+    
+    
+
+    /// <summary>
+    /// function called when the server receives a message of type BombExplosion
+    /// </summary>
+    /// <param name="p_conn">The connection from which originated the message</param>
+    /// <param name="p_bombExplosion">The message sent by the Client to the Server</param>
+    private void OnServerReceiveBombExplosion(NetworkConnection p_conn, BombExplosion p_bombExplosion) {
+
+        bool hit = Vector3.Distance(p_bombExplosion.position, m_pcTransformBuffer.position) < m_bombExplosionRange;
+
+        if (hit) m_pcPlayerHealth--;
+        
+        SendToBothClients(new BombExplosion(){position = p_bombExplosion.position, index = p_bombExplosion.index, bombID = p_bombExplosion.bombID, hit = hit});
+    }
+
 
     #endregion
 

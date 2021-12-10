@@ -64,6 +64,14 @@ namespace Network {
         /// <summary/> The delegate that will be called each time the server sends a InitialData message
         public delegate void InitialDataDelegator(InitialData p_initialData);
         public static InitialDataDelegator OnReceiveInitialData;
+    
+        /// <summary/> The delegates that will be called each time the server updates the beacons
+        public delegate void SpawnBombDelegator(SpawnBomb p_spawnBomb);
+        public static SpawnBombDelegator OnReceiveSpawnBomb;
+    
+        /// <summary/> The delegates that will be called each time the server updates the beacons
+        public delegate void BombExplosionDelegator(BombExplosion p_bombExplosion);
+        public static BombExplosionDelegator OnReceiveBombExplosion;
 
         #endregion
         
@@ -93,10 +101,10 @@ namespace Network {
         /// <typeparam name="T">Can be anything as long as its a struct deriving from VrData</typeparam>
         public void SendVrData<T>(T p_vrDataToSend) where T : struct, NetworkMessage {
             if (NetworkClient.active && m_canSend) {
-                
+#if UNITY_EDITOR
                 if(p_vrDataToSend is DestroyedBeacon) Debug.LogError($"WTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
-                
                 //Debug.Log($"I'm sending {p_vrDataToSend}");
+#endif
                 NetworkClient.Send(p_vrDataToSend);
             }
             // else {
@@ -118,6 +126,8 @@ namespace Network {
             NetworkClient.RegisterHandler<ActivateBeacon>(ReceiveActivateBeacon);
             NetworkClient.RegisterHandler<GameEnd>(ReceiveGameEnd);
             NetworkClient.RegisterHandler<InitialData>(ReceiveInitialData);
+            NetworkClient.RegisterHandler<SpawnBomb>(ReceiveSpawnBomb);
+            NetworkClient.RegisterHandler<BombExplosion>(ReceiveBombExplosion);
         
             OnConnection?.Invoke();
         }
@@ -188,6 +198,14 @@ namespace Network {
         /// <summary/> The function called when the client receives a message of type GameEnd
         /// <param name="p_gameEnd"> The message sent by the Server to the Client </param>
         private void ReceiveGameEnd(GameEnd p_gameEnd) => OnReceiveGameEnd?.Invoke(p_gameEnd);
+    
+        /// <summary/> The function called when the client receives a message of type SpawnBeacon
+        /// <param name="p_spawnBomb"> The message sent by the Server to the Client </param>
+        private void ReceiveSpawnBomb(SpawnBomb p_spawnBomb) => OnReceiveSpawnBomb?.Invoke(p_spawnBomb); 
+    
+        /// <summary/> The function called when the client receives a message of type BombExplosion
+        /// <param name="p_bombExplosion"> The message sent by the Server to the Client </param>
+        private void ReceiveBombExplosion(BombExplosion p_bombExplosion) => OnReceiveBombExplosion?.Invoke(p_bombExplosion); 
 
         /// <summary>
         /// Connects to the default serialized ip

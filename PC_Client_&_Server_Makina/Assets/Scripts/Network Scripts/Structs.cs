@@ -153,4 +153,36 @@ namespace CustomMessages
     }
 
     #endregion
+
+    #region Bombs
+
+    /// <summary/> Sent when a new bomb spawns
+    public struct SpawnBomb : NetworkMessage {
+        public float bombID;
+    }
+    
+    /// <summary/> The index of the destroyed bomb
+    public struct BombData {
+        
+        public Vector3 position;
+        public Quaternion rotation;
+        public float bombID;
+    }
+    
+    /// <summary/> The position of every bomb in the game
+    public struct BombsPositions : NetworkMessage {
+        public BombData[] data;
+    }
+    
+    /// <summary/> Sent when a bomb is exploding, then sent back to know if the explosion killed or not
+    public struct BombExplosion : NetworkMessage {
+
+        public Vector3 position;
+        public int index;
+        public float bombID;
+        /// <summary>Is sent by server only</summary>
+        public bool hit;
+    }
+
+    #endregion
 }

@@ -36,6 +36,8 @@ namespace Synchronizers {
             m_availblePositions[p_index] = true;
         }
         
+        //TODO : improve this coz there is a lot of copy/paste in bombs & beacons
+        
     }
 
 }
