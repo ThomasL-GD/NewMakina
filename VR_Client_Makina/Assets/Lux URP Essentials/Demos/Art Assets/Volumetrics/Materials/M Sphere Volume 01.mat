@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: M Sphere Volume 01
   m_Shader: {fileID: 4800000, guid: 10b957b18916b46a6accd7f15592a4ea, type: 3}
-  m_ShaderKeywords: _APPLYFOG _SAMPLE_FULL3D
+  m_ShaderKeywords: _APPLYFOG _ENABLEGRADIENT _SAMPLE_FULL3D
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -46,10 +46,10 @@ Material:
     - _Cull: 1
     - _DepthInfluence: 0.1
     - _DetailStrength: 1
-    - _EnableGradient: 0
+    - _EnableGradient: 1
     - _HQFog: 0
     - _LimitLength: 50
-    - _Lower: 0
+    - _Lower: 0.367
     - _OrthoSpport: 0
     - _Power: 0.43
     - _Sample: 0
@@ -62,13 +62,13 @@ Material:
     - _SpotFade: 0.6
     - _Strength: 0.5
     - _Tiling: 1
-    - _Upper: 1
+    - _Upper: 1.63
     - _ZTest: 8
     - _far: 2
     - _near: 0
     m_Colors:
     - _CameraFadeDistances: {r: 0.3, g: 1, b: 0.3, a: 1}
-    - _Color: {r: 0.5241189, g: 0.61130184, b: 0.735849, a: 0.54901963}
+    - _Color: {r: 0.46226418, g: 0.44608378, b: 0.40411773, a: 0.15686275}
     - _DetailScrollSpeed: {r: 0, g: 0, b: 0, a: 0}
     - _Speed: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
