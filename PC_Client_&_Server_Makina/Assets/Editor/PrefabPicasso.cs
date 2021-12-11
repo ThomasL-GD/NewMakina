@@ -10,6 +10,8 @@ public class PrefabPicasso : EditorWindow
     private static int m_maximumArrayLength = 256;
     private static Vector3[] positions;
     private static GameObject[] m_prefabs;
+    private static GameObject m_cursor;
+    
     
     /// <summary/> The function called when the MenuItem is called to create the window
     [MenuItem("Tools/Prefab Picasso &v")]
@@ -20,8 +22,6 @@ public class PrefabPicasso : EditorWindow
         window.Show();
         window.Focus();
         window.Repaint();
-        positions = new Vector3[m_maximumArrayLength];
-        m_prefabs = new GameObject[m_maximumArrayLength];
     }
 
     void OnEnable()
@@ -37,29 +37,39 @@ public class PrefabPicasso : EditorWindow
     void GuiUpdate(SceneView p_sceneView)
     {
         Tools.current = Tool.Custom;
-        if(m_mouseDown) UpdateBrush();
+        if(m_mouseDown) UpdateBrush(p_sceneView);
         
         Event currentEvent = Event.current;
 
         if (currentEvent.control && currentEvent.button == 1 && currentEvent.type == EventType.MouseDown)
         {
             m_mouseDown = true;
-            UpdateBrush();
+            UpdateBrush(p_sceneView);
         }
         
         if (!currentEvent.control || (currentEvent.button == 1 && currentEvent.type == EventType.MouseUp))
+        {
             m_mouseDown = false;
+            m_cursor.transform.position = Vector3.zero;
+        }
     }
 
     private static float m_timer;
 
-    void UpdateBrush()
+    void UpdateBrush(SceneView p_sceneView)
     {
+        Vector3 mousePos = Event.current.mousePosition;
+        float ppp = EditorGUIUtility.pixelsPerPoint;
+        mousePos.y = p_sceneView.camera.pixelHeight - mousePos.y * ppp;
+        mousePos.x *= ppp;
         
+        Physics.Raycast(p_sceneView.camera.ScreenPointToRay(mousePos), out RaycastHit hit);
+        if (m_cursor != null) m_cursor.transform.position = hit.point;
     }
     
     private void OnGUI()
     {
+        m_cursor = (GameObject)EditorGUILayout.ObjectField(m_cursor, typeof(Object), true);
         m_spacing = Mathf.Abs(EditorGUILayout.FloatField("Spacing", 5f));
         m_placingSpeed = Mathf.Abs(EditorGUILayout.FloatField("Placing Speed", .2f));
         
@@ -70,8 +80,10 @@ public class PrefabPicasso : EditorWindow
         
         GUILayout.Label(" ");
         GUILayout.Label(" ");
+
+        if (m_prefabs == null) m_prefabs = new GameObject[m_maximumArrayLength];
         
-        for (int i = 0; i < m_prefabs.Length + 1; i++)
+        for (int i = 0; i < m_prefabs.Length; i++)
         {
             m_prefabs[i]= (GameObject) EditorGUILayout.ObjectField(m_prefabs[i] == null?null:m_prefabs[i], typeof(Object), true);
             if (m_prefabs[i] == null) break;
