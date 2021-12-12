@@ -40,7 +40,8 @@ public class PrefabPicasso : EditorWindow
         if(m_mouseDown) UpdateBrush(p_sceneView);
         
         Event currentEvent = Event.current;
-
+        
+        
         if (currentEvent.control && currentEvent.button == 1 && currentEvent.type == EventType.MouseDown)
         {
             m_mouseDown = true;
