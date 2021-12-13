@@ -106,6 +106,8 @@ public class PrefabPicasso : EditorWindow
         if (m_parent != null) spawnedGo.transform.parent = m_parent;
 
         Vector3 rotation = spawnedGo.transform.rotation.eulerAngles;
+        spawnedGo.transform.LookAt(Vector3.zero);
+        rotation.y = spawnedGo.transform.rotation.eulerAngles.y;
         
         spawnedGo.transform.rotation = Quaternion.Euler(rotation.x ,rotation.y + 90f * Round(Random.Range(0,4)),rotation.z);
         

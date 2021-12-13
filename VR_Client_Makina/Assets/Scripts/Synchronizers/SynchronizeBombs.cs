@@ -9,9 +9,12 @@ namespace Synchronizers {
 
         [SerializeField] private GameObject m_prefabBomb = null;
 
+        [SerializeField] private float m_bombScale = 1f;
+        
         [SerializeField] [Range(1f, 100f)] [Tooltip("This shall be replaced by server data sent to this")] private float m_explosionRange = 5f;
 
-        [SerializeField] private GameObject m_prefabFxBoom = null;
+        [SerializeField] private GameObject m_prefabFxBoomHit = null;
+        [SerializeField] private GameObject m_prefabFxBoomMiss = null;
 
         private class BombInfo {
             public Transform transform;
@@ -90,8 +93,9 @@ namespace Synchronizers {
         private void ExplosionFeedback(BombExplosion p_bombExplosion) {
             //TODO if(p_bombExplosion)
             
-            GameObject go = Instantiate(m_prefabFxBoom, p_bombExplosion.position, Quaternion.Euler(0f, 0f, 0f));
+            GameObject go = Instantiate(p_bombExplosion.hit?m_prefabFxBoomHit:m_prefabFxBoomMiss, p_bombExplosion.position, Quaternion.Euler(0f, 0f, 0f));
             go.GetComponent<ParticleSystem>().Play();
+            go.transform.localScale *= m_bombScale/2;
         }
 
         /// <summary> Will load a bomb in a random available position </summary>
