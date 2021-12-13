@@ -6,14 +6,8 @@ using static UnityEditor.EditorGUILayout;
 using static UnityEngine.GUILayout;
 
 
-public class PrefabPicasso : EditorWindow, IPointerClickHandler
+public class PrefabPicasso : EditorWindow
 {
-    
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        Debug.Log("mouse click!");
-    }
-    
     /// <summary/> the minimum distance between placed prefabs
     private static float m_spacing = 20f;
     
@@ -149,7 +143,7 @@ public class PrefabPicasso : EditorWindow, IPointerClickHandler
         
         Label("\nThe Prefabs to instantiate\n");
         
-        //Creating an bject field for all the set prefab fields prefabs + 1
+        //Creating an object field for all the set prefab fields prefabs + 1
         for (int i = 0; i < m_prefabs.Length; i++)
         {
             m_prefabs[i]= (GameObject) ObjectField(m_prefabs[i] == null?null:m_prefabs[i], typeof(Object), true);
