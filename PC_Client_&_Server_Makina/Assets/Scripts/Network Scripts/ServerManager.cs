@@ -326,6 +326,8 @@ public class ServerManager : MonoBehaviour
         SpawnBomb spawnBomb = new SpawnBomb() {bombID = p_customID ?? Time.time};
         
         AddBomb(spawnBomb.bombID);
+            
+        Debug.LogWarning("Bomb supposed to spawn");
         SendToBothClients(spawnBomb);
     }
 
@@ -513,7 +515,7 @@ public class ServerManager : MonoBehaviour
     /// <param name="p_bombsPositions">The message sent by the Client to the Server</param>
     private void OnServerReceiveBombsPositions(NetworkConnection p_conn, BombsPositions p_bombsPositions) {
         
-        int count = m_beaconsPositionsBuffer.data.Length;
+        int count = m_bombsPositionsBuffer.data.Length;
 
         for (int i = 0; i < count; i++) { // We get only the position and ID in our buffers
             if(i>=p_bombsPositions.data.Length) break;
