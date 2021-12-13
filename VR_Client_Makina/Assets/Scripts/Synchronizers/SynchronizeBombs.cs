@@ -30,6 +30,13 @@ namespace Synchronizers {
             
             MyNetworkManager.OnReceiveSpawnBomb += SpawnBomb;
             MyNetworkManager.OnReceiveBombExplosion += ExplosionFeedback;
+            MyNetworkManager.OnReceiveInitialData += SetMaxBombsSlots;
+        }
+
+        /// <summary>Just sets maxSlotsForBombs according to the server's InitialData</summary>
+        /// <param name="p_initialData">The message sent by the server</param>
+        private void SetMaxBombsSlots(InitialData p_initialData) {
+            m_maxSlotsLoading = p_initialData.maximumBombsCount;
         }
 
         private void Update() {
@@ -66,8 +73,16 @@ namespace Synchronizers {
         /// <param name="p_serverID">The server ID of the bomb</param>
         public void ExplodeLol(int p_index, float p_serverID) {
 
-            int index = FindBeaconFromID(p_index, p_serverID)??0;
-            MyNetworkManager.singleton.SendVrData(new BombExplosion(){position = m_bombs[index].transform.position, index = index, bombID = m_bombs[index].serverID, hit = false});
+            int? index = FindBeaconFromID(p_index, p_serverID);
+            Debug.LogWarning($"The index value is {index} but the initial one was {p_index}, the list contains {m_bombs.Count} elements");
+            
+            MyNetworkManager.singleton.SendVrData(new BombExplosion(){
+                position = m_bombs[index??0].transform.position,
+                index = index??0,
+                bombID = m_bombs[index??0].serverID,
+                hit = false});
+            
+            m_bombs.RemoveAt(index??0);
         }
 
         /// <summary> Will display the feedback of an explosion </summary>

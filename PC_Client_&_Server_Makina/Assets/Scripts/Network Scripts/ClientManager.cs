@@ -39,6 +39,14 @@ public class ClientManager : MonoBehaviour
     public delegate void BeaconsPositionsDelegator(BeaconsPositions p_beaconsPositions);
     public static BeaconsPositionsDelegator OnReceiveBeaconsPositions;
     
+    /// <summary/> The delegates that will be called each time the server updates the bombs 
+    public delegate void BombsPositionsDelegator(BombsPositions p_bombsPositions);
+    public static BombsPositionsDelegator OnReceiveBombsPositions;
+    
+    /// <summary/> The delegates that will be called each time the server spawns a bomb
+    public delegate void SpawnBombDelegator(SpawnBomb p_spawnBomb);
+    public static SpawnBombDelegator OnReceiveSpawnBomb;
+    
     public delegate void DestroyedBeaconsDelegator(DestroyedBeacon p_beaconsPositions);
     public static DestroyedBeaconsDelegator OnReceiveDestroyedBeacon;
 
@@ -68,7 +76,8 @@ public class ClientManager : MonoBehaviour
     
     #endregion
     
-    [SerializeField][Tooltip("The player Object to be enabled on connection")] private GameObject m_player;
+    [SerializeField, Tooltip("The player Object to be enabled on connection")] public GameObject m_player;
+    
     
     /// <summary/> Singleton type beat
     private void Awake()
@@ -103,6 +112,8 @@ public class ClientManager : MonoBehaviour
         NetworkClient.RegisterHandler<SpawnBeacon>(ReceiveSpawnBeacon);
         NetworkClient.RegisterHandler<ActivateBeacon>(ReceiveActivateBeacon);
         NetworkClient.RegisterHandler<BombExplosion>(ReceiveBombExplosion);
+        NetworkClient.RegisterHandler<BombsPositions>(ReceiveBombsPositions);
+        NetworkClient.RegisterHandler<SpawnBomb>(ReceiveSpawnBomb);
     }
 
     private void ReceiveActivateBeacon(ActivateBeacon p_activateBeacon) => OnReceiveActivateBeacon?.Invoke(p_activateBeacon);
@@ -187,6 +198,16 @@ public class ClientManager : MonoBehaviour
     /// <summary/>The function called when the client receives a message of type BeaconsPositions
     /// <param name="p_beaconsPositions"> The message sent by the Server to the Client </param>
     private void ReceiveBeaconsPositions(BeaconsPositions p_beaconsPositions) => OnReceiveBeaconsPositions?.Invoke(p_beaconsPositions); 
+    
+    
+    /// <summary/>The function called when the client receives a message of type BombsPositions
+    /// <param name="p_bombsPositions"> The message sent by the Server to the Client </param>
+    private void ReceiveBombsPositions(BombsPositions p_bombsPositions) => OnReceiveBombsPositions?.Invoke(p_bombsPositions);
+    
+    
+    /// <summary/>The function called when the client receives a message of type SpawnBomb
+    /// <param name="p_spawnBomb"> The message sent by the Server to the Client </param>
+    private void ReceiveSpawnBomb(SpawnBomb p_spawnBomb) => OnReceiveSpawnBomb?.Invoke(p_spawnBomb);
     
     
     /// <summary/> The function called when the client receives a message of type DestroyedBeacon

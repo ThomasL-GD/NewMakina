@@ -55,6 +55,7 @@ namespace CustomMessages
         public int healthVrPlayer;
         public float beaconRange;
         public int maximumBeaconCount;
+        public int maximumBombsCount;
     }
     
     //TODO add this to that ^

@@ -245,6 +245,7 @@ public class ServerManager : MonoBehaviour
     {
         StartCoroutine(ServerTick());
         StartCoroutine(SpawnInitialBeacons());
+        StartCoroutine(BombSpawnTimer());
     }
 
 
@@ -362,7 +363,8 @@ public class ServerManager : MonoBehaviour
             healthPcPlayer = m_pcPlayerHealth,
             healthVrPlayer = m_vrPlayerHealth,
             beaconRange = m_beaconRange,
-            maximumBeaconCount = m_maxBeacons
+            maximumBeaconCount = m_maxBeacons,
+            maximumBombsCount = m_maxBombs
         };
         
         p_conn.Send(initialData);
