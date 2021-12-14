@@ -599,7 +599,7 @@ MonoBehaviour:
   autoCreatePlayer: 0
   playerSpawnMethod: 0
   spawnPrefabs: []
-  m_localHost: 1
+  m_localHost: 0
   m_IPadress: 10.31.241.108
 --- !u!4 &1425784625
 Transform:
@@ -708,6 +708,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 804811613}
     m_Modifications:
     - target: {fileID: 2047781738407387244, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
+      propertyPath: m_bombScale
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047781738407387244, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
+      propertyPath: m_explosionRange
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047781738407387244, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
+      propertyPath: m_colorWhenAlmostExploding.g
+      value: 0.2554821
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047781738407387244, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
       propertyPath: m_loadingPositions.Array.data[0]
       value: 
       objectReference: {fileID: 1889473450}
@@ -727,6 +739,10 @@ PrefabInstance:
       propertyPath: m_loadingPositions.Array.data[4]
       value: 
       objectReference: {fileID: 1637636481}
+    - target: {fileID: 2047781738407387244, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
+      propertyPath: m_explosionTimeOnceTouchingTheGround
+      value: 0.99
+      objectReference: {fileID: 0}
     - target: {fileID: 5783733579950633025, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
       propertyPath: m_text
       value: 

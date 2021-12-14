@@ -9,9 +9,12 @@ namespace Synchronizers {
 
         [SerializeField] private GameObject m_prefabBomb = null;
 
+        [SerializeField] [Range(0f, 5f)] private float m_explosionTimeOnceTouchingTheGround = 0f;
+        [SerializeField] private Color m_colorWhenAlmostExploding = Color.red;
+
         [SerializeField] private float m_bombScale = 1f;
         
-        [SerializeField] [Range(1f, 100f)] [Tooltip("This shall be replaced by server data sent to this")] private float m_explosionRange = 5f;
+        /*[SerializeField] [Range(1f, 100f)] [Tooltip("This shall be replaced by server data sent to this")] */private float m_explosionRange = 5f;
 
         [SerializeField] private GameObject m_prefabFxBoomHit = null;
         [SerializeField] private GameObject m_prefabFxBoomMiss = null;
@@ -67,6 +70,7 @@ namespace Synchronizers {
             script.m_synchronizer = this;
             script.m_index = m_bombs.Count;
             script.m_serverID = p_spawnBomb.bombID;
+            script.m_explosionTimeOnceOnGround = m_explosionTimeOnceTouchingTheGround;
             
             m_bombs.Add(new BombInfo(go.transform, p_spawnBomb.bombID));
         }
@@ -94,8 +98,8 @@ namespace Synchronizers {
             //TODO if(p_bombExplosion)
             
             GameObject go = Instantiate(p_bombExplosion.hit?m_prefabFxBoomHit:m_prefabFxBoomMiss, p_bombExplosion.position, Quaternion.Euler(0f, 0f, 0f));
+            go.transform.localScale *= m_bombScale;
             go.GetComponent<ParticleSystem>().Play();
-            go.transform.localScale *= m_bombScale/2;
         }
 
         /// <summary> Will load a bomb in a random available position </summary>
@@ -105,7 +109,13 @@ namespace Synchronizers {
             for(int i = 0; i < m_availblePositions.Length; i++) if(m_availblePositions[i]) currentAvailablePositions.Add(i);
 
             int random = Random.Range(0, currentAvailablePositions.Count);
+            Debug.Log($"Index technically wrong : {random}   (btw, the list has {currentAvailablePositions.Count} elements)");
             LoadObjectFromIndex(p_script, currentAvailablePositions[random]);
+        }
+
+        public void ChangeMaterialOfABomb(int p_index, float p_serverID) {
+            int index = FindBeaconFromID(p_index, p_serverID)??-1;
+            m_bombs[index].transform.GetComponent<MeshRenderer>().material.color = m_colorWhenAlmostExploding;
         }
         
         /// <summary/> A function to find the index of the bomb that matches the given ID
