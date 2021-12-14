@@ -29,7 +29,8 @@ public class InvisibilityByInput : MonoBehaviour {
     private void Awake()
     {
         ClientManager.OnReceiveHeartBreak += ResetInvisibilityOnReceiveHeartBreak;
-        ClientManager.OnReceiveLaser += ResetInvisibilityOnReceiveLaser;
+        ClientManager.OnReceiveLaser += ResetInvisibilityOnReceiveAttack;
+        ClientManager.OnReceiveBombExplosion += ResetInvisibilityOnReceiveAttack;
     }
 
     /// <summary>
@@ -46,9 +47,21 @@ public class InvisibilityByInput : MonoBehaviour {
     /// The function called to reset the player's invisibility timer when he get's eliminated
     /// </summary>
     /// <param name="p_laser"> The Laser Component </param>
-    private void ResetInvisibilityOnReceiveLaser(Laser p_laser)
+    private void ResetInvisibilityOnReceiveAttack(Laser p_laser)
     {
         if (!p_laser.hit) return; //Checking if the Laser actually hit the player
+        
+        m_invisibilityTime = m_invisibilityTimeSave;
+        m_timerText.text = $"Invisibility {(int) m_invisibilityTime} / {m_invisibilityTimeSave}";
+    }
+    
+    /// <summary>
+    /// The function called to reset the player's invisibility timer when he get's eliminated
+    /// </summary>
+    /// <param name="p_bomb"> The Laser Component </param>
+    private void ResetInvisibilityOnReceiveAttack(BombExplosion p_bomb)
+    {
+        if (!p_bomb.hit) return; //Checking if the Laser actually hit the player
         
         m_invisibilityTime = m_invisibilityTimeSave;
         m_timerText.text = $"Invisibility {(int) m_invisibilityTime} / {m_invisibilityTimeSave}";

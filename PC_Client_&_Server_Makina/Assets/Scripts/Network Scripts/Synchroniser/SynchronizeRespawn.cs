@@ -59,12 +59,14 @@ namespace Synchronizers
             InputMovement.instance.m_isDead = true;
             int respawnIndex = Random.Range(0, m_spawnPoints.Length);
             m_deathFeedback.SetActive(true);
-            
+
             //Todo Make this no cursed for the love of baby jesus
-            m_player.transform.position = Vector3.one * 1000000000f;
+            m_player.transform.position = Vector3.one * -1000f;
             //Updating the feedback
             SynchronizeInitialData.instance.LosePcHealth();
 
+            
+            
             //Waiting for the respawn time
             yield return new WaitForSeconds(m_respawnTime);
 

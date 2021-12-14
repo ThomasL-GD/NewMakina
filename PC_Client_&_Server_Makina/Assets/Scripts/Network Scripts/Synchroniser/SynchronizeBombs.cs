@@ -15,10 +15,10 @@ namespace Synchronizers {
             public GameObject bombPrefabInstance;
             public float ID;
 
-            public Bomb(GameObject p_bombPrefabInstance, float p_id, Vector3? p_position = null)
+            public Bomb(GameObject p_bombPrefab, float p_id, Vector3? p_position = null)
             {
-                p_bombPrefabInstance.name += p_id.ToString();
-                bombPrefabInstance = Instantiate(p_bombPrefabInstance);
+                p_bombPrefab.name += p_id.ToString();
+                bombPrefabInstance = Instantiate(p_bombPrefab);
                 bombPrefabInstance.transform.position = p_position?? Vector3.zero;
                     
                 ID = p_id;
@@ -30,7 +30,7 @@ namespace Synchronizers {
         // Start is called before the first frame update
         void Start() {
 
-            ClientManager.OnReceiveSpawnBomb += SpawnABomb;
+            ClientManager.OnReceiveSpawnBomb += SpawnBomb;
             ClientManager.OnReceiveBombsPositions += UpdatePositions;
             ClientManager.OnReceiveBombExplosion += DestroyBomb;
 
@@ -38,7 +38,10 @@ namespace Synchronizers {
 
         /// <summary> YES ! You actually guessed, this function will spawn a freaking bomb ! </summary>
         /// <param name="p_spawnBomb">The message received by the ClientManager</param>
-        private void SpawnABomb(SpawnBomb p_spawnBomb) => m_bombs.Add(new Bomb(m_prefabBomb, p_spawnBomb.bombID));
+        private void SpawnBomb(SpawnBomb p_spawnBomb)
+        {
+            m_bombs.Add(new Bomb(m_prefabBomb, p_spawnBomb.bombID));
+        }
 
         /// <summary>
         /// Updating the bombs positions
@@ -46,13 +49,15 @@ namespace Synchronizers {
         /// </summary>
         /// <param name="p_bombsPositions"></param>
         private void UpdatePositions(BombsPositions p_bombsPositions) {
+            
+            Debug.Log("update positions");
             for (int i = 0; i < m_bombs.Count; i++) {
                 BombData data = p_bombsPositions.data[i];
                     
                 int? index = FindBeaconFromID(i, data.bombID);
 
                 if (index == null) {
-                    Debug.LogWarning($"BEACON DETECTION UPDATE ID ({data.bombID}) SEARCH FAILED");
+                    Debug.LogWarning($"BOMB POSITION UPDATE ID ({data.bombID}) SEARCH FAILED");
                     return;
                 }
 
@@ -69,8 +74,13 @@ namespace Synchronizers {
         {
 
             int? index = FindBeaconFromID(p_bombExplosion.index, p_bombExplosion.bombID);
-                
-            //TODO : Feedback here !
+            
+            if(index == null)
+            {
+                Debug.Log("Big L");
+                return;
+            }
+            
             Destroy(m_bombs[index??0].bombPrefabInstance);
             m_bombs.RemoveAt(index??0);
         }
