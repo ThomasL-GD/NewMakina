@@ -11,6 +11,7 @@ public class BombBehavior : GrabbablePhysickedObject {
 
     [HideInInspector] public int m_index;
     [HideInInspector] public float m_serverID;
+    [HideInInspector] public float m_explosionTimeOnceOnGround = 0f;
 
     public delegate void DestroyBombDelegator(BombBehavior p_bombBehavior);
     private static DestroyBombDelegator OnDestroyBomb;
@@ -33,8 +34,26 @@ public class BombBehavior : GrabbablePhysickedObject {
         OnDestroyBomb += ActualiseIndex;
     }
 
+    public override void ActualiseParent() {
+        base.ActualiseParent();
+
+        if (m_isCaught) {
+            m_bombLoading.Unloading();
+        }
+    }
+
     protected override void OnFirstTimeTouchingGround() {
         base.OnFirstTimeTouchingGround();
+        
+        m_isGrabbable = false;
+        m_rb.isKinematic = true;
+
+        m_synchronizer.ChangeMaterialOfABomb(m_index, m_serverID);
+        StartCoroutine(ExplodeAfterTime());
+    }
+
+    IEnumerator ExplodeAfterTime() {
+        yield return new WaitForSeconds(m_explosionTimeOnceOnGround);
         
         m_synchronizer.ExplodeLol(m_index, m_serverID);
             
