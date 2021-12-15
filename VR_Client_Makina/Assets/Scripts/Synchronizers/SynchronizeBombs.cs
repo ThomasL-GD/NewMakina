@@ -30,6 +30,12 @@ namespace Synchronizers {
         }
 
         private List<BombInfo> m_bombs = new List<BombInfo>();
+        
+
+        [Header("Sounds")]
+        [SerializeField] private AudioSource m_audioSource;
+        [SerializeField] [Tooltip("If true, nice shot :)\nIf false, crippling emptiness...")] private bool m_niceShotQuestionMark = true;
+        [SerializeField] private AudioClip m_niceShotSound = null;
 
         protected override void Start() {
             base.Start();
@@ -100,6 +106,12 @@ namespace Synchronizers {
             GameObject go = Instantiate(p_bombExplosion.hit?m_prefabFxBoomHit:m_prefabFxBoomMiss, p_bombExplosion.position, Quaternion.Euler(0f, 0f, 0f));
             go.transform.localScale *= m_bombScale;
             go.GetComponent<ParticleSystem>().Play();
+
+            if (m_niceShotQuestionMark && p_bombExplosion.hit) { // Audio Feedback
+                m_audioSource.Stop();
+                m_audioSource.clip = m_niceShotSound;
+                m_audioSource.Play();
+            }
         }
 
         /// <summary> Will load a bomb in a random available position </summary>
