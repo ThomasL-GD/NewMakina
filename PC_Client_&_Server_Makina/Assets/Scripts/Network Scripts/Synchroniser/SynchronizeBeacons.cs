@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using CustomMessages;
+using TMPro;
 using UnityEngine;
 
 namespace Synchronizers {
@@ -12,6 +13,8 @@ namespace Synchronizers {
 
         [SerializeField][Tooltip("The color of the beacon when the player is undetected")] private Color m_undetectedColor = Color.red;
         [SerializeField][Tooltip("The color of the beacon when the player is detected")] private Color m_detectedColor = Color.green;
+        
+        [SerializeField][Tooltip("The UI feedback of detection")] private TextMeshProUGUI m_detectionFeedaback;
         
         /// <summary/> The beacons of the player that are stored away
         private List<Beacons> m_beacons = new List<Beacons>();
@@ -32,8 +35,9 @@ namespace Synchronizers {
             }
         }
         private float m_beaconRange;
+        private static readonly int m_beaconColorProperty = Shader.PropertyToID("_Beacon_Color");
 
-        
+
         /// <summary/> Spawning a beacon and adding it to the array
         /// <param name="p_spawnbeacon"> the message sent by the server </param>
         private void SpawnBeacons(SpawnBeacon p_spawnbeacon)
@@ -50,6 +54,8 @@ namespace Synchronizers {
             ClientManager.OnReceiveBeaconDetectionUpdate += UpdateDetection;
             ClientManager.OnReceiveInitialData += UpdateBeaconRange;
             ClientManager.OnReceiveActivateBeacon += UpdateBeaconActivation;
+            m_detectionFeedaback.enabled = false;
+
         }
         
         /// <summary/> Updating a beacon to activate
@@ -108,10 +114,11 @@ namespace Synchronizers {
                 Debug.LogWarning("BEACON DETECTION UPDATE ID SEARCH FAILED");
                 return;
             }
-            
 
+            bool detected = p_beaconDetectionUpdate.playerDetected;
             Material mat = m_beacons[index ?? 0].beaconPrefabInstance.GetComponent<MeshRenderer>().material;
-            mat.SetColor("_Beacon_Color", p_beaconDetectionUpdate.playerDetected?m_detectedColor:m_undetectedColor);
+            mat.SetColor(m_beaconColorProperty, detected?m_detectedColor:m_undetectedColor);
+            m_detectionFeedaback.enabled = detected;
         }
 
         /// <summary/> Destroying the beacon based in the server info

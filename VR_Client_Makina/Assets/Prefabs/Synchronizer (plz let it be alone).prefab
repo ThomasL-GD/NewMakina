@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 5783733579950633026}
   - component: {fileID: 5783733579950633025}
   - component: {fileID: 5783733579950633030}
+  - component: {fileID: 2047781738407387244}
   m_Layer: 0
   m_Name: Synchronizer (plz let it be alone)
   m_TagString: Untagged
@@ -60,7 +61,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5783733579950633034}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf22ad0a9ffc0744896bece452a80f7d, type: 3}
   m_Name: 
@@ -75,6 +76,9 @@ MonoBehaviour:
   m_laserLoadingTime: 1
   m_laserPrefab: {fileID: 5777138034286177843, guid: e2cb3604f1d3e5e46b7298c10065f9e7, type: 3}
   m_prefabParticles: {fileID: 6027568845842637197, guid: 4a34f0e0f9120c7488999a80f7c6b0a8, type: 3}
+  m_audioSource: {fileID: 0}
+  m_niceShotQuestionMark: 1
+  m_niceShotSound: {fileID: 8300000, guid: 096c2eeb437d590429b07b282afedc7f, type: 3}
 --- !u!114 &5783733579950633029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,10 +141,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 050f212302b0ba44fb00629d9500621b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_prefabBeacon: {fileID: 6606253773114217689, guid: 1828515427f5cff448da50184b7adf33, type: 3}
+  m_loadingPositions: []
+  m_maxSlotsLoading: 1
+  m_prefabBeaconAmmo: {fileID: 0}
+  m_range: 20
+  m_inflateTime: 0.2
   m_undetectedColor: {r: 1, g: 0, b: 0, a: 1}
   m_detectedColor: {r: 0, g: 1, b: 0, a: 1}
-  m_grabbedColor: {r: 0.29178533, g: 0.29178533, b: 0.7830189, a: 1}
+  m_unactiveColor: {r: 0, g: 0, b: 1, a: 1}
 --- !u!114 &5783733579950633025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,3 +182,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_pcPlayerHealthText: {fileID: 0}
   m_vrPlayerHealthText: {fileID: 0}
+--- !u!114 &2047781738407387244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5783733579950633034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62a3b15c84600fe4db9289f7e84855b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_loadingPositions:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  m_maxSlotsLoading: 1
+  m_prefabBomb: {fileID: 5767537656552913653, guid: 61e04b72ef96e234f836b698dac2f3c1, type: 3}
+  m_bombScale: 1
+  m_explosionRange: 5
+  m_prefabFxBoomHit: {fileID: 2578695409718655044, guid: 7f12a1289625b5848b0eeca163c0fcbd, type: 3}
+  m_prefabFxBoomMiss: {fileID: 2578695409718655044, guid: a8f0e125f8b772b4ab22e300ebffc0c7, type: 3}

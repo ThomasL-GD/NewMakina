@@ -80,6 +80,8 @@ public class ServerManager : MonoBehaviour
     /// <summary/> The connection addresses of the players
     private NetworkConnection m_vrNetworkConnection = null;
     private NetworkConnection m_pcNetworkConnection = null;
+    
+    private bool m_bombCoroutineRunning;
 
     #endregion
     
@@ -109,6 +111,7 @@ public class ServerManager : MonoBehaviour
         OnServerTick += SendBeaconsPositions;
         OnServerTick += CheckHealths;
         OnServerTick += BeaconDetectionCheck;
+        OnServerTick += SendBombPositions;
     }
     
     
@@ -225,6 +228,7 @@ public class ServerManager : MonoBehaviour
 
     IEnumerator BombSpawnTimer() {
         
+        m_bombCoroutineRunning = true;
         if (/*!NetworkServer.active ||*/ m_currentBombAmount >= m_maxBombs) yield break;
         
         yield return new WaitForSeconds(m_bombRespawnTime);
@@ -235,6 +239,7 @@ public class ServerManager : MonoBehaviour
         SpawnBomb();
         
         if(m_currentBombAmount < m_maxBombs) StartCoroutine(BombSpawnTimer());
+        m_bombCoroutineRunning = false;
     }
 
     #region SERVER ACTIONS
@@ -371,8 +376,14 @@ public class ServerManager : MonoBehaviour
         
         if(m_beaconsPositionsBuffer.data != null)
             foreach (BeaconData data in m_beaconsPositionsBuffer.data)
-                p_conn.Send(new SpawnBeacon(){beaconID = data.beaconID});
+                p_conn.Send(new SpawnBeacon() {beaconID = data.beaconID});
         
+        if(m_bombsPositionsBuffer.data != null)
+            foreach (BombData data in m_bombsPositionsBuffer.data)
+            {
+                p_conn.Send(new SpawnBomb() {bombID = data.bombID});
+                Debug.LogWarning("hey!");
+            }
     }
     
     /// <summary/> function called when the server receives a message of type ActivateBeacon
@@ -513,7 +524,7 @@ public class ServerManager : MonoBehaviour
     /// <param name="p_bombsPositions">The message sent by the Client to the Server</param>
     private void OnServerReceiveBombsPositions(NetworkConnection p_conn, BombsPositions p_bombsPositions) {
         
-        int count = m_beaconsPositionsBuffer.data.Length;
+        int count = m_bombsPositionsBuffer.data.Length;
 
         for (int i = 0; i < count; i++) { // We get only the position and ID in our buffers
             if(i>=p_bombsPositions.data.Length) break;
@@ -534,10 +545,11 @@ public class ServerManager : MonoBehaviour
     private void OnServerReceiveBombExplosion(NetworkConnection p_conn, BombExplosion p_bombExplosion) {
 
         bool hit = Vector3.Distance(p_bombExplosion.position, m_pcTransformBuffer.position) < m_bombExplosionRange;
-
+        m_currentBombAmount--;
         if (hit) m_pcPlayerHealth--;
         
         SendToBothClients(new BombExplosion(){position = p_bombExplosion.position, index = p_bombExplosion.index, bombID = p_bombExplosion.bombID, hit = hit});
+        if(!m_bombCoroutineRunning)StartCoroutine(BombSpawnTimer());
     }
 
 
@@ -594,6 +606,16 @@ public class ServerManager : MonoBehaviour
         {
             m_pcNetworkConnection.Send(m_beaconsPositionsBuffer);
             m_newPositions = false;
+        }
+    }
+    
+    /// <summary>
+    /// The function that send the BeaconsPositions (if not empty) to the pc client
+    /// </summary>
+    private void SendBombPositions() {
+        if(m_bombsPositionsBuffer.data != null && m_bombsPositionsBuffer.data.Length > 0)
+        {
+            m_pcNetworkConnection.Send(m_bombsPositionsBuffer);
         }
     }
 
