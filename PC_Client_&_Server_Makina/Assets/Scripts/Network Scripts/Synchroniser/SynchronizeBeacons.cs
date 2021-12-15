@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using CustomMessages;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Synchronizers {
@@ -20,18 +21,20 @@ namespace Synchronizers {
         private List<Beacons> m_beacons = new List<Beacons>();
 
         [Serializable]
-        private struct Beacons
+        private class Beacons
         {
             public GameObject beaconPrefabInstance;
             public float ID;
+            public bool detected;
 
-            public Beacons(GameObject p_beaconPrefabInstance, float p_id, Vector3? p_position = null)
+            public Beacons(GameObject p_beaconPrefabInstance, float p_id, Vector3? p_position = null, bool p_detected = false)
             {
                 p_beaconPrefabInstance.name += p_id.ToString();
                 beaconPrefabInstance = Instantiate(p_beaconPrefabInstance);
                 beaconPrefabInstance.transform.position = p_position?? Vector3.zero;
                 
                 ID = p_id;
+                detected = p_detected;
             }
         }
         private float m_beaconRange;
@@ -55,24 +58,22 @@ namespace Synchronizers {
             ClientManager.OnReceiveInitialData += UpdateBeaconRange;
             ClientManager.OnReceiveActivateBeacon += UpdateBeaconActivation;
             m_detectionFeedaback.enabled = false;
-
         }
         
         /// <summary/> Updating a beacon to activate
         /// <param name="p_activatebeacon"> the beacon data to activate </param>
         private void UpdateBeaconActivation(ActivateBeacon p_activatebeacon)
         {
-            int? index = FindBeaconFromID(p_activatebeacon.index, p_activatebeacon.beaconID);
+            int? index = FindBeaconFromID(p_activatebeacon.index, p_activatebeacon.beaconID,"Update Beacon Activation");
 
             if (index == null)
             {
-                Debug.LogError("BEACON DETECTION UPDATE ID SEARCH FAILED");
                 return;
             }
-
-            GameObject oldBeacon = m_beacons[index ?? 0].beaconPrefabInstance;
-            m_beacons[index ?? 0] = new Beacons(m_prefabBeaconActive,m_beacons[index ?? 0].ID,oldBeacon.transform.position);
-            Destroy(oldBeacon);
+            
+            Beacons oldBeacon = m_beacons[index ?? 0];
+            m_beacons[index ?? 0] = new Beacons(m_prefabBeaconActive,oldBeacon.ID,oldBeacon.beaconPrefabInstance.transform.position,oldBeacon.detected);
+            Destroy(oldBeacon.beaconPrefabInstance);
         }
 
 
@@ -91,13 +92,9 @@ namespace Synchronizers {
             {
                 BeaconData data = p_beaconsPositions.data[i];
                 
-                int? index = FindBeaconFromID(i, data.beaconID);
+                int? index = FindBeaconFromID(i, data.beaconID, "Update Beacon Position");
 
-                if (index == null)
-                {
-                    Debug.LogWarning($"BEACON DETECTION UPDATE ID ({data.beaconID}) SEARCH FAILED");
-                    return;
-                }
+                if (index == null) return;
 
                 m_beacons[index ?? 0].beaconPrefabInstance.transform.position = data.position;
             }
@@ -107,18 +104,26 @@ namespace Synchronizers {
         /// <param name="p_beaconDetectionUpdate"></param>
         private void UpdateDetection(BeaconDetectionUpdate p_beaconDetectionUpdate)
         {
-            int? index = FindBeaconFromID(p_beaconDetectionUpdate.index, p_beaconDetectionUpdate.beaconID);
+            int? index = FindBeaconFromID(p_beaconDetectionUpdate.index, p_beaconDetectionUpdate.beaconID, "Update Beacon Detection");
 
-            if (index == null)
-            {
-                Debug.LogWarning("BEACON DETECTION UPDATE ID SEARCH FAILED");
-                return;
-            }
+            if (index == null) return;
 
             bool detected = p_beaconDetectionUpdate.playerDetected;
-            Material mat = m_beacons[index ?? 0].beaconPrefabInstance.GetComponent<MeshRenderer>().material;
+            Beacons beacon = m_beacons[index ?? 0];
+            
+            Material mat = beacon.beaconPrefabInstance.GetComponent<MeshRenderer>().material;
             mat.SetColor(m_beaconColorProperty, detected?m_detectedColor:m_undetectedColor);
-            m_detectionFeedaback.enabled = detected;
+            beacon.detected = detected;
+            
+            if(detected)
+            {
+                m_detectionFeedaback.enabled = true;
+                return;
+            }
+            
+            foreach (var beaconData in m_beacons) if (beaconData.detected) return;
+            m_detectionFeedaback.enabled = false;
+            
         }
 
         /// <summary/> Destroying the beacon based in the server info
@@ -126,25 +131,26 @@ namespace Synchronizers {
         private void DestroyBeacon(DestroyedBeacon p_destroyedBeacon)
         {
 
-            int? index = FindBeaconFromID(p_destroyedBeacon.index, p_destroyedBeacon.beaconID);
+            int? index = FindBeaconFromID(p_destroyedBeacon.index, p_destroyedBeacon.beaconID, "Destroy Beacon");
 
-            if (index == null)
-            {
-                Debug.LogError("DESTROY BEACON ID SEARCH FAILED");
-                return;
-            }
-            
-            Debug.Log($"destroyed beacon id : {m_beacons[index??0].ID} using this id {p_destroyedBeacon.beaconID}");
-            
+            if (index == null) return;
+
             Destroy(m_beacons[index??0].beaconPrefabInstance);
             m_beacons.RemoveAt(index??0);
+
+            foreach (var beacon in m_beacons)
+            {
+                if (beacon.detected) return;
+            }
+
+            m_detectionFeedaback.enabled = false;
         }
 
         /// <summary/> A function to find the index of the beacon that matches the given ID
         /// <param name="p_index"> the estimated index of the wanted beacon </param>
         /// <param name="p_beaconID"> the ID of the wanted beacon </param>
         /// <returns> returns the index of the beacon with the right ID if none are found, returns null </returns>
-        private int? FindBeaconFromID(int p_index, float p_beaconID)
+        private int? FindBeaconFromID(int p_index, float p_beaconID, string context = "")
         {
             int index = p_index;
             float ID = p_beaconID;
@@ -152,7 +158,12 @@ namespace Synchronizers {
 
             for (int i = 0; i < m_beacons.Count; i++) if (m_beacons[i].ID == ID) return i;
 
-            Debug.LogWarning($"I couldn't find the index matching this ID ({p_beaconID}) brother",this);
+            #if UNITY_EDITOR
+            if (context != null)
+                Debug.LogWarning(
+                    $"I couldn't find the index matching this ID ({p_beaconID}) brother - { context }", this);
+            #endif
+            
             return null;
         }
     }
