@@ -185,5 +185,12 @@ namespace CustomMessages
         public bool hit;
     }
 
+    /// <summary/> Sent when a bomb is activated to enable feedback on the PC side
+    public struct BombActivation : NetworkMessage
+    {
+        public int index;
+        public float bombID;
+    }
+
     #endregion
 }

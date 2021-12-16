@@ -137,6 +137,7 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<ActivateBeacon>(OnServerReceiveActivateBeacon);
         NetworkServer.RegisterHandler<BombsPositions>(OnServerReceiveBombsPositions);
         NetworkServer.RegisterHandler<BombExplosion>(OnServerReceiveBombExplosion);
+        NetworkClient.RegisterHandler<BombActivation>(OnReceiveBombActivation);
 
         //Unpacking the heart position values from the transforms to send through messages
         List<Vector3> heartPositions = new List<Vector3>();
@@ -552,7 +553,8 @@ public class ServerManager : MonoBehaviour
         if(!m_bombCoroutineRunning)StartCoroutine(BombSpawnTimer());
     }
 
-
+    private void OnReceiveBombActivation(BombActivation p_bombActivation) => m_pcNetworkConnection.Send(p_bombActivation);
+    
     #endregion
 
 

@@ -6,9 +6,9 @@ using UnityEngine;
 namespace Synchronizers {
     public class SynchronizeBombs : MonoBehaviour {
 
-        [SerializeField] private GameObject m_prefabBomb = null;
+        [SerializeField,Tooltip("The bomb prefab that will be instantiated")]
+        private GameObject m_prefabBomb = null;
         
-
         [Serializable]
         private struct Bomb
         {
@@ -33,7 +33,7 @@ namespace Synchronizers {
             ClientManager.OnReceiveSpawnBomb += SpawnBomb;
             ClientManager.OnReceiveBombsPositions += UpdatePositions;
             ClientManager.OnReceiveBombExplosion += DestroyBomb;
-
+            ClientManager.OnReceiveBombActivation += ActivateBomb;
         }
 
         /// <summary> YES ! You actually guessed, this function will spawn a freaking bomb ! </summary>
@@ -64,6 +64,18 @@ namespace Synchronizers {
                 m_bombs[index ?? 0].bombPrefabInstance.transform.position = data.position;
             }
         }
+        private void ActivateBomb(BombActivation p_bombActivation )
+        { 
+            int? index = FindBeaconFromID(p_bombActivation.index, p_bombActivation.bombID);
+
+            if (index == null) {
+                Debug.LogWarning($"BOMB POSITION UPDATE ID ({p_bombActivation.bombID}) SEARCH FAILED");
+                return;
+            }
+            
+            Transform bombTransform = m_bombs[index ?? 0].bombPrefabInstance.transform;
+            for (int i = 0; i < bombTransform.childCount; i++) bombTransform.GetChild(i).gameObject.SetActive(true);
+        }   
 
         /// <summary>
         /// Destroying a bomb

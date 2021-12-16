@@ -74,6 +74,9 @@ public class ClientManager : MonoBehaviour
     public delegate void BombExplosionDelegator(BombExplosion p_activateBeacon);
     public static BombExplosionDelegator OnReceiveBombExplosion;
     
+    /// <summary/> The delegate that will be called each time the client receives a BombActivation message
+    public delegate void BombActivationDelegator(BombActivation p_bombActivation);
+    public static BombActivationDelegator OnReceiveBombActivation;
     #endregion
     
     [SerializeField, Tooltip("The player Object to be enabled on connection")] public GameObject m_player;
@@ -114,7 +117,10 @@ public class ClientManager : MonoBehaviour
         NetworkClient.RegisterHandler<BombExplosion>(ReceiveBombExplosion);
         NetworkClient.RegisterHandler<BombsPositions>(ReceiveBombsPositions);
         NetworkClient.RegisterHandler<SpawnBomb>(ReceiveSpawnBomb);
+        NetworkClient.RegisterHandler<BombActivation>(ReceiveBombActivation);
     }
+
+    private void ReceiveBombActivation(BombActivation p_bombActivation) => OnReceiveBombActivation?.Invoke(p_bombActivation);
 
     private void ReceiveActivateBeacon(ActivateBeacon p_activateBeacon) => OnReceiveActivateBeacon?.Invoke(p_activateBeacon);
 

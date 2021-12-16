@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using CustomMessages;
+using Network;
 using Synchronizers;
 using UnityEngine;
 
@@ -49,6 +51,7 @@ public class BombBehavior : GrabbablePhysickedObject {
         m_rb.isKinematic = true;
 
         m_synchronizer.ChangeMaterialOfABomb(m_index, m_serverID);
+        MyNetworkManager.singleton.SendVrData(new BombActivation(){index = m_index,bombID = m_serverID});
         StartCoroutine(ExplodeAfterTime());
     }
 
@@ -56,7 +59,7 @@ public class BombBehavior : GrabbablePhysickedObject {
         yield return new WaitForSeconds(m_explosionTimeOnceOnGround);
         
         m_synchronizer.ExplodeLol(m_index, m_serverID);
-            
+        
         OnDestroyBomb?.Invoke(this);
         Destroy(gameObject);
     }
