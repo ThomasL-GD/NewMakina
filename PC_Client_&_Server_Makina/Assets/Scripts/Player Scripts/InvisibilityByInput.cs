@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using CustomMessages;
 using Mirror;
 using TMPro;
@@ -5,15 +6,20 @@ using UnityEngine;
 
 public class InvisibilityByInput : MonoBehaviour {
 
-    [Tooltip("The key the player will have to hold to turn invisible")]
-    [SerializeField] private KeyCode m_inputInvisibility = KeyCode.Mouse1;
+    [Tooltip("The key the player will have to hold to turn invisible"),SerializeField]
+    private KeyCode m_inputInvisibility = KeyCode.Mouse1;
     
-    [Tooltip("The up time of invisibility available to the player")]
-    [SerializeField] private float m_invisibilityTime = 10f;
+    [Tooltip("The up time of invisibility available to the player"),SerializeField]
+    private float m_invisibilityTime = 10f;
     
-    [Tooltip("The TextMeshPro element that will contain the feedback for the player's invisibility")]
-    [SerializeField] private TextMeshProUGUI m_timerText;
+    [Tooltip("The TextMeshPro element that will contain the feedback for the player's invisibility"),SerializeField]
+    private TextMeshProUGUI m_timerText;
 
+    [Tooltip("The TextMeshPro element that will contain the feedback for the player's invisibility"), SerializeField]
+    private float m_speedMultiplier = 1.5f;
+
+    public static float m_maxSpeedMultipler = 1f;
+    
     ///<summary/> The variable that will conserve the original value of m_invisibilityTime 
     private float m_invisibilityTimeSave;
     
@@ -85,23 +91,13 @@ public class InvisibilityByInput : MonoBehaviour {
     /// </summary>
     void Update()
     {
-        if (!m_canTurnInvisible)
-        {
-            return;
-        }
+        if (!m_canTurnInvisible) return;
         
         // Checking if the timer has expired
         if (m_invisibilityTime<0f)
         {
             // Checking if the player is invisible
-            if(m_invisible)
-            {
-                // Send the message to the server
-                NetworkClient.Send(new PcInvisibility() {isInvisible = false});
-                
-                // Setting invisibility to false
-                m_invisible = false;
-            }
+            if(m_invisible) SendInvisibility(false);
             return;
         }
         
@@ -118,20 +114,21 @@ public class InvisibilityByInput : MonoBehaviour {
         // Checking if this is the frame that the player has pressed down the invisibility key
         if(Input.GetKeyDown(m_inputInvisibility))
         {
-            // Setting invisibility to true
-            m_invisible = true;
-            
-            // Send the message to the server
-            NetworkClient.Send(new PcInvisibility() {isInvisible = true});
+            SendInvisibility(true);
+            return;
         }
+        
         // Checking if this is the frame that the player has let go of the invisibility key
-        else if (Input.GetKeyUp(m_inputInvisibility))
-        {
-            // Setting invisibility to false
-            m_invisible = false;
+        if (Input.GetKeyUp(m_inputInvisibility)) SendInvisibility(false);
+    }
+    private void SendInvisibility(bool p_isInvisible)
+    {
             
-            // Send the message to the server
-            NetworkClient.Send(new PcInvisibility() {isInvisible = false});
-        }
+        // Setting invisibility to false
+        m_invisible = p_isInvisible;
+        m_maxSpeedMultipler = p_isInvisible?m_speedMultiplier:1f;
+            
+        // Send the message to the server
+        NetworkClient.Send(new PcInvisibility() {isInvisible = p_isInvisible});
     }
 }

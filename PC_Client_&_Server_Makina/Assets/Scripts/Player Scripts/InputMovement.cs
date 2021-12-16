@@ -47,7 +47,6 @@ public class InputMovement : MonoBehaviour
     [SerializeField] private KeyCode m_sprintKey = KeyCode.LeftShift;
     
     public Vector3 m_velocity = Vector3.zero;
-    public float m_speed = 0f;
 
     [SerializeField]private float m_ledgeGrabDistance = 2f;
     [SerializeField]private float m_maxLedgeGrabHeight = 2f;
@@ -58,7 +57,8 @@ public class InputMovement : MonoBehaviour
     [SerializeField] private float m_climbSpeed = 30f;
     [SerializeField] private float m_endClimbTolerance = .25f;
     [SerializeField]private float m_ledgeCheckMinHeight = .25f;
-    
+
+    public float m_speed;
     private delegate void ActionUpdate();
     private ActionUpdate onActionUpdate;
 
@@ -105,6 +105,7 @@ public class InputMovement : MonoBehaviour
 
         // Changing the MaxRunSpeed based on if the player's state
         float maxRunSpeed = Input.GetKey(m_sprintKey) ? m_maxSprintSpeed : m_maxRunSpeed;
+        maxRunSpeed *= InvisibilityByInput.m_maxSpeedMultipler;
         
         //Getting values for the sphereCasts
         float radius = m_characterController.radius * m_radiusMultiplier;
