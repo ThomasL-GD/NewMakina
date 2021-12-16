@@ -51,10 +51,10 @@ public class BeaconBehavior : GrabbablePhysickedObject {
     //     Gizmos.DrawWireSphere(transform.position, m_radius); // feedback magic ♪♪ ヽ(ˇ∀ˇ )ゞ
     // }
     
-    protected override void OnFirstTimeTouchingGround() {
+    protected override void OnFirstTimeTouchingGround(Collision p_other) {
 
         if (m_isDeployed) return;
-        base.OnFirstTimeTouchingGround();
+        base.OnFirstTimeTouchingGround(p_other);
         
         m_isGrabbable = false;
         m_rb.isKinematic = true;

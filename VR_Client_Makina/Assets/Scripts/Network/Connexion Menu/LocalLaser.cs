@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Network {
+namespace Network.Connexion_Menu {
 
     [RequireComponent(typeof(LineRenderer))]
     public class LocalLaser : MonoBehaviour {
@@ -48,7 +48,7 @@ namespace Network {
                 bool hasRaycastHit = Physics.Raycast(transform.position, transform.forward, out hit, 1000f, m_mask);
                 if (hasRaycastHit) {
                     m_shutDown = true;
-                    if(hit.transform.gameObject.TryGetComponent(out LaserSensitiveButtonBehavior script)) script.OnBeingShot();
+                    if(hit.transform.gameObject.TryGetComponent(out ConnexionMenuButtonBehavior script)) script.OnBeingActivated();
                     m_line.enabled = false;
                 }
                 
@@ -74,13 +74,14 @@ namespace Network {
             m_line.enabled = false;
                     
             if (MyNetworkManager.singleton.m_canSend) {
-                Destroy(p_hit.transform.gameObject);
-                Destroy(this);
+                MyNetworkManager.OnConnection += DestroyMyself;
             }
             else {
                 m_elapsedTime = 0f;
                 m_isShooting = false;
             }
         }
+
+        private void DestroyMyself() => Destroy(gameObject);
     }
 }

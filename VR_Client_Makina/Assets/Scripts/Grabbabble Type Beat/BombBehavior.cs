@@ -42,8 +42,8 @@ public class BombBehavior : GrabbablePhysickedObject {
         }
     }
 
-    protected override void OnFirstTimeTouchingGround() {
-        base.OnFirstTimeTouchingGround();
+    protected override void OnFirstTimeTouchingGround(Collision p_other) {
+        base.OnFirstTimeTouchingGround(p_other);
         
         m_isGrabbable = false;
         m_rb.isKinematic = true;

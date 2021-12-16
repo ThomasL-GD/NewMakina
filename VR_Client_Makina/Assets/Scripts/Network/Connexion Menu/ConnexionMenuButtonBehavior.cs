@@ -1,9 +1,9 @@
 using UnityEngine;
 
-namespace Network {
+namespace Network.Connexion_Menu {
 
     [RequireComponent(typeof(Collider))]
-    public abstract class LaserSensitiveButtonBehavior : MonoBehaviour {
+    public abstract class ConnexionMenuButtonBehavior : MonoBehaviour {
         
         
         void OnEnable() {
@@ -19,6 +19,10 @@ namespace Network {
         /// <remarks>
         /// Override this function if you want something to happen when this object is being shot
         /// </remarks>
-        public virtual void OnBeingShot() { }
+        public virtual void OnBeingActivated() {
+            MyNetworkManager.OnConnection += DestroyMyself;
+        }
+
+        private void DestroyMyself() => Destroy(gameObject);
     }
 }

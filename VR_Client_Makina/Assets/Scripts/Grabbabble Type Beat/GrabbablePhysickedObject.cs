@@ -7,6 +7,9 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
 
     private bool m_hasTouchedGround = false;
 
+    /// <summary> The layers this object will collide with, only layer 8 (ground) is selected by default </summary>
+    protected LayerMask m_layersThatCollides = 1 << 8;
+
     /// <summary>Well, it was a transform but... err... I kinda amputated it so... it's just a position and rotation sticked together now... (￣ー￣; )ゞ </summary>
     [Serializable]
     protected struct AmputatedTransform {
@@ -21,7 +24,7 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
         }
     }
 
-    [SerializeField] [Range(1, 50)] [Tooltip("The number of values used to calculate the direction of the throw.\nUnit : values, can be seen as 1 value = 1 frame")] private int m_throwValuesNumber = 4;
+    /*[SerializeField] [Range(1, 50)] [Tooltip("The number of values used to calculate the direction of the throw.\nUnit : values, can be seen as 1 value = 1 frame")]*/ private int m_throwValuesNumber = 2;
 
     /// <summary/>The last positions & rotations of this object, its length depends on m_throwValuesNumber
     protected AmputatedTransform[] m_lastCoordinates = null;
@@ -67,15 +70,15 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
     }
 
     private void OnCollisionEnter(Collision p_other) {
-        if (p_other.gameObject.layer == 8) { //The ground layer
+        if (((1 << p_other.gameObject.layer) & m_layersThatCollides) != 0) { //If this object collides with any layer specified with m_layersThatCollides
             transform.rotation = Quaternion.Euler(0,0,0);
-            if(!m_hasTouchedGround)OnFirstTimeTouchingGround();
+            if(!m_hasTouchedGround)OnFirstTimeTouchingGround(p_other);
         }
     }
 
     /// <summary> Is called the first time this object touches the ground </summary>
     /// <remarks> Override this to have things done at this moment </remarks>
-    protected virtual void OnFirstTimeTouchingGround() {
+    protected virtual void OnFirstTimeTouchingGround(Collision p_other) {
         m_hasTouchedGround = true;
     }
 }

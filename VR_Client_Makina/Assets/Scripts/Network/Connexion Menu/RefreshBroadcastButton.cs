@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using Mirror.Discovery;
+using Network.Connexion_Menu;
 using UnityEngine;
 
 namespace Network {
 
-    public class RefreshBroadcastButton : LaserSensitiveButtonBehavior {
+    public class RefreshBroadcastButton : ConnexionMenuButtonBehavior {
 
         [SerializeField] private MyNetworkDiscovery m_networkDiscovery = null;
         
@@ -17,7 +18,8 @@ namespace Network {
         /// <summary>
         /// Overriden to start broadcast when the button is hit
         /// </summary>
-        public override void OnBeingShot() {
+        public override void OnBeingActivated() {
+            base.OnBeingActivated();
             MyNetworkDiscovery.DiscoveredServers.Clear();
             m_networkDiscovery.StartDiscovery();
         }
