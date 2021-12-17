@@ -24,7 +24,7 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
         }
     }
 
-    /*[SerializeField] [Range(1, 50)] [Tooltip("The number of values used to calculate the direction of the throw.\nUnit : values, can be seen as 1 value = 1 frame")]*/ private int m_throwValuesNumber = 2;
+    [SerializeField] [Range(1, 50)] [Tooltip("The number of values used to calculate the direction of the throw.\nUnit : values, can be seen as 1 value = 1 frame")]/**/ private int m_throwValuesNumber = 3;
 
     /// <summary/>The last positions & rotations of this object, its length depends on m_throwValuesNumber
     protected AmputatedTransform[] m_lastCoordinates = null;
@@ -49,6 +49,7 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
         }
         else { //If the item is let go
             m_rb.isKinematic = false;
+            
             m_rb.velocity = (m_lastCoordinates[0].position - m_lastCoordinates[m_lastCoordinates.Length - 1].position) * ((1 / Time.fixedDeltaTime) / m_lastCoordinates.Length);
             //m_rb.angularVelocity += m_lastCoordinates[0].rotation.eulerAngles - m_lastCoordinates[m_lastCoordinates.Length - 1].rotation.eulerAngles;
             // m_rb.velocity = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);
