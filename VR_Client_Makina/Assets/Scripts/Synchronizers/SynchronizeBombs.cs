@@ -107,6 +107,8 @@ namespace Synchronizers {
             go.transform.localScale *= m_bombScale;
             go.GetComponent<ParticleSystem>().Play();
 
+            if(p_bombExplosion.hit) SynchronizeInitialData.instance.LosePcHealth();
+            
             if (m_niceShotQuestionMark && p_bombExplosion.hit) { // Audio Feedback
                 m_audioSource.Stop();
                 m_audioSource.clip = m_niceShotSound;
