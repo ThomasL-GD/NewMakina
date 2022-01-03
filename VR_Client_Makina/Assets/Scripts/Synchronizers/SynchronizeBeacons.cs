@@ -15,7 +15,7 @@ namespace Synchronizers {
         [Header("Colors")]
         [SerializeField] private Color m_undetectedColor = Color.red;
         [SerializeField] private Color m_detectedColor = Color.green;
-        [SerializeField] private Color m_unactiveColor = Color.blue;
+        //[SerializeField] private Color m_unactiveColor = Color.blue;
 
         /// <summary> Contains a gameobject of a beacon and its server ID, additionally contains booleans that explain the beacon state </summary>
         private class BeaconInfo {
@@ -155,8 +155,8 @@ namespace Synchronizers {
 
             Color newColor;
 
-            if (!m_beacons[p_index].isOnTheGroundAndSetUp) newColor = m_unactiveColor;
-            else switch (m_beacons[p_index].isDetecting) {
+            /*if (!m_beacons[p_index].isOnTheGroundAndSetUp) newColor = m_unactiveColor;
+            else */switch (m_beacons[p_index].isDetecting) {
                 case true:
                     newColor = m_detectedColor;
                     break;

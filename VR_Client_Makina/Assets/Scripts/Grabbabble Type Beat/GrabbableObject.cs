@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Collider))]
 public abstract class GrabbableObject : MonoBehaviour {
     
     protected bool m_isCaught = false;
@@ -18,7 +19,11 @@ public abstract class GrabbableObject : MonoBehaviour {
 
     // Start is called before the first frame update
     protected virtual void Start() {
-        if(!(gameObject.layer == 0 || gameObject.layer == 6)) Debug.LogWarning($"This object was on a weird layer ( {gameObject.layer} ), this code will AUTOMATICALLY put it back to the right layer.\nIf you wanted to mess with the layers of this objects, contact Blue.", gameObject);
+        if(!(gameObject.layer == 0 || gameObject.layer == 6)) {
+            GameObject go = gameObject;
+            Debug.LogWarning($"This object was on a weird layer ( {go.layer} ), this code will AUTOMATICALLY put it back to the right layer.\nIf you wanted to mess with the layers of this objects, contact Blue.", go);
+        }
+
         gameObject.layer = 6; //The sixth layer is the one for Catchable Objects
 
         m_originalParent.Add(transform.parent);
