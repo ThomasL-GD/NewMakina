@@ -4,9 +4,12 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(CharacterController))]
 public class InputMovement2 : MonoBehaviour
 {
+    public float s_speed = 0;
     [Space,Header("Movement Stuff")]
     [SerializeField] float m_movementSpeed = 8.0f;
-    [FormerlySerializedAs("m_moveSmoothTime")] [SerializeField][Range(0.0f, 0.5f),Tooltip("the time to transition smoothly between the player input direction")] float m_moveSmoothTimeGrounded = 0.3f;
+    [SerializeField,Range(0f, 0.3f),Tooltip("the time to transition smoothly between the player input direction")] float m_moveSmoothTimeGrounded = 0.3f;
+    [SerializeField,Range(0f, 2f),Tooltip("the time to transition smoothly between the player input direction")] float m_slideSmoothTimeUp = 0.3f;
+    [SerializeField,Range(0f, 2f),Tooltip("the time to transition smoothly between the player input direction")] float m_slideSmoothTimeDown = 0.3f;
     [SerializeField, Tooltip("The m_gravity independent from weight or volume applied to the player in m/s²")] float m_gravity = -9.18f;
 
     /// <summary/> the current pitch of the player's first person camera
@@ -20,6 +23,12 @@ public class InputMovement2 : MonoBehaviour
     
     /// <summary/> The current velocity of the player's movement
     Vector2 m_currentInputDirVelocity = Vector2.zero;
+    
+    /// <summary/> The current Direction of the player's sliding movement
+    Vector3 m_slideDirection = Vector3.zero;
+    
+    /// <summary/> The current velocity of the player's sliding movement
+    private Vector3 m_slideDirectionVelocity;
     
     [Space,Header("camera stuff"),SerializeField, Tooltip("the sensitivity of the mouse"), Range(0f,15f)]
     private float m_mouseSensitivity = 4f;
@@ -38,6 +47,7 @@ public class InputMovement2 : MonoBehaviour
     [Space]
     [Header("Editor Settings")]
     [SerializeField, Tooltip("A boolean to change the cursor lock and visibility mode")] private bool m_lockCursor = true;
+
 #endif
 
     // Start is called before the first frame update
@@ -78,17 +88,16 @@ public class InputMovement2 : MonoBehaviour
         // Calculating the camera's pitch
         m_cameraPicth -= targetMouseDelta.y * m_mouseSensitivity;
         
-        //Clamping the pitch to avoid barrel rolls (._.) ( .-. ) (._.)
+        //Clamping the pitch to avoid barrel rolls (._.)(.-.)(._.)
         m_cameraPicth = Mathf.Clamp(m_cameraPicth, -90.0f, 90.0f);
 
         // Applying the pitch
         m_cameraTr.localEulerAngles = Vector3.right * m_cameraPicth;
-        
-        
+
         //Calculating the camera's yaw
         Vector3 cameraYaw = Vector3.up * targetMouseDelta.x * m_mouseSensitivity;
         
-        //Settiong the camera and the player's new yaw
+        //Setting the camera and the player's new yaw
         transform.Rotate(cameraYaw);
         m_cameraParentTr.Rotate(cameraYaw);
     }
@@ -98,10 +107,7 @@ public class InputMovement2 : MonoBehaviour
     {
         // Checking whether the ground is within range and whether the player is grounded 
         bool grounded = CheckIfGrounded(out bool groundWithinRange, out Vector3 groundNormal ,out bool onSlope);
-        
-        // The direction of the player's Input
-        Vector2 targetDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
-        
+
         // Setting the m_gravity to zero if the player is grounded and adding the gravitational acceleration to the player if he isn't
         if(grounded)
         {
@@ -110,7 +116,7 @@ public class InputMovement2 : MonoBehaviour
         }
         else if(!onSlope) m_gVelocity += m_gravity * Time.deltaTime;
         
-        // Resseting the y velocity if the player bumbs his head
+        // Resetting the y velocity if the player bumps his head
         if (m_gVelocity < 0f)
         {
             float radius = m_controller.radius;
@@ -122,35 +128,57 @@ public class InputMovement2 : MonoBehaviour
             }
         }
         
-        // Calculating the player's velocity
-        Vector3 velocity = new Vector3();
+        Vector3 targetSlideVelocity = Vector3.zero;
 
-        // If the player is on a slope sliding him
+        // If the player is on a slope, slide him
         if (onSlope)
         {
-            m_gVelocity = 0f;
-            velocity.x += (1f - groundNormal.y) * groundNormal.x;
-            velocity.z += (1f - groundNormal.y) * groundNormal.z;
+            targetSlideVelocity.x += (1f - groundNormal.y) * groundNormal.x;
+            targetSlideVelocity.z += (1f - groundNormal.y) * groundNormal.z;
 
-            velocity = Vector3.ProjectOnPlane(velocity, groundNormal);
-            velocity.Normalize();
-            velocity *= m_slideSpeed;
-            m_currentInputDir = Vector2.zero;
+            targetSlideVelocity = Vector3.ProjectOnPlane(targetSlideVelocity, groundNormal);
+            targetSlideVelocity.Normalize();
+
+            // m_currentInputDir = Vector2.zero;
         }
-        else
-        {
-            // Transition the player's input velocity smoothly from the wanted direction to the current one
-            m_currentInputDir = Vector2.SmoothDamp(m_currentInputDir, targetDir, ref m_currentInputDirVelocity, m_moveSmoothTimeGrounded);
         
-            // Fetching the input velocity
-            Vector3 inputVelocity = transform.forward * m_currentInputDir.y + transform.right * m_currentInputDir.x;
-            
-            // Projecting the velocity based on the ground normal 
-            if(grounded) inputVelocity = Vector3.ProjectOnPlane(inputVelocity,groundNormal);
-            
-            // Setting the velocity to the movement speed based of the player's input
-            velocity = inputVelocity * m_movementSpeed + Vector3.down * m_gVelocity;
+        if(targetSlideVelocity != Vector3.zero)
+            m_slideDirection = Vector3.SmoothDamp(m_slideDirection, targetSlideVelocity, ref m_slideDirectionVelocity, m_slideSmoothTimeUp);
+        else
+            m_slideDirection = Vector3.SmoothDamp(m_slideDirection, targetSlideVelocity, ref m_slideDirectionVelocity, m_slideSmoothTimeDown);
+
+        Vector3 slideVelocity = m_slideDirection * m_slideSpeed;
+        
+        if(grounded) m_slideDirection = Vector3.ProjectOnPlane(m_slideDirection,groundNormal);
+        
+        if(onSlope)
+        {
+            if (m_gVelocity >= slideVelocity.magnitude)
+            {
+                m_slideDirection = targetSlideVelocity *  m_gVelocity / m_slideSpeed;
+            }
+            m_gVelocity = 0f;
         }
+            
+        Vector3 velocity = Vector3.zero;
+        
+        
+        // The direction of the player's Input
+        Vector2 targetDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+        
+        // Transition the player's input velocity smoothly from the wanted direction to the current one
+        m_currentInputDir = Vector2.SmoothDamp(m_currentInputDir, targetDir, ref m_currentInputDirVelocity, m_moveSmoothTimeGrounded);
+    
+        // Fetching the input velocity
+        Vector3 inputVelocity = transform.forward * m_currentInputDir.y + transform.right * m_currentInputDir.x;
+        
+        
+        if(grounded || onSlope) inputVelocity = Vector3.ProjectOnPlane(inputVelocity,groundNormal);
+        
+        // Setting the velocity to the movement speed based of the player's input
+        velocity = inputVelocity * m_movementSpeed + Vector3.down * m_gVelocity;
+        
+        // Projecting the velocity based on the ground normal 
         
 #if UNITY_EDITOR
         Debug.DrawRay(transform.position + Vector3.up * m_controller.height/2,velocity);
@@ -159,7 +187,9 @@ public class InputMovement2 : MonoBehaviour
 #endif
         
         // Moving the player
-        m_controller.Move(velocity * Time.deltaTime);
+        m_controller.Move((velocity + slideVelocity) * Time.deltaTime);
+
+        s_speed = (int) (velocity.magnitude + slideVelocity.magnitude);
         
         // Updating the camera
         UpdateCameraPosition();
@@ -180,9 +210,9 @@ public class InputMovement2 : MonoBehaviour
 #if UNITY_EDITOR
         Debug.DrawRay(groundHit.point,Vector3.up/4f);
 #endif
-        
+        //Todo make dot asshole
         p_groundNormal = groundHit.normal;
-        p_onSlope = Vector3.Angle(groundHit.normal,Vector3.up) >= m_maxSlope;
+        p_onSlope = Vector3.Angle(p_groundNormal,Vector3.up) >= m_maxSlope;
         
         bool grounded = p_groundetected && !p_onSlope && Vector3.Distance(groundHit.point, position + Vector3.up * rad) < m_controller.skinWidth + rad;
         
@@ -194,10 +224,8 @@ public class InputMovement2 : MonoBehaviour
     private void UpdateJump() {
         if(Input.GetKeyDown(m_jumpKey))
         {
+            //Todo get set ass
             m_gVelocity = -Mathf.Sqrt(m_playerJumpHeight * 2f * m_gravity);
-#if UNITY_EDITOR
-            Debug.Log($"Jump! {Time.time}");
-#endif
         }
     }
     
