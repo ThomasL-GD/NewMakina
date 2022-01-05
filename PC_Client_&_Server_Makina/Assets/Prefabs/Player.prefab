@@ -195,16 +195,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dbd190420989344d8450a1b98241307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  s_speed: 0
   m_movementSpeed: 15
   m_moveSmoothTimeGrounded: 0.103
-  m_gravity: 18
+  m_slideSmoothTimeUp: 0.3
+  m_slideSmoothTimeDown: 0.06
+  m_gravity: 30
   m_mouseSensitivity: 4
   m_cameraTr: {fileID: 7711472500313669524}
   m_cameraParentTr: {fileID: 6210662997634988316}
-  m_playerJumpHeight: 2
+  m_playerJumpHeight: 1
   m_groundCheckRange: 0.2
   m_maxSlope: 40
-  m_slideSpeed: 15
+  m_slideSpeed: 45
   m_jumpKey: 32
   m_controller: {fileID: 5885792929394297701}
   m_lockCursor: 1
