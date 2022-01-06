@@ -5,6 +5,10 @@ using UnityEngine.Serialization;
 public class InputMovement2 : MonoBehaviour
 {
     public float s_speed = 0;
+    public float s_distance = 0;
+    public float s_range = 0;
+    public bool s_withinRange = false;
+    
     [Space,Header("Movement Stuff")]
     [SerializeField] float m_movementSpeed = 8.0f;
     [SerializeField,Range(0f, 0.3f),Tooltip("the time to transition smoothly between the player input direction")] float m_moveSmoothTimeGrounded = 0.3f;
@@ -122,7 +126,7 @@ public class InputMovement2 : MonoBehaviour
             float radius = m_controller.radius;
             Vector3 origin = transform.position + Vector3.up * (m_controller.height - radius);
             Debug.DrawLine(origin + Vector3.right *.2f + Vector3.up * radius,origin+ Vector3.right *.2f, Color.red);
-            if(Physics.SphereCast(origin,radius, Vector3.up, out RaycastHit upHit, m_controller.skinWidth))
+            if(Physics.SphereCast(origin,radius, Vector3.up, out RaycastHit upHit, m_controller.skinWidth + m_controller.skinWidth))
             {
                 m_gVelocity = 0f;
             }
@@ -213,8 +217,18 @@ public class InputMovement2 : MonoBehaviour
         //Todo make dot asshole
         p_groundNormal = groundHit.normal;
         p_onSlope = Vector3.Angle(p_groundNormal,Vector3.up) >= m_maxSlope;
+
+        float distance = Vector3.Distance(position + Vector3.up * rad, groundHit.point);
+        float range = m_controller.skinWidth + rad + Mathf.Epsilon + m_controller.minMoveDistance;
         
-        bool grounded = p_groundetected && !p_onSlope && Vector3.Distance(groundHit.point, position + Vector3.up * rad) < m_controller.skinWidth + rad;
+        s_distance = distance * 1000f;
+        s_range = range * 1000f;
+        
+        s_withinRange = distance <= range;
+        
+        bool grounded = p_groundetected && !p_onSlope && s_withinRange;
+        
+        Debug.DrawLine(position + Vector3.up * rad, position + Vector3.up * rad  + (groundHit.point - position).normalized * rad);
         
         // Returning whether or not the player is actually grounded based on the distance of the hit point from the player taking into account the character controller's skin width
         return grounded;
