@@ -158,10 +158,10 @@ GameObject:
   - component: {fileID: 5490693662426325857}
   - component: {fileID: 5490693662426325862}
   - component: {fileID: 6746398649237760059}
+  - component: {fileID: 5490693662426325863}
   - component: {fileID: 5490693662426325884}
   - component: {fileID: 1826505101674252948}
   - component: {fileID: 1826505100148384446}
-  - component: {fileID: 5490693662426325863}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -200,12 +200,14 @@ MonoBehaviour:
   m_movementSpeed: 10
   m_accelerationSpeed: 10000
   m_decelerationSpeed: 5
-  m_SustainDirectionChangeSpeed: 10
+  m_sustainDirectionChangeSpeed: 100
   m_mouseSensitivity: 4
   m_cameraTr: {fileID: 7424795100352601290}
   m_cameraParentTr: {fileID: 6502698377413810754}
+  s_inputAngle: 0
+  s_inputVelocityAngle: 0
+  s_lookAngle: 0
   m_lockCursor: 1
-  m_trailRendererObj: {fileID: 0}
   s_speed: 0
   m_movementState: 0
 --- !u!143 &6746398649237760059
@@ -226,66 +228,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &5490693662426325884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5490693662426325861}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd0bd31c09edf1842a183c56f50cd9ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_camera: {fileID: 7424795100352601290}
-  m_blinkTarget: {fileID: 0}
-  m_blinkRange: 100
-  m_maxBlinkSurfaceNormal: 90
-  m_blinkKey: 323
-  m_layerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_coolDown: 5
-  m_timeStop: 0
---- !u!114 &1826505101674252948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5490693662426325861}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75170bb1c64b8134d92931660b61e2d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_inputInvisibility: 324
-  m_invisibilityTime: 10
-  m_timerText: {fileID: 0}
-  m_speedMultiplier: 1.5
-  m_canTurnInvisible: 1
---- !u!114 &1826505100148384446
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5490693662426325861}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c2842f18eaca0447abbdd651a9fac0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_layerMask:
-    serializedVersion: 2
-    m_Bits: 512
-  m_cameraTransform: {fileID: 6502698377413810754}
-  m_text: {fileID: 0}
-  m_destroyKey: 102
-  m_range: 5
-  m_yeetStrength: 20
-  m_upYeetStrength: 20
 --- !u!96 &5490693662426325863
 TrailRenderer:
   serializedVersion: 2
@@ -384,6 +326,66 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &5490693662426325884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5490693662426325861}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd0bd31c09edf1842a183c56f50cd9ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_camera: {fileID: 7424795100352601290}
+  m_blinkTarget: {fileID: 0}
+  m_blinkRange: 100
+  m_maxBlinkSurfaceNormal: 90
+  m_blinkKey: 323
+  m_layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_coolDown: 5
+  m_timeStop: 0
+--- !u!114 &1826505101674252948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5490693662426325861}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75170bb1c64b8134d92931660b61e2d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_inputInvisibility: 324
+  m_invisibilityTime: 10
+  m_timerText: {fileID: 0}
+  m_speedMultiplier: 1.5
+  m_canTurnInvisible: 1
+--- !u!114 &1826505100148384446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5490693662426325861}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c2842f18eaca0447abbdd651a9fac0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_layerMask:
+    serializedVersion: 2
+    m_Bits: 512
+  m_cameraTransform: {fileID: 6502698377413810754}
+  m_text: {fileID: 0}
+  m_destroyKey: 102
+  m_range: 5
+  m_yeetStrength: 20
+  m_upYeetStrength: 20
 --- !u!1 &6193271049827776636
 GameObject:
   m_ObjectHideFlags: 0
