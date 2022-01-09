@@ -39,6 +39,7 @@ public class InputMovement3 : MonoBehaviour
     [SerializeField, HideInInspector, Tooltip("boolean to switch wether we want the player to have a headBob or not")] private bool m_headBob = true;
     [SerializeField, HideInInspector, Tooltip("The speed at which the head will bob in oscillations per second")] private float m_headBobSpeed = .8f;
     [SerializeField, HideInInspector, Tooltip("The intensity of the bob displacement in m")] private float m_headBobIntensity = .2f;
+    [SerializeField, HideInInspector, Tooltip("the head bob animation curve")]private AnimationCurve m_headBobAnimationCurve;
     
     /// <summary> The different states player's acceleration
     /// could be: idle, accelerating, sustaining, decelerating</summary>
@@ -65,6 +66,7 @@ public class InputMovement3 : MonoBehaviour
     [SerializeField, HideInInspector, Tooltip("A boolean to change the cursor lock and visibility mode")]private bool m_lockCursor = true;
     [SerializeField, HideInInspector, Tooltip("The speed of the player")]private float s_speed = 0;
     [SerializeField, HideInInspector, Tooltip("The player's acceleration position on the abscess")]private float s_curvePositionX = 0;
+    [SerializeField, HideInInspector, Tooltip("The player's head bob position on the abscess")]private float s_headBobCurvePositionX = 0;
     [SerializeField, HideInInspector, Tooltip("The angle between Vector3.forward and the player's input")] private float s_inputAngle = 0f;
     [SerializeField, HideInInspector, Tooltip("The angle between Vector3.forward and the player's input velocity")] private float s_inputVelocityAngle = 0f;
     [SerializeField, HideInInspector, Tooltip("The ground detection state odf the player")] private GroundTouchingState s_groundTouchingState;
@@ -98,6 +100,8 @@ public class InputMovement3 : MonoBehaviour
     [SerializeField,HideInInspector]private bool m_jump;
     
     private Coroutine m_jumpCoroutine;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -137,7 +141,7 @@ public class InputMovement3 : MonoBehaviour
         
         m_controller.Move(displacement * Time.deltaTime);
 
-        if (m_headBob) UpdateHeadBob(new Vector2(displacement.x, displacement.z).magnitude);
+        if (m_headBob) UpdateHeadBob(new Vector2(displacement.x, displacement.z).magnitude, groundTouchingState);
         
         #if UNITY_EDITOR
         s_groundTouchingState = groundTouchingState;
@@ -456,11 +460,19 @@ public class InputMovement3 : MonoBehaviour
 
     #region Head Raoul
 
-    private void UpdateHeadBob(float p_magnitude)
+    private void UpdateHeadBob(float p_magnitude, GroundTouchingState p_groundTouchingState)
     {
+        float invertedSpeed = 1 / m_headBobSpeed;
+        if (p_groundTouchingState != GroundTouchingState.grounded)
+        {
+            m_cameraTr.localPosition = Vector3.MoveTowards(m_cameraTr.localPosition, Vector3.up * m_originalCameraHeight, invertedSpeed* Time.deltaTime);
+            return;
+        }
         float magnitude = Mathf.Min(p_magnitude, m_maxMovementSpeed);
         float intensity = m_headBobIntensity * (magnitude / m_maxMovementSpeed);
-        m_cameraTr.localPosition = Vector3.up * (m_originalCameraHeight + Mathf.Cos(Time.time * Mathf.PI * m_headBobSpeed) * (intensity / 2f));
+        float time = (Time.time % invertedSpeed)/ invertedSpeed;
+        s_headBobCurvePositionX = time;
+        m_cameraTr.localPosition =  Vector3.up * (m_originalCameraHeight + m_headBobAnimationCurve.Evaluate(time) * (intensity / 2f));
     }
 
     #endregion

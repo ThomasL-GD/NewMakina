@@ -55,6 +55,8 @@ public class InputMovement3Editor : Editor
         SerializedProperty headBob = serializedObject.FindProperty("m_headBob");
         SerializedProperty headBobSpeed = serializedObject.FindProperty("m_headBobSpeed");
         SerializedProperty headBobIntensity = serializedObject.FindProperty("m_headBobIntensity");
+        SerializedProperty headBobAnimationCurve = serializedObject.FindProperty("m_headBobAnimationCurve");
+        SerializedProperty headBobCurvePositionX = serializedObject.FindProperty("s_headBobCurvePositionX");
         
         // Info
         SerializedProperty speed = serializedObject.FindProperty("s_speed");
@@ -162,6 +164,22 @@ public class InputMovement3Editor : Editor
             {
                 PropertyField(headBobSpeed);
                 PropertyField(headBobIntensity);
+                
+                float height = Screen.width/1.5f;
+                Rect headBobCurveContainer = GUILayoutUtility.GetRect(10f, 1000f, 220f, height);
+
+                bool active = movementState.enumValueIndex != 0 && groundTouchingState.enumValueIndex == 0;
+                
+                              Color headBobCurveColor = Color.gray;
+                if (active ) headBobCurveColor = Color.green;
+                
+                headBobAnimationCurve.animationCurveValue = EditorGUI.CurveField(headBobCurveContainer, headBobAnimationCurve.animationCurveValue,headBobCurveColor, new Rect());
+
+                if (active)
+                {
+                    float curvePosition = headBobCurvePositionX.floatValue;
+                    DrawLine(headBobCurveContainer, new Vector2(curvePosition, 0f), new Vector2(curvePosition, 1.5f), Color.red);
+                }
             }
         }
 
