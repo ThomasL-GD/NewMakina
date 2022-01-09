@@ -1,3 +1,4 @@
+using ICSharpCode.NRefactory.Ast;
 using UnityEditor;
 using UnityEngine;
 using static UnityEditor.EditorGUILayout;
@@ -11,6 +12,7 @@ public class InputMovement3Editor : Editor
     protected static bool showLookMetrics = false;
     protected static bool showGravitySlope = false;
     protected static bool showJump = false;
+    protected static bool showHeadBob = false;
     protected static bool showInfo = true;
     public override void OnInspectorGUI()
     {
@@ -48,6 +50,11 @@ public class InputMovement3Editor : Editor
         SerializedProperty jumpOnSlope = serializedObject.FindProperty("m_jumpOnSlope");
         SerializedProperty jumpOnSlopeUsingGroundNormal = serializedObject.FindProperty("m_jumpOnSlopeUsingGroundNormal");
         SerializedProperty jumpKey = serializedObject.FindProperty("m_jumpKey");
+        
+        //Head Bob
+        SerializedProperty headBob = serializedObject.FindProperty("m_headBob");
+        SerializedProperty headBobSpeed = serializedObject.FindProperty("m_headBobSpeed");
+        SerializedProperty headBobIntensity = serializedObject.FindProperty("m_headBobIntensity");
         
         // Info
         SerializedProperty speed = serializedObject.FindProperty("s_speed");
@@ -145,6 +152,19 @@ public class InputMovement3Editor : Editor
             PropertyField(jumpOnSlope);
             if(jumpOnSlope.boolValue) PropertyField(jumpOnSlopeUsingGroundNormal);
         }
+        
+        // Head Bob
+        showHeadBob= Foldout(showHeadBob, "Head Bob", true,EditorStyles.foldoutHeader);
+        if (showHeadBob)
+        {
+            PropertyField(headBob);
+            if (headBob.boolValue)
+            {
+                PropertyField(headBobSpeed);
+                PropertyField(headBobIntensity);
+            }
+        }
+
         //Info
         showInfo = Foldout(showInfo, "Info", true,EditorStyles.foldoutHeader);
         if (showInfo)

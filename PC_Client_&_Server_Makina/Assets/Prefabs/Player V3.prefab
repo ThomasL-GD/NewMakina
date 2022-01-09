@@ -196,20 +196,88 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f91b4fcd0cde26a458d0ebfe5cec3bf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_controler: {fileID: 6746398649237760059}
-  m_movementSpeed: 10
-  m_accelerationSpeed: 10000
-  m_decelerationSpeed: 5
-  m_sustainDirectionChangeSpeed: 100
+  m_controller: {fileID: 6746398649237760059}
+  m_maxMovementSpeed: 10
+  m_accelerationBehaviorCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_decelerationBehaviorCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0083351135
+      value: 1
+      inSlope: -1.703744
+      outSlope: -1.703744
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.08749996
+    - serializedVersion: 3
+      time: 1.0041809
+      value: 0
+      inSlope: -0.043538507
+      outSlope: -0.043538507
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.32803023
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_accelerationTime: 0.2
+  m_decelerationTime: 0.3
+  m_sustainDirectionChangeSpeed: 40
   m_mouseSensitivity: 4
   m_cameraTr: {fileID: 7424795100352601290}
   m_cameraParentTr: {fileID: 6502698377413810754}
-  s_inputAngle: 0
-  s_inputVelocityAngle: 0
-  s_lookAngle: 0
+  m_movementState: 0
+  m_gravityAcceleration: 16
+  m_slideAcceleration: 16
+  m_maxSlideSpeed: 250
+  m_maxFallSpeed: 250
+  m_groundCheckRange: 0.2
+  m_maxSlope: 40
+  m_slideDeceleration: 50
+  m_playerJumpHeight: 5
+  m_playerJumpToleranceTime: 0.1
+  m_jumpUsingGroundNormal: 0
+  m_jumpOnSlope: 1
+  m_jumpOnSlopeUsingGroundNormal: 1
+  m_jumpKey: 32
+  m_headBob: 1
+  m_headBobSpeed: 5
+  m_headBobIntensity: 0.2
   m_lockCursor: 1
   s_speed: 0
-  m_movementState: 0
+  s_curvePositionX: 0
+  s_inputAngle: 0
+  s_inputVelocityAngle: 0
+  s_groundTouchingState: 0
+  m_gravity: {x: 0, y: 0, z: 0}
+  m_slideVelocity: 0
+  m_jump: 0
 --- !u!143 &6746398649237760059
 CharacterController:
   m_ObjectHideFlags: 0

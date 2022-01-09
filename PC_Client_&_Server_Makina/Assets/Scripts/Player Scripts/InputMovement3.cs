@@ -34,6 +34,11 @@ public class InputMovement3 : MonoBehaviour
     [SerializeField, HideInInspector, Tooltip("Will the player jump when on slope")]private bool m_jumpOnSlope= true;
     [SerializeField, HideInInspector, Tooltip("Will the player jump using the ground normal when on slope")]private bool m_jumpOnSlopeUsingGroundNormal= true;
     [SerializeField, HideInInspector, Tooltip("The Jump Key")] private KeyCode m_jumpKey;
+
+
+    [SerializeField, HideInInspector, Tooltip("boolean to switch wether we want the player to have a headBob or not")] private bool m_headBob = true;
+    [SerializeField, HideInInspector, Tooltip("The speed at which the head will bob in oscillations per second")] private float m_headBobSpeed = .8f;
+    [SerializeField, HideInInspector, Tooltip("The intensity of the bob displacement in m")] private float m_headBobIntensity = .2f;
     
     /// <summary> The different states player's acceleration
     /// could be: idle, accelerating, sustaining, decelerating</summary>
@@ -80,6 +85,9 @@ public class InputMovement3 : MonoBehaviour
     /// <summary/> The initial speed during an acceleration curve
     private float m_initialSpeed;
     
+    /// <summary/> The initial speed during an acceleration curve
+    private float m_originalCameraHeight;
+    
     /// <summary/> The gravity
     [SerializeField, HideInInspector]private Vector3 m_gravity;
     
@@ -93,6 +101,7 @@ public class InputMovement3 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        m_originalCameraHeight = m_cameraTr.position.y;
         // Okay so hear me out
         // Sometimes... The people need to set stuff to the right boolean before compiling
         // But...
@@ -127,6 +136,8 @@ public class InputMovement3 : MonoBehaviour
         UpdateCameraPosition();
         
         m_controller.Move(displacement * Time.deltaTime);
+
+        if (m_headBob) UpdateHeadBob(new Vector2(displacement.x, displacement.z).magnitude);
         
         #if UNITY_EDITOR
         s_groundTouchingState = groundTouchingState;
@@ -443,6 +454,16 @@ public class InputMovement3 : MonoBehaviour
 
     #endregion
 
+    #region Head Raoul
+
+    private void UpdateHeadBob(float p_magnitude)
+    {
+        float magnitude = Mathf.Min(p_magnitude, m_maxMovementSpeed);
+        float intensity = m_headBobIntensity * (magnitude / m_maxMovementSpeed);
+        m_cameraTr.localPosition = Vector3.up * (m_originalCameraHeight + Mathf.Cos(Time.time * Mathf.PI * m_headBobSpeed) * (intensity / 2f));
+    }
+
+    #endregion
     
     #region Camera
 
