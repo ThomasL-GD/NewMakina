@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class InputMovement3 : MonoBehaviour
@@ -41,6 +43,10 @@ public class InputMovement3 : MonoBehaviour
     [SerializeField, HideInInspector, Tooltip("The intensity of the bob displacement in m")] private float m_headBobIntensity = .2f;
     [SerializeField, HideInInspector, Tooltip("the head bob animation curve")]private AnimationCurve m_headBobAnimationCurve;
     
+    [SerializeField, HideInInspector, Tooltip("whether or not we use the smooth stepping")]private bool m_smoothStepping = true;
+    [SerializeField, HideInInspector, Tooltip("the sensitivity of the step detection")]private float m_stepSensitivity = 100f;
+    [SerializeField, HideInInspector, Tooltip("the speed of the of the stepping")]private float m_smoothingSpeed = 10f;
+    
     /// <summary> The different states player's acceleration
     /// could be: idle, accelerating, sustaining, decelerating</summary>
     private enum AccelerationState
@@ -61,7 +67,7 @@ public class InputMovement3 : MonoBehaviour
         onSlope,
         airborn
     }
-    
+
     #if UNITY_EDITOR
     [SerializeField, HideInInspector, Tooltip("A boolean to change the cursor lock and visibility mode")]private bool m_lockCursor = true;
     [SerializeField, HideInInspector, Tooltip("The speed of the player")]private float s_speed = 0;
@@ -100,12 +106,14 @@ public class InputMovement3 : MonoBehaviour
     [SerializeField,HideInInspector]private bool m_jump;
     
     private Coroutine m_jumpCoroutine;
+    private bool m_smoothing = false;
 
 
     // Start is called before the first frame update
     void Start()
     {
         m_originalCameraHeight = m_cameraTr.position.y;
+        m_cameraParentTr.position = transform.position;
         // Okay so hear me out
         // Sometimes... The people need to set stuff to the right boolean before compiling
         // But...
@@ -137,10 +145,22 @@ public class InputMovement3 : MonoBehaviour
         UpdateSlide(ref displacement, groundTouchingState,groundNormal);
         UpdateGravity(ref displacement, groundTouchingState);
         UpdatePlayerInput(ref displacement, groundNormal);
-        UpdateCameraPosition();
         
-        m_controller.Move(displacement * Time.deltaTime);
-
+        // The way the stepping works is that I compare the movement the player would've done with a simple
+        // transform.Translate to the one done by the Character controller.Move (Only on the y).
+        // TO be accurate we use a same value of delta time
+        float previous = transform.position.y;
+        float deltaTime = Time.deltaTime;
+        
+        // Mocing the player
+        m_controller.Move(displacement * deltaTime);
+        
+        // Calculating the movement
+        float difference = Mathf.Abs(previous + displacement.y * deltaTime) - Mathf.Abs(transform.position.y);
+        bool snappedMovement = Mathf.Round(difference * m_stepSensitivity) / m_stepSensitivity != 0f;
+        UpdateCameraPosition(snappedMovement);
+        
+        
         if (m_headBob) UpdateHeadBob(new Vector2(displacement.x, displacement.z).magnitude, groundTouchingState);
         
         #if UNITY_EDITOR
@@ -503,7 +523,21 @@ public class InputMovement3 : MonoBehaviour
     }
     
     /// <summary/> Updating the camera's position
-    void UpdateCameraPosition() => m_cameraParentTr.position = transform.position;
+    void UpdateCameraPosition(bool p_snapped)
+    {
+        Debug.Log($"snapped : {p_snapped} smoothing {m_smoothing}");
+        if(m_smoothStepping  && !p_snapped && !m_smoothing)
+        {
+            m_cameraParentTr.position = transform.position;
+            return;
+        }
+
+        
+        m_smoothing = true;
+        Vector3 tr = new Vector3(transform.position.x, m_cameraParentTr.position.y, transform.position.z);
+        m_cameraParentTr.position = Vector3.MoveTowards(tr, transform.position,m_smoothingSpeed * Time.deltaTime * (Vector3.Distance(tr, transform.position) + 1f));
+        if (transform.position == m_cameraParentTr.position) m_smoothing = false;
+    }
 
     #endregion
     

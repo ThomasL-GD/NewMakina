@@ -1,4 +1,3 @@
-using ICSharpCode.NRefactory.Ast;
 using UnityEditor;
 using UnityEngine;
 using static UnityEditor.EditorGUILayout;
@@ -6,14 +5,15 @@ using static UnityEditor.EditorGUILayout;
 [CustomEditor(typeof(InputMovement3))]
 public class InputMovement3Editor : Editor
 {
-    Material m_mat;
-    bool showInputMetrics;
-    bool showInputCurves;
-    bool showLookMetrics;
-    bool showGravitySlope;
-    bool showJump;
-    bool showHeadBob;
-    bool showInfo;
+    private Material m_mat;
+    private bool m_showInputMetrics;
+    private bool m_showInputCurves;
+    private bool m_showLookMetrics;
+    private bool m_showGravitySlope;
+    private bool m_showJump;
+    private bool m_showHeadBob;
+    private bool m_showSmoothStepping;
+    private bool m_showInfo;
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
@@ -58,6 +58,11 @@ public class InputMovement3Editor : Editor
         SerializedProperty headBobAnimationCurve = serializedObject.FindProperty("m_headBobAnimationCurve");
         SerializedProperty headBobCurvePositionX = serializedObject.FindProperty("s_headBobCurvePositionX");
         
+        //Smooth Stepping
+        SerializedProperty stepSensitivity = serializedObject.FindProperty("m_stepSensitivity");
+        SerializedProperty smoothStepping = serializedObject.FindProperty("m_smoothStepping");
+        SerializedProperty smoothingSpeed = serializedObject.FindProperty("m_smoothingSpeed");
+
         // Info
         SerializedProperty speed = serializedObject.FindProperty("s_speed");
         SerializedProperty gravity = serializedObject.FindProperty("m_gravity");
@@ -73,8 +78,8 @@ public class InputMovement3Editor : Editor
         
         //Creation the foldouts
         //Input Metrics
-        showInputMetrics = Foldout(showInputMetrics, "Input Metrics", true, EditorStyles.foldoutHeader);
-        if (showInputMetrics)
+        m_showInputMetrics = Foldout(m_showInputMetrics, "Input Metrics", true, EditorStyles.foldoutHeader);
+        if (m_showInputMetrics)
         {
             PropertyField(movementSpeed);
             PropertyField(accelerationTime);
@@ -83,8 +88,8 @@ public class InputMovement3Editor : Editor
         }
         
         //Input Curves
-        showInputCurves = Foldout(showInputCurves, "Input Curves", true, EditorStyles.foldoutHeader);
-        if (showInputCurves)
+        m_showInputCurves = Foldout(m_showInputCurves, "Input Curves", true, EditorStyles.foldoutHeader);
+        if (m_showInputCurves)
         {
             float height = Screen.width/1.5f;
             LabelField("Acceleration Curve");
@@ -122,16 +127,16 @@ public class InputMovement3Editor : Editor
         }
         
         //Look Metrics
-        showLookMetrics = Foldout(showLookMetrics, "Look Metrics", true,EditorStyles.foldoutHeader);
-        if (showLookMetrics)
+        m_showLookMetrics = Foldout(m_showLookMetrics, "Look Metrics", true,EditorStyles.foldoutHeader);
+        if (m_showLookMetrics)
         {
             PropertyField(mouseSensitivity);
             PropertyField(lockCursor);
         }
         
         //Gravity & slopes
-        showGravitySlope = Foldout(showGravitySlope, "Gravity & Slopes", true,EditorStyles.foldoutHeader);
-        if (showGravitySlope)
+        m_showGravitySlope = Foldout(m_showGravitySlope, "Gravity & Slopes", true,EditorStyles.foldoutHeader);
+        if (m_showGravitySlope)
         {
             PropertyField(gravityAcceleration);
             PropertyField(slideAcceleration);
@@ -143,8 +148,8 @@ public class InputMovement3Editor : Editor
         }
 
         //Jump
-        showJump= Foldout(showJump, "Jump", true,EditorStyles.foldoutHeader);
-        if (showJump)
+        m_showJump= Foldout(m_showJump, "Jump", true,EditorStyles.foldoutHeader);
+        if (m_showJump)
         {
             PropertyField(jumpKey);
             Space();
@@ -156,8 +161,8 @@ public class InputMovement3Editor : Editor
         }
         
         // Head Bob
-        showHeadBob= Foldout(showHeadBob, "Head Bob", true,EditorStyles.foldoutHeader);
-        if (showHeadBob)
+        m_showHeadBob= Foldout(m_showHeadBob, "Head Bob", true,EditorStyles.foldoutHeader);
+        if (m_showHeadBob)
         {
             PropertyField(headBob);
             if (headBob.boolValue)
@@ -183,9 +188,21 @@ public class InputMovement3Editor : Editor
             }
         }
 
+        //Smooth Stepping
+        m_showSmoothStepping = Foldout(m_showSmoothStepping, "Smooth Stepping", true,EditorStyles.foldoutHeader);
+        if (m_showSmoothStepping)
+        {
+            PropertyField(smoothStepping);
+            if (smoothStepping.boolValue)
+            {
+                PropertyField(stepSensitivity);
+                PropertyField(smoothingSpeed);
+            }
+        }
+        
         //Info
-        showInfo = Foldout(showInfo, "Info", true,EditorStyles.foldoutHeader);
-        if (showInfo)
+        m_showInfo = Foldout(m_showInfo, "Info", true,EditorStyles.foldoutHeader);
+        if (m_showInfo)
         {
             LabelField($"Input speed : {speed.floatValue.ToString()} m/s");
             LabelField($"Falling speed : {gravity.vector3Value.y.ToString()} m/s");
