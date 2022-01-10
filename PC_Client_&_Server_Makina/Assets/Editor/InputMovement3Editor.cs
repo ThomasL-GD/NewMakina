@@ -7,13 +7,13 @@ using static UnityEditor.EditorGUILayout;
 public class InputMovement3Editor : Editor
 {
     Material m_mat;
-    protected static bool showInputMetrics = false;
-    protected static bool showInputCurves = false;
-    protected static bool showLookMetrics = false;
-    protected static bool showGravitySlope = false;
-    protected static bool showJump = false;
-    protected static bool showHeadBob = false;
-    protected static bool showInfo = true;
+    bool showInputMetrics;
+    bool showInputCurves;
+    bool showLookMetrics;
+    bool showGravitySlope;
+    bool showJump;
+    bool showHeadBob;
+    bool showInfo;
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
