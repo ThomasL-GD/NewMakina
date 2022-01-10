@@ -173,7 +173,10 @@ namespace EditorTools
                 {
                     PropertyField(headBobSpeed);
                     PropertyField(headBobIntensity);
-                
+                    Space();
+                    LabelField("Head Bob Curve");
+                    Space();
+                    
                     float height = Screen.width/1.5f;
                     Rect headBobCurveContainer = GUILayoutUtility.GetRect(10f, 1000f, 220f, height);
 
@@ -187,7 +190,7 @@ namespace EditorTools
                     if (active)
                     {
                         float curvePosition = headBobCurvePositionX.floatValue;
-                        DrawLine(headBobCurveContainer, new Vector2(curvePosition, 0f), new Vector2(curvePosition, 1.5f), Color.red);
+                        DrawLine(headBobCurveContainer, new Vector2(curvePosition, 0f), new Vector2(curvePosition, 1f), Color.red);
                     }
                 }
             }
