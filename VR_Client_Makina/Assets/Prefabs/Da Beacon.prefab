@@ -115,6 +115,7 @@ MonoBehaviour:
   m_originalParent: []
   m_throwValuesNumber: 4
   m_index: 0
+  m_serverID: 0
   m_synchronizer: {fileID: 0}
 --- !u!54 &6277487996144178680
 Rigidbody:
@@ -131,7 +132,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!114 &8607726231727516761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,6 +145,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0dd614ae5a85f54699b653a2bd8a379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_synchronizer: {fileID: 0}
+  mustPreserveParent: 0
 --- !u!1 &6606253773710282511
 GameObject:
   m_ObjectHideFlags: 0
@@ -238,3 +241,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8574283b5dbce93439961a2679756d09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_inflationTime: 0.5
+  m_targetScale: 1

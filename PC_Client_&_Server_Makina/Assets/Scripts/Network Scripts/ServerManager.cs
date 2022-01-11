@@ -402,12 +402,13 @@ public class ServerManager : MonoBehaviour
         }
         
         m_beaconsPositionsBuffer.data[index??0].isActive = true;
+        // TODO faire la coroutine propre #indexe memoire
         StartCoroutine(DespawnBeacon(index??0,m_beaconsPositionsBuffer.data[index??0].beaconID));
         
         //TODO Add this to server loop
         SendToBothClients(p_ativateBeacon);
     }
-    
+
     /// <summary/> function called when the server receives a message of type VrTransform
     /// <param name="p_conn"> The connection from which originated the message </param>
     /// <param name="p_vrTransform"> The message sent by the Client to the Server  </param>
