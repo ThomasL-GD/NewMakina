@@ -8,12 +8,16 @@ namespace Player_Scripts
         [SerializeField, HideInInspector, Tooltip("the player's character controller")]private CharacterController m_controller;
     
         [SerializeField, HideInInspector, Min(0f),Tooltip("the player's input speed in m/s")]private float m_maxMovementSpeed = 10f;
+        [SerializeField, HideInInspector, Min(0f),Tooltip("the player's input speed in m/s")]private float m_maxMovementSpeedSprinting = 10f;
 
         [SerializeField, HideInInspector, Tooltip("The acceleration curve of that player's speed progression will follow")] private AnimationCurve m_accelerationBehaviorCurve;
         [SerializeField, HideInInspector, Tooltip("The deceleration curve of that player's speed progression will follow")] private AnimationCurve m_decelerationBehaviorCurve;
     
         [SerializeField, HideInInspector, Tooltip("The Time it will take the player to accelerate to full speed"), Min(0f)]private float m_accelerationTime = .3f;
         [SerializeField, HideInInspector, Tooltip("The Time it will take the player to decelerate to an idle speed"), Min(0f)]private float m_decelerationTime = .5f;
+        [SerializeField, HideInInspector, Tooltip("The Time it will take the player to decelerate to an idle speed"), Min(0f)]private float m_accelerationTimeSprinting = .5f;
+        [SerializeField, HideInInspector, Tooltip("The Time it will take the player to decelerate to an idle speed"), Min(0f)]private float m_decelerationTimeSprinting = .5f;
+        [SerializeField, HideInInspector, Tooltip("The Sprint Key")] private KeyCode m_sprintKey;
         [SerializeField, HideInInspector, Tooltip("The Speed of the player's speed transition rotation in °/²"), Min(0f)]private float m_sustainDirectionChangeSpeed = 100f;
 
         [SerializeField, HideInInspector, Tooltip("the sensitivity of the mouse"), Range(0f,15f)] private float m_mouseSensitivity = 4f;
@@ -106,6 +110,7 @@ namespace Player_Scripts
     
         private Coroutine m_jumpCoroutine;
         private bool m_smoothing;
+        private float m_targetVelocity;
 
 
         // Start is called before the first frame update
@@ -360,6 +365,13 @@ namespace Player_Scripts
         /// <param name="p_groundNormal"></param>
         private void UpdatePlayerInput(ref Vector3 p_displacement, Vector3 p_groundNormal)
         {
+            bool sprinting = Input.GetKey(m_sprintKey);
+            
+            float maxMovementSpeed = sprinting? m_maxMovementSpeedSprinting : m_maxMovementSpeed;
+            
+            float accelerationTime = sprinting? m_accelerationTimeSprinting : m_accelerationTime;
+            float decelerationTime = sprinting? m_decelerationTimeSprinting : m_decelerationTime;
+            
             //Getting the player input
             Vector2 playerInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
@@ -379,7 +391,11 @@ namespace Player_Scripts
                 else
                 {
                     // Resetting the curve timer
-                    if (m_movementState != AccelerationState.decelerating) ResetCurveTimer();
+                    if (m_movementState != AccelerationState.decelerating)
+                    {
+                        ResetCurveTimer();
+                        m_targetVelocity = 0f;
+                    }
                     else m_accelerationTimer += Time.deltaTime;
                 
                     m_movementState = AccelerationState.decelerating;
@@ -387,10 +403,17 @@ namespace Player_Scripts
             }
             else
             {
-                if (Mathf.Approximately(m_currentInputVelocity.magnitude,m_maxMovementSpeed))
+                if (Mathf.Approximately(m_currentInputVelocity.magnitude,maxMovementSpeed))
                     m_movementState = AccelerationState.sustaining;
-                else if (m_currentInputVelocity.magnitude > m_maxMovementSpeed)
-                    m_movementState = AccelerationState.error;
+                else if (m_currentInputVelocity.magnitude > maxMovementSpeed)
+                {
+                    if(m_movementState != AccelerationState.decelerating)
+                    {
+                        m_movementState = AccelerationState.decelerating;
+                        ResetCurveTimer();
+                        m_targetVelocity = maxMovementSpeed;
+                    }else m_accelerationTimer += Time.deltaTime;
+                }
                 else
                 {
                     if (m_movementState != AccelerationState.accelerating) ResetCurveTimer();
@@ -406,7 +429,7 @@ namespace Player_Scripts
                 case AccelerationState.accelerating:
                 
                     // Calculating the time the acceleration will take based on the factor between the starting speed and the maximum
-                    float time = m_accelerationTime * (1 - m_initialSpeed / m_maxMovementSpeed);
+                    float time = accelerationTime * (1 - m_initialSpeed / maxMovementSpeed);
                 
                     // calculating the position of the acceleration on the curve
                     float curvePositionX = m_accelerationBehaviorCurve.Evaluate(m_accelerationTimer / time);
@@ -416,7 +439,7 @@ namespace Player_Scripts
 #endif
                 
                     // Calculating the speed and adding it to the current input
-                    float speed = curvePositionX * (m_maxMovementSpeed - m_initialSpeed) + m_initialSpeed;
+                    float speed = curvePositionX * (maxMovementSpeed - m_initialSpeed) + m_initialSpeed;
                     m_currentInputVelocity = playerInput * speed;
                 
                     break;
@@ -426,18 +449,22 @@ namespace Player_Scripts
                     break;
                 case AccelerationState.decelerating:
 
+                    float speedToRemove = m_initialSpeed - m_targetVelocity;
                     // Calculating the time the deceleration will take based on the factor between the starting speed and the maximum
-                    time = m_decelerationTime * m_initialSpeed / m_maxMovementSpeed;
-                
+                    time = decelerationTime * speedToRemove / maxMovementSpeed;
+
                     // calculating the position of the deceleration on the curve
                     curvePositionX = m_decelerationBehaviorCurve.Evaluate(m_accelerationTimer / time);
-                
+                    
 #if UNITY_EDITOR
                     s_curvePositionX = curvePositionX;
 #endif
                 
+                    
                     // Calculating the speed and adding it to the current input
-                    speed = curvePositionX * m_initialSpeed;
+                    speed = m_targetVelocity + (curvePositionX * speedToRemove);
+                    
+                    Debug.Log($"target: {m_targetVelocity} initial: {m_initialSpeed} time: {time} speed: {speed}");
                     m_currentInputVelocity = m_currentInputVelocity.normalized * speed;
                 
                     break;
@@ -484,8 +511,8 @@ namespace Player_Scripts
                 m_cameraTr.localPosition = Vector3.MoveTowards(m_cameraTr.localPosition, Vector3.up * m_originalCameraHeight, invertedSpeed* Time.deltaTime);
                 return;
             }
-            float magnitude = Mathf.Min(p_magnitude, m_maxMovementSpeed);
-            float intensity = m_headBobIntensity * (magnitude / m_maxMovementSpeed);
+            float magnitude = Mathf.Min(p_magnitude, m_maxMovementSpeedSprinting);
+            float intensity = m_headBobIntensity * (magnitude / m_maxMovementSpeedSprinting);
             float time = (Time.time % invertedSpeed)/ invertedSpeed;
             s_headBobCurvePositionX = time;
             m_cameraTr.localPosition =  Vector3.up * (m_originalCameraHeight + m_headBobAnimationCurve.Evaluate(time) * (intensity / 2f));
@@ -521,8 +548,7 @@ namespace Player_Scripts
         /// <summary/> Updating the camera's position
         void UpdateCameraPosition(bool p_snapped)
         {
-            Debug.Log($"snapped : {p_snapped} smoothing {m_smoothing}");
-            if(m_smoothStepping  && !p_snapped && !m_smoothing)
+            if(!m_smoothStepping  || !p_snapped && !m_smoothing)
             {
                 m_cameraParentTr.position = transform.position;
                 return;

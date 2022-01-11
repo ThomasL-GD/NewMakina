@@ -28,6 +28,12 @@ namespace EditorTools
             SerializedProperty accelerationTime = serializedObject.FindProperty("m_accelerationTime");
             SerializedProperty decelerationTime = serializedObject.FindProperty("m_decelerationTime");
             SerializedProperty sustainDirectionChangeSpeed = serializedObject.FindProperty("m_sustainDirectionChangeSpeed");
+            
+            
+            SerializedProperty maxMovementSpeedSprinting = serializedObject.FindProperty("m_maxMovementSpeedSprinting");
+            SerializedProperty accelerationTimeSprinting = serializedObject.FindProperty("m_accelerationTimeSprinting");
+            SerializedProperty decelerationTimeSprinting = serializedObject.FindProperty("m_decelerationTimeSprinting");
+            SerializedProperty sprintKey = serializedObject.FindProperty("m_sprintKey");
 
             // Acceleration Curves
             SerializedProperty accelerationCurve = serializedObject.FindProperty("m_accelerationBehaviorCurve");
@@ -86,9 +92,17 @@ namespace EditorTools
             if (m_showInputMetrics)
             {
                 PropertyField(movementSpeed);
+                PropertyField(maxMovementSpeedSprinting);
+                Space();
                 PropertyField(accelerationTime);
                 PropertyField(decelerationTime);
+                Space();
+                PropertyField(accelerationTimeSprinting);
+                PropertyField(decelerationTimeSprinting);
+                Space();
                 PropertyField(sustainDirectionChangeSpeed);
+                Space();
+                PropertyField(sprintKey);
             }
         
             //Input Curves
