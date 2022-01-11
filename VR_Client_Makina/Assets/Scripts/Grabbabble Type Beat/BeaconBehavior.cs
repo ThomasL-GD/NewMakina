@@ -8,12 +8,14 @@ public class BeaconBehavior : GrabbablePhysickedObject {
     [HideInInspector] public int m_index;
     [HideInInspector] public float m_serverID;
     [HideInInspector] public SynchronizeBeacons m_synchronizer;
+
+    [SerializeField] [Tooltip("The prefab of the beacon once it is deployed.\nMust contain the InflateToSize script")] private GameObject m_prefabDeployed = null;
     
     private ObjectLoading m_beaconLoading = null;
 
     private bool m_isDeployed = false;
 
-    public delegate void DestroyBeaconDelegator(BeaconBehavior p_beaconBehavior);
+    private delegate void DestroyBeaconDelegator(BeaconBehavior p_beaconBehavior);
     private static DestroyBeaconDelegator OnDestroyBeacon;
     
     protected override void Start() {
@@ -62,21 +64,13 @@ public class BeaconBehavior : GrabbablePhysickedObject {
         m_isDeployed = true;
         transform.rotation = Quaternion.Euler(Vector3.zero);
 
-        //For each children of this object, make them inflate and add the script in the case they don't have it already
-        foreach (Transform child in transform) {
-            if (!child.gameObject.TryGetComponent(out InflateToSize script)){
-                script = child.gameObject.AddComponent<InflateToSize>();
-            }
-            
-            script.StartInflating();
-        }
-
         m_synchronizer.SendBeaconActivation(m_index, m_serverID);
     }
 
     protected override void BeingDestroyed() {
         base.BeingDestroyed();
         
+        OnDestroyBeacon -= ActualiseIndex;
         OnDestroyBeacon?.Invoke(this); //Saying everyone we get destroyed
     }
 

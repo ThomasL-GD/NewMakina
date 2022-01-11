@@ -7,7 +7,8 @@ namespace Synchronizers {
     public class SynchronizeBeacons : SynchronizeLoadedObjectsAbstract {
 
         [Header("Beacons")]
-        [SerializeField] private GameObject m_prefabBeaconAmmo = null;
+        [SerializeField] [Tooltip("Must have the BeaconBehavior script attached")] private GameObject m_prefabBeaconAmmo = null;
+        [SerializeField] [Tooltip("Must have the InflateToSize script attached")] private GameObject m_prefabDeployedBeacon = null;
         [HideInInspector] public float m_range = 20f;
         [SerializeField] [Range(0f, 1f)] public float m_inflateTime = 0.2f;
         
@@ -19,8 +20,11 @@ namespace Synchronizers {
 
         /// <summary> Contains a gameobject of a beacon and its server ID, additionally contains booleans that explain the beacon state </summary>
         private class BeaconInfo {
-            /// <summary>The gameobject of the beacon</summary>
-            public readonly GameObject gameObject;
+            /// <summary>The gameobject of the beacon to grab</summary>
+            public readonly BeaconBehavior beaconScript;
+            
+            /// <summary>The gameobject of the deployed beacon</summary>
+            public readonly InflateToSize deployedBeaconScript;
             
             /// <summary> If true, the PC player is in the range of this beacon </summary>
             public bool isDetecting;
@@ -32,13 +36,15 @@ namespace Synchronizers {
             public float serverID;
 
             /// <summary> The constructor of a beaconInfo class </summary>
-            /// <param name="p_go">The GameObject of the beacon</param>
+            /// <param name="p_grabScript">The GameObject of the beacon to grab</param>
             /// <param name="p_serverID">The server id of the beacon</param>
-            public BeaconInfo(GameObject p_go, float p_serverID) {
+            /// <param name="p_deployedBeaconScript">The gameobject of the deployed beacon</param>
+            public BeaconInfo(BeaconBehavior p_grabScript, InflateToSize p_deployedBeaconScript, float p_serverID) {
                 isDetecting = false;
                 isOnTheGroundAndSetUp = false;
-                gameObject = p_go;
+                beaconScript = p_grabScript;
                 serverID = p_serverID;
+                deployedBeaconScript = p_deployedBeaconScript;
             }
         }
         
@@ -79,7 +85,7 @@ namespace Synchronizers {
             BeaconData[] positionses = new BeaconData[m_beacons.Count];
 
             for (int i = 0; i < positionses.Length; i++) {
-                positionses[i].position = m_beacons[i].gameObject.transform.position;
+                positionses[i].position = m_beacons[i].beaconScript.gameObject.transform.position;
                 positionses[i].beaconID = m_beacons[i].serverID;
             }
             
@@ -94,15 +100,19 @@ namespace Synchronizers {
         private void CreateBeacon(SpawnBeacon p_spawnBeacon) {
             
             GameObject go = Instantiate(m_prefabBeaconAmmo);
+            BeaconBehavior beaconScript = go.GetComponent<BeaconBehavior>();
             
-            m_beacons.Add(new BeaconInfo(go, p_spawnBeacon.beaconID));
+            GameObject daChild = Instantiate(m_prefabDeployedBeacon, go.transform);
+            InflateToSize deployScript = daChild.GetComponent<InflateToSize>();
             
-            BeaconBehavior script = go.GetComponent<BeaconBehavior>();
-            script.m_index = m_beacons.Count - 1;
-            script.m_serverID = p_spawnBeacon.beaconID;
-            script.m_synchronizer = this;
+            m_beacons.Add(new BeaconInfo(beaconScript, deployScript, p_spawnBeacon.beaconID));
+            
+            
+            beaconScript.m_index = m_beacons.Count - 1;
+            beaconScript.m_serverID = p_spawnBeacon.beaconID;
+            beaconScript.m_synchronizer = this;
 
-            OnNewBeacon?.Invoke(script);
+            OnNewBeacon?.Invoke(beaconScript);
         }
 
         /// <summary> Will load a beacon in a random available position </summary>
@@ -126,7 +136,7 @@ namespace Synchronizers {
                 return;
             }
             
-            m_beacons[index??0].gameObject.GetComponent<GrabbableObject>().DestroyMaSoul();
+            m_beacons[index??0].beaconScript.DestroyMaSoul();
             m_beacons.RemoveAt(index??0);
         }
         
@@ -165,11 +175,11 @@ namespace Synchronizers {
                     break;
             }
             
-            GameObject child = m_beacons[p_index].gameObject.transform.GetChild(0).gameObject;
+            GameObject child = m_beacons[p_index].beaconScript.gameObject.transform.GetChild(0).gameObject;
             Material mat = child.GetComponent<MeshRenderer>().material;
             mat.SetColor(CodeBeaconColor, newColor);
 
-            m_beacons[p_index].gameObject.GetComponent<MeshRenderer>().material.color = newColor;
+            m_beacons[p_index].beaconScript.gameObject.GetComponent<MeshRenderer>().material.color = newColor;
             
         }
 
@@ -197,8 +207,11 @@ namespace Synchronizers {
                 return;
             }
             
+            m_beacons[index??0].deployedBeaconScript.gameObject.transform.SetParent(null, true);
+            m_beacons[index??0].deployedBeaconScript.StartInflating();
+            
             SetActivationOfABeacon(index??0, true);
-            OnBeaconSetUp?.Invoke(m_beacons[index??0].gameObject.GetComponent<BeaconBehavior>());
+            OnBeaconSetUp?.Invoke(m_beacons[index??0].beaconScript);
             //Debug.LogWarning($"I'm sending a beacon activation, its index is : {index??0} and server id : {m_beacons[index??0].serverID}");
             MyNetworkManager.singleton.SendVrData(new ActivateBeacon(){index = index??0, beaconID = m_beacons[index??0].serverID});
         }
