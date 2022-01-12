@@ -177,7 +177,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5490693662426325861}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -22.021, y: 1.04, z: 2.175}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2735870143947823674}
@@ -198,6 +198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_controller: {fileID: 6746398649237760059}
   m_maxMovementSpeed: 10
+  m_maxMovementSpeedSprinting: 15
   m_accelerationBehaviorCurve:
     serializedVersion: 2
     m_Curve:
@@ -226,7 +227,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: -0.0083351135
+      time: 0
       value: 1
       inSlope: -1.703744
       outSlope: -1.703744
@@ -235,7 +236,16 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.08749996
     - serializedVersion: 3
-      time: 1.0041809
+      time: 0.32605156
+      value: 0.49250895
+      inSlope: -1.3067435
+      outSlope: -1.3067435
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
       value: 0
       inSlope: -0.043538507
       outSlope: -0.043538507
@@ -248,30 +258,79 @@ MonoBehaviour:
     m_RotationOrder: 4
   m_accelerationTime: 0.2
   m_decelerationTime: 0.3
+  m_accelerationTimeSprinting: 0.5
+  m_decelerationTimeSprinting: 0.5
+  m_sprintKey: 304
   m_sustainDirectionChangeSpeed: 40
   m_mouseSensitivity: 4
   m_cameraTr: {fileID: 7424795100352601290}
   m_cameraParentTr: {fileID: 6502698377413810754}
   m_movementState: 0
-  m_gravityAcceleration: 16
+  m_gravityAcceleration: 30
   m_slideAcceleration: 16
   m_maxSlideSpeed: 250
   m_maxFallSpeed: 250
   m_groundCheckRange: 0.2
   m_maxSlope: 40
   m_slideDeceleration: 50
-  m_playerJumpHeight: 5
+  m_playerJumpHeight: 1.5
   m_playerJumpToleranceTime: 0.1
   m_jumpUsingGroundNormal: 0
   m_jumpOnSlope: 1
   m_jumpOnSlopeUsingGroundNormal: 1
   m_jumpKey: 32
   m_headBob: 1
-  m_headBobSpeed: 5
-  m_headBobIntensity: 0.2
+  m_headBobSpeed: 2
+  m_headBobIntensity: 0.4
+  m_headBobAnimationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.25
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.75
+      value: -1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_smoothStepping: 1
+  m_stepSensitivity: 100
+  m_smoothingSpeed: 5
   m_lockCursor: 1
   s_speed: 0
   s_curvePositionX: 0
+  s_headBobCurvePositionX: 0
   s_inputAngle: 0
   s_inputVelocityAngle: 0
   s_groundTouchingState: 0
@@ -291,8 +350,8 @@ CharacterController:
   serializedVersion: 2
   m_Height: 2
   m_Radius: 0.35
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_SlopeLimit: 0
+  m_StepOffset: 0.5
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
@@ -465,7 +524,6 @@ GameObject:
   - component: {fileID: 4681243484760862261}
   - component: {fileID: 7803882423708419559}
   - component: {fileID: 5196395039276285068}
-  - component: {fileID: 2426854259987276869}
   m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
@@ -536,19 +594,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &2426854259987276869
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6193271049827776636}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6608007961698435456
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,7 +605,6 @@ GameObject:
   - component: {fileID: 2735870143947823674}
   - component: {fileID: 7951948793771693500}
   - component: {fileID: 7620647225955557491}
-  - component: {fileID: 1320079017028246241}
   m_Layer: 3
   m_Name: Capsule
   m_TagString: Untagged
@@ -632,20 +676,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &1320079017028246241
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6608007961698435456}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8482125714654492766
 GameObject:
   m_ObjectHideFlags: 0

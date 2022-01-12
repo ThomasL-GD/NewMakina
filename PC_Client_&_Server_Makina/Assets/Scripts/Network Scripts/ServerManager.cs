@@ -4,6 +4,7 @@ using System.Linq;
 using Mirror;
 using UnityEngine;
 using CustomMessages;
+using JetBrains.Annotations;
 
 /// <summary/> The server side manager will handle all of the server side network dealings of the game
 
@@ -27,6 +28,7 @@ public class ServerManager : MonoBehaviour
     private BombsPositions m_bombsPositionsBuffer = new BombsPositions();
     private bool m_newPositions = false;
     private DestroyedBeacon m_destroyedBeaconBuffer = new DestroyedBeacon();
+    private ElevatorActivation m_elevatorActivationBuffer;
 
     #endregion
     
@@ -35,39 +37,41 @@ public class ServerManager : MonoBehaviour
 
 
     [Header("Server Settings")]
-    [SerializeField][Range(1,120)][Tooltip("the server's tick rate in Hz")] private int m_tickrate = 30;
+    [SerializeField, Range(1,120), Tooltip("the server's tick rate in Hz")] private int m_tickrate = 30;
     private float m_tickDelta = 1f;
     
     /// <summary/> The custom variables added onto the Network Manager
     [Header("Laser :")]
     [Header("Game Settings")]
-    [SerializeField][Tooltip("The radius of the VR laser")] private float m_laserRadius = 20f;
+    [SerializeField, Tooltip("The radius of the VR laser")] private float m_laserRadius = 20f;
+    [SerializeField, Tooltip("The speed of the elevators in m/s")] private float m_elevatorSpeed = 5.8f;
+    [SerializeField, Tooltip("The speed of the elevators in m/s")] private float m_elevatorWaitTime = 1f;
     
 
     [Header("Hearts")]
     [Header(" ")]
-    [SerializeField][Tooltip("The positions of the hearts on the map")] private Transform[] m_heartTransforms;
-    [SerializeField][Tooltip("The amount of hearts that need to be destroyed for the VR player to lose")] private int m_vrPlayerHealth = 3;
-    [SerializeField][Tooltip("The amount of times the PC player has to eliminated to lose")] private int m_pcPlayerHealth = 3;
-    [SerializeField][Tooltip("The possible spawn positions of the PC player on the map")] private Transform[] m_beaconSpawnPositions;
+    [SerializeField, Tooltip("The positions of the hearts on the map")] private Transform[] m_heartTransforms;
+    [SerializeField, Tooltip("The amount of hearts that need to be destroyed for the VR player to lose")] private int m_vrPlayerHealth = 3;
+    [SerializeField, Tooltip("The amount of times the PC player has to eliminated to lose")] private int m_pcPlayerHealth = 3;
+    [SerializeField, Tooltip("The possible spawn positions of the PC player on the map")] private Transform[] m_beaconSpawnPositions;
 
     
     [Header("Beacons")]
     [Header(" ")]
-    [SerializeField][Tooltip("The amount of beacons that will spawn at the start of the game")]private int m_initialBeacons = 2;
-    [SerializeField][Tooltip("The time after which the initial beacons will spawn")]private float m_initialBeaconSpawnDelay = 10f;
+    [SerializeField, Tooltip("The amount of beacons that will spawn at the start of the game")]private int m_initialBeacons = 2;
+    [SerializeField, Tooltip("The time after which the initial beacons will spawn")]private float m_initialBeaconSpawnDelay = 10f;
     [Header(" ")]
-    [SerializeField][Tooltip("The interval at which the beacons spawn")] private float m_beaconRespawnTime = 30f;
-    [SerializeField][Tooltip("The lifetime of a beacon")] private float m_beaconLifeTime = 10f;
-    [SerializeField][Tooltip("The maximum amount of beacons")] private int m_maxBeacons = 3; 
+    [SerializeField, Tooltip("The interval at which the beacons spawn")] private float m_beaconRespawnTime = 30f;
+    [SerializeField, Tooltip("The lifetime of a beacon")] private float m_beaconLifeTime = 10f;
+    [SerializeField, Tooltip("The maximum amount of beacons")] private int m_maxBeacons = 3; 
     private int m_currentBeaconAmount = 0;
     [Header(" ")]
-    [SerializeField][Tooltip("The range of the beacons")] private float m_beaconRange = 400f;
+    [SerializeField, Tooltip("The range of the beacons")] private float m_beaconRange = 400f;
 
     [Header(" ")] [Header("Bombs")] [Header(" ")]
-    [SerializeField] [Tooltip("The interval at which the bomb spawn")] [Range(0f, 120f)] private float m_bombRespawnTime = 30f;
-    [SerializeField] [Tooltip("The maximum amount of bombs")] [Range(1, 5)] private int m_maxBombs = 1;
-    [SerializeField] [Tooltip("The range of the bomb's explosion")] [Range(1f, 100f)] private float m_bombExplosionRange = 50f;
+    [SerializeField, Tooltip("The interval at which the bomb spawn"), Range(0f, 120f)] private float m_bombRespawnTime = 30f;
+    [SerializeField, Tooltip("The maximum amount of bombs"), Range(1, 5)] private int m_maxBombs = 1;
+    [SerializeField, Tooltip("The range of the bomb's explosion"), Range(1f, 100f)] private float m_bombExplosionRange = 50f;
     private int m_currentBombAmount = 0;
     
 
@@ -138,6 +142,7 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<BombsPositions>(OnServerReceiveBombsPositions);
         NetworkServer.RegisterHandler<BombExplosion>(OnServerReceiveBombExplosion);
         NetworkServer.RegisterHandler<BombActivation>(OnReceiveBombActivation);
+        NetworkServer.RegisterHandler<ElevatorActivation>(OnElevatorActivation);
 
         //Unpacking the heart position values from the transforms to send through messages
         List<Vector3> heartPositions = new List<Vector3>();
@@ -370,7 +375,9 @@ public class ServerManager : MonoBehaviour
             healthVrPlayer = m_vrPlayerHealth,
             beaconRange = m_beaconRange,
             maximumBeaconCount = m_maxBeacons,
-            maximumBombsCount = m_maxBombs
+            maximumBombsCount = m_maxBombs,
+            elevatorSpeed = m_elevatorSpeed,
+            elevatorWaitTime = m_elevatorWaitTime
         };
         
         p_conn.Send(initialData);
@@ -556,6 +563,16 @@ public class ServerManager : MonoBehaviour
 
     private void OnReceiveBombActivation(NetworkConnection p_conn, BombActivation p_bombActivation) => m_pcNetworkConnection.Send(p_bombActivation);
     
+    /// <summary/> function called when the server receives a message of type ElevatorActivation
+    /// <param name="p_conn">The connection from which originated the message</param>
+    /// <param name="p_elevatorActivation">The message sent by the Client to the Server</param>
+    private void OnElevatorActivation(NetworkConnection p_conn, ElevatorActivation p_elevatorActivation)
+    {
+        m_elevatorActivationBuffer = p_elevatorActivation;
+        OnServerTick -= UpdateElevatorActivation;
+        OnServerTick += UpdateElevatorActivation;
+    }
+    
     #endregion
 
 
@@ -620,6 +637,11 @@ public class ServerManager : MonoBehaviour
         {
             m_pcNetworkConnection.Send(m_bombsPositionsBuffer);
         }
+    }
+    
+    /// <summary/> The function to call when an elevator gets activated
+    private void UpdateElevatorActivation() {
+        SendToBothClients(m_elevatorActivationBuffer);
     }
 
     #endregion

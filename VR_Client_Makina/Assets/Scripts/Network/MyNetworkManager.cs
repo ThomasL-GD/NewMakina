@@ -73,6 +73,10 @@ namespace Network {
         public delegate void BombExplosionDelegator(BombExplosion p_bombExplosion);
         public static BombExplosionDelegator OnReceiveBombExplosion;
 
+
+        /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+        public delegate void ElevatorActivationDelegator(ElevatorActivation p_bombActivation);
+        public static ElevatorActivationDelegator OnReceiveElevatorActivation;
         #endregion
         
         /// <summary>
@@ -128,10 +132,13 @@ namespace Network {
             NetworkClient.RegisterHandler<InitialData>(ReceiveInitialData);
             NetworkClient.RegisterHandler<SpawnBomb>(ReceiveSpawnBomb);
             NetworkClient.RegisterHandler<BombExplosion>(ReceiveBombExplosion);
+            NetworkClient.RegisterHandler<ElevatorActivation>(ReceiveElevatorActivation);
         
             OnConnection?.Invoke();
         }
-
+        
+        private void ReceiveElevatorActivation(ElevatorActivation p_elevatorActivation) => OnReceiveElevatorActivation?.Invoke(p_elevatorActivation);
+        
         /// <summary/> The function called when the client receives a message of type InitialData
         /// <param name="p_initialData"> The message sent by the Server to the Client </param>
         private void ReceiveInitialData(InitialData p_initialData) => OnReceiveInitialData?.Invoke(p_initialData);

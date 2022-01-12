@@ -367,11 +367,13 @@ namespace Player_Scripts
         {
             bool sprinting = Input.GetKey(m_sprintKey);
             
+            
             float maxMovementSpeed = sprinting? m_maxMovementSpeedSprinting : m_maxMovementSpeed;
             
             float accelerationTime = sprinting? m_accelerationTimeSprinting : m_accelerationTime;
             float decelerationTime = sprinting? m_decelerationTimeSprinting : m_decelerationTime;
             
+            //Debug.Log(maxMovementSpeed);
             //Getting the player input
             Vector2 playerInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
@@ -391,7 +393,7 @@ namespace Player_Scripts
                 else
                 {
                     // Resetting the curve timer
-                    if (m_movementState != AccelerationState.decelerating)
+                    if (m_movementState != AccelerationState.decelerating || m_targetVelocity != 0f)
                     {
                         ResetCurveTimer();
                         m_targetVelocity = 0f;
@@ -464,7 +466,7 @@ namespace Player_Scripts
                     // Calculating the speed and adding it to the current input
                     speed = m_targetVelocity + (curvePositionX * speedToRemove);
                     
-                    Debug.Log($"target: {m_targetVelocity} initial: {m_initialSpeed} time: {time} speed: {speed}");
+                    // Debug.Log($"target: {m_targetVelocity} initial: {m_initialSpeed} time: {time} speed: {speed}");
                     m_currentInputVelocity = m_currentInputVelocity.normalized * speed;
                 
                     break;

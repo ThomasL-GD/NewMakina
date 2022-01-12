@@ -56,6 +56,13 @@ namespace CustomMessages
         public float beaconRange;
         public int maximumBeaconCount;
         public int maximumBombsCount;
+        public float elevatorSpeed;
+        public float elevatorWaitTime;
+    }
+
+    public struct ElevatorActivation : NetworkMessage
+    {
+        public int index;
     }
     
     //TODO add this to that ^
