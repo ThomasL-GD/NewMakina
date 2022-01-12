@@ -1,9 +1,10 @@
+using System;
 using System.Collections.Generic;
-using System.Net;
 using Mirror;
 using Mirror.Discovery;
+using UnityEngine;
 
-namespace Network { /*
+namespace Network.Connexion_Menu { /*
     Documentation: https://mirror-networking.gitbook.io/docs/components/network-discovery
     API Reference: https://mirror-networking.com/docs/api/Mirror.Discovery.NetworkDiscovery.html
 */
@@ -18,55 +19,37 @@ namespace Network { /*
         // clients for them to display or consume for establishing a connection.
     }
 
-    public class MyNetworkDiscovery : NetworkDiscoveryBase<DiscoveryRequest, DiscoveryResponse> {
+    public class MyNetworkDiscovery : NetworkDiscovery {
+
+    
+        //Singleton time ! 	(˵ ͡° ͜ʖ ͡°˵)
+        public new static MyNetworkDiscovery singleton { get; private set; }
+        
+        /// <summary>
+        /// Is that... a singleton setup ?
+        /// *Pokédex's voice* A singleton, a pretty common pokécode you can find in a lot of projects, it allows anyone to
+        /// call it and ensure there is only one script of this type in the entire scene !
+        /// </summary>
+        private new void Awake() {
+            //base.Awake();
+            // if the singleton hasn't been initialized yet
+            if (singleton != null && singleton != this)
+            {
+                gameObject.SetActive(this);
+                Debug.LogWarning("BROOOOOOOOOOOOOOOOOOO ! There are too many Singletons broda", this);
+                return;
+            }
+ 
+            singleton = this;
+        }
         
         public static readonly Dictionary<long, ServerResponse> DiscoveredServers = new Dictionary<long, ServerResponse>();
-    
-        #region Server
 
-        /// <summary>
-        /// Process the request from a client
-        /// </summary>
-        /// <remarks>
-        /// Override if you wish to provide more information to the clients
-        /// such as the name of the host player
-        /// </remarks>
-        /// <param name="request">Request coming from client</param>
-        /// <param name="endpoint">Address of the client that sent the request</param>
-        /// <returns>A message containing information about this server</returns>
-        protected override DiscoveryResponse ProcessRequest(DiscoveryRequest request, IPEndPoint endpoint) 
-        {
-            return new DiscoveryResponse();
+        public void CustomDiscoveryConnect(Uri p_uri) {
+            StopDiscovery();
+            NetworkManager.singleton.StartClient(p_uri);
         }
-
-        #endregion
-
-        #region Client
-
-        /// <summary>
-        /// Create a message that will be broadcasted on the network to discover servers
-        /// </summary>
-        /// <remarks>
-        /// Override if you wish to include additional data in the discovery message
-        /// such as desired game mode, language, difficulty, etc... </remarks>
-        /// <returns>An instance of ServerRequest with data to be broadcasted</returns>
-        protected override DiscoveryRequest GetRequest()
-        {
-            return new DiscoveryRequest();
-        }
-
-        /// <summary>
-        /// Process the answer from a server
-        /// </summary>
-        /// <remarks>
-        /// A client receives a reply from a server, this method processes the
-        /// reply and raises an event
-        /// </remarks>
-        /// <param name="response">Response that came from the server</param>
-        /// <param name="endpoint">Address of the server that replied</param>
-        protected override void ProcessResponse(DiscoveryResponse response, IPEndPoint endpoint) { }
-
-        #endregion
+        
     }
 
 }
