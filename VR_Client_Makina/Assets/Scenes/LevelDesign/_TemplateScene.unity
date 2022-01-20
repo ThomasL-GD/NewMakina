@@ -150,11 +150,16 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 932789506}
   - {fileID: 517048635}
+  - {fileID: 932789506}
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!20 &247252105 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 7413916035946230257, guid: dce19f08d91541c489495dd83b7da24c, type: 3}
+  m_PrefabInstance: {fileID: 7413916036529811002}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &261706892
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -384,7 +389,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 36abc19b7b815cf4bba7b0105a0652f4, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 36abc19b7b815cf4bba7b0105a0652f4, type: 3}
       propertyPath: m_LocalScale.x
@@ -404,7 +409,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 36abc19b7b815cf4bba7b0105a0652f4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.62
+      value: 4.21
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 36abc19b7b815cf4bba7b0105a0652f4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -689,6 +694,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8704895006966500739, guid: bfaa9ecd2230aa948ad1727f55e8f63e, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 247252105}
     - target: {fileID: 8704895006966500740, guid: bfaa9ecd2230aa948ad1727f55e8f63e, type: 3}
       propertyPath: m_Name
       value: Blinding
@@ -762,12 +771,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 932789505}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 4.21, z: 0}
+  m_LocalPosition: {x: 0, y: 8.62, z: 0}
   m_LocalScale: {x: 1.8, y: 4, z: 1.8}
   m_Children:
   - {fileID: 1231323482}
   m_Father: {fileID: 37027786}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &932789507
 MeshRenderer:
