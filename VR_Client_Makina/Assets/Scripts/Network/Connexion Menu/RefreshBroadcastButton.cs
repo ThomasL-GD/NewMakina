@@ -19,7 +19,8 @@ namespace Network.Connexion_Menu {
         }
 
         private void OnValidate() {
-            UnityEditor.Events.UnityEventTools.AddPersistentListener(MyNetworkDiscovery.singleton.OnServerFound, OnDiscoveredServer);
+            //TODO re-add this if it ain't working
+            //UnityEditor.Events.UnityEventTools.AddPersistentListener(MyNetworkDiscovery.singleton.OnServerFound, OnDiscoveredServer);
         }
 
         /// <summary>

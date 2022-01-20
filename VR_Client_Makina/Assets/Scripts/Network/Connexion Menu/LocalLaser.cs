@@ -79,6 +79,7 @@ namespace Network.Connexion_Menu {
             else {
                 m_elapsedTime = 0f;
                 m_isShooting = false;
+                m_shutDown = false;
             }
         }
 
