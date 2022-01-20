@@ -30,6 +30,9 @@ namespace CustomMessages
     #endregion
 
     #region Misc Data
+
+    public struct ActivateBlind : NetworkMessage {}
+    public struct DeActivateBlind : NetworkMessage {}
     
     public enum ClientConnection
     {

@@ -77,6 +77,14 @@ namespace Network {
         /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
         public delegate void ElevatorActivationDelegator(ElevatorActivation p_bombActivation);
         public static ElevatorActivationDelegator OnReceiveElevatorActivation;
+        
+        /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+        public delegate void DeActivateBlindDelegator(DeActivateBlind p_deActivateBlind);
+        public static DeActivateBlindDelegator OnReceiveDeActivateBlind;
+        
+        /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+        public delegate void ActivateBlindDelegator(ActivateBlind p_activateBlind);
+        public static ActivateBlindDelegator OnReceiveActivateBlind;
         #endregion
         
         /// <summary>
@@ -133,10 +141,15 @@ namespace Network {
             NetworkClient.RegisterHandler<SpawnBomb>(ReceiveSpawnBomb);
             NetworkClient.RegisterHandler<BombExplosion>(ReceiveBombExplosion);
             NetworkClient.RegisterHandler<ElevatorActivation>(ReceiveElevatorActivation);
+            NetworkClient.RegisterHandler<ActivateBlind>(ReceiveActivateBlind);
+            NetworkClient.RegisterHandler<DeActivateBlind>(ReceiveDeActivateBlind);
         
             OnConnection?.Invoke();
         }
         
+        private void ReceiveActivateBlind(ActivateBlind p_activateBlind) => OnReceiveActivateBlind?.Invoke(p_activateBlind);
+        private void ReceiveDeActivateBlind(DeActivateBlind p_deActivateBlind) => OnReceiveDeActivateBlind?.Invoke(p_deActivateBlind);
+
         private void ReceiveElevatorActivation(ElevatorActivation p_elevatorActivation) => OnReceiveElevatorActivation?.Invoke(p_elevatorActivation);
         
         /// <summary/> The function called when the client receives a message of type InitialData

@@ -143,6 +143,8 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<BombExplosion>(OnServerReceiveBombExplosion);
         NetworkServer.RegisterHandler<BombActivation>(OnReceiveBombActivation);
         NetworkServer.RegisterHandler<ElevatorActivation>(OnElevatorActivation);
+        NetworkServer.RegisterHandler<ActivateBlind>(OnActivateBlind);
+        NetworkServer.RegisterHandler<DeActivateBlind>(OnDeActivateBlind);
 
         //Unpacking the heart position values from the transforms to send through messages
         List<Vector3> heartPositions = new List<Vector3>();
@@ -357,6 +359,19 @@ public class ServerManager : MonoBehaviour
     #region SERVER BUFFERS
 
 
+    private void OnActivateBlind(NetworkConnection arg1, ActivateBlind arg2)
+    {
+        OnServerTick -= SendActivateBlind;
+        OnServerTick += SendActivateBlind;
+    }
+    
+    private void OnDeActivateBlind(NetworkConnection arg1, DeActivateBlind arg2)
+    {
+        OnServerTick -= SendDeActivateBlind;
+        OnServerTick += SendDeActivateBlind;
+    }
+
+
     /// <summary>
     /// function called when the server receives a message of type ClientConnect
     /// </summary>
@@ -568,8 +583,8 @@ public class ServerManager : MonoBehaviour
     private void OnElevatorActivation(NetworkConnection p_conn, ElevatorActivation p_elevatorActivation)
     {
         m_elevatorActivationBuffer = p_elevatorActivation;
-        OnServerTick -= UpdateElevatorActivation;
-        OnServerTick += UpdateElevatorActivation;
+        OnServerTick -= SendElevatorActivation;
+        OnServerTick += SendElevatorActivation;
     }
     
     #endregion
@@ -639,10 +654,22 @@ public class ServerManager : MonoBehaviour
     }
     
     /// <summary/> The function to call when an elevator gets activated
-    private void UpdateElevatorActivation() {
+    private void SendElevatorActivation() {
         SendToBothClients(m_elevatorActivationBuffer);
     }
 
+    private void SendActivateBlind()
+    {
+        OnServerTick -= SendActivateBlind;
+        m_vrNetworkConnection.Send(new ActivateBlind());
+    }
+
+    private void SendDeActivateBlind()
+    {
+        OnServerTick -= SendDeActivateBlind;
+        m_vrNetworkConnection.Send(new DeActivateBlind());
+    }
+    
     #endregion
 
 
