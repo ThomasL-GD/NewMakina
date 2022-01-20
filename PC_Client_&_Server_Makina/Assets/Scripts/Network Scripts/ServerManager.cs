@@ -390,7 +390,6 @@ public class ServerManager : MonoBehaviour
             foreach (BombData data in m_bombsPositionsBuffer.data)
             {
                 p_conn.Send(new SpawnBomb() {bombID = data.bombID});
-                Debug.LogWarning("hey!");
             }
     }
     

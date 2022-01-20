@@ -49,8 +49,6 @@ namespace Synchronizers {
         /// </summary>
         /// <param name="p_bombsPositions"></param>
         private void UpdatePositions(BombsPositions p_bombsPositions) {
-            
-            Debug.Log("update positions");
             for (int i = 0; i < m_bombs.Count; i++) {
                 BombData data = p_bombsPositions.data[i];
                     
