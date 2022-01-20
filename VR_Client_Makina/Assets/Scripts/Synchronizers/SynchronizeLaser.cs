@@ -66,7 +66,8 @@ namespace Synchronizers {
             GameObject instantiate = Instantiate(m_laserPrefab);
 
             instantiate.transform.position = p_laser.origin;
-            instantiate.transform.rotation = p_laser.rotation;
+            instantiate.transform.rotation = p_laser.hit? Quaternion.LookRotation(p_laser.hitPosition - p_laser.origin, Vector3.up) : p_laser.rotation;
+            instantiate.GetComponent<LineRenderer>().SetPosition(1, Vector3.forward*p_laser.length);
             
             if(p_laser.hit){ //If the player is hit, we make a cool FX coz player rewarding and other arguable design reasons
                 GameObject particles = Instantiate(m_prefabParticles, p_laser.hitPosition, new Quaternion(0, 0, 0, 0));

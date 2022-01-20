@@ -65,7 +65,7 @@ namespace CustomMessages
         public int index;
     }
     
-    //TODO add this to that ^
+    //TODO add this to that Initial Data
     /// <summary/> The position and rotations of all the Hearts in the game
     public struct HeartTransforms : NetworkMessage
     {
@@ -109,6 +109,7 @@ namespace CustomMessages
         
         public Vector3 origin;
         public Quaternion rotation;
+        public float length;
         public Vector3 hitPosition;
 
         public bool hit;
