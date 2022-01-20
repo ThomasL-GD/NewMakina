@@ -137,7 +137,9 @@ namespace Synchronizers {
             }
             
             m_beacons[index??0].beaconScript.DestroyMaSoul();
+            GameObject go = m_beacons[index ?? 0].deployedBeaconScript.gameObject;
             m_beacons.RemoveAt(index??0);
+            Destroy(go);
         }
         
         /// <summary>
@@ -175,8 +177,8 @@ namespace Synchronizers {
                     break;
             }
             
-            GameObject child = m_beacons[p_index].beaconScript.gameObject.transform.GetChild(0).gameObject;
-            Material mat = child.GetComponent<MeshRenderer>().material;
+            GameObject go = m_beacons[p_index].deployedBeaconScript.gameObject;
+            Material mat = go.GetComponent<MeshRenderer>().material;
             mat.SetColor(CodeBeaconColor, newColor);
 
             m_beacons[p_index].beaconScript.gameObject.GetComponent<MeshRenderer>().material.color = newColor;
@@ -187,13 +189,10 @@ namespace Synchronizers {
         /// <param name="p_initialData">The message from the server</param>
         private void SetRangeOfBeacons(InitialData p_initialData) {
             m_range = p_initialData.beaconRange;
-            
-            foreach (Transform child in m_prefabBeaconAmmo.transform) {
-                if (child.gameObject.TryGetComponent(out InflateToSize script)) {
-                    script.m_targetScale = (m_range * 2f) / m_prefabBeaconAmmo.transform.localScale.x;
-                    script.m_inflationTime = m_inflateTime;
-                }
-            }
+
+            InflateToSize script = m_prefabDeployedBeacon.GetComponent<InflateToSize>();
+            script.m_targetScale = (m_range * 2f) /* / m_prefabBeaconAmmo.transform.localScale.x*/;
+            script.m_inflationTime = m_inflateTime;
         }
 
         /// <summary> Send to the network manager the ActivateBeacon message </summary>

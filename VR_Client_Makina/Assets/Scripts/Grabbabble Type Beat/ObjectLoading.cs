@@ -30,7 +30,7 @@ public class ObjectLoading : MonoBehaviour {
     /// <summary> Set the position and parent of this object according to its current index in the arm </summary>
     protected void SetPosition() {
         
-        if(m_indexInArm > m_synchronizer.m_maxSlotsLoading) Debug.LogWarning("wtf plzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz don't tell me this error occured", this);
+        if(m_indexInArm > m_synchronizer.m_maxSlotsLoading) Debug.LogWarning($"wtf plzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz don't tell me this error occured   index : {m_indexInArm}    >      maxSlotxs : {m_synchronizer.m_maxSlotsLoading}", this);
         
         Transform reference = m_synchronizer.m_loadingPositions[m_indexInArm];
         transform.position = reference.position;

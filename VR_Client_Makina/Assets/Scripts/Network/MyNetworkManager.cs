@@ -209,7 +209,7 @@ namespace Network {
         /// <summary/> The function called when the client receives a message of type SpawnBeacon
         /// <param name="p_spawnBomb"> The message sent by the Server to the Client </param>
         private void ReceiveSpawnBomb(SpawnBomb p_spawnBomb) {
-            Debug.LogWarning("Bomb supposed to spawn");
+            //Debug.LogWarning("Bomb supposed to spawn");
             OnReceiveSpawnBomb?.Invoke(p_spawnBomb);
         }
     

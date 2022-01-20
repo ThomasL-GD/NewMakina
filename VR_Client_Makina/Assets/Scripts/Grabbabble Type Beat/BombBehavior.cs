@@ -51,7 +51,7 @@ public class BombBehavior : GrabbablePhysickedObject {
         m_rb.isKinematic = true;
 
         m_synchronizer.ChangeMaterialOfABomb(m_index, m_serverID);
-        Debug.Log("hooyeaaa");
+        //Debug.Log("hooyeaaa");
         MyNetworkManager.singleton.SendVrData(new BombActivation(){index = m_index,bombID = m_serverID});
         
         StartCoroutine(ExplodeAfterTime());

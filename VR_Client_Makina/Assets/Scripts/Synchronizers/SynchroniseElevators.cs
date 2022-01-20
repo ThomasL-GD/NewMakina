@@ -1,6 +1,8 @@
 using CustomMessages;
+using Network;
 using Synchronizers;
 using UnityEngine;
+
 
 public class SynchroniseElevators : Synchronizer
 {
@@ -12,8 +14,8 @@ public class SynchroniseElevators : Synchronizer
     // Start is called before the first frame update
     void Awake()
     {
-        ClientManager.OnReceiveInitialData += InitializeElevators;
-        ClientManager.OnReceiveElevatorActivation += OnUpdateElevator;
+        MyNetworkManager.OnReceiveInitialData += InitializeElevators;
+        MyNetworkManager.OnReceiveElevatorActivation += OnUpdateElevator;
     }
 
     private void InitializeElevators(InitialData p_initialData)

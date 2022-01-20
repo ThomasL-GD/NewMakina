@@ -10,13 +10,15 @@ public class InflateToSize : MonoBehaviour
 
     void Update() {
         if (!m_isInflating) return;
+        //Debug.Log($"Scale : {transform.localScale}", this);
         
         float inflation = m_inflationSpeed * Time.deltaTime;
         transform.localScale += Vector3.one * inflation;
-        if (transform.localScale.x >= m_targetScale)
-        {
+        if (transform.localScale.x >= m_targetScale) { //When we reached desired range
+            
             transform.localScale = Vector3.one * m_targetScale;
-            Destroy(this);
+            m_isInflating = false;
+            //this.enabled = false;
         }
     }
 

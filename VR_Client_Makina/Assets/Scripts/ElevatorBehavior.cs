@@ -60,6 +60,5 @@ public class ElevatorBehavior : MonoBehaviour
     public void SetInitialData(float p_speed,float p_waitTime)
     {
         m_speed = p_speed;
-        m_waitTime = p_waitTime;
     }
 }

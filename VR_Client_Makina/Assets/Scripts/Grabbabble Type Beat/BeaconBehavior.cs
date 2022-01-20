@@ -8,8 +8,8 @@ public class BeaconBehavior : GrabbablePhysickedObject {
     [HideInInspector] public int m_index;
     [HideInInspector] public float m_serverID;
     [HideInInspector] public SynchronizeBeacons m_synchronizer;
-
-    [SerializeField] [Tooltip("The prefab of the beacon once it is deployed.\nMust contain the InflateToSize script")] private GameObject m_prefabDeployed = null;
+    //
+    // [SerializeField] [Tooltip("The prefab of the beacon once it is deployed.\nMust contain the InflateToSize script")] private GameObject m_prefabDeployed = null;
     
     private ObjectLoading m_beaconLoading = null;
 
@@ -65,6 +65,8 @@ public class BeaconBehavior : GrabbablePhysickedObject {
         transform.rotation = Quaternion.Euler(Vector3.zero);
 
         m_synchronizer.SendBeaconActivation(m_index, m_serverID);
+        
+        
     }
 
     protected override void BeingDestroyed() {
