@@ -85,6 +85,18 @@ namespace Network {
         /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
         public delegate void ActivateBlindDelegator(ActivateBlind p_activateBlind);
         public static ActivateBlindDelegator OnReceiveActivateBlind;
+        
+        /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+        public delegate void SpawnLeureDelegator(SpawnLeure p_spawnLeure);
+        public static SpawnLeureDelegator OnReceiveSpawnLeure;
+        
+        /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+        public delegate void DestroyLeureDelegator(DestroyLeure p_destroyLeure);
+        public static DestroyLeureDelegator OnReceiveDestroyLeure;
+        
+        /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+        public delegate void LeureTransformDelegator(LeureTransform p_leureTransform);
+        public static LeureTransformDelegator OnReceiveLeureTransform;
         #endregion
         
         /// <summary>
@@ -143,10 +155,19 @@ namespace Network {
             NetworkClient.RegisterHandler<ElevatorActivation>(ReceiveElevatorActivation);
             NetworkClient.RegisterHandler<ActivateBlind>(ReceiveActivateBlind);
             NetworkClient.RegisterHandler<DeActivateBlind>(ReceiveDeActivateBlind);
+            NetworkClient.RegisterHandler<SpawnLeure>(ReceiveSpawnLeure);
+            NetworkClient.RegisterHandler<DestroyLeure>(ReceiveDestroyLeure);
+            NetworkClient.RegisterHandler<LeureTransform>(ReceiveLeureTransform);
         
             OnConnection?.Invoke();
         }
-        
+
+        private void ReceiveSpawnLeure(SpawnLeure p_spawnLeure) => OnReceiveSpawnLeure?.Invoke(p_spawnLeure);
+
+        private void ReceiveDestroyLeure(DestroyLeure p_destroyLeure) => OnReceiveDestroyLeure?.Invoke(p_destroyLeure);
+
+        private void ReceiveLeureTransform(LeureTransform p_leureTransform) => OnReceiveLeureTransform?.Invoke(p_leureTransform);
+
         private void ReceiveActivateBlind(ActivateBlind p_activateBlind) => OnReceiveActivateBlind?.Invoke(p_activateBlind);
         private void ReceiveDeActivateBlind(DeActivateBlind p_deActivateBlind) => OnReceiveDeActivateBlind?.Invoke(p_deActivateBlind);
 

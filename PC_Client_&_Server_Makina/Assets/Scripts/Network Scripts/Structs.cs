@@ -33,7 +33,7 @@ namespace CustomMessages
 
     public struct ActivateBlind : NetworkMessage {}
     public struct DeActivateBlind : NetworkMessage {}
-    
+
     public enum ClientConnection
     {
         PcPlayer,
@@ -201,6 +201,18 @@ namespace CustomMessages
         public int index;
         public float bombID;
     }
+
+    #endregion
+
+    #region Leure
+    public struct SpawnLeure : NetworkMessage {}
+
+    public struct LeureTransform : NetworkMessage
+    {
+        public Vector3 position;
+        public Quaternion rotation;
+    }
+    public struct DestroyLeure : NetworkMessage {}
 
     #endregion
 }

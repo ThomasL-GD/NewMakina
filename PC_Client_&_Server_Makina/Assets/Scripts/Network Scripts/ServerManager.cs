@@ -29,6 +29,7 @@ public class ServerManager : MonoBehaviour
     private bool m_newPositions = false;
     private DestroyedBeacon m_destroyedBeaconBuffer = new DestroyedBeacon();
     private ElevatorActivation m_elevatorActivationBuffer;
+    private LeureTransform m_leureBuffer;
 
     #endregion
     
@@ -145,6 +146,9 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<ElevatorActivation>(OnElevatorActivation);
         NetworkServer.RegisterHandler<ActivateBlind>(OnActivateBlind);
         NetworkServer.RegisterHandler<DeActivateBlind>(OnDeActivateBlind);
+        NetworkServer.RegisterHandler<SpawnLeure>(OnSpawnLeure);
+        NetworkServer.RegisterHandler<DestroyLeure>(OnDestroyLeure);
+        NetworkServer.RegisterHandler<LeureTransform>(OnLeureTransform);
 
         //Unpacking the heart position values from the transforms to send through messages
         List<Vector3> heartPositions = new List<Vector3>();
@@ -162,6 +166,7 @@ public class ServerManager : MonoBehaviour
         
         if (m_vrPlayerHealth > m_heartTransforms.Length) Debug.LogWarning("the Vr Player has more health than there are hearts... Big L?",this);
     }
+
 
     /// <summary/> The Server Loop
     IEnumerator ServerTick()
@@ -358,7 +363,26 @@ public class ServerManager : MonoBehaviour
 
     #region SERVER BUFFERS
 
+    private void OnLeureTransform(NetworkConnection arg1, LeureTransform p_leureTransform)
+    {
+        OnServerTick -= SendLeureTransform;
+        OnServerTick += SendLeureTransform;
 
+        m_leureBuffer = p_leureTransform;
+    }
+
+    private void OnDestroyLeure(NetworkConnection arg1, DestroyLeure arg2)
+    {
+        OnServerTick -= SendDestroyLeure;
+        OnServerTick += SendDestroyLeure;
+    }
+    
+    private void OnSpawnLeure(NetworkConnection arg1, SpawnLeure arg2)
+    {
+        OnServerTick -= SendSpawnLeure;
+        OnServerTick += SendSpawnLeure;
+    }
+    
     private void OnActivateBlind(NetworkConnection arg1, ActivateBlind arg2)
     {
         OnServerTick -= SendActivateBlind;
@@ -668,6 +692,20 @@ public class ServerManager : MonoBehaviour
     {
         OnServerTick -= SendDeActivateBlind;
         m_vrNetworkConnection.Send(new DeActivateBlind());
+    }
+    
+    private void SendLeureTransform()
+    {
+        OnServerTick -= SendLeureTransform;
+        m_vrNetworkConnection.Send(m_leureBuffer);
+    }
+    private void SendDestroyLeure()
+    {
+        m_vrNetworkConnection.Send(new DestroyLeure());
+    }
+    private void SendSpawnLeure()
+    {
+        m_vrNetworkConnection.Send(new SpawnLeure());
     }
     
     #endregion
