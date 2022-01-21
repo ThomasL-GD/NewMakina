@@ -30,7 +30,8 @@ namespace Synchronizers {
         [Header("Prefabs")]
         [SerializeField] private GameObject m_laserPrefab;
 
-        [SerializeField] private GameObject m_prefabParticles = null;
+        [SerializeField] private GameObject m_prefabParticlesWhenKill = null;
+        [SerializeField] private GameObject m_prefabParticlesWallHit = null;
 
         [Header("Sounds")]
         [SerializeField] private AudioSource m_audioSource;
@@ -61,16 +62,23 @@ namespace Synchronizers {
         /// Will display various feedback regarding the shot
         /// </summary>
         /// <param name="p_laser">The message sent by the server</param>
-        private void SynchroniseShot(Laser p_laser)
-        {
+        private void SynchroniseShot(Laser p_laser) {
+            if (p_laser.length == 0f) p_laser.length = 10000f;
+            
             GameObject instantiate = Instantiate(m_laserPrefab);
 
             instantiate.transform.position = p_laser.origin;
             instantiate.transform.rotation = p_laser.hit? Quaternion.LookRotation(p_laser.hitPosition - p_laser.origin, Vector3.up) : p_laser.rotation;
-            instantiate.GetComponent<LineRenderer>().SetPosition(1, Vector3.forward*p_laser.length);
+            instantiate.GetComponent<LineRenderer>().SetPosition(1,  Vector3.forward*p_laser.length);
+
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
+            if (p_laser.length != 10000f) {
+                GameObject particles = Instantiate(m_prefabParticlesWallHit, p_laser.origin + (instantiate.transform.rotation * Vector3.forward *p_laser.length ), new Quaternion(0, 0, 0, 0));
+                StartCoroutine(ParticleStopper(particles));
+            }
             
             if(p_laser.hit){ //If the player is hit, we make a cool FX coz player rewarding and other arguable design reasons
-                GameObject particles = Instantiate(m_prefabParticles, p_laser.hitPosition, new Quaternion(0, 0, 0, 0));
+                GameObject particles = Instantiate(m_prefabParticlesWhenKill, p_laser.hitPosition, new Quaternion(0, 0, 0, 0));
                 StartCoroutine(ParticleStopper(particles));
                 
                 if (m_niceShotQuestionMark) { // Audio Feedback
