@@ -87,6 +87,10 @@ namespace Network {
         public static ActivateBlindDelegator OnReceiveActivateBlind;
         
         /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+        public delegate void ActivateFlairDelegator(ActivateFlair p_activateFlair);
+        public static ActivateFlairDelegator OnReceiveActivateFlair;
+        
+        /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
         public delegate void SpawnLeureDelegator(SpawnLeure p_spawnLeure);
         public static SpawnLeureDelegator OnReceiveSpawnLeure;
         
@@ -153,6 +157,7 @@ namespace Network {
             NetworkClient.RegisterHandler<SpawnBomb>(ReceiveSpawnBomb);
             NetworkClient.RegisterHandler<BombExplosion>(ReceiveBombExplosion);
             NetworkClient.RegisterHandler<ElevatorActivation>(ReceiveElevatorActivation);
+            NetworkClient.RegisterHandler<ActivateFlair>(ReceiveActivateFlair);
             NetworkClient.RegisterHandler<ActivateBlind>(ReceiveActivateBlind);
             NetworkClient.RegisterHandler<DeActivateBlind>(ReceiveDeActivateBlind);
             NetworkClient.RegisterHandler<SpawnLeure>(ReceiveSpawnLeure);
@@ -161,6 +166,8 @@ namespace Network {
         
             OnConnection?.Invoke();
         }
+
+        private void ReceiveActivateFlair(ActivateFlair p_activateFlair) => OnReceiveActivateFlair?.Invoke(p_activateFlair);
 
         private void ReceiveSpawnLeure(SpawnLeure p_spawnLeure) => OnReceiveSpawnLeure?.Invoke(p_spawnLeure);
 

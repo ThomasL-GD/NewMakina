@@ -31,6 +31,10 @@ namespace CustomMessages
 
     #region Misc Data
 
+    public struct ActivateFlair : NetworkMessage
+    {
+        public Vector3 startPosition;
+    }
     public struct ActivateBlind : NetworkMessage {}
     public struct DeActivateBlind : NetworkMessage {}
 
@@ -61,6 +65,8 @@ namespace CustomMessages
         public int maximumBombsCount;
         public float elevatorSpeed;
         public float elevatorWaitTime;
+        public float flairRaiseSpeed;
+        public float flairDetonationTime;
     }
 
     public struct ElevatorActivation : NetworkMessage

@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Synchronizers;
 using UnityEngine;
 
 public class TeleportToChosenPosition : MonoBehaviour
@@ -9,7 +11,16 @@ public class TeleportToChosenPosition : MonoBehaviour
 
     private GameObject m_teleportLocation;
     private bool m_placed;
+
+    private void Awake() => SynchronizeRespawn.OnPlayerDeath += Reset;
     
+
+    private void Reset()
+    {
+        Destroy(m_teleportLocation);
+        m_placed = false;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -18,8 +29,7 @@ public class TeleportToChosenPosition : MonoBehaviour
             if (m_placed)
             {
                 transform.position = m_teleportLocation.transform.position;
-                Destroy(m_teleportLocation);
-                m_placed = false;
+                Reset();
                 return;
             }
 

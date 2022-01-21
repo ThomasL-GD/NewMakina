@@ -1,32 +1,42 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using CustomMessages;
 using Mirror;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 
 public class ActivateBlindOnInput : MonoBehaviour
 {
     [SerializeField] private KeyCode m_key;
-    [SerializeField, Min(0f)] private float m_blindingTime = 3f;
+    [SerializeField] private float m_forwardOffset = 1.2f;
+    [SerializeField] private TextMeshProUGUI m_uiElement;
 
     private bool m_alreadyActive;
-    
+
+    private void Awake()
+    {
+        ClientManager.OnReceiveDeActivateBlind += SetBoolToFalse;
+        m_uiElement.text = "Press A to Flash";
+    }
+
+    private void SetBoolToFalse(DeActivateBlind p_message)
+    {
+        m_alreadyActive = false;
+        m_uiElement.text = "Press A to Flash";
+    }
+
     // Update is called once per frame
     void Update()
     {
         if(!m_alreadyActive && Input.GetKeyDown(m_key))
         {
-            NetworkClient.Send(new ActivateBlind());
-            StartCoroutine(BlindTimer());
+            Vector3 flairStartPosition = transform.position + transform.forward * m_forwardOffset;
+    
+            NetworkClient.Send(new ActivateFlair() {startPosition = flairStartPosition});
+            m_alreadyActive = true;
+            m_uiElement.text = "Can't Flash";
         }
-    }
-
-    IEnumerator BlindTimer()
-    {
-        m_alreadyActive = true;
-        yield return new WaitForSeconds(m_blindingTime);
-        NetworkClient.Send(new DeActivateBlind());
-        m_alreadyActive = false;
     }
 }
