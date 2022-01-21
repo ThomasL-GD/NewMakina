@@ -86,7 +86,7 @@ namespace Synchronizers {
         /// <param name="p_serverID">The server ID of the bomb</param>
         public void ExplodeLol(int p_index, float p_serverID) {
 
-            int? index = FindBeaconFromID(p_index, p_serverID);
+            int? index = FindBombFromID(p_index, p_serverID);
             Debug.LogWarning($"The index value is {index} but the initial one was {p_index}, the list contains {m_bombs.Count} elements");
             
             MyNetworkManager.singleton.SendVrData(new BombExplosion(){
@@ -128,7 +128,7 @@ namespace Synchronizers {
         }
 
         public void ChangeMaterialOfABomb(int p_index, float p_serverID) {
-            int index = FindBeaconFromID(p_index, p_serverID)??-1;
+            int index = FindBombFromID(p_index, p_serverID)??-1;
             m_bombs[index].transform.GetComponent<MeshRenderer>().material.color = m_colorWhenAlmostExploding;
         }
         
@@ -136,7 +136,7 @@ namespace Synchronizers {
         /// <param name="p_index"> the estimated index of the wanted bomb </param>
         /// <param name="p_beaconID"> the ID of the wanted bomb </param>
         /// <returns> returns the index of the beacon with the right ID if none are found, returns null </returns>
-        private int? FindBeaconFromID(int p_index, float p_beaconID)
+        private int? FindBombFromID(int p_index, float p_beaconID)
         {
             int index = p_index;
             float ID = p_beaconID;
