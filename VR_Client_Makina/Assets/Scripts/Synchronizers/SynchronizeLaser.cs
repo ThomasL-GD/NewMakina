@@ -72,7 +72,7 @@ namespace Synchronizers {
             instantiate.GetComponent<LineRenderer>().SetPosition(1,  Vector3.forward*p_laser.length);
 
             // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (p_laser.length != 10000f) {
+            if (p_laser.length != 10000f && !p_laser.hit) {
                 GameObject particles = Instantiate(m_prefabParticlesWallHit, p_laser.origin + (instantiate.transform.rotation * Vector3.forward *p_laser.length ), new Quaternion(0, 0, 0, 0));
                 StartCoroutine(ParticleStopper(particles));
             }
