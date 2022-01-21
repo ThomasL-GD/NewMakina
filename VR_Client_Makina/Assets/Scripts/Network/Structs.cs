@@ -112,6 +112,7 @@ namespace CustomMessages
         
         public Vector3 origin;
         public Quaternion rotation;
+        public float length;
         public Vector3 hitPosition;
 
         public bool hit;

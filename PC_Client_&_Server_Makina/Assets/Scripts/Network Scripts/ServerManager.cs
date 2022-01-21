@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -496,14 +497,43 @@ public class ServerManager : MonoBehaviour
             Vector3 startingPoint = m_vrTransformBuffer.positionRightHand;
             Vector3 direction = m_vrTransformBuffer.rotationRightHand * Vector3.forward;
             Vector3 playerPos = m_pcTransformBuffer.position;
+            Vector3 laserCriticalPath = playerPos - startingPoint;
+            
+            // Hitboxes Verification (blame Blue)
+            bool hitAWall = Physics.Raycast(startingPoint, laserCriticalPath.normalized, laserCriticalPath.magnitude, /*Ignoring the player and Vr layers, and yes it could be slightly more optimized :-Þ*/~((1 << 13) | (1 << 3)), QueryTriggerInteraction.Ignore);
+            
+            RaycastHit rayHit;
+            bool hitSmth = Physics.Raycast(startingPoint, direction.normalized, out rayHit, 10000f, /*Ignoring the player and Vr layers, and yes it could be slightly more optimized :-Þ*/~((1 << 13) | (1 << 3)), QueryTriggerInteraction.Ignore);
 
-            // So we measure the distance of the player's position from the line of the laser
-            float distance = Vector3.Cross(direction, playerPos - startingPoint).magnitude;
+            Debug.DrawRay(startingPoint, laserCriticalPath, hitAWall ? Color.green : Color.red, 15f);
+            
+            Debug.LogWarning($"The laser hit ? {hitAWall}", this);
+            
+            bool hit;
+            switch (hitAWall) {
+                case false : { //If there's no wall between
+                    // So we measure the distance of the player's position from the line of the laser
+                    float distance = Vector3.Cross(direction, playerPos - startingPoint).magnitude;
 
-            //if the distance between the line of fire and the player's position is blablablbalalboom... he ded
-            bool hit = distance <= m_laserRadius && Vector3.Angle(playerPos - startingPoint, direction) < 90f;
+                    //if the distance between the line of fire and the player's position is blablablbalalboom... he ded
+                    hit = distance <= m_laserRadius && Vector3.Angle(playerPos - startingPoint, direction) < 90f;
 
-            if (hit) m_pcPlayerHealth--;
+                    if (hit) {
+                        m_pcPlayerHealth--;
+                        m_laserBuffer.length = laserCriticalPath.magnitude;
+                    }
+                    else {
+                        m_laserBuffer.length = hitSmth ? rayHit.distance : 10000f;
+                    }
+
+                break; }
+
+                case true : {
+                    m_laserBuffer.length = hitSmth ? rayHit.distance : 10000f;
+                    
+                    hit = false;
+                break; }
+            }
             
             // Packing the vallues in a neat little message
             m_laserBuffer.origin = startingPoint;
