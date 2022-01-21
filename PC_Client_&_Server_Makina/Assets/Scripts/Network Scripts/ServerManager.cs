@@ -31,6 +31,7 @@ public class ServerManager : MonoBehaviour
     private DestroyedBeacon m_destroyedBeaconBuffer = new DestroyedBeacon();
     private ElevatorActivation m_elevatorActivationBuffer;
     private LeureTransform m_leureBuffer;
+    private ActivateFlair m_flairBuffer;
 
     #endregion
     
@@ -74,6 +75,12 @@ public class ServerManager : MonoBehaviour
     [SerializeField, Tooltip("The interval at which the bomb spawn"), Range(0f, 120f)] private float m_bombRespawnTime = 30f;
     [SerializeField, Tooltip("The maximum amount of bombs"), Range(1, 5)] private int m_maxBombs = 1;
     [SerializeField, Tooltip("The range of the bomb's explosion"), Range(1f, 100f)] private float m_bombExplosionRange = 50f;
+    
+    [Header(" ")] [Header("Flair")] [Header(" ")]
+    [SerializeField, Tooltip("The speed at which the flair will rise"), Range(0f, 120f)] private float m_flairRaiseSpeed = 30f;
+    [SerializeField, Tooltip("The amount of time before the flair detonates"), Range(1, 15)] private float m_flairDetonationTime = 2f;
+    [SerializeField, Tooltip("The amount of time before the flair detonates"), Range(1, 15)] private float m_flashDuration = 5f;
+    [SerializeField, Tooltip("the minimum and maximum dot product from the look angle to clamp")]private Vector2 m_flashClamp;
     private int m_currentBombAmount = 0;
     
 
@@ -145,8 +152,9 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<BombExplosion>(OnServerReceiveBombExplosion);
         NetworkServer.RegisterHandler<BombActivation>(OnReceiveBombActivation);
         NetworkServer.RegisterHandler<ElevatorActivation>(OnElevatorActivation);
-        NetworkServer.RegisterHandler<ActivateBlind>(OnActivateBlind);
-        NetworkServer.RegisterHandler<DeActivateBlind>(OnDeActivateBlind);
+        NetworkServer.RegisterHandler<ActivateFlair>(OnActivateFlair);
+        //NetworkServer.RegisterHandler<ActivateBlind>(OnActivateBlind);
+        //NetworkServer.RegisterHandler<DeActivateBlind>(OnDeActivateBlind);
         NetworkServer.RegisterHandler<SpawnLeure>(OnSpawnLeure);
         NetworkServer.RegisterHandler<DestroyLeure>(OnDestroyLeure);
         NetworkServer.RegisterHandler<LeureTransform>(OnLeureTransform);
@@ -177,6 +185,35 @@ public class ServerManager : MonoBehaviour
             OnServerTick?.Invoke();
             yield return new WaitForSeconds(m_tickDelta);
         }
+    }
+    
+    /// <summary/> The Server Loop
+    IEnumerator Flair(float p_detonationTime, float p_flashDuration)
+    {
+        yield return new WaitForSeconds(p_detonationTime);
+        
+        SendActivateBlind();
+
+        Vector3 detonationPoint = m_flairBuffer.startPosition + Vector3.up * (m_flairRaiseSpeed * m_flairDetonationTime);
+
+        Vector3 vrHeadForward = m_vrTransformBuffer.rotationHead * Vector3.forward;
+
+        
+        
+        Vector3 headToDetonationAngle = (detonationPoint - m_vrTransformBuffer.positionHead).normalized;
+        
+        float flashStrength = (Vector3.Dot(vrHeadForward, headToDetonationAngle) + 1f)/2f;
+
+        if (flashStrength < m_flashClamp.x) flashStrength = 0f;
+        else if (flashStrength > m_flashClamp.y) flashStrength = 1f;
+        
+        yield return new WaitForSeconds(p_flashDuration * flashStrength);
+        SendDeActivateBlind();
+    }
+
+    private void Update()
+    {
+        Debug.DrawRay(Vector3.zero, m_vrTransformBuffer.rotationHead * Vector3.forward * 300f);
     }
 
     IEnumerator SpawnInitialBeacons()
@@ -292,6 +329,7 @@ public class ServerManager : MonoBehaviour
             if(!data.isActive)continue;
             
             bool detected = Vector3.Distance(data.position, m_pcTransformBuffer.position) < m_beaconRange;
+            detected = detected || Vector3.Distance(data.position, m_leureBuffer.position) < m_beaconRange;
 
             if (data.detectingPlayer != detected)
             {
@@ -384,6 +422,13 @@ public class ServerManager : MonoBehaviour
         OnServerTick += SendSpawnLeure;
     }
     
+    private void OnActivateFlair(NetworkConnection arg1, ActivateFlair p_message)
+    {
+        m_flairBuffer = p_message;
+        OnServerTick -= SendActivateFlair;
+        OnServerTick += SendActivateFlair;
+    }
+    
     private void OnActivateBlind(NetworkConnection arg1, ActivateBlind arg2)
     {
         OnServerTick -= SendActivateBlind;
@@ -417,7 +462,9 @@ public class ServerManager : MonoBehaviour
             maximumBeaconCount = m_maxBeacons,
             maximumBombsCount = m_maxBombs,
             elevatorSpeed = m_elevatorSpeed,
-            elevatorWaitTime = m_elevatorWaitTime
+            elevatorWaitTime = m_elevatorWaitTime,
+            flairRaiseSpeed = m_flairRaiseSpeed,
+            flairDetonationTime = m_flairDetonationTime
         };
         
         p_conn.Send(initialData);
@@ -713,16 +760,23 @@ public class ServerManager : MonoBehaviour
         SendToBothClients(m_elevatorActivationBuffer);
     }
 
+    private void SendActivateFlair()
+    {
+        OnServerTick -= SendActivateFlair;
+        SendToBothClients(m_flairBuffer);
+        StartCoroutine(Flair(m_flairDetonationTime, m_flashDuration));
+    }
+
     private void SendActivateBlind()
     {
         OnServerTick -= SendActivateBlind;
-        m_vrNetworkConnection.Send(new ActivateBlind());
+        SendToBothClients(new ActivateBlind());
     }
 
     private void SendDeActivateBlind()
     {
         OnServerTick -= SendDeActivateBlind;
-        m_vrNetworkConnection.Send(new DeActivateBlind());
+        SendToBothClients(new DeActivateBlind());
     }
     
     private void SendLeureTransform()

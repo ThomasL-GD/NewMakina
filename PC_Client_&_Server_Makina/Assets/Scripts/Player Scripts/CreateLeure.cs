@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using CustomMessages;
 using Mirror;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ public class CreateLeure : MonoBehaviour
     [SerializeField] private float m_leureGravity;
     [SerializeField] private float m_leureForwardOffset = .5f;
     [SerializeField] private float m_leureLifeTime = 5f;
+    [SerializeField] private TextMeshProUGUI m_uiElement;
 
     private bool m_canSpawnLeure = true;
     
@@ -32,9 +34,11 @@ public class CreateLeure : MonoBehaviour
     {
         
         NetworkClient.Send(new SpawnLeure());
+        m_uiElement.text = "Leure Spawned";
         yield return new WaitForSeconds(m_leureLifeTime);
         Destroy(p_leure);
         NetworkClient.Send(new DestroyLeure());
         m_canSpawnLeure = true;
+        m_uiElement.text = "Press E to spawn a leure";
     }
 }

@@ -81,6 +81,18 @@ public class ClientManager : MonoBehaviour
     /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
     public delegate void ElevatorActivationDelegator(ElevatorActivation p_bombActivation);
     public static ElevatorActivationDelegator OnReceiveElevatorActivation;
+        
+    /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+    public delegate void ActivateFlairDelegator(ActivateFlair p_activateFlair);
+    public static ActivateFlairDelegator OnReceiveActivateFlair;
+        
+    /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+    public delegate void DeActivateBlindDelegator(DeActivateBlind p_deActivateBlind);
+    public static DeActivateBlindDelegator OnReceiveDeActivateBlind;
+        
+    /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+    public delegate void ActivateBlindDelegator(ActivateBlind p_activateBlind);
+    public static ActivateBlindDelegator OnReceiveActivateBlind;
     #endregion
     
     [SerializeField, Tooltip("The player Object to be enabled on connection")] public GameObject m_player;
@@ -123,7 +135,16 @@ public class ClientManager : MonoBehaviour
         NetworkClient.RegisterHandler<SpawnBomb>(ReceiveSpawnBomb);
         NetworkClient.RegisterHandler<BombActivation>(ReceiveBombActivation);
         NetworkClient.RegisterHandler<ElevatorActivation>(ReceiveElevatorActivation);
+        NetworkClient.RegisterHandler<ActivateFlair>(ReceiveActivateFlair);
+        NetworkClient.RegisterHandler<ActivateBlind>(ReceiveActivateBlind);
+        NetworkClient.RegisterHandler<DeActivateBlind>(ReceiveDeActivateBlind);
     }
+
+    private void ReceiveActivateFlair(ActivateFlair p_activateFlair) => OnReceiveActivateFlair?.Invoke(p_activateFlair);
+    
+    private void ReceiveActivateBlind(ActivateBlind p_activateBlind) => OnReceiveActivateBlind?.Invoke(p_activateBlind);
+
+    private void ReceiveDeActivateBlind(DeActivateBlind p_deActivteBlind) => OnReceiveDeActivateBlind?.Invoke(p_deActivteBlind);
 
     private void ReceiveElevatorActivation(ElevatorActivation p_elevatorActivation) => OnReceiveElevatorActivation?.Invoke(p_elevatorActivation);
     
