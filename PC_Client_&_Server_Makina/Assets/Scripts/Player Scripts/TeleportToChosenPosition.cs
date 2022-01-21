@@ -14,7 +14,7 @@ public class TeleportToChosenPosition : MonoBehaviour
     private GameObject m_teleportLocation;
     private bool m_placed;
 
-    private void Awake() => SynchronizeRespawn.OnPlayerDeath += Reset;
+    private void Awake() => SynchronizeRespawn.OnPlayerRespawn += Reset;
     
 
     private void Reset()

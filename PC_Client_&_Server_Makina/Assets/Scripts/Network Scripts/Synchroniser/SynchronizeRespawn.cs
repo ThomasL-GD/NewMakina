@@ -29,6 +29,9 @@ namespace Synchronizers
         public delegate void OnPlayerDeathDelegator();
 
         public static OnPlayerDeathDelegator OnPlayerDeath;
+        public delegate void OnPlayerRespawnDelegator();
+
+        public static OnPlayerDeathDelegator OnPlayerRespawn;
 
         void Awake() => OnPlayerDeath += ReceiveLaser;
 
@@ -75,6 +78,8 @@ namespace Synchronizers
             m_deathFeedback.SetActive(false);
             m_player.transform.position = m_spawnPoints[respawnIndex].position;
 
+            OnPlayerRespawn?.Invoke();
+            
             //Removing the ability for the player to turn invisible to avoid him wasting his precious invisibility charge
             m_script.m_canTurnInvisible = false;
 
