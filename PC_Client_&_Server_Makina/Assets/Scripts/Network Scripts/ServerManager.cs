@@ -510,6 +510,7 @@ public class ServerManager : MonoBehaviour
             Debug.LogWarning($"The laser hit ? {hitAWall}", this);
             
             bool hit;
+            const float valueIfNoHit = 0f; //BE WARY THE VR NEEDS TO KNOW WHICH VALUE THIS IS AND WE DON'T SEND IT THROUGH NETWORK!
             switch (hitAWall) {
                 case false : { //If there's no wall between
                     // So we measure the distance of the player's position from the line of the laser
@@ -523,13 +524,13 @@ public class ServerManager : MonoBehaviour
                         m_laserBuffer.length = laserCriticalPath.magnitude;
                     }
                     else {
-                        m_laserBuffer.length = hitSmth ? rayHit.distance : 10000f;
+                        m_laserBuffer.length = hitSmth ? rayHit.distance : valueIfNoHit;
                     }
 
                 break; }
 
                 case true : {
-                    m_laserBuffer.length = hitSmth ? rayHit.distance : 10000f;
+                    m_laserBuffer.length = hitSmth ? rayHit.distance : valueIfNoHit;
                     
                     hit = false;
                 break; }
