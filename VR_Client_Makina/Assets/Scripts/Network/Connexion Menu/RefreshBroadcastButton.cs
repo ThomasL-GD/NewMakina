@@ -12,15 +12,18 @@ namespace Network.Connexion_Menu {
         [SerializeField] [Tooltip("the gameobject that will spawn for every server available.\nMust contain the ServerConnectButton script.")] private GameObject m_prefabServerConnectButton = null;
         [SerializeField] private Vector3 m_positionFirstButton = Vector3.zero;
 
+        public NetworkDiscovery networkDiscovery;
+
         private List<GameObject> m_spawnedButtons = new List<GameObject>();
 
         private void Start() {
             if (m_prefabServerConnectButton == null) Debug.LogError("No server button prefab serialized, how do you expect me to work ?!", this);
+            
+            UnityEditor.Events.UnityEventTools.AddPersistentListener(networkDiscovery.OnServerFound, OnDiscoveredServer);
         }
 
         private void OnValidate() {
-            //TODO re-add this if it ain't working
-            //UnityEditor.Events.UnityEventTools.AddPersistentListener(MyNetworkDiscovery.singleton.OnServerFound, OnDiscoveredServer);
+            //UnityEditor.Events.UnityEventTools.AddPersistentListener(networkDiscovery.OnServerFound, OnDiscoveredServer);
         }
 
         /// <summary>
