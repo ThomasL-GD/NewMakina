@@ -757,6 +757,7 @@ public class ServerManager : MonoBehaviour
     
     /// <summary/> The function to call when an elevator gets activated
     private void SendElevatorActivation() {
+        OnServerTick -= SendElevatorActivation;
         SendToBothClients(m_elevatorActivationBuffer);
     }
 

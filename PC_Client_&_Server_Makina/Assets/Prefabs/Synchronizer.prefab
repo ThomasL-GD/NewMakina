@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 586668069150170722}
   - component: {fileID: 586668069150170730}
   - component: {fileID: 6328612753638025571}
+  - component: {fileID: 8417031006943273845}
   m_Layer: 0
   m_Name: Synchronizer
   m_TagString: Untagged
@@ -112,6 +113,7 @@ MonoBehaviour:
   m_prefabBeaconInactive: {fileID: 0}
   m_undetectedColor: {r: 1, g: 0, b: 0, a: 1}
   m_detectedColor: {r: 0, g: 1, b: 0, a: 1}
+  m_detectionFeedaback: {fileID: 0}
 --- !u!114 &586668069150170722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,3 +167,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_pcPlayerHealthText: {fileID: 0}
   m_vrPlayerHealthText: {fileID: 0}
+--- !u!114 &8417031006943273845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586668069150170729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec69706c2a5be7a488c252f04dbd60ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_elevators: []

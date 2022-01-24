@@ -15,6 +15,7 @@ namespace EditorTools
         private bool m_showLookMetrics;
         private bool m_showGravitySlope;
         private bool m_showJump;
+        private bool m_edgeSafety;
         private bool m_showHeadBob;
         private bool m_showSmoothStepping;
         private bool m_showInfo;
@@ -27,12 +28,19 @@ namespace EditorTools
             SerializedProperty movementSpeed = serializedObject.FindProperty("m_maxMovementSpeed");
             SerializedProperty accelerationTime = serializedObject.FindProperty("m_accelerationTime");
             SerializedProperty decelerationTime = serializedObject.FindProperty("m_decelerationTime");
-            SerializedProperty sustainDirectionChangeSpeed = serializedObject.FindProperty("m_sustainDirectionChangeSpeed");
-            
-            
+            SerializedProperty directionChangeSpeed = serializedObject.FindProperty("m_directionChangeSpeed");
+            SerializedProperty directionChangeSpeedAirborn = serializedObject.FindProperty("m_directionChangeSpeedAirborn");
+
             SerializedProperty maxMovementSpeedSprinting = serializedObject.FindProperty("m_maxMovementSpeedSprinting");
             SerializedProperty accelerationTimeSprinting = serializedObject.FindProperty("m_accelerationTimeSprinting");
             SerializedProperty decelerationTimeSprinting = serializedObject.FindProperty("m_decelerationTimeSprinting");
+
+            SerializedProperty airAcceleration = serializedObject.FindProperty("m_airAcceleration");
+            SerializedProperty accelerationTimeAirborn = serializedObject.FindProperty("m_accelerationTimeAirborn");
+            SerializedProperty decelerationTimeAirborn = serializedObject.FindProperty("m_decelerationTimeAirborn");
+            SerializedProperty accelerationTimeSprintingAirborn = serializedObject.FindProperty("m_accelerationTimeSprintingAirborn");
+            SerializedProperty decelerationTimeSprintingAirborn = serializedObject.FindProperty("m_decelerationTimeSprintingAirborn");
+            
             SerializedProperty sprintKey = serializedObject.FindProperty("m_sprintKey");
 
             // Acceleration Curves
@@ -48,6 +56,7 @@ namespace EditorTools
             SerializedProperty gravityAcceleration = serializedObject.FindProperty("m_gravityAcceleration");
             SerializedProperty slideAcceleration = serializedObject.FindProperty("m_slideAcceleration");
             SerializedProperty maxSlideSpeed = serializedObject.FindProperty("m_maxSlideSpeed");
+            SerializedProperty minimumSlideDeceleration = serializedObject.FindProperty("m_minimumSlideDeceleration");
             SerializedProperty maxFallSpeed = serializedObject.FindProperty("m_maxFallSpeed");
             SerializedProperty groundCheckRange = serializedObject.FindProperty("m_groundCheckRange");
             SerializedProperty maxSlope = serializedObject.FindProperty("m_maxSlope");
@@ -59,7 +68,13 @@ namespace EditorTools
             SerializedProperty jumpUsingGroundNormal = serializedObject.FindProperty("m_jumpUsingGroundNormal");
             SerializedProperty jumpOnSlope = serializedObject.FindProperty("m_jumpOnSlope");
             SerializedProperty jumpOnSlopeUsingGroundNormal = serializedObject.FindProperty("m_jumpOnSlopeUsingGroundNormal");
+            SerializedProperty antiClimbSafety = serializedObject.FindProperty("m_antiClimbSafety");
             SerializedProperty jumpKey = serializedObject.FindProperty("m_jumpKey");
+            
+            //Edge safety
+            SerializedProperty edgeAutoStopCheckDistance = serializedObject.FindProperty("m_edgeAutoStopCheckDistance");
+            SerializedProperty minSpeedFactor = serializedObject.FindProperty("m_minSpeedFactor");
+            SerializedProperty edgeSafety = serializedObject.FindProperty("m_edgeSafety");
         
             //Head Bob
             SerializedProperty headBob = serializedObject.FindProperty("m_headBob");
@@ -83,8 +98,10 @@ namespace EditorTools
             SerializedProperty inputAngle = serializedObject.FindProperty("s_inputAngle");
             SerializedProperty inputVelocityAngle = serializedObject.FindProperty("s_inputVelocityAngle");
         
-            // Character Controller
+            // Serialized object
             SerializedProperty controller = serializedObject.FindProperty("m_controller");
+            SerializedProperty cameraTr = serializedObject.FindProperty("m_cameraTr");
+            SerializedProperty cameraParentTr = serializedObject.FindProperty("m_cameraParentTr");
         
             //Creation the foldouts
             //Input Metrics
@@ -100,7 +117,21 @@ namespace EditorTools
                 PropertyField(accelerationTimeSprinting);
                 PropertyField(decelerationTimeSprinting);
                 Space();
-                PropertyField(sustainDirectionChangeSpeed);
+                PropertyField(airAcceleration);
+                
+                if (airAcceleration.boolValue)
+                {
+                    Space();
+                    PropertyField(accelerationTimeAirborn);
+                    PropertyField(decelerationTimeAirborn);
+                    Space();
+                    PropertyField(accelerationTimeSprintingAirborn);
+                    PropertyField(decelerationTimeSprintingAirborn);
+                }
+                
+                Space();
+                PropertyField(directionChangeSpeed);
+                PropertyField(directionChangeSpeedAirborn);
                 Space();
                 PropertyField(sprintKey);
             }
@@ -131,8 +162,7 @@ namespace EditorTools
                 {
                     float curvePosition = curvePositionX.floatValue;
                     if(movementState.enumValueIndex == 1){
-                        DrawLine(accelerationCurveContainer, new Vector2(curvePosition, 0f), new Vector2(curvePosition, 1f),
-                            Color.red);
+                        DrawLine(accelerationCurveContainer, new Vector2(curvePosition, 0f), new Vector2(curvePosition, 1f), Color.red);
                     }
 
                     if (movementState.enumValueIndex == 3)
@@ -159,10 +189,12 @@ namespace EditorTools
                 PropertyField(gravityAcceleration);
                 PropertyField(slideAcceleration);
                 PropertyField(maxSlideSpeed);
+                minimumSlideDeceleration.floatValue = Slider("Minimum Slide Deceleration", minimumSlideDeceleration.floatValue,0f,1f);
                 PropertyField(maxFallSpeed);
                 PropertyField(groundCheckRange);
                 PropertyField(maxSlope);
                 PropertyField(slideDeceleration);
+                
             }
 
             //Jump
@@ -175,7 +207,23 @@ namespace EditorTools
                 PropertyField(playerJumpToleranceTime);
                 PropertyField(jumpUsingGroundNormal);
                 PropertyField(jumpOnSlope);
-                if(jumpOnSlope.boolValue) PropertyField(jumpOnSlopeUsingGroundNormal);
+                if(jumpOnSlope.boolValue)
+                {
+                    PropertyField(jumpOnSlopeUsingGroundNormal);
+                    
+                    if (jumpOnSlopeUsingGroundNormal.boolValue) PropertyField(antiClimbSafety);
+                }
+            }
+
+            m_edgeSafety = Foldout(m_edgeSafety, "Edge Safety", true, EditorStyles.foldoutHeader);
+            if(m_edgeSafety)
+            {
+                PropertyField(edgeSafety);
+                if(edgeSafety.boolValue)
+                {
+                    PropertyField(edgeAutoStopCheckDistance);
+                    PropertyField(minSpeedFactor);
+                }
             }
         
             // Head Bob
@@ -183,6 +231,7 @@ namespace EditorTools
             if (m_showHeadBob)
             {
                 PropertyField(headBob);
+                
                 if (headBob.boolValue)
                 {
                     PropertyField(headBobSpeed);
@@ -198,7 +247,8 @@ namespace EditorTools
                 
                     Color headBobCurveColor = Color.gray;
                     if (active ) headBobCurveColor = Color.green;
-                
+
+                    
                     headBobAnimationCurve.animationCurveValue = EditorGUI.CurveField(headBobCurveContainer, headBobAnimationCurve.animationCurveValue,headBobCurveColor, new Rect());
 
                     if (active)
@@ -266,6 +316,9 @@ namespace EditorTools
             }
         
             PropertyField(controller);
+            PropertyField(cameraParentTr);
+            PropertyField(cameraTr);
+            
             serializedObject.ApplyModifiedProperties();
             Repaint();
         }

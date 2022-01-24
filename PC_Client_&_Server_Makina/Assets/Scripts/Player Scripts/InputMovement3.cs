@@ -5,7 +5,13 @@ namespace Player_Scripts
 {
     public class InputMovement3 : MonoBehaviour
     {
+        [SerializeField, HideInInspector, Min(0f)] private float m_edgeAutoStopCheckDistance = .25f;
+        [SerializeField, HideInInspector, Range(0f,1f)] private float m_minSpeedFactor=.5f;
+        [SerializeField, HideInInspector] private bool m_edgeSafety = true;
+
         [SerializeField, HideInInspector, Tooltip("the player's character controller")]private CharacterController m_controller;
+        [SerializeField, HideInInspector, Tooltip("The camera transform (not the parent)")] private Transform m_cameraTr;
+        [SerializeField, HideInInspector, Tooltip("The camera parent transform")] private Transform m_cameraParentTr;
     
         [SerializeField, HideInInspector, Min(0f),Tooltip("the player's input speed in m/s")]private float m_maxMovementSpeed = 10f;
         [SerializeField, HideInInspector, Min(0f),Tooltip("the player's input speed in m/s")]private float m_maxMovementSpeedSprinting = 10f;
@@ -15,30 +21,40 @@ namespace Player_Scripts
     
         [SerializeField, HideInInspector, Tooltip("The Time it will take the player to accelerate to full speed"), Min(0f)]private float m_accelerationTime = .3f;
         [SerializeField, HideInInspector, Tooltip("The Time it will take the player to decelerate to an idle speed"), Min(0f)]private float m_decelerationTime = .5f;
-        [SerializeField, HideInInspector, Tooltip("The Time it will take the player to decelerate to an idle speed"), Min(0f)]private float m_accelerationTimeSprinting = .5f;
+        [SerializeField, HideInInspector, Tooltip("The Time it will take the player to accelerate to full speed"), Min(0f)]private float m_accelerationTimeSprinting = .5f;
         [SerializeField, HideInInspector, Tooltip("The Time it will take the player to decelerate to an idle speed"), Min(0f)]private float m_decelerationTimeSprinting = .5f;
+        
+        [SerializeField, HideInInspector, Tooltip("Boolean to check wether or not the player will have a different acceleration and deceleration in mid air")]private bool m_airAcceleration;
+        
+        [SerializeField, HideInInspector, Tooltip("The Time it will take the player to accelerate to full speed"), Min(0f)]private float m_accelerationTimeAirborn = .5f;
+        [SerializeField, HideInInspector, Tooltip("The Time it will take the player to decelerate to an idle speed"), Min(0f)]private float m_decelerationTimeAirborn = .5f;
+        [SerializeField, HideInInspector, Tooltip("The Time it will take the player to accelerate to full speed"), Min(0f)]private float m_accelerationTimeSprintingAirborn = .5f;
+        [SerializeField, HideInInspector, Tooltip("The Time it will take the player to decelerate to an idle speed"), Min(0f)]private float m_decelerationTimeSprintingAirborn = .5f;
+        
         [SerializeField, HideInInspector, Tooltip("The Sprint Key")] private KeyCode m_sprintKey;
-        [SerializeField, HideInInspector, Tooltip("The Speed of the player's speed transition rotation in °/²"), Min(0f)]private float m_sustainDirectionChangeSpeed = 100f;
+        [SerializeField, HideInInspector, Tooltip("Boolean to check wether or not the player will be able to start sprinting while in mid air")]private bool m_canSprintInMidAir;
+        [SerializeField, HideInInspector, Tooltip("The Speed of the player's speed transition rotation in °/²"), Min(0f)]private float m_directionChangeSpeed = 100f;
+        [SerializeField, HideInInspector, Tooltip("The Speed of the player's speed transition rotation in °/²"), Min(0f)]private float m_directionChangeSpeedAirborn = 100f;
 
         [SerializeField, HideInInspector, Tooltip("the sensitivity of the mouse"), Range(0f,15f)] private float m_mouseSensitivity = 4f;
-        [SerializeField, HideInInspector, Tooltip("The camera transform (not the parent)")] private Transform m_cameraTr;
-        [SerializeField, HideInInspector, Tooltip("The camera parent transform")] private Transform m_cameraParentTr;
     
         [SerializeField, HideInInspector,Tooltip("current player's movement state")]private AccelerationState m_movementState = AccelerationState.idle;
     
         [SerializeField, HideInInspector, Tooltip("The gravitational acceleration of the player in m/s²") ]private float m_gravityAcceleration = 16f;
         [SerializeField, HideInInspector, Tooltip("The gravitational acceleration of the player on a slope in m/s²") ]private float m_slideAcceleration = 16f;
         [SerializeField, HideInInspector, Tooltip("The gravitational acceleration of the player in m/s²") ]private float m_maxSlideSpeed = 250f;
+        [SerializeField, HideInInspector, Tooltip("The minimum slide deceleration value") ] private float m_minimumSlideDeceleration = .5f;
         [SerializeField, HideInInspector, Tooltip("The gravitational acceleration of the player in m/s²") ]private float m_maxFallSpeed = 250f;
         [SerializeField, HideInInspector, Tooltip("The distance until which the player will detect the ground")]private float m_groundCheckRange;
         [SerializeField, HideInInspector, Tooltip("The maximum slope inclination that the player can move on without sliding")]private float m_maxSlope;
-        [SerializeField, HideInInspector, Tooltip("The Slide Deceleration")] private float m_slideDeceleration;
+        [SerializeField, HideInInspector, Tooltip("The Slide Deceleration in m/s²")] private float m_slideDeceleration;
     
         [SerializeField, HideInInspector, Tooltip("the height at which the player will jump in m"), Min(0.0f)] private float m_playerJumpHeight = .5f;
         [SerializeField, HideInInspector, Tooltip("the tolerance time of the jump in s"), Min(0.0f)] private float m_playerJumpToleranceTime = .5f;
         [SerializeField, HideInInspector, Tooltip("Will the player jump using the ground normal when grounded")]private bool m_jumpUsingGroundNormal;
         [SerializeField, HideInInspector, Tooltip("Will the player jump when on slope")]private bool m_jumpOnSlope= true;
-        [SerializeField, HideInInspector, Tooltip("Will the player jump using the ground normal when on slope")]private bool m_jumpOnSlopeUsingGroundNormal= true;
+        [SerializeField, HideInInspector, Tooltip("Will the player jump using the ground normal when on slope")]private bool m_jumpOnSlopeUsingGroundNormal = true;
+        [SerializeField, HideInInspector, Tooltip("Will the player's jump reset his input velocity")]private bool m_antiClimbSafety = true;
         [SerializeField, HideInInspector, Tooltip("The Jump Key")] private KeyCode m_jumpKey;
 
         [SerializeField, HideInInspector, Tooltip("boolean to switch wether we want the player to have a headBob or not")] private bool m_headBob = true;
@@ -49,7 +65,7 @@ namespace Player_Scripts
         [SerializeField, HideInInspector, Tooltip("whether or not we use the smooth stepping")]private bool m_smoothStepping = true;
         [SerializeField, HideInInspector, Tooltip("the sensitivity of the step detection")]private float m_stepSensitivity = 100f;
         [SerializeField, HideInInspector, Tooltip("the speed of the of the stepping")]private float m_smoothingSpeed = 10f;
-    
+
         /// <summary> The different states player's acceleration
         /// could be: idle, accelerating, sustaining, decelerating</summary>
         private enum AccelerationState
@@ -57,8 +73,7 @@ namespace Player_Scripts
             idle,
             accelerating,
             sustaining,
-            decelerating,
-            error
+            decelerating
         }
     
         /// <summary> The different of the player's groundedness
@@ -111,6 +126,9 @@ namespace Player_Scripts
         private Coroutine m_jumpCoroutine;
         private bool m_smoothing;
         private float m_targetVelocity;
+        private float m_headBobPreviousTime;
+        private bool m_sprinting;
+        private Vector2 m_inputDirection;
 
 
         // Start is called before the first frame update
@@ -118,6 +136,7 @@ namespace Player_Scripts
         {
             m_originalCameraHeight = m_cameraTr.position.y;
             m_cameraParentTr.position = transform.position;
+            
             // Okay so hear me out
             // Sometimes... The people need to set stuff to the right boolean before compiling
             // But...
@@ -140,13 +159,14 @@ namespace Player_Scripts
         void Update()
         {
             UpdateMouseLook();
+            
             Vector3 displacement = new Vector3();
 
             UpdateGroundDetection(out var groundTouchingState, out var groundNormal);
             UpdateJump(groundTouchingState, groundNormal);
             UpdateSlide(ref displacement, groundTouchingState,groundNormal);
             UpdateGravity(ref displacement, groundTouchingState);
-            UpdatePlayerInput(ref displacement, groundNormal);
+            UpdatePlayerInput(ref displacement, groundNormal, groundTouchingState);
         
             // The way the stepping works is that I compare the movement the player would've done with a simple
             // transform.Translate to the one done by the Character controller.Move (Only on the y).
@@ -183,6 +203,7 @@ namespace Player_Scripts
             p_groundNormal = Vector3.up;
             p_groundTouchingState = GroundTouchingState.airborn;
         
+            
             //Shooting the spherecast from the bottom of the sphere with an offset so that the sphere begins incremented with the object
             float rad = m_controller.radius;
             Vector3 origin = transform.position + Vector3.up * rad;
@@ -244,12 +265,12 @@ namespace Player_Scripts
             // Getting the input
             if(Input.GetKeyDown(m_jumpKey))
             {
-                if(m_jumpCoroutine  !=null) StopCoroutine(m_jumpCoroutine);
+                if(m_jumpCoroutine != null) StopCoroutine(m_jumpCoroutine);
                 m_jumpCoroutine = StartCoroutine(JumpCoroutine());
             }
         
             // Checking whether or not the player is in a situation in which he can jump
-            bool canJump = p_groundTouchingState == GroundTouchingState.grounded || (p_groundTouchingState == GroundTouchingState.onSlope && m_jumpOnSlope);
+            bool canJump = p_groundTouchingState == GroundTouchingState.grounded || (m_jumpOnSlope && p_groundTouchingState == GroundTouchingState.onSlope);
         
             // Returning if the player can't jump
             if(!canJump) return;
@@ -271,6 +292,13 @@ namespace Player_Scripts
             if(p_groundTouchingState == GroundTouchingState.onSlope && m_jump)
             {
                 jumpDir = m_jumpOnSlopeUsingGroundNormal ? p_groundNormal : Vector3.up;
+
+                if (m_jumpOnSlopeUsingGroundNormal && m_antiClimbSafety)
+                {
+                    m_currentInputVelocity = Vector2.zero;
+                    ResetCurveTimer();
+                }
+                
                 m_currentInputVelocity = Vector2.zero; // Resetting the player's input velocity to avoid climbing
                 m_gravity.y = 0f;
                 m_gravity += jumpDir * Mathf.Sqrt(m_playerJumpHeight * 2f * m_gravityAcceleration);
@@ -316,7 +344,7 @@ namespace Player_Scripts
             float speed = Vector3.Angle(p_groundNormal, Vector3.up) / 90f;
         
             // Clamping the minimum acceleration to .5f
-            speed = Mathf.Max(.5f, speed);
+            speed = Mathf.Max(m_minimumSlideDeceleration, speed);
         
             // Setting the new Displacement
             m_slopeDisplacement *= m_slideVelocity * speed;
@@ -356,31 +384,48 @@ namespace Player_Scripts
         }
 
         #endregion
-    
-    
+        
         #region Movement
 
         /// <summary/> Adds te players input to the displacement
         /// <param name="p_displacement"> the displacement to add the player's input too</param>
-        /// <param name="p_groundNormal"></param>
-        private void UpdatePlayerInput(ref Vector3 p_displacement, Vector3 p_groundNormal)
+        /// <param name="p_groundNormal"> the ground normal of that the player is standing on </param>
+        /// <param name="p_groundTouchingState"> the ground touching state of the player </param>
+        private void UpdatePlayerInput(ref Vector3 p_displacement, Vector3 p_groundNormal, GroundTouchingState p_groundTouchingState)
         {
-            bool sprinting = Input.GetKey(m_sprintKey);
+            float accelerationTime;
+            float decelerationTime;
+
+            float directionChangeSpeed;
             
+            if (!m_airAcceleration || p_groundTouchingState == GroundTouchingState.grounded)
+            {
+                directionChangeSpeed = m_directionChangeSpeed;
+                m_sprinting = Input.GetKey(m_sprintKey);
+                accelerationTime = m_sprinting? m_accelerationTimeSprinting : m_accelerationTime;
+                decelerationTime = m_sprinting? m_decelerationTimeSprinting : m_decelerationTime;
+            }
+            else
+            {
+                directionChangeSpeed = m_directionChangeSpeedAirborn;
+                if(m_canSprintInMidAir) m_sprinting = Input.GetKey(m_sprintKey);
+                
+                accelerationTime = m_sprinting? m_accelerationTimeSprintingAirborn : m_accelerationTimeAirborn;
+                decelerationTime = m_sprinting? m_decelerationTimeSprintingAirborn : m_decelerationTimeAirborn;
+            }
             
-            float maxMovementSpeed = sprinting? m_maxMovementSpeedSprinting : m_maxMovementSpeed;
-            
-            float accelerationTime = sprinting? m_accelerationTimeSprinting : m_accelerationTime;
-            float decelerationTime = sprinting? m_decelerationTimeSprinting : m_decelerationTime;
-            
-            //Debug.Log(maxMovementSpeed);
+            float maxMovementSpeed = m_sprinting? m_maxMovementSpeedSprinting : m_maxMovementSpeed;
+
             //Getting the player input
             Vector2 playerInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
+            m_inputDirection = Vector2.MoveTowards(m_inputDirection,playerInput,directionChangeSpeed * Time.deltaTime);
+            
             // Setting the different states
             // No input and immobile : Idle
             // No input and mobile : decelerating
             // Yes input and yes at max running speed : sustaining
+            // Yes input and max running speed is inferior : decelerating
             // Yes input and no at max running speed : accelerating
             //
             // decelerating & accelerating are temporary states.
@@ -389,7 +434,10 @@ namespace Player_Scripts
             if (playerInput == Vector2.zero)
             {
                 if (m_currentInputVelocity == Vector2.zero)
+                {
                     m_movementState = AccelerationState.idle;
+                    //m_inputDirection = Vector2.zero;
+                }
                 else
                 {
                     // Resetting the curve timer
@@ -442,12 +490,12 @@ namespace Player_Scripts
                 
                     // Calculating the speed and adding it to the current input
                     float speed = curvePositionX * (maxMovementSpeed - m_initialSpeed) + m_initialSpeed;
-                    m_currentInputVelocity = playerInput * speed;
+                    m_currentInputVelocity = m_inputDirection * speed;
                 
                     break;
                 case AccelerationState.sustaining:
                     // Linear transition between directions when going at full speed
-                    m_currentInputVelocity = Vector3.RotateTowards(m_currentInputVelocity,playerInput,m_sustainDirectionChangeSpeed * Time.deltaTime, 0f);
+                    m_currentInputVelocity = m_inputDirection * maxMovementSpeed;
                     break;
                 case AccelerationState.decelerating:
 
@@ -467,7 +515,7 @@ namespace Player_Scripts
                     speed = m_targetVelocity + (curvePositionX * speedToRemove);
                     
                     // Debug.Log($"target: {m_targetVelocity} initial: {m_initialSpeed} time: {time} speed: {speed}");
-                    m_currentInputVelocity = m_currentInputVelocity.normalized * speed;
+                    m_currentInputVelocity = Vector3.ClampMagnitude(m_currentInputVelocity,1f) * speed;
                 
                     break;
             }
@@ -482,14 +530,24 @@ namespace Player_Scripts
             inputDisplacement = Vector3.ProjectOnPlane(inputDisplacement, p_groundNormal);
             m_gravity.x = gravityHorizontal.x;
             m_gravity.z = gravityHorizontal.z;
-        
+            
+            // Edge security
+            if (m_edgeSafety && m_movementState == AccelerationState.decelerating && p_groundTouchingState == GroundTouchingState.grounded && inputDisplacement.magnitude <= m_minSpeedFactor * maxMovementSpeed)
+            {
+                if (!Physics.Raycast(Vector3.up + transform.position + inputDisplacement * Time.deltaTime, Vector3.down, m_edgeAutoStopCheckDistance + 1f))
+                {
+                    inputDisplacement = Vector3.zero;
+                    m_currentInputVelocity = Vector2.zero;
+                }
+            }
+            
             // diplacement groig dfs<fksdgf
             p_displacement += inputDisplacement;
 
 #if UNITY_EDITOR
             s_speed = m_currentInputVelocity.magnitude;
 
-            s_inputAngle = Vector2.SignedAngle(playerInput, Vector2.up);
+            s_inputAngle = Vector2.SignedAngle(m_inputDirection, Vector2.up);
             s_inputVelocityAngle = Vector2.SignedAngle(m_currentInputVelocity, Vector2.up);
 #endif
         }
@@ -503,19 +561,34 @@ namespace Player_Scripts
 
         #endregion
 
-        #region Head Raoul
+        #region Head Bob
 
-        private void UpdateHeadBob(float p_magnitude, GroundTouchingState p_groundTouchingState)
+        /// <summary>
+        /// The function called tu update the head's position using the headbob curve and the time
+        /// </summary>
+        /// <param name="p_movementSpeed"> the magnitude of the bob </param>
+        /// <param name="p_groundTouchingState"> the ground touching state of the player </param>
+        private void UpdateHeadBob(float p_movementSpeed, GroundTouchingState p_groundTouchingState)
         {
+            // Getting the period of the curve by inverting the speed 
             float invertedSpeed = 1 / m_headBobSpeed;
-            if (p_groundTouchingState != GroundTouchingState.grounded)
+            
+            // if the player isn't grounded : reset the position
+            if (p_groundTouchingState != GroundTouchingState.grounded || p_movementSpeed == 0f)
             {
+                m_headBobPreviousTime = 0f;
                 m_cameraTr.localPosition = Vector3.MoveTowards(m_cameraTr.localPosition, Vector3.up * m_originalCameraHeight, invertedSpeed* Time.deltaTime);
                 return;
             }
-            float magnitude = Mathf.Min(p_magnitude, m_maxMovementSpeedSprinting);
-            float intensity = m_headBobIntensity * (magnitude / m_maxMovementSpeedSprinting);
-            float time = (Time.time % invertedSpeed)/ invertedSpeed;
+            
+            float speed = Mathf.Min(p_movementSpeed, m_maxMovementSpeedSprinting);
+
+            m_headBobPreviousTime += Time.deltaTime * speed/m_maxMovementSpeedSprinting;
+
+            float intensity = m_headBobIntensity * (speed / m_maxMovementSpeedSprinting);
+            
+            float time = (m_headBobPreviousTime % invertedSpeed)/ invertedSpeed;
+            
             s_headBobCurvePositionX = time;
             m_cameraTr.localPosition =  Vector3.up * (m_originalCameraHeight + m_headBobAnimationCurve.Evaluate(time) * (intensity / 2f));
         }

@@ -1,11 +1,10 @@
+using System;
 using CustomMessages;
 using Mirror;
 using UnityEngine;
 
 public class ElevatorBehavior : MonoBehaviour
 {
-    
-    [SerializeField, Tooltip("The bottom position that the elevator will go to")]
     private float m_bottomPosition;
     
     [SerializeField, Tooltip("The top position that the elevator will go to")]
@@ -14,7 +13,7 @@ public class ElevatorBehavior : MonoBehaviour
     private bool m_activated;
     private bool m_goingUp = true;
 
-    public int m_index;
+    [HideInInspector]public int m_index;
     
     /// <summary/> The elevators speed in m/s
     private float m_speed = 10f;
@@ -22,15 +21,14 @@ public class ElevatorBehavior : MonoBehaviour
     private bool m_doneWaiting;
     private void Start()
     {
-        Vector3 pos = transform.position;
-        transform.position = new Vector3(pos.x, m_bottomPosition, pos.z);
+        float posY = transform.position.y;
+        m_bottomPosition = posY;
+        m_topPosition = posY + m_topPosition;
     }
 
     private void Update()
     {
         if(!m_activated) return;
-        
-        
         
         transform.position += (m_goingUp ? Vector3.up : Vector3.down) * m_speed * Time.deltaTime;
 
@@ -53,14 +51,23 @@ public class ElevatorBehavior : MonoBehaviour
     }
     
     public void ButtonActivateElevator(){
-        NetworkClient.Send<ElevatorActivation>(new ElevatorActivation(){index = m_index});
+        NetworkClient.Send(new ElevatorActivation(){index = m_index});
     }
     
-    public void ActivateElevator() => m_activated = true;
+    public void ActivateElevator() {
+        m_activated = true;
+    }
 
     public void SetInitialData(float p_speed,float p_waitTime)
     {
         m_speed = p_speed;
         m_waitTime = p_waitTime;
+    }
+
+    private void OnDrawGizmos()
+    {
+        TryGetComponent(out BoxCollider boxCollider);
+        Vector3 box = boxCollider.size;
+        Gizmos.DrawWireCube(transform.position + Vector3.up * m_topPosition + transform.up *box.y/2  - transform.forward * box.z/2 + transform.right *box.x/2 , boxCollider.size);
     }
 }
