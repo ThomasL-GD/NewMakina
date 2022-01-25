@@ -23,7 +23,7 @@ public class SynchroniseBlindAndFlair : MonoBehaviour
     void ActivateBlindness(ActivateBlind p_activateBlind) 
     {
         m_blindObject.gameObject.SetActive(true);
-        StartCoroutine(m_blindObject.WaitFortransition(Mathf.Max(p_activateBlind.blindIntensity)));
+        StartCoroutine(m_blindObject.WaitFortransition(Mathf.Max(p_activateBlind.blindIntensity-1f,0)));
     }
 
     void DeactivateBlindness(DeActivateBlind p_deActivateBlind) => m_blindObject.gameObject.SetActive(false);
