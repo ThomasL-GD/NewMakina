@@ -35,7 +35,11 @@ namespace CustomMessages
     {
         public Vector3 startPosition;
     }
-    public struct ActivateBlind : NetworkMessage {}
+
+    public struct ActivateBlind : NetworkMessage
+    {
+        public float blindIntensity;
+    }
     public struct DeActivateBlind : NetworkMessage {}
 
     public enum ClientConnection

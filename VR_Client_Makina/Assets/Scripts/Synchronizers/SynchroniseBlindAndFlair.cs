@@ -5,7 +5,7 @@ using UnityEngine;
 public class SynchroniseBlindAndFlair : MonoBehaviour
 {
     [SerializeField] private MoveUp m_flair;
-    [SerializeField] private GameObject m_blindObject;
+    [SerializeField] private UIOpacityTransition m_blindObject;
     void Awake()
     {
         MyNetworkManager.OnReceiveInitialData += FlairInitialData;
@@ -20,8 +20,11 @@ public class SynchroniseBlindAndFlair : MonoBehaviour
     private void FlairInitialData(InitialData p_initialdata) =>
         m_flair.SetRaiseSpeedAndTime(p_initialdata.flairRaiseSpeed,p_initialdata.flairDetonationTime);
     
-    
-    void ActivateBlindness(ActivateBlind p_activateBlind) => m_blindObject.SetActive(true);
+    void ActivateBlindness(ActivateBlind p_activateBlind) 
+    {
+        m_blindObject.gameObject.SetActive(true);
+        StartCoroutine(m_blindObject.WaitFortransition(Mathf.Max(p_activateBlind.blindIntensity)));
+    }
 
-    void DeactivateBlindness(DeActivateBlind p_deActivateBlind) => m_blindObject.SetActive(false);
+    void DeactivateBlindness(DeActivateBlind p_deActivateBlind) => m_blindObject.gameObject.SetActive(false);
 }

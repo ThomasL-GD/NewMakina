@@ -30,6 +30,7 @@ public class ServerManager : MonoBehaviour
     private ElevatorActivation m_elevatorActivationBuffer;
     private LeureTransform m_leureBuffer;
     private ActivateFlair m_flairBuffer;
+    private ActivateBlind m_activateBlindBuffer;
 
     #endregion
     
@@ -189,9 +190,6 @@ public class ServerManager : MonoBehaviour
     IEnumerator Flair(float p_detonationTime, float p_flashDuration)
     {
         yield return new WaitForSeconds(p_detonationTime);
-        
-        SendActivateBlind();
-
         Vector3 detonationPoint = m_flairBuffer.startPosition + Vector3.up * (m_flairRaiseSpeed * m_flairDetonationTime);
 
         Vector3 vrHeadForward = m_vrTransformBuffer.rotationHead * Vector3.forward;
@@ -204,6 +202,10 @@ public class ServerManager : MonoBehaviour
 
         if (flashStrength < m_flashClamp.x) flashStrength = 0f;
         else if (flashStrength > m_flashClamp.y) flashStrength = 1f;
+
+        m_activateBlindBuffer.blindIntensity = p_flashDuration * flashStrength;
+        
+        SendActivateBlind();
         
         yield return new WaitForSeconds(p_flashDuration * flashStrength);
         SendDeActivateBlind();
@@ -427,8 +429,9 @@ public class ServerManager : MonoBehaviour
         OnServerTick += SendActivateFlair;
     }
     
-    private void OnActivateBlind(NetworkConnection arg1, ActivateBlind arg2)
+    private void OnActivateBlind(NetworkConnection arg1, ActivateBlind p_activateBlind)
     {
+        m_activateBlindBuffer = p_activateBlind;
         OnServerTick -= SendActivateBlind;
         OnServerTick += SendActivateBlind;
     }
@@ -769,7 +772,7 @@ public class ServerManager : MonoBehaviour
     private void SendActivateBlind()
     {
         OnServerTick -= SendActivateBlind;
-        SendToBothClients(new ActivateBlind());
+        SendToBothClients(m_activateBlindBuffer);
     }
 
     private void SendDeActivateBlind()
