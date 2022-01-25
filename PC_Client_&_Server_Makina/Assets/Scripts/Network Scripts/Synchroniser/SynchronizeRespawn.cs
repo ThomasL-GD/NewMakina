@@ -1,7 +1,7 @@
 using System.Collections;
 using CustomMessages;
 using Mirror;
-using Synchronizers;
+using Player_Scripts;
 using UnityEngine;
 
 namespace Synchronizers
@@ -39,7 +39,7 @@ namespace Synchronizers
         /// <param name="p_laser"> the LaserShotInfo </param>
         void ReceiveLaser()
         {
-            if (InputMovement.instance.m_isDead) return;
+            if (InputMovement3.instance.m_isDead) return;
             StartCoroutine(DeathLoop());
         }
 
@@ -56,7 +56,7 @@ namespace Synchronizers
         IEnumerator DeathLoop()
         {
             //Enabling the feedback and finding the next spawn point
-            InputMovement.instance.m_isDead = true;
+            InputMovement3.instance.m_isDead = true;
             int respawnIndex = Random.Range(0, m_spawnPoints.Length);
             m_deathFeedback.SetActive(true);
 
@@ -71,7 +71,7 @@ namespace Synchronizers
             yield return new WaitForSeconds(m_respawnTime);
 
             //Disabling the feedback and teleporting the player to his new position
-            InputMovement.instance.m_isDead = false;
+            InputMovement3.instance.m_isDead = false;
             m_deathFeedback.SetActive(false);
             m_player.transform.position = m_spawnPoints[respawnIndex].position;
 

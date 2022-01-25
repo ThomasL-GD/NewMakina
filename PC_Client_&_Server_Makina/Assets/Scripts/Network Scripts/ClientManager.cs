@@ -96,6 +96,7 @@ public class ClientManager : MonoBehaviour
     #endregion
     
     [SerializeField, Tooltip("The player Object to be enabled on connection")] public GameObject m_player;
+    [SerializeField, Tooltip("The player Object to get the player's location")] public GameObject m_playerObject;
     
     
     /// <summary/> Singleton type beat

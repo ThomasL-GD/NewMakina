@@ -10,9 +10,9 @@ public class Teleport : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if(Vector3.Distance(ClientManager.singleton.m_player.transform.position, transform.position) > m_rangeOfEntry) return;
+        if(Vector3.Distance(ClientManager.singleton.m_playerObject.transform.position, transform.position) > m_rangeOfEntry) return;
 
-        ClientManager.singleton.m_player.transform.position = m_exits[Random.Range(0,m_exits.Length)].position;
+        ClientManager.singleton.m_playerObject.transform.position = m_exits[Random.Range(0,m_exits.Length)].position;
     }
 
     private void OnDrawGizmos() {

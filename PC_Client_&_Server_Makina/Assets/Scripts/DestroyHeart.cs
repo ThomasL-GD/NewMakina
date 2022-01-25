@@ -60,7 +60,7 @@ public class DestroyHeart : MonoBehaviour
                 NetworkClient.Send(new HeartBreak(){index = heartIndex});
                 
                 // Yeet the player
-                InputMovement.instance.m_velocity += (transform.position - heart.transform.position).normalized * m_yeetStrength + Vector3.up * m_upYeetStrength;
+                //InputMovement3.instance.m_velocity += (transform.position - heart.transform.position).normalized * m_yeetStrength + Vector3.up * m_upYeetStrength;
             }
             else Debug.LogWarning("There is a gameobject that is on the heart layer that doesn't have the heart identifier class ಠ_ಠ", hit.transform.gameObject);
     }

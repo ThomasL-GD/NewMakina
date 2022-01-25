@@ -5,6 +5,8 @@ namespace Player_Scripts
 {
     public class InputMovement3 : MonoBehaviour
     {
+        public static InputMovement3 instance;
+        public bool m_isDead;
         [SerializeField, HideInInspector, Min(0f)] private float m_edgeAutoStopCheckDistance = .25f;
         [SerializeField, HideInInspector, Range(0f,1f)] private float m_minSpeedFactor=.5f;
         [SerializeField, HideInInspector] private bool m_edgeSafety = true;
@@ -134,6 +136,7 @@ namespace Player_Scripts
         // Start is called before the first frame update
         void Start()
         {
+            instance = this;
             m_originalCameraHeight = m_cameraTr.position.y;
             m_cameraParentTr.position = transform.position;
             
@@ -158,6 +161,11 @@ namespace Player_Scripts
         // Update is called once per frame
         void Update()
         {
+            if (m_isDead)
+            {
+                m_currentInputVelocity = Vector2.zero;
+                return;
+            }
             UpdateMouseLook();
             
             Vector3 displacement = new Vector3();

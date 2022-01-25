@@ -80,6 +80,8 @@ public class ServerManager : MonoBehaviour
     [SerializeField, Tooltip("The amount of time before the flair detonates"), Range(1, 15)] private float m_flairDetonationTime = 2f;
     [SerializeField, Tooltip("The amount of time before the flair detonates"), Range(1, 15)] private float m_flashDuration = 5f;
     [SerializeField, Tooltip("the minimum and maximum dot product from the look angle to clamp")]private Vector2 m_flashClamp;
+    [Space]
+    [SerializeField, Tooltip("The offset of the raycast shot to the player to check if the lazer hit")] private float m_laserCheckOffset = 2f;
     private int m_currentBombAmount = 0;
     
 
@@ -544,8 +546,8 @@ public class ServerManager : MonoBehaviour
             // Mafs
             Vector3 startingPoint = m_vrTransformBuffer.positionRightHand;
             Vector3 direction = m_vrTransformBuffer.rotationRightHand * Vector3.forward;
-            Vector3 playerPos = m_pcTransformBuffer.position;
-            Vector3 laserCriticalPath = playerPos - startingPoint;
+            Vector3 playerPos = m_pcTransformBuffer.position + Vector3.up * m_laserCheckOffset/2f;
+            Vector3 laserCriticalPath = (playerPos + Vector3.up * m_laserCheckOffset/2f) - startingPoint;
             
             // Hitboxes Verification (blame Blue)
             bool hitAWall = Physics.Raycast(startingPoint, laserCriticalPath.normalized, laserCriticalPath.magnitude, /*Ignoring the player and Vr layers, and yes it could be slightly more optimized :-Þ*/~((1 << 13) | (1 << 3)), QueryTriggerInteraction.Ignore);
