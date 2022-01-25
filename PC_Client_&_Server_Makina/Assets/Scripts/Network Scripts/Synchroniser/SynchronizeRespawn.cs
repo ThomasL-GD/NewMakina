@@ -23,9 +23,6 @@ namespace Synchronizers
         [SerializeField] [Tooltip("The time for which the player will be invisible on respawn")]
         private float m_invisibilityTime = 5f;
 
-        [SerializeField] [Tooltip("The player's invisibility script")]
-        private InvisibilityByInput m_script;
-
         public delegate void OnPlayerDeathDelegator();
 
         public static OnPlayerDeathDelegator OnPlayerDeath;
@@ -79,9 +76,6 @@ namespace Synchronizers
             m_player.transform.position = m_spawnPoints[respawnIndex].position;
 
             OnPlayerRespawn?.Invoke();
-            
-            //Removing the ability for the player to turn invisible to avoid him wasting his precious invisibility charge
-            m_script.m_canTurnInvisible = false;
 
             //Making the player invisible
             NetworkClient.Send(new PcInvisibility() {isInvisible = true});
@@ -91,9 +85,6 @@ namespace Synchronizers
 
             //Making the player visible
             NetworkClient.Send(new PcInvisibility() {isInvisible = false});
-
-            //Giving the player back the ability to turn invisible
-            m_script.m_canTurnInvisible = true;
         }
 
     }

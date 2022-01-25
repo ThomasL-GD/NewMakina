@@ -34,10 +34,14 @@ public class CreateLeure : MonoBehaviour
     {
         
         NetworkClient.Send(new SpawnLeure());
+        NetworkClient.Send(new PcInvisibility{isInvisible = true});
         m_uiElement.text = "Leure Spawned";
         yield return new WaitForSeconds(m_leureLifeTime);
         Destroy(p_leure);
+        
         NetworkClient.Send(new DestroyLeure());
+        NetworkClient.Send(new PcInvisibility{isInvisible = false});
+        
         m_canSpawnLeure = true;
         m_uiElement.text = "Press E to spawn a leure";
     }

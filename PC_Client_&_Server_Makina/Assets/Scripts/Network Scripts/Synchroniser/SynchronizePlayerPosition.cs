@@ -25,14 +25,12 @@
          void Update()
          {
              if (!NetworkClient.ready) return;
-
              NetworkClient.Send(new PcTransform() {position = m_player.position, rotation = m_playerHead.rotation});
          }
 
-         void UpdateInvisibility(PcInvisibility p_pcInvisibility) {
-
+         void UpdateInvisibility(PcInvisibility p_pcInvisibility) 
+         {
              foreach (GameObject go in m_invisbilityFeedbacks) go.SetActive(p_pcInvisibility.isInvisible);
-
          }
      }
  }

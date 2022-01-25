@@ -1,11 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 using UnityEngine;
 using CustomMessages;
-using JetBrains.Annotations;
 
 /// <summary/> The server side manager will handle all of the server side network dealings of the game
 
@@ -783,15 +781,15 @@ public class ServerManager : MonoBehaviour
     private void SendLeureTransform()
     {
         OnServerTick -= SendLeureTransform;
-        m_vrNetworkConnection.Send(m_leureBuffer);
+        m_vrNetworkConnection?.Send(m_leureBuffer);
     }
     private void SendDestroyLeure()
     {
-        m_vrNetworkConnection.Send(new DestroyLeure());
+        m_vrNetworkConnection?.Send(new DestroyLeure());
     }
     private void SendSpawnLeure()
     {
-        m_vrNetworkConnection.Send(new SpawnLeure());
+        m_vrNetworkConnection?.Send(new SpawnLeure());
     }
     
     #endregion
