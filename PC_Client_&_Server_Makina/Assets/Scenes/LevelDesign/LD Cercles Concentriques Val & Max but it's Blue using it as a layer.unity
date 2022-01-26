@@ -604,7 +604,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7326766765409136338, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
       propertyPath: m_pcPlayerHealth
-      value: 5
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7326766765409136338, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
+      propertyPath: m_vrPlayerHealth
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7326766765409136338, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
       propertyPath: m_bombRespawnTime
@@ -622,6 +626,10 @@ PrefabInstance:
       propertyPath: m_heartTransforms.Array.size
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 7326766765409136339, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
+      propertyPath: m_playerObject
+      value: 
+      objectReference: {fileID: 279846113}
     - target: {fileID: 7326766765447975172, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
       propertyPath: m_heartPrefabs
       value: 
@@ -707,6 +715,11 @@ PrefabInstance:
 --- !u!224 &279846112 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7326766765247384054, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
+  m_PrefabInstance: {fileID: 279846111}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &279846113 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3410370340419816798, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
   m_PrefabInstance: {fileID: 279846111}
   m_PrefabAsset: {fileID: 0}
 --- !u!43 &754830788
