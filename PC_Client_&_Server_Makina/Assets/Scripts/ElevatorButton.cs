@@ -19,7 +19,6 @@ public class ElevatorButton : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                Debug.Log("press F");
                 m_elevator.ButtonActivateElevator();
             }
         }
@@ -28,6 +27,6 @@ public class ElevatorButton : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (m_inRange) CameraAndUISingleton.elevatorButtonFeedback.SetActive(true);
+        if (m_inRange && !m_elevator.m_activated) CameraAndUISingleton.elevatorButtonFeedback.SetActive(true);
     }
 }

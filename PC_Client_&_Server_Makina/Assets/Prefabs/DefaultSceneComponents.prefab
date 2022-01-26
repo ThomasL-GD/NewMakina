@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25.45
+  m_fontSize: 14.4
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -349,7 +349,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25.95
+  m_fontSize: 14.7
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -794,7 +794,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 23077d292ca71754f9725c9a4dc494f4, type: 2}
+  - {fileID: 2100000, guid: 42670830d00ed9d479ee57eac18f231e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -932,7 +932,7 @@ GameObject:
   - component: {fileID: 2024164952}
   - component: {fileID: 2024164951}
   m_Layer: 5
-  m_Name: Invisible
+  m_Name: Elevator prompt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -985,7 +985,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press F to activate Elevator
+  m_text: Press F to activate elevator
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1682,7 +1682,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7405762300650092718, guid: 1f35df31a68d99f468dfd9ce47d78cb6, type: 3}
       propertyPath: m_heartTransforms.Array.size
-      value: 10
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7405762300650092718, guid: 1f35df31a68d99f468dfd9ce47d78cb6, type: 3}
       propertyPath: m_heartTransforms.Array.data[0]
@@ -2343,7 +2343,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 886141219637608064, guid: 933f49e8e7f7d9443a95d8790ad6798a, type: 3}
       propertyPath: m_fontSize
-      value: 14
+      value: 8.15
       objectReference: {fileID: 0}
     - target: {fileID: 886141220200166097, guid: 933f49e8e7f7d9443a95d8790ad6798a, type: 3}
       propertyPath: m_Pivot.x
@@ -2447,7 +2447,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1184380235637592362, guid: 933f49e8e7f7d9443a95d8790ad6798a, type: 3}
       propertyPath: m_fontSize
-      value: 27.15
+      value: 20.55
       objectReference: {fileID: 0}
     - target: {fileID: 6602148934851028978, guid: 933f49e8e7f7d9443a95d8790ad6798a, type: 3}
       propertyPath: m_RootOrder
@@ -2459,7 +2459,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6602148936221583454, guid: 933f49e8e7f7d9443a95d8790ad6798a, type: 3}
       propertyPath: m_fontSize
-      value: 27.15
+      value: 20.55
       objectReference: {fileID: 0}
     - target: {fileID: 6602148936221583455, guid: 933f49e8e7f7d9443a95d8790ad6798a, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2479,7 +2479,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6602148936273740814, guid: 933f49e8e7f7d9443a95d8790ad6798a, type: 3}
       propertyPath: m_fontSize
-      value: 38.65
+      value: 21.9
       objectReference: {fileID: 0}
     - target: {fileID: 6602148936273740815, guid: 933f49e8e7f7d9443a95d8790ad6798a, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2699,6 +2699,10 @@ PrefabInstance:
       propertyPath: m_spawnPoints.Array.data[17]
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 586668069150170732, guid: c1d0f69dad19b50469b9df1f1e46bf20, type: 3}
+      propertyPath: m_heartPrefabs
+      value: 
+      objectReference: {fileID: 88736851637077653, guid: 1f32f33eff942e841a05908b54b15aa8, type: 3}
     - target: {fileID: 586668069150170733, guid: c1d0f69dad19b50469b9df1f1e46bf20, type: 3}
       propertyPath: m_lazerPreshot
       value: 
@@ -2777,7 +2781,7 @@ PrefabInstance:
       objectReference: {fileID: 3638442620085867385}
     - target: {fileID: 8417031006943273845, guid: c1d0f69dad19b50469b9df1f1e46bf20, type: 3}
       propertyPath: m_elevators.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1d0f69dad19b50469b9df1f1e46bf20, type: 3}

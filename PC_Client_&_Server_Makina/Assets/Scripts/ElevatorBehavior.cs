@@ -10,7 +10,7 @@ public class ElevatorBehavior : MonoBehaviour
     [SerializeField, Tooltip("The top position that the elevator will go to")]
     private float m_topPosition;
 
-    private bool m_activated;
+    [HideInInspector]public bool m_activated;
     private bool m_goingUp = true;
 
     [HideInInspector]public int m_index;
@@ -19,6 +19,11 @@ public class ElevatorBehavior : MonoBehaviour
     private float m_speed = 10f;
     private float m_waitTime = 3f;
     private bool m_doneWaiting;
+
+    private void Awake()=>
+        SynchroniseElevators.OnReceiveElevatorInitialData += SetInitialData;
+    
+
     private void Start()
     {
         float posY = transform.position.y;
@@ -67,7 +72,8 @@ public class ElevatorBehavior : MonoBehaviour
     private void OnDrawGizmos()
     {
         TryGetComponent(out BoxCollider boxCollider);
-        Vector3 box = boxCollider.size;
-        Gizmos.DrawWireCube(transform.position + Vector3.up * m_topPosition + transform.up *box.y/2  - transform.forward * box.z/2 + transform.right *box.x/2 , boxCollider.size);
+        Vector3 box = Quaternion.Euler(-90, 0, 0) * boxCollider.size;
+        Vector3 origin = transform.position + Quaternion.Euler(-90, 0, 0) * boxCollider.center;
+        Gizmos.DrawWireCube(origin + Vector3.up * m_topPosition, box);
     }
 }
