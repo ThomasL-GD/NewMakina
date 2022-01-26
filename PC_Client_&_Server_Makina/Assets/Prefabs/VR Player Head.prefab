@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5985447621629064213
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2080164520633229076}
+  m_Layer: 0
+  m_Name: VR Player Head
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2080164520633229076
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5985447621629064213}
+  m_LocalRotation: {x: 0.26370403, y: -0, z: -0, w: 0.96460366}
+  m_LocalPosition: {x: 0, y: 36, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8628177476533807665}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 30.58, y: 0, z: 0}
+--- !u!1001 &4026066810118190641
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2080164520633229076}
+    m_Modifications:
+    - target: {fileID: 4639279214611618816, guid: dbef18e87e00a314683bac80cef26e8d, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4639279214611618816, guid: dbef18e87e00a314683bac80cef26e8d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4639279214611618816, guid: dbef18e87e00a314683bac80cef26e8d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4639279214611618816, guid: dbef18e87e00a314683bac80cef26e8d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4639279214611618816, guid: dbef18e87e00a314683bac80cef26e8d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4639279214611618816, guid: dbef18e87e00a314683bac80cef26e8d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4639279214611618816, guid: dbef18e87e00a314683bac80cef26e8d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4639279214611618816, guid: dbef18e87e00a314683bac80cef26e8d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4639279214611618816, guid: dbef18e87e00a314683bac80cef26e8d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4639279214611618816, guid: dbef18e87e00a314683bac80cef26e8d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4639279214611618816, guid: dbef18e87e00a314683bac80cef26e8d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5416096908201887418, guid: dbef18e87e00a314683bac80cef26e8d, type: 3}
+      propertyPath: m_Name
+      value: MakinaHead
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dbef18e87e00a314683bac80cef26e8d, type: 3}
+--- !u!4 &8628177476533807665 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4639279214611618816, guid: dbef18e87e00a314683bac80cef26e8d, type: 3}
+  m_PrefabInstance: {fileID: 4026066810118190641}
+  m_PrefabAsset: {fileID: 0}
