@@ -82,6 +82,8 @@ public class ServerManager : MonoBehaviour
     [SerializeField, Tooltip("the minimum and maximum dot product from the look angle to clamp")]private Vector2 m_flashClamp;
     [Space]
     [SerializeField, Tooltip("The offset of the raycast shot to the player to check if the lazer hit")] private float m_laserCheckOffset = 2f;
+
+    [SerializeField] private LayerMask m_playerLayers;
     private int m_currentBombAmount = 0;
     
 
@@ -549,11 +551,14 @@ public class ServerManager : MonoBehaviour
             Vector3 playerPos = m_pcTransformBuffer.position + Vector3.up * m_laserCheckOffset/2f;
             Vector3 laserCriticalPath = (playerPos + Vector3.up * m_laserCheckOffset/2f) - startingPoint;
             
-            // Hitboxes Verification (blame Blue)
-            bool hitAWall = Physics.Raycast(startingPoint, laserCriticalPath.normalized, laserCriticalPath.magnitude, /*Ignoring the player and Vr layers, and yes it could be slightly more optimized :-Þ*/~((1 << 13) | (1 << 3)), QueryTriggerInteraction.Ignore);
+            Debug.DrawLine(playerPos,playerPos + Vector3.up * m_laserCheckOffset/2f,Color.red,5f);
             
+            // Hitboxes Verification (blame Blue)
+            bool hitAWall = Physics.Raycast(startingPoint, laserCriticalPath.normalized,out RaycastHit hited, laserCriticalPath.magnitude,m_playerLayers,QueryTriggerInteraction.Ignore);
+            Debug.Log(hitAWall?"hit":"miss");
+            Debug.DrawRay(hited.point, Vector3.up * 4f, Color.yellow, 15f);
             RaycastHit rayHit;
-            bool hitSmth = Physics.Raycast(startingPoint, direction.normalized, out rayHit, 10000f, /*Ignoring the player and Vr layers, and yes it could be slightly more optimized :-Þ*/~((1 << 13) | (1 << 3)), QueryTriggerInteraction.Ignore);
+            bool hitSmth = Physics.Raycast(startingPoint, direction.normalized, out rayHit, 10000f, m_playerLayers, QueryTriggerInteraction.Ignore);
 
             Debug.DrawRay(startingPoint, laserCriticalPath, hitAWall ? Color.green : Color.red, 15f);
             
@@ -569,11 +574,15 @@ public class ServerManager : MonoBehaviour
                     //if the distance between the line of fire and the player's position is blablablbalalboom... he ded
                     hit = distance <= m_laserRadius && Vector3.Angle(playerPos - startingPoint, direction) < 90f;
 
+                    Debug.Log("yay maybe");
                     if (hit) {
                         m_pcPlayerHealth--;
                         m_laserBuffer.length = laserCriticalPath.magnitude;
+                        
+                        Debug.Log("yay");
                     }
                     else {
+                        Debug.Log("fuuuuck");
                         m_laserBuffer.length = hitSmth ? rayHit.distance : valueIfNoHit;
                     }
 
@@ -581,7 +590,6 @@ public class ServerManager : MonoBehaviour
 
                 case true : {
                     m_laserBuffer.length = hitSmth ? rayHit.distance : valueIfNoHit;
-                    
                     hit = false;
                 break; }
             }
