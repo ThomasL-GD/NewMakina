@@ -7,7 +7,10 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
 
     private bool m_hasTouchedGround = false;
 
-    [HideInInspector] public bool m_dropDown = false;
+    //Dropdown type beat
+    [HideInInspector] public bool m_mustDropDown = false;
+    [HideInInspector] public GameObject m_prefabDropDownFeedback;
+    private GameObject m_lineFeedback = null;
 
     /// <summary> The layers this object will collide with, only layer 8 (ground) is selected by default </summary>
     protected LayerMask m_layersThatCollides = 1 << 8;
@@ -46,13 +49,24 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
     public override void ActualiseParent() {
         base.ActualiseParent();
 
+        if (m_mustDropDown && m_isCaught) {
+            if (m_lineFeedback != null) {
+                Debug.LogError("Wait ! You're gonna instantiate an object that already exist");
+                Destroy(m_lineFeedback);
+                m_lineFeedback = null;
+            }
+
+            m_lineFeedback = Instantiate(m_prefabDropDownFeedback, transform);
+            
+        }
+
         if (m_isCaught || (!m_isCaught && !m_hasBeenCaughtInLifetime)) { //If it's either caught or spawned but never has been caught
             m_rb.isKinematic = true;
         }
         else { //If the item is let go
             m_rb.isKinematic = false;
             
-            if(m_dropDown) return; // Watch out, this line can kill your code if you put line afterwards
+            if(m_mustDropDown) return; // Watch out, this line can kill your code if you put line afterwards
                 
             m_rb.velocity = (m_lastCoordinates[0].position - m_lastCoordinates[m_lastCoordinates.Length - 1].position) * ((1 / Time.fixedDeltaTime) / m_lastCoordinates.Length);
             //m_rb.angularVelocity += m_lastCoordinates[0].rotation.eulerAngles - m_lastCoordinates[m_lastCoordinates.Length - 1].rotation.eulerAngles;

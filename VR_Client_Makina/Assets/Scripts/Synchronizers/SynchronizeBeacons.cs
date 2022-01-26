@@ -58,6 +58,9 @@ namespace Synchronizers {
         
         
         private static readonly int CodeBeaconColor = Shader.PropertyToID("_Beacon_Color");
+        
+        [Header("DropDown")]
+        [SerializeField] [Tooltip("If true, nice shot :)\nIf false, crippling emptiness...")] private GameObject m_prefabDropDownFeedback;
 
         private void Awake() {
             if(m_prefabBeaconAmmo == null) Debug.LogError("You forgot to serialize a beacon prefab here ! (╬ ಠ益ಠ)", this);
@@ -120,7 +123,8 @@ namespace Synchronizers {
             beaconScript.m_index = m_beacons.Count - 1;
             beaconScript.m_serverID = p_spawnBeacon.beaconID;
             beaconScript.m_synchronizer = this;
-            beaconScript.m_dropDown = m_dropDown;
+            beaconScript.m_mustDropDown = m_dropDown;
+            beaconScript.m_prefabDropDownFeedback = m_prefabDropDownFeedback;
 
             OnNewBeacon?.Invoke(beaconScript);
         }

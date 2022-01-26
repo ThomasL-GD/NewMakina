@@ -36,6 +36,10 @@ namespace Synchronizers {
         [SerializeField] private AudioSource m_audioSource;
         [SerializeField] [Tooltip("If true, nice shot :)\nIf false, crippling emptiness...")] private bool m_niceShotQuestionMark = true;
         [SerializeField] private AudioClip m_niceShotSound = null;
+        
+        [Header("DropDown")]
+        
+        [SerializeField] [Tooltip("If true, nice shot :)\nIf false, crippling emptiness...")] private GameObject m_prefabDropDownFeedback;
 
         protected override void Start() {
             base.Start();
@@ -77,7 +81,8 @@ namespace Synchronizers {
             script.m_index = m_bombs.Count;
             script.m_serverID = p_spawnBomb.bombID;
             script.m_explosionTimeOnceOnGround = m_explosionTimeOnceTouchingTheGround;
-            script.m_dropDown = m_dropDown;
+            script.m_mustDropDown = m_dropDown;
+            script.m_prefabDropDownFeedback = m_prefabDropDownFeedback;
             
             m_bombs.Add(new BombInfo(go.transform, p_spawnBomb.bombID));
         }
