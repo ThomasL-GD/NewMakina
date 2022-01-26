@@ -35,6 +35,8 @@ public class VrHandBehaviour : MonoBehaviour {
         GameObject other = p_other.gameObject;
 
         if (other.layer == 6 && other.TryGetComponent(out GrabbableObject script)) { // The Catchable Object layer
+            
+            //Debug.Log("Good old debug");
 
             if (!m_isPressed && OVRInput.Get(m_grabInput) >= m_triggerGrabSensitivity) { // If the player is pressing the trigger hard enough
                 m_isPressed = true;

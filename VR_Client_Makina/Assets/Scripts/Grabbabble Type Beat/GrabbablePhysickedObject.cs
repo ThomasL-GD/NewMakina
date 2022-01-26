@@ -7,6 +7,8 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
 
     private bool m_hasTouchedGround = false;
 
+    [HideInInspector] public bool m_dropDown = false;
+
     /// <summary> The layers this object will collide with, only layer 8 (ground) is selected by default </summary>
     protected LayerMask m_layersThatCollides = 1 << 8;
 
@@ -50,6 +52,8 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
         else { //If the item is let go
             m_rb.isKinematic = false;
             
+            if(m_dropDown) return; // Watch out, this line can kill your code if you put line afterwards
+                
             m_rb.velocity = (m_lastCoordinates[0].position - m_lastCoordinates[m_lastCoordinates.Length - 1].position) * ((1 / Time.fixedDeltaTime) / m_lastCoordinates.Length);
             //m_rb.angularVelocity += m_lastCoordinates[0].rotation.eulerAngles - m_lastCoordinates[m_lastCoordinates.Length - 1].rotation.eulerAngles;
             // m_rb.velocity = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);

@@ -77,6 +77,7 @@ namespace Synchronizers {
             script.m_index = m_bombs.Count;
             script.m_serverID = p_spawnBomb.bombID;
             script.m_explosionTimeOnceOnGround = m_explosionTimeOnceTouchingTheGround;
+            script.m_dropDown = m_dropDown;
             
             m_bombs.Add(new BombInfo(go.transform, p_spawnBomb.bombID));
         }
