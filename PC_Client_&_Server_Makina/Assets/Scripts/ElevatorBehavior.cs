@@ -13,16 +13,13 @@ public class ElevatorBehavior : MonoBehaviour
     [HideInInspector]public bool m_activated;
     private bool m_goingUp = true;
 
-    [HideInInspector]public int m_index;
+    private int m_index;
     
     /// <summary/> The elevators speed in m/s
     private float m_speed = 10f;
     private float m_waitTime = 3f;
     private bool m_doneWaiting;
 
-    private void Awake()=>
-        SynchroniseElevators.OnReceiveElevatorInitialData += SetInitialData;
-    
 
     private void Start()
     {
@@ -63,10 +60,11 @@ public class ElevatorBehavior : MonoBehaviour
         m_activated = true;
     }
 
-    public void SetInitialData(float p_speed,float p_waitTime)
+    public void SetInitialData(float p_speed,float p_waitTime, int p_index)
     {
         m_speed = p_speed;
         m_waitTime = p_waitTime;
+        m_index = p_index;
     }
 
     private void OnDrawGizmos()
