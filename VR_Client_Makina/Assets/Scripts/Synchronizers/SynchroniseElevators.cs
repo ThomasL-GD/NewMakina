@@ -22,8 +22,7 @@ public class SynchroniseElevators : Synchronizer
     {
         for (int i = 0; i< m_elevators.Length;i++)
         {
-            m_elevators[i].SetInitialData(p_initialData.elevatorSpeed, p_initialData.elevatorWaitTime);
-            m_elevators[i].m_index = i;
+            m_elevators[i].SetInitialData(p_initialData.elevatorSpeed, p_initialData.elevatorWaitTime, i);
         }
     }
     
