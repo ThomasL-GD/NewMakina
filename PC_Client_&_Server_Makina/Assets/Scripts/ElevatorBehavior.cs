@@ -40,6 +40,7 @@ public class ElevatorBehavior : MonoBehaviour
         {
             m_goingUp = false;
             m_activated = false;
+            m_light.color = m_lightColorOff;
             Vector3 pos = transform.position;
             transform.position = new Vector3(pos.x, m_topPosition, pos.z);
             return;
