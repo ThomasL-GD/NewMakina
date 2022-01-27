@@ -26,6 +26,7 @@ public class WindowPlacer : EditorWindow
 
     private List<Positions> m_points;
     private GameObject m_window;
+    private GameObject m_parent;
 
     struct Positions
     {
@@ -125,9 +126,9 @@ public class WindowPlacer : EditorWindow
         for (int i = 0; i < amountOfPossibleWidows+1; i++)
         {
             Vector3 origin = (p_e2 + p_wallDir * i * m_spacing) + WallNormal + p_wallDir * p_offset;
-            if (!Physics.Raycast(origin, -WallNormal, out RaycastHit hit, 2f)) continue;
+            if (!Physics.Raycast(origin, -WallNormal, out RaycastHit hit, 1.1f)) continue;
             DrawCube(hit.point, Vector3.one *.5f, p_color);
-            Quaternion rotation = Quaternion.Euler(Vector3.up * Vector3.Angle(Vector3.forward, new Vector3(hit.normal.x,0,hit.normal.z))+ m_angleOffset);
+            Quaternion rotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward, new Vector3(hit.normal.x,0,hit.normal.z), Vector3.up)+ m_angleOffset);
             m_points.Add(new Positions(){position = hit.point,rotation = rotation});
         }
     }
@@ -160,10 +161,10 @@ public class WindowPlacer : EditorWindow
         Vector3 planeCenter = p_boundingBoxCenter + p_chosenExtent;
         Vector3 opposedPlaneCenter = p_boundingBoxCenter - p_chosenExtent;
         
-        if (!Physics.Raycast(planeCenter, opposedPlaneCenter - planeCenter, out RaycastHit hit, p_chosenExtent.magnitude*2f)) return new RaycastHit();
+        if (!Physics.Raycast(planeCenter + (planeCenter - opposedPlaneCenter) * .1f, opposedPlaneCenter - planeCenter, out RaycastHit hit, p_chosenExtent.magnitude*2.2f)) return new RaycastHit();
 
         Handles.color = p_color;
-        Handles.DrawLine(planeCenter+hit.normal, hit.point);
+        Handles.DrawLine(planeCenter + (planeCenter - opposedPlaneCenter) * .1f, hit.point);
         
         return hit;
     }
@@ -245,10 +246,12 @@ public class WindowPlacer : EditorWindow
         Space();
         m_angleOffset = Vector3Field("Angle Offset", m_angleOffset);
 
+        m_parent =  (GameObject) ObjectField("windowPrefab",m_parent,typeof(object),true);
+        
         if (Button("\n Place Windows\n") && m_points.Count != 0)
         {
             var parent = new GameObject();
-            parent.name = "window parent";
+            parent.name = "windows";
             
             Undo.RegisterCreatedObjectUndo(parent, "created parent");
             
@@ -257,6 +260,8 @@ public class WindowPlacer : EditorWindow
                 var placedWindow = Instantiate(m_window,point.position,point.rotation);
                 placedWindow.transform.parent = parent.transform;
             }
+
+            if(m_parent != null)parent.transform.parent = m_parent.transform;
         }
     }
 }
