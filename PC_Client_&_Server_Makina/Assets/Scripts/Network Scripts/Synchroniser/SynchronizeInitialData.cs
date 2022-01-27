@@ -1,15 +1,18 @@
 using CustomMessages;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Synchronizers
 {
     public class SynchronizeInitialData : Synchronizer
     {
 
-        [SerializeField][Tooltip("the GUI element that keeps track of the PC player's health")] private TextMeshProUGUI m_pcPlayerHealthText;
-        [SerializeField][Tooltip("the GUI element that keeps track of the VR player's health")] private TextMeshProUGUI m_vrPlayerHealthText;
+        [SerializeField][Tooltip("the GUI element that keeps track of the PC player's health")] private RawImage m_pcPlayerHealth;
+        [SerializeField][Tooltip("the GUI element that keeps track of the VR player's health")] private RawImage m_vrPlayerHealth;
 
+        [SerializeField] private Texture[] m_pcHealthTextures;
+        [SerializeField] private Texture[] m_vrHealthTextures;
         /// <summary/> The PC Health data saved localy
         private int m_pcHealth;
         
@@ -60,11 +63,13 @@ namespace Synchronizers
             UpdateHealthText();
         }
 
+        
         /// <summary/> Updates both player's health on the PC GUI based on the local variables
+        [ContextMenu("test")]
         private void UpdateHealthText()
         {
-            m_pcPlayerHealthText.text = $"Health : {m_pcHealth}";
-            m_vrPlayerHealthText.text = $"Enemy Health : {m_vrHealth}";
+            m_pcPlayerHealth.texture = m_pcHealthTextures[m_pcHealth];
+            m_vrPlayerHealth.texture = m_vrHealthTextures[m_vrHealth];
         }
     }
 }
