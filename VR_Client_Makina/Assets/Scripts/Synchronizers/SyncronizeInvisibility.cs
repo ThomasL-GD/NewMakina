@@ -16,7 +16,7 @@ public class SyncronizeInvisibility : MonoBehaviour
     }
 
     /// <summary>
-    /// Called whn the server sends a PcInvisbility type message (▀̿Ĺ̯▀̿ ̿) ▄︻̷̿┻̿═━一
+    /// Called when the server sends a PcInvisbility type message (▀̿Ĺ̯▀̿ ̿) ▄︻̷̿┻̿═━一
     /// </summary>
     /// <param name="p_pcInvisibility"> the message </param>
     void OnReceiveInvisibility(PcInvisibility p_pcInvisibility)
@@ -26,9 +26,10 @@ public class SyncronizeInvisibility : MonoBehaviour
         foreach (MeshRenderer meshRenderer in m_playerMeshRenderers)
             meshRenderer.enabled = !invisible;
 
-        m_audioSource.Stop();
-        m_audioSource.clip = invisible ? m_soundOn : m_soundOff;
-        m_audioSource.Play();
+        //TODO: Replace audio "player invisible" if needed 
+        // m_audioSource.Stop();
+        // m_audioSource.clip = invisible ? m_soundOn : m_soundOff;
+        // m_audioSource.Play();
         
     }
 }
