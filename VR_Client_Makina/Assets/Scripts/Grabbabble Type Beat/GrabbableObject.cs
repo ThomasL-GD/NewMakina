@@ -56,7 +56,7 @@ public abstract class GrabbableObject : MonoBehaviour {
         }
 
 
-        if (!m_isPuttableOnlyOnce) return; //m_isPuttableOnlyOnce code from here and nothing else
+        if (!m_isPuttableOnlyOnce) return;
         
         if (m_hasBeenCaughtInLifetime && !m_isCaught) {
             m_isGrabbable = false;

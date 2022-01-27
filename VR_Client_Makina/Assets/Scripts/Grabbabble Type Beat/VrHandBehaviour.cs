@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CatchThoseHands;
 using Synchronizers;
@@ -10,7 +11,7 @@ namespace CatchThoseHands {
     }
 }
 
-[RequireComponent(typeof(SphereCollider), typeof(Rigidbody))]
+[RequireComponent(typeof(Collider), typeof(Rigidbody))]
 public class VrHandBehaviour : MonoBehaviour {
 
     [SerializeField] private Hands m_hand = Hands.Left;
@@ -23,18 +24,26 @@ public class VrHandBehaviour : MonoBehaviour {
 
     //public List<GrabbableObject> m_objectsInRange = new List<GrabbableObject>();
     /*[HideInInspector]/**/ public List<GrabbableObject> m_objectsGrabbed = new List<GrabbableObject>();
-    
+
+    private Animator m_animator = null;
+    private static readonly int IsGrabbing = Animator.StringToHash("IsGrabbing");
+
     private void Start() {
         SynchronizeBeacons.OnNewBeacon += Subscribe;
         if (m_triggerGrabSensitivity < m_triggerLetGoSensitivity) Debug.LogWarning("What the fuck is that balancing ?!", this);
+
+        if (TryGetComponent(out Animator animator)) {
+            m_animator = animator;
+        }
     }
-    
-    
-    private void OnTriggerStay(Collider p_other) {
+
+    private void OnTriggerStay(Collider p_other) { //TODO Oh My God ! this is so old and broken plz fix this at some pôint
 
         GameObject other = p_other.gameObject;
 
         if (other.layer == 6 && other.TryGetComponent(out GrabbableObject script)) { // The Catchable Object layer
+            
+            //Debug.Log("Good old debug");
 
             if (!m_isPressed && OVRInput.Get(m_grabInput) >= m_triggerGrabSensitivity) { // If the player is pressing the trigger hard enough
                 m_isPressed = true;
@@ -44,6 +53,7 @@ public class VrHandBehaviour : MonoBehaviour {
                 m_objectsGrabbed.Add(script);
                 script.m_originalParent.Add(transform);
                 script.ActualiseParent();
+                if(m_animator != null)m_animator.SetBool(IsGrabbing, true);
             }
             
             if (m_isPressed && OVRInput.Get(m_grabInput) < m_triggerLetGoSensitivity) { //If the player let go enough
@@ -53,6 +63,7 @@ public class VrHandBehaviour : MonoBehaviour {
                 m_objectsGrabbed.Remove(script);
                 script.m_originalParent.Remove(transform);
                 script.ActualiseParent();
+                if(m_animator != null)m_animator.SetBool(IsGrabbing, false);
             }
         }
     }

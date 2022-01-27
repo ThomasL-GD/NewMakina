@@ -58,6 +58,9 @@ namespace Synchronizers {
         
         
         private static readonly int CodeBeaconColor = Shader.PropertyToID("_Beacon_Color");
+        
+        [Header("DropDown")]
+        [SerializeField] [Tooltip("If true, nice shot :)\nIf false, crippling emptiness...")] private GameObject m_prefabDropDownFeedback;
 
         private void Awake() {
             if(m_prefabBeaconAmmo == null) Debug.LogError("You forgot to serialize a beacon prefab here ! (╬ ಠ益ಠ)", this);
@@ -85,7 +88,16 @@ namespace Synchronizers {
             BeaconData[] positionses = new BeaconData[m_beacons.Count];
 
             for (int i = 0; i < positionses.Length; i++) {
-                positionses[i].position = m_beacons[i].beaconScript.gameObject.transform.position;
+                switch (m_beacons[i].isOnTheGroundAndSetUp) { //If the beacon is not deployed yet, we take the position of the grabbable item, else, we take the deployed beacon's position coz the grabbableBeacon has been destroyed
+                    case true :
+                        positionses[i].position = m_beacons[i].deployedBeaconScript.gameObject.transform.position;
+                    break;
+                    
+                    case false :
+                        positionses[i].position = m_beacons[i].beaconScript.gameObject.transform.position;
+                    break;
+                }
+                
                 positionses[i].beaconID = m_beacons[i].serverID;
             }
             
@@ -111,6 +123,8 @@ namespace Synchronizers {
             beaconScript.m_index = m_beacons.Count - 1;
             beaconScript.m_serverID = p_spawnBeacon.beaconID;
             beaconScript.m_synchronizer = this;
+            beaconScript.m_mustDropDown = m_dropDown;
+            beaconScript.m_prefabDropDownFeedback = m_prefabDropDownFeedback;
 
             OnNewBeacon?.Invoke(beaconScript);
         }
@@ -136,7 +150,6 @@ namespace Synchronizers {
                 return;
             }
             
-            m_beacons[index??0].beaconScript.DestroyMaSoul();
             GameObject go = m_beacons[index ?? 0].deployedBeaconScript.gameObject;
             m_beacons.RemoveAt(index??0);
             Destroy(go);
@@ -181,7 +194,7 @@ namespace Synchronizers {
             Material mat = go.GetComponent<MeshRenderer>().material;
             mat.SetColor(CodeBeaconColor, newColor);
 
-            m_beacons[p_index].beaconScript.gameObject.GetComponent<MeshRenderer>().material.color = newColor;
+            //m_beacons[p_index].beaconScript.gameObject.GetComponent<MeshRenderer>().material.color = newColor;
             
         }
 
@@ -208,6 +221,7 @@ namespace Synchronizers {
             
             m_beacons[index??0].deployedBeaconScript.gameObject.transform.SetParent(null, true);
             m_beacons[index??0].deployedBeaconScript.StartInflating();
+            m_beacons[index??0].beaconScript.DestroyMaSoul();
             
             SetActivationOfABeacon(index??0, true);
             OnBeaconSetUp?.Invoke(m_beacons[index??0].beaconScript);

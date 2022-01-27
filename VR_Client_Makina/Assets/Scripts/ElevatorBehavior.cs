@@ -6,8 +6,11 @@ public class ElevatorBehavior : MonoBehaviour
 {
     private float m_bottomPosition;
     
-    [SerializeField, Tooltip("The top position that the elevator will go to")]
-    private float m_topPosition;
+    [SerializeField, Tooltip("The top position that the elevator will go to")] private float m_topPosition;
+    
+    [SerializeField] private Light m_light;
+    [SerializeField] private Color m_lightColorOff = Color.green;
+    [SerializeField] private Color m_lightColorOn = Color.red;
 
     private bool m_activated;
     private bool m_goingUp = true;
@@ -34,6 +37,7 @@ public class ElevatorBehavior : MonoBehaviour
         {
             m_goingUp = false;
             m_activated = false;
+            m_light.color = m_lightColorOff;
             Vector3 pos = transform.position;
             transform.position = new Vector3(pos.x, m_topPosition, pos.z);
             return;
@@ -43,6 +47,7 @@ public class ElevatorBehavior : MonoBehaviour
         {
             m_goingUp = true;
             m_activated = false;
+            m_light.color = m_lightColorOff;
             Vector3 pos = transform.position;
             transform.position = new Vector3(pos.x, m_bottomPosition, pos.z);
         }
@@ -54,6 +59,7 @@ public class ElevatorBehavior : MonoBehaviour
     
     public void ActivateElevator() {
         m_activated = true;
+        m_light.color = m_lightColorOn;
     }
 
     public void SetInitialData(float p_speed,float p_waitTime, int p_index)

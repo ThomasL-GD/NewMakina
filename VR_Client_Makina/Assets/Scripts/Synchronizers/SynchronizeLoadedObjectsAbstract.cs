@@ -13,6 +13,8 @@ namespace Synchronizers {
         protected bool[] m_availblePositions = null;
         
         [HideInInspector] public int m_maxSlotsLoading = 1;
+        
+        [SerializeField] [Tooltip("If true, the only physics applied to be applied on this object on drop will be a straight down force.\nIf false, it can be thrown around")] protected bool m_dropDown = false;
 
         protected virtual void Start() {
             m_availblePositions = new bool[m_loadingPositions.Length];
