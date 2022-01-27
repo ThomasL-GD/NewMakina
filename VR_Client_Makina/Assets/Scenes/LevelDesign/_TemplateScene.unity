@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &537005232 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6124474369649903744, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
+  m_PrefabInstance: {fileID: 3611048692076519165}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,6 +261,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkDiscovery: {fileID: 1458416911}
+--- !u!4 &1551320097 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6124474370071472004, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
+  m_PrefabInstance: {fileID: 3611048692076519165}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1637636480
 GameObject:
   m_ObjectHideFlags: 0
@@ -327,6 +337,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &2021356918 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6124474371227171964, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
+  m_PrefabInstance: {fileID: 3611048692076519165}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2107560718
 GameObject:
   m_ObjectHideFlags: 0
@@ -431,8 +446,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3347910666744556375, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
+      propertyPath: m_dropDown
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3347910666744556375, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
+      propertyPath: m_prefabDropDownFeedback
+      value: 
+      objectReference: {fileID: 5155275930683169883, guid: 652058eb3f88af74797b4974bbae9634, type: 3}
+    - target: {fileID: 3347910666744556375, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
       propertyPath: m_loadingPositions.Array.size
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3347910666744556375, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
       propertyPath: m_loadingPositions.Array.data[0]
@@ -445,15 +468,15 @@ PrefabInstance:
     - target: {fileID: 3347910666744556375, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
       propertyPath: m_loadingPositions.Array.data[2]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 537005232}
     - target: {fileID: 3347910666744556375, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
       propertyPath: m_loadingPositions.Array.data[3]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1551320097}
     - target: {fileID: 3347910666744556375, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
       propertyPath: m_loadingPositions.Array.data[4]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2021356918}
     - target: {fileID: 3611048691210986495, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
@@ -468,7 +491,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3611048692802888141, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
       propertyPath: m_localHost
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3611048692802888143, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
       propertyPath: OnServerFound.m_PersistentCalls.m_Calls.Array.size
@@ -515,13 +538,37 @@ PrefabInstance:
       value: Default Components
       objectReference: {fileID: 0}
     - target: {fileID: 7088374079911476089, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
+      propertyPath: m_dropDown
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7088374079911476089, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
+      propertyPath: m_prefabDropDownFeedback
+      value: 
+      objectReference: {fileID: 5155275930683169883, guid: 652058eb3f88af74797b4974bbae9634, type: 3}
+    - target: {fileID: 7088374079911476089, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
+      propertyPath: m_loadingPositions.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7088374079911476089, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
       propertyPath: m_loadingPositions.Array.data[0]
       value: 
       objectReference: {fileID: 1889473450}
     - target: {fileID: 7088374079911476089, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
-      propertyPath: m_loadingPositions.Array.data[4]
+      propertyPath: m_loadingPositions.Array.data[1]
       value: 
       objectReference: {fileID: 1637636481}
+    - target: {fileID: 7088374079911476089, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
+      propertyPath: m_loadingPositions.Array.data[2]
+      value: 
+      objectReference: {fileID: 2021356918}
+    - target: {fileID: 7088374079911476089, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
+      propertyPath: m_loadingPositions.Array.data[3]
+      value: 
+      objectReference: {fileID: 537005232}
+    - target: {fileID: 7088374079911476089, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
+      propertyPath: m_loadingPositions.Array.data[4]
+      value: 
+      objectReference: {fileID: 1551320097}
     - target: {fileID: 8907849920664484147, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
       propertyPath: m_RootOrder
       value: 4
