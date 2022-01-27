@@ -52,7 +52,7 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
         if (m_mustDropDown && m_isCaught) {
             if (m_lineFeedback != null) {
                 Debug.LogError("Wait ! You're gonna instantiate an object that already exist");
-                Destroy(m_lineFeedback);
+                m_lineFeedback.GetComponent<DropDownFeedback>().DestroyMe();
                 m_lineFeedback = null;
             }
 
