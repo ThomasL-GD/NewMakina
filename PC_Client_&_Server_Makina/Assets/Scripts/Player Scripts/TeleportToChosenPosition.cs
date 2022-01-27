@@ -21,8 +21,8 @@ public class TeleportToChosenPosition : MonoBehaviour
     
     private void Reset()
     {
-        Destroy(m_teleportLocation);
         m_placed = false;
+        m_canUse = true;
         m_teleportIcon.enabled = false;
         m_podIcon.enabled = true;
     }
@@ -37,7 +37,9 @@ public class TeleportToChosenPosition : MonoBehaviour
                 transform.position = m_teleportLocation.transform.position;
                 m_canUse = false;
                 m_coolDownScript.StartReloading();
+                m_teleportIcon.enabled = false;
                 m_podIcon.enabled = false;
+                Destroy(m_teleportLocation);
                 return;
             }
 
