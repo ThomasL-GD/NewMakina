@@ -36,7 +36,7 @@ namespace Synchronizers
             // Fetching all the hearts and adding them to the list
             for (int i = 0; i < p_heartTransforms.positions.Length; i++)
             {
-                hearts.Add(Instantiate(m_heartPrefabs, p_heartTransforms.positions[i], p_heartTransforms.rotations[i]));
+                hearts.Add(Instantiate(m_heartPrefabs, p_heartTransforms.positions[i], m_heartPrefabs.transform.rotation));
                 
                 // Giving them a heart identifier component
                 if (hearts[i].TryGetComponent( out HeartIdentifier hi))

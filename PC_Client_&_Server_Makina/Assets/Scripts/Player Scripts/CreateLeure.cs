@@ -7,6 +7,7 @@ using Player_Scripts.Reloading;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CreateLeure : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class CreateLeure : MonoBehaviour
     [SerializeField] private float m_leureGravity;
     [SerializeField] private float m_leureForwardOffset = .5f;
     [SerializeField] private float m_leureLifeTime = 5f;
-    [SerializeField] private TextMeshProUGUI m_uiElement;
+    [SerializeField] private RawImage m_uiElement;
     
     [SerializeField] private ReloadingAbstract m_coolDownScript;
     
@@ -44,7 +45,7 @@ public class CreateLeure : MonoBehaviour
         
         NetworkClient.Send(new SpawnLeure());
         NetworkClient.Send(new PcInvisibility{isInvisible = true});
-        m_uiElement.text = "Leure Spawned";
+        m_uiElement.enabled = false;
         yield return new WaitForSeconds(m_leureLifeTime);
         Destroy(p_leure);
         
@@ -57,6 +58,6 @@ public class CreateLeure : MonoBehaviour
     void ResetCooldown()
     {
         m_canSpawnLeure = true;
-        m_uiElement.text = "Press E to spawn a leure";
+        m_uiElement.enabled = true;
     }
 }

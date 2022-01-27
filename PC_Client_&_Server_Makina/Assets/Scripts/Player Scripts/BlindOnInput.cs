@@ -3,12 +3,13 @@ using Mirror;
 using Player_Scripts.Reloading;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BlindOnInput : MonoBehaviour
 {
     [SerializeField] private KeyCode m_key;
     [SerializeField] private float m_forwardOffset = 1.2f;
-    [SerializeField] private TextMeshProUGUI m_uiElement;
+    [SerializeField] private RawImage m_uiElement;
     [SerializeField] private TextMeshProUGUI m_vrBlindUiElement;
 
     [SerializeField] private ReloadingAbstract m_coolDownScript;
@@ -19,14 +20,14 @@ public class BlindOnInput : MonoBehaviour
     {
         m_coolDownScript.OnReloading += ResetCooldown;
         ClientManager.OnReceiveDeActivateBlind += SayVRIsBlind;
-        m_uiElement.text = "Press A to flash";
+        m_uiElement.enabled = true;
         m_vrBlindUiElement.enabled = false;
     }
     
     private void ResetCooldown()
     {
         m_canFlash = true;
-        m_uiElement.text = "Press A to flash";
+        m_uiElement.enabled = true;
     }
 
     private void SayVRIsBlind(DeActivateBlind p_deactivateblind)
@@ -44,7 +45,7 @@ public class BlindOnInput : MonoBehaviour
             NetworkClient.Send(new ActivateFlair() {startPosition = flairStartPosition});
             m_canFlash = false;
             m_coolDownScript.StartReloading();
-            m_uiElement.text = " ";
+            m_uiElement.enabled = false;
 
             m_vrBlindUiElement.enabled = true;
         }
