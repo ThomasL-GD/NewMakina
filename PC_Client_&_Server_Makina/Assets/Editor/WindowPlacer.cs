@@ -1,35 +1,44 @@
-using System;
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.EditorTools;
+using static UnityEngine.Mathf;
+using static UnityEditor.EditorGUILayout;
+using static UnityEngine.GUILayout;
 
-[EditorTool("Window Placer Tool")]
-public class WindowPlacer : EditorTool
+public class WindowPlacer : EditorWindow
 {
-    [SerializeField] Texture2D m_ToolIcon;
-    [SerializeField] GameObject m_prefab;
-    [SerializeField] float m_offset;
-
-    
     GUIContent m_IconContent;
-    
-    void OnEnable()
+    /// <summary/> The function called when the MenuItem is called to create the window
+    [MenuItem("Tools/Window Placer")]
+    static void Init()
     {
-        m_IconContent = new GUIContent()
-        {
-            image = m_ToolIcon,
-            text = "Window Placer Tool",
-            tooltip = "Window Placer Tool"
-        };
+        // Instantiating or fetching the PrefabPicasso window 
+        WindowPlacer window = (WindowPlacer)GetWindow(typeof(WindowPlacer));
+        
+        // Giving the window the "Prefab Picasso" name
+        window.titleContent = new GUIContent("Window Placer");
+        
+        // Display the window that has been created
+        window.Show();
+        
+        // Bring the window to the front
+        window.Focus();
+        
+        // Updating the GUI of the window
+        window.Repaint();
     }
     
-    public override GUIContent toolbarIcon
-    {
-        get { return m_IconContent; }
-    }
+    
+    /// <summary>
+    /// Adding GuiUpdate to the SceneView.duringSceneGui delegate called everytime
+    /// the sceneView is repainted when the editor window is opened
+    /// </summary>
+    void OnEnable() => SceneView.duringSceneGui += SceneViewUpdate;
+
+    /// <summary/> Adding GuiUpdate from the SceneView.duringSceneGui delegate when the editor window is closed
+    private void OnDisable() => SceneView.duringSceneGui -= SceneViewUpdate;
     
     // This is called for each window that your tool is active in. Put the functionality of your tool here.
-    public override void OnToolGUI(EditorWindow window)
+    public void SceneViewUpdate(EditorWindow window)
     {
         if(Selection.count == 0) return;
         GameObject selection = (GameObject)Selection.objects[0];
