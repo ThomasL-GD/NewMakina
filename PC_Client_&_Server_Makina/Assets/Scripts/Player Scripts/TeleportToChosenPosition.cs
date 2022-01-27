@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Synchronizers;
+using Player_Scripts.Reloading;
 using TMPro;
 using UnityEngine;
 
@@ -13,10 +10,12 @@ public class TeleportToChosenPosition : MonoBehaviour
 
     private GameObject m_teleportLocation;
     private bool m_placed;
+    private bool m_canUse = true;
 
-    private void Awake() => SynchronizeRespawn.OnPlayerRespawn += Reset;
+    [SerializeField] private ReloadingAbstract m_coolDownScript;
     
-
+    private void Awake() => m_coolDownScript.OnReloading += Reset;
+    
     private void Reset()
     {
         Destroy(m_teleportLocation);
@@ -27,12 +26,13 @@ public class TeleportToChosenPosition : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(m_placeOrTeleportKey))
+        if (m_canUse && Input.GetKeyDown(m_placeOrTeleportKey))
         {
             if (m_placed)
             {
                 transform.position = m_teleportLocation.transform.position;
-                Reset();
+                m_canUse = false;
+                m_coolDownScript.StartReloading();
                 return;
             }
 
