@@ -99,5 +99,10 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
     /// <remarks> Override this to have things done at this moment </remarks>
     protected virtual void OnFirstTimeTouchingGround(Collision p_other) {
         m_hasTouchedGround = true;
+
+        if (m_mustDropDown) {
+            m_lineFeedback.GetComponent<DropDownFeedback>().DestroyMe();
+            m_lineFeedback = null;
+        }
     }
 }
