@@ -19,7 +19,7 @@ namespace Network.Connexion_Menu {
         private void Start() {
             if (m_prefabServerConnectButton == null) Debug.LogError("No server button prefab serialized, how do you expect me to work ?!", this);
             
-            UnityEditor.Events.UnityEventTools.AddPersistentListener(networkDiscovery.OnServerFound, OnDiscoveredServer);
+            //UnityEditor.Events.UnityEventTools.AddPersistentListener(networkDiscovery.OnServerFound, OnDiscoveredServer);
         }
 
         private void OnValidate() {
