@@ -22,6 +22,8 @@ namespace Synchronizers
 
         [SerializeField] [Tooltip("The time for which the player will be invisible on respawn")]
         private float m_invisibilityTime = 5f;
+        
+        [SerializeField]private AudioSource m_deathSound;
 
         public delegate void OnPlayerDeathDelegator();
 
@@ -60,6 +62,8 @@ namespace Synchronizers
             int respawnIndex = Random.Range(0, m_spawnPoints.Length);
             m_deathFeedback.SetActive(true);
 
+            m_deathSound.Play();
+            
             //Todo Make this no cursed for the love of baby jesus
             m_player.transform.position = Vector3.one * -1000f;
             //Updating the feedback

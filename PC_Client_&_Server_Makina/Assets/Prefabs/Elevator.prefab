@@ -108,6 +108,8 @@ GameObject:
   - component: {fileID: 4580080786917443560}
   - component: {fileID: 2635040951687593696}
   - component: {fileID: 7066913462890888996}
+  - component: {fileID: 7180391804890154119}
+  - component: {fileID: 4164428450871677826}
   m_Layer: 0
   m_Name: Elevator
   m_TagString: Untagged
@@ -239,6 +241,32 @@ MonoBehaviour:
   m_lightColorOff: {r: 0, g: 1, b: 0, a: 1}
   m_lightColorOn: {r: 1, g: 0, b: 0, a: 1}
   m_activated: 0
+--- !u!65 &7180391804890154119
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3262981755768985697}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.0689445, y: 3.811653, z: 200}
+  m_Center: {x: 0, y: -0.018108727, z: 104.3}
+--- !u!65 &4164428450871677826
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3262981755768985697}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.0689445, y: 3.811653, z: 200}
+  m_Center: {x: 0, y: -0.018108727, z: -99.9}
 --- !u!1 &4362945995512751619
 GameObject:
   m_ObjectHideFlags: 0
@@ -7813,6 +7841,30 @@ PrefabInstance:
     - target: {fileID: 2719997490764878216, guid: 5bc45232bec086144a39123ea33cddef, type: 3}
       propertyPath: m_TagString
       value: EditorOnly
+      objectReference: {fileID: 0}
+    - target: {fileID: 3722558092964426206, guid: 5bc45232bec086144a39123ea33cddef, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3722558092964426206, guid: 5bc45232bec086144a39123ea33cddef, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951545822028659440, guid: 5bc45232bec086144a39123ea33cddef, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951545822028659440, guid: 5bc45232bec086144a39123ea33cddef, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5924277233278251575, guid: 5bc45232bec086144a39123ea33cddef, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5924277233278251575, guid: 5bc45232bec086144a39123ea33cddef, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7669210041358500267, guid: 5bc45232bec086144a39123ea33cddef, type: 3}
       propertyPath: m_Layer
