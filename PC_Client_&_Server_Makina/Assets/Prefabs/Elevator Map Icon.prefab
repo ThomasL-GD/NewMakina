@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1191542904766861054}
   - component: {fileID: 7791295925360606444}
   m_Layer: 0
-  m_Name: Elevator Buttons
+  m_Name: Elevator Map Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,6 +62,7 @@ GameObject:
   - component: {fileID: 7459710308515802888}
   - component: {fileID: 1809700362114880717}
   - component: {fileID: 8622380917439522576}
+  - component: {fileID: 8129274279110444715}
   m_Layer: 0
   m_Name: Arrow Down
   m_TagString: EditorOnly
@@ -146,6 +147,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &8129274279110444715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2341168901336451248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a93766f32fcdb1446b4b82bd1f10c9e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_rotation: {x: 0, y: 180, z: 0}
 --- !u!1 &2719997490764878216
 GameObject:
   m_ObjectHideFlags: 0
@@ -158,6 +172,7 @@ GameObject:
   - component: {fileID: 1007682495320732421}
   - component: {fileID: 134471822028854284}
   - component: {fileID: 993785874016913627}
+  - component: {fileID: 4889635697955521252}
   m_Layer: 0
   m_Name: Arrow Up
   m_TagString: EditorOnly
@@ -242,6 +257,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &4889635697955521252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2719997490764878216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a93766f32fcdb1446b4b82bd1f10c9e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_rotation: {x: 0, y: 180, z: 0}
 --- !u!1 &7669210041358500267
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,6 +282,7 @@ GameObject:
   - component: {fileID: 8503974150362905885}
   - component: {fileID: 7148716714042653666}
   - component: {fileID: 234408557888313591}
+  - component: {fileID: 2591546535558551322}
   m_Layer: 0
   m_Name: Both Arrows
   m_TagString: Untagged
@@ -338,3 +367,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2591546535558551322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7669210041358500267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a93766f32fcdb1446b4b82bd1f10c9e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_rotation: {x: 0, y: 180, z: 0}
