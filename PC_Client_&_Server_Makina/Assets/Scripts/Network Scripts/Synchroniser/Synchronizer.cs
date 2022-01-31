@@ -1,20 +1,31 @@
 using UnityEngine;
 
 namespace Synchronizers {
-    public abstract class Synchronizer : MonoBehaviour {
+    /// <summary>
+    /// A singleton class which will be used to synchronize the Clients and the server
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public abstract class Synchronizer<T> : MonoBehaviour where T : Component {
 
-        //TODO Make the sttic apply dependin of the children type
+        protected static T m_instance;
         
-        /*private static int m_howManyMe = 0;
-
-        protected void Awake() {
-            Debug.Log("I wanna check something out", this);
-            m_howManyMe++;
-
-            if (m_howManyMe != 1) {
-                Debug.LogWarning($"There are duplicates ", this);
-                this.enabled = false;
+        public static T Instance
+        {
+            get
+            {
+                //Est-ce que l'objet existe déjà comme singleton
+                if (m_instance != null) return m_instance;
+                
+                m_instance = FindObjectOfType<T>();
+                
+                int amountOfInstances = FindObjectsOfType<T>().Length;
+                if (amountOfInstances > 1) Debug.LogWarning(amountOfInstances + $" Synchronizer Class Detected. Only {m_instance.name} will taken into account.");
+                
+                if (m_instance != null) return m_instance;
+                
+                Debug.LogError("trying to call a synchronizer that isn't instantiated in the project");
+                return null;
             }
-        }*/
+        }
     }
 }

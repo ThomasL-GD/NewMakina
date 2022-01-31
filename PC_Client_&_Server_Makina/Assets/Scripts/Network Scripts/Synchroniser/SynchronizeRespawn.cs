@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Synchronizers
 {
-    public class SynchronizeRespawn : Synchronizer
+    public class SynchronizeRespawn : Synchronizer<SynchronizeRespawn>
     {
         [SerializeField] [Tooltip("The PC player")]
         private GameObject m_player;
@@ -28,7 +28,6 @@ namespace Synchronizers
         public delegate void OnPlayerDeathDelegator();
 
         public static OnPlayerDeathDelegator OnPlayerDeath;
-        public delegate void OnPlayerRespawnDelegator();
 
         public static OnPlayerDeathDelegator OnPlayerRespawn;
 

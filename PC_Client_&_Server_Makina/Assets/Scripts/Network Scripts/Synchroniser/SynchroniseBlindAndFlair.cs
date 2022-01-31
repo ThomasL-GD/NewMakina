@@ -1,7 +1,8 @@
 using CustomMessages;
+using Synchronizers;
 using UnityEngine;
 
-public class SynchroniseBlindAndFlair : MonoBehaviour
+public class SynchroniseBlindAndFlair : Synchronizer<SynchroniseBlindAndFlair>
 {
     [SerializeField] private MoveUp m_flair;
     void Awake()

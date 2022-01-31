@@ -7,7 +7,7 @@ using Unity.Mathematics;
 using UnityEngine;
 
 namespace Synchronizers {
-    public class SynchronizeBeacons : Synchronizer {
+    public class SynchronizeBeacons : Synchronizer<SynchronizeBeacons> {
 
         [SerializeField][Tooltip("The beacon prefab that will be instantiated for each beacon")] private GameObject m_prefabBeaconActive = null;
         [SerializeField][Tooltip("The beacon prefab that will be instantiated for each beacon")] private GameObject m_prefabBeaconInactive = null;
