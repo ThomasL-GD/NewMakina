@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Synchronizers
 {
-    public class SynchronizerHearts : Synchronizer
+    public class SynchronizerHearts : Synchronizer<SynchronizerHearts>
     {
         
         [SerializeField] [Tooltip("The prefab of the hearts that will be spawned on server connection")]

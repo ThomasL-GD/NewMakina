@@ -3,13 +3,13 @@ using Network;
 using UnityEngine;
 
 namespace Synchronizers {
-    public class SynchronizeSendVrRig : Synchronizer {
+    public class SynchronizeSendVrRig : Synchronizer<SynchronizeSendVrRig> {
 
         [Header("VR elements to track")]
         [SerializeField] private Transform m_head;
         [SerializeField] private Transform m_leftHand;
         [SerializeField] private Transform m_rightHand;
-
+        
         
         public void Update() {
             if (m_head == null) {

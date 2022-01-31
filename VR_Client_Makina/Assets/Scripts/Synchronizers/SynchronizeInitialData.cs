@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Synchronizers
 {
-    public class SynchronizeInitialData : Synchronizer
+    public class SynchronizeInitialData : Synchronizer<SynchronizeInitialData>
     {
 
         [SerializeField][Tooltip("the TMP Text element that keeps track of the PC player's health")] private TextMeshPro m_pcPlayerHealthText;

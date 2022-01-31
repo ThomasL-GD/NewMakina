@@ -1,8 +1,9 @@
 using CustomMessages;
 using Network;
+using Synchronizers;
 using UnityEngine;
 
-public class SynchroniseBlindAndFlair : MonoBehaviour
+public class SynchroniseBlindAndFlair : Synchronizer<SynchroniseBlindAndFlair>
 {
     [SerializeField] private MoveUp m_flair;
     [SerializeField] private UIOpacityTransition m_blindObject;

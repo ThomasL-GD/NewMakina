@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Synchronizers {
 
-    public class SynchronizeGameEnd : Synchronizer
+    public class SynchronizeGameEnd : Synchronizer<SynchronizeGameEnd>
     {
         [SerializeField] private TextMeshPro m_text;
         [SerializeField] private GameObject[] m_GOToSetActive;
