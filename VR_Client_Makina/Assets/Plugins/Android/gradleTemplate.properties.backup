@@ -1,0 +1,6 @@
+org.gradle.jvmargs=-Xmx**JVM_HEAP_SIZE**M
+org.gradle.parallel=true
+android.enableR8=**MINIFY_WITH_R_EIGHT**
+**ADDITIONAL_PROPERTIES**
+
+android.useAndroidX = true // I added this property to fix error:  This project uses AndroidX dependencies, but the 'android.useAndroidX' property is not enabled. Set this property to true in the gradle.properties file and retry.
