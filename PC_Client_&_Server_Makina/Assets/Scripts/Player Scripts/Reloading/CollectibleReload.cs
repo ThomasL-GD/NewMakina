@@ -32,6 +32,10 @@ namespace Player_Scripts.Reloading {
             if (m_respawnCollectibles != null) {
                 m_respawnCollectibles.OnReloading += RespawnAll;
             }
+
+            foreach (Transform tran in m_collectiblesTransforms) {
+                m_collectibles.Add(new Collectible(tran));
+            }
         }
 
         private void FixedUpdate() {
