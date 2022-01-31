@@ -1,19 +1,51 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
+using UnityEditor.EditorTools;
 
-public class NavigateMesh : MonoBehaviour
+class WindowPlacerEditorTool : EditorWindow
 {
-    [SerializeField] private float m_height;
-    [SerializeField] private GameObject m_prefab;
-
-    private void OnDrawGizmosSelected()
+    /// <summary/> The function called when the MenuItem is called to create the window
+    [MenuItem("Tools/Window Placer 2")]
+    static void Init()
     {
-        //Getting the mesh of the object
-        if(!TryGetComponent(out MeshFilter filter)) return;
-        Mesh mesh = filter.sharedMesh;
+        // Instantiating or fetching the PrefabPicasso window 
+        WindowPlacerEditorTool window = (WindowPlacerEditorTool)GetWindow(typeof(WindowPlacerEditorTool));
+        
+        // Giving the window the "Prefab Picasso" name
+        window.titleContent = new GUIContent("Window Placer 2");
+        
+        // Display the window that has been created
+        window.Show();
+        
+        // Bring the window to the front
+        window.Focus();
+        
+        // Updating the GUI of the window
+        window.Repaint();
+    }
+    
+    /// <summary>
+    /// Adding GuiUpdate to the SceneView.duringSceneGui delegate called everytime
+    /// the sceneView is repainted when the editor window is opened
+    /// </summary>
+    void OnEnable() => SceneView.duringSceneGui += SceneViewUpdate;
 
+    /// <summary/> Adding GuiUpdate from the SceneView.duringSceneGui delegate when the editor window is closed
+    private void OnDisable() => SceneView.duringSceneGui -= SceneViewUpdate;
+    
+    public void SceneViewUpdate(EditorWindow window)
+    {
+        if(Selection.count == 0) return;
+        
+        GameObject selection = (GameObject)Selection.objects[0];
+        if(selection==null || !((GameObject)Selection.objects[0]).TryGetComponent(out MeshFilter filter)) return;
+        
+        Mesh mesh = filter.sharedMesh;
+        
+        
         // making a list of all the triangles of the mesh
-        List<triangle> triangles = new List<triangle>();
+        List<Triangle> triangles = new List<Triangle>();
 
         // Getting all of the triangles of the mesh 
         Vector3[] v = mesh.vertices;
@@ -21,14 +53,14 @@ public class NavigateMesh : MonoBehaviour
         int[] tr = mesh.triangles;
         
         for (int i = 0; i < tr.Length;) 
-            triangles.Add(new triangle(v[tr[i]], n[tr[i++]], v[tr[i]], n[tr[i++]], v[tr[i]], n[tr[i]], tr[i++]));
+            triangles.Add(new Triangle(v[tr[i]], n[tr[i++]], v[tr[i]], n[tr[i++]], v[tr[i]], n[tr[i]], tr[i++]));
         
         List<Intersections> intersections = new List<Intersections>();
 
         foreach (var triangle in triangles)
         {
             List<Intersections> localLine = new List<Intersections>();
-            triangle.DrawHorizontalLineAlongMesh(transform.position,m_height,transform.rotation, transform.localScale, out localLine);
+            triangle.DrawHorizontalLineAlongMesh(selection.transform.position,0,selection.transform.rotation, selection.transform.localScale, out localLine);
             foreach (var item in localLine)
             {
                 bool canAdd = true;
@@ -39,6 +71,7 @@ public class NavigateMesh : MonoBehaviour
                     if(intersections[i].position == item.position)
                     {
                         intersections[i].triangles.Add(item.triangles[0]);
+                        intersections[i].normal.Add(item.normal[0]);
                         canAdd = false;
                     }
                 }
@@ -48,7 +81,7 @@ public class NavigateMesh : MonoBehaviour
 
         List<Link> links = new List<Link>();
         
-        Gizmos.color = Color.red;
+        Handles.color = Color.red;
         
         for (int i = 0; i < intersections.Count; i++)
         {
@@ -59,8 +92,8 @@ public class NavigateMesh : MonoBehaviour
                 {
                     for (int l = 0; l < intersections[j].triangles.Count; l++)
                     {
-                        if(intersections[i].triangles[k] == intersections[j].triangles[l])
-                            links.Add(new Link(intersections[i].position,intersections[j].position));
+                        if (intersections[i].triangles[k] == intersections[j].triangles[l])
+                            links.Add(new Link(intersections[i].position, intersections[j].position,intersections[i].normal[k]));
                     }
                 }
             }
@@ -99,34 +132,39 @@ public class NavigateMesh : MonoBehaviour
             }
         }
         
-        Debug.Log(links.Count);
+        // Debug.Log(links.Count);
         foreach (var link in links) link.DrawLink();
 
-        if(!m_prefab.TryGetComponent(out MeshFilter prefabMeshFilter)) return;
-
-        Mesh prefabMesh = prefabMeshFilter.sharedMesh;
-        Bounds prefabBounds = prefabMesh.bounds;
+        // if(!m_prefab.TryGetComponent(out MeshFilter prefabMeshFilter)) return;
+        //
+        // Mesh prefabMesh = prefabMeshFilter.sharedMesh;
+        // Bounds prefabBounds = prefabMesh.bounds;
     }
-
+    
     class Link
     {
         public Vector3 A;
         public Vector3 B;
+        public Vector3 normal;
 
-        public Link(Vector3 p_A, Vector3 p_B)
+        public Link(Vector3 p_A, Vector3 p_B, Vector3 p_normal)
         {
             A = p_A;
             B = p_B;
+            normal = p_normal;
         }
 
         public void DrawLink()
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(A, B);
-            Gizmos.color = Color.yellow;
+            Handles.color = Color.red;
+            Handles.DrawLine(A, B);
+            Handles.color = Color.yellow;
             float radius = .1f;
-            Gizmos.DrawWireSphere(A,radius);
-            Gizmos.DrawWireSphere(B,radius);
+            Handles.DrawWireCube(A,radius * Vector3.one);
+            Handles.DrawWireCube(B,radius * Vector3.one);
+            Handles.color = Color.green;
+            Vector3 origin = A + (B - A) / 2;
+            Handles.DrawLine(origin, origin+ (normal *1f));
         }
     }
     
@@ -134,17 +172,17 @@ public class NavigateMesh : MonoBehaviour
     {
         public Vector3 position;
         public List<int> triangles;
+        public List<Vector3> normal;
     }
     
-    struct triangle
+    struct Triangle
     {
         public Vector3 vertex1;
         public Vector3 vertex2;
         public Vector3 vertex3;
         public Vector3 normal;
         public int triangleId;
-        
-        public triangle(Vector3 p_v1,Vector3 p_n1,Vector3 p_v2,Vector3 p_n2,Vector3 p_v3,Vector3 p_n3, int id)
+        public Triangle(Vector3 p_v1,Vector3 p_n1,Vector3 p_v2,Vector3 p_n2,Vector3 p_v3,Vector3 p_n3, int id)
         {
             vertex1 = p_v1;
             vertex2 = p_v2;
@@ -161,21 +199,19 @@ public class NavigateMesh : MonoBehaviour
 
             if ((CheckIfInCameraView(p_cam, p_position + v1) && CheckIfInCameraView(p_cam, p_position + v2)
                                                              && CheckIfInCameraView(p_cam, p_position + v3))) return;
-            Gizmos.color = Color.blue;
+            Handles.color = Color.blue;
 
-            Gizmos.DrawLine(p_position + v1,p_position + v2);
-            Gizmos.DrawLine(p_position + v2,p_position + v3);
-            Gizmos.DrawLine(p_position + v3,p_position + v1);
+            Handles.DrawLine(p_position + v1,p_position + v2);
+            Handles.DrawLine(p_position + v2,p_position + v3);
+            Handles.DrawLine(p_position + v3,p_position + v1);
 
-            Color color = Gizmos.color;
+            Color color = Handles.color;
             color.a = .5f;
-            Gizmos.color = color;
+            Handles.color = color;
             Mesh face = new Mesh();
-            face.vertices = new[] {v1,v2,v3};
+            face.vertices = new[] {vertex1,vertex2,vertex3};
             face.triangles = new[] {0,1,2};
             face.normals = new[] {normal,normal,normal};
-            
-            Gizmos.DrawMesh(face,p_position + -Vector3.Scale(p_cam.transform.forward * .01f, p_scale));
         }
 
         public void DrawHorizontalLineAlongMesh(Vector3 p_position, float p_lineHeight, Quaternion p_rotation, Vector3 p_scale, out List<Intersections> p_intersections)
@@ -184,7 +220,7 @@ public class NavigateMesh : MonoBehaviour
             Vector3 v1 = Vector3.Scale(p_rotation * vertex1, p_scale);
             Vector3 v2 = Vector3.Scale(p_rotation * vertex2, p_scale);
             Vector3 v3 = Vector3.Scale(p_rotation * vertex3, p_scale);
-            
+            Vector3 n = p_rotation * normal;
             bool tooHigh = v1.y >= p_lineHeight && v2.y >= p_lineHeight && v3.y >= p_lineHeight;
             bool tooLow = v1.y <= p_lineHeight && v2.y <= p_lineHeight && v3.y <= p_lineHeight;
             
@@ -196,20 +232,20 @@ public class NavigateMesh : MonoBehaviour
                 if (GetSegmentPlaneIntersection(v1, v2, out intersection, p_lineHeight))
                 {
                     intersection += p_position;
-                    p_intersections.Add(new Intersections(){position = intersection, triangles = new List<int>(){triangleId} });
+                    p_intersections.Add(new Intersections(){position = intersection, triangles = new List<int>(){triangleId} , normal = new List<Vector3>(){n}});
                 }
                     
                 
                 if (GetSegmentPlaneIntersection(v2, v3, out intersection, p_lineHeight))
                 {
                     intersection += p_position;
-                    p_intersections.Add(new Intersections(){position = intersection, triangles = new List<int>(){triangleId} });
+                    p_intersections.Add(new Intersections(){position = intersection, triangles = new List<int>(){triangleId} , normal = new List<Vector3>(){n}});
                 }
                 
                 if (GetSegmentPlaneIntersection(v3, v1, out intersection, p_lineHeight))
                 {
                     intersection += p_position;
-                    p_intersections.Add(new Intersections(){position = intersection, triangles = new List<int>(){triangleId} });
+                    p_intersections.Add(new Intersections(){position = intersection, triangles = new List<int>(){triangleId} , normal = new List<Vector3>(){n}});
                 }
             }
         }
