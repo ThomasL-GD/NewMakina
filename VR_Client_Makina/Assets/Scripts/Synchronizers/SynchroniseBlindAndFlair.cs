@@ -18,8 +18,10 @@ public class SynchroniseBlindAndFlair : Synchronizer<SynchroniseBlindAndFlair>
     private void ActivateFlair(ActivateFlair p_activateflair) =>
         m_flair.StartRaise(p_activateflair.startPosition);
 
-    private void FlairInitialData(InitialData p_initialdata) =>
+    private void FlairInitialData(InitialData p_initialdata) {
         m_flair.SetRaiseSpeedAndTime(p_initialdata.flairRaiseSpeed,p_initialdata.flairDetonationTime);
+        DeactivateBlindness(new DeActivateBlind());
+    }
     
     void ActivateBlindness(ActivateBlind p_activateBlind) 
     {

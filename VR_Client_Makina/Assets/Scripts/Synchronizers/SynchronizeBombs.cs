@@ -46,13 +46,19 @@ namespace Synchronizers {
             
             MyNetworkManager.OnReceiveSpawnBomb += SpawnBomb;
             MyNetworkManager.OnReceiveBombExplosion += ExplosionFeedback;
-            MyNetworkManager.OnReceiveInitialData += SetMaxBombsSlots;
+            MyNetworkManager.OnReceiveInitialData += ReceiveIntialData;
         }
 
-        /// <summary>Just sets maxSlotsForBombs according to the server's InitialData</summary>
+        /// <summary>Just sets maxSlotsForBombs according to the server's InitialData
+        /// Additionally and supposically, resets everything too restart a game</summary>
         /// <param name="p_initialData">The message sent by the server</param>
-        private void SetMaxBombsSlots(InitialData p_initialData) {
+        private void ReceiveIntialData(InitialData p_initialData) {
             m_maxSlotsLoading = p_initialData.maximumBombsCount;
+
+            foreach (BombInfo info in m_bombs) {
+                info.transform.GetComponent<BombBehavior>().DestroyMaSoul();
+            }
+            m_bombs.Clear();
         }
 
         private void Update() {
@@ -92,7 +98,7 @@ namespace Synchronizers {
         /// <param name="p_serverID">The server ID of the bomb</param>
         public void ExplodeLol(int p_index, float p_serverID) {
 
-            int? index = FindBeaconFromID(p_index, p_serverID);
+            int? index = FindBombFromID(p_index, p_serverID);
             Debug.LogWarning($"The index value is {index} but the initial one was {p_index}, the list contains {m_bombs.Count} elements");
             
             MyNetworkManager.singleton.SendVrData(new BombExplosion(){
@@ -134,7 +140,7 @@ namespace Synchronizers {
         }
 
         public void ChangeMaterialOfABomb(int p_index, float p_serverID) {
-            int index = FindBeaconFromID(p_index, p_serverID)??-1;
+            int index = FindBombFromID(p_index, p_serverID)??-1;
             m_bombs[index].transform.GetComponent<MeshRenderer>().material.color = m_colorWhenAlmostExploding;
         }
         
@@ -142,7 +148,7 @@ namespace Synchronizers {
         /// <param name="p_index"> the estimated index of the wanted bomb </param>
         /// <param name="p_beaconID"> the ID of the wanted bomb </param>
         /// <returns> returns the index of the beacon with the right ID if none are found, returns null </returns>
-        private int? FindBeaconFromID(int p_index, float p_beaconID)
+        private int? FindBombFromID(int p_index, float p_beaconID)
         {
             int index = p_index;
             float ID = p_beaconID;
