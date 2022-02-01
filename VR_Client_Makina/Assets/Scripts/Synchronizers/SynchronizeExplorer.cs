@@ -7,7 +7,8 @@ using Synchronizers;
 using UnityEngine;
 
 namespace Synchronizers {
-    public class SynchronizeExplorer : Synchronizer {
+    public class SynchronizeExplorer : Synchronizer<SynchronizeExplorer>
+    {
 
         [SerializeField] private Transform m_explorerTransform = null;
         [SerializeField] private Transform m_explorerHeadTransform = null;

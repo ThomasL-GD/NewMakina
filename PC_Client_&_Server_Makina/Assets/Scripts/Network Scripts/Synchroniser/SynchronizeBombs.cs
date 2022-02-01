@@ -4,7 +4,7 @@ using CustomMessages;
 using UnityEngine;
 
 namespace Synchronizers {
-    public class SynchronizeBombs : MonoBehaviour {
+    public class SynchronizeBombs : Synchronizer<SynchronizeBombs> {
 
         [SerializeField,Tooltip("The bomb prefab that will be instantiated")]
         private GameObject m_prefabBomb = null;

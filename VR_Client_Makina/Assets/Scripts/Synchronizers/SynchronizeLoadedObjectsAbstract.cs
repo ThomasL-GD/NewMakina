@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Synchronizers {
     
-    public abstract class SynchronizeLoadedObjectsAbstract : Synchronizer {
+    public abstract class SynchronizeLoadedObjectsAbstract : Synchronizer<SynchronizeLoadedObjectsAbstract> {
 
         [Header("Loading in Arm")]
         [SerializeField] public Transform[] m_loadingPositions;

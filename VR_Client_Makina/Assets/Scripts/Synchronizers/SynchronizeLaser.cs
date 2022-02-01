@@ -6,7 +6,8 @@ using UnityEngine;
 using UnityEngine.PlayerLoop;
 
 namespace Synchronizers {
-    public class SynchronizeLaser : Synchronizer {
+    public class SynchronizeLaser : Synchronizer<SynchronizeLaser>
+    {
         
         [SerializeField] private LineRenderer m_laserAiming;
         

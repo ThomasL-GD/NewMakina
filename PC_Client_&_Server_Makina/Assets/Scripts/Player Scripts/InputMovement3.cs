@@ -596,8 +596,10 @@ namespace Player_Scripts
             float intensity = m_headBobIntensity * (speed / m_maxMovementSpeedSprinting);
             
             float time = (m_headBobPreviousTime % invertedSpeed)/ invertedSpeed;
-            
+
+#if UNITY_EDITOR
             s_headBobCurvePositionX = time;
+#endif
             m_cameraTr.localPosition =  Vector3.up * (m_originalCameraHeight + m_headBobAnimationCurve.Evaluate(time) * (intensity / 2f));
         }
 

@@ -1,22 +1,31 @@
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Synchronizers {
-    public abstract class Synchronizer/*<T>*/ : MonoBehaviour /*where T : Synchronizer<T> */{
-        
-        //TODO repair this coz it ain't working properly and is f*cking useful (and fancy ( ͡° ͜ʖ ͡°) )
-        /*private static int howManyMe = 0;
-        public static T halfSingleton = null;
+    /// <summary>
+    /// A singleton class which will be used to synchronize the Clients and the server
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public abstract class Synchronizer<T> : MonoBehaviour where T : Component {
 
-        protected void Awake() {
-            Debug.Log("I wanna check something out", this);
-            howManyMe++;
-            halfSingleton = this;
-            
-            if (howManyMe != 1) {
-                Debug.LogError("                                                         c=====e\nH\n____________                                         _,,_H__\n(__((__((___()                                       //|     |\n(__((__((___()()_____________________________________// |ACME |\n(__((__((___()()()------------------------------------'  |_____|", this);
-                this.enabled = false;
+        protected static T m_instance;
+        
+        public static T Instance
+        {
+            get
+            {
+                //Est-ce que l'objet existe déjà comme singleton
+                if (m_instance != null) return m_instance;
+                
+                m_instance = FindObjectOfType<T>();
+                
+                int amountOfInstances = FindObjectsOfType<T>().Length;
+                if (amountOfInstances > 1) Debug.LogWarning(amountOfInstances + $" Synchronizer Class Detected. Only {m_instance.name} will taken into account.");
+                
+                if (m_instance != null) return m_instance;
+                
+                Debug.LogError("trying to call a synchronizer that isn't instantiated in the project");
+                return null;
             }
-        }*/
+        }
     }
 }

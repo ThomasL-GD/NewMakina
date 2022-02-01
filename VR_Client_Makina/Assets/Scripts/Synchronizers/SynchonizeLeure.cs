@@ -1,8 +1,9 @@
 using CustomMessages;
 using Network;
+using Synchronizers;
 using UnityEngine;
 
-public class SynchonizeLeure : MonoBehaviour
+public class SynchonizeLeure : Synchronizer<SynchonizeLeure>
 {
     [SerializeField] private GameObject m_leure;
     // Start is called before the first frame update

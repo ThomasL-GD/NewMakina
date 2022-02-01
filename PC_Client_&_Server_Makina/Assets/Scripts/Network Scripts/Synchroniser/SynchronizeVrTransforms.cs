@@ -9,7 +9,7 @@ namespace Synchronizers
     /// these transforms belong to VR player's :  head, right hand, and left hand
     /// </summary>
 
-    public class SynchronizeVrTransforms : Synchronizer
+    public class SynchronizeVrTransforms : Synchronizer<SynchronizeVrTransforms>
     {
         /// <summary>
         /// The Transforms of Pc Representations of the VR player

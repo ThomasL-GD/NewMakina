@@ -8,7 +8,7 @@
 
  namespace Synchronizers
  {
-     public class SynchronizePlayerPosition : Synchronizer
+     public class SynchronizePlayerPosition : Synchronizer<SynchronizePlayerPosition>
      {
          [SerializeField] private Transform m_player;
          [SerializeField] private Transform m_playerHead;

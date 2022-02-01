@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using CustomMessages;
+using Synchronizers;
 using TMPro;
 using UnityEngine;
 
-public class SynchronizeGameEnd : MonoBehaviour
+public class SynchronizeGameEnd : Synchronizer<SynchronizeGameEnd>
 {
     [SerializeField] private TextMeshProUGUI m_text;
     

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Synchronizers
 {
-    public class SynchronizeInitialData : Synchronizer
+    public class SynchronizeInitialData : Synchronizer<SynchronizeInitialData>
     {
 
         [SerializeField][Tooltip("the GUI element that keeps track of the PC player's health")] private RawImage m_pcPlayerHealth;

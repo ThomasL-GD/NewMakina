@@ -1,8 +1,9 @@
 using UnityEngine;
 using CustomMessages;
 using Network;
+using Synchronizers;
 
-public class SyncronizeInvisibility : MonoBehaviour
+public class SyncronizeInvisibility : Synchronizer<SyncronizeInvisibility>
 {
     [SerializeField] private MeshRenderer[] m_playerMeshRenderers;
 
