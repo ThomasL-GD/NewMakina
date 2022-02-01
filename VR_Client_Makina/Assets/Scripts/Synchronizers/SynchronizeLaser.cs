@@ -42,13 +42,22 @@ namespace Synchronizers {
         private bool m_isLoading = false;
 
         // Start is called before the first frame update
-        private void Awake()
-        {
+        private void Awake() {
+
+            MyNetworkManager.OnReceiveInitialData += ReceiveInitialData;
             MyNetworkManager.OnLaserAimingUpdate += SynchroniseLaserAiming;
             MyNetworkManager.OnLaserShootingUpdate += SynchroniseLaserAiming;
             MyNetworkManager.OnLaserShootingUpdate += SynchroniseShot;
 
             m_laserAiming.enabled = false;
+        }
+
+        /// <summary/> Function called when the client received the initial data
+        /// <param name="p_initialData"> The message sent by the server</param>
+        void ReceiveInitialData(InitialData p_initialData) {
+            m_elapsedTime = 0f;
+            m_isTriggerPressed = false;
+            m_isLoading = false;
         }
 
         /// <summary>
