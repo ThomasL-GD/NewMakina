@@ -1,16 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.EditorTools;
+using static UnityEngine.Mathf;
+using static UnityEditor.EditorGUILayout;
+using static UnityEngine.GUILayout;
 
-class WindowPlacerEditorTool : EditorWindow
+class WindowPlacer2 : EditorWindow
 {
+    
+    private GameObject m_window;
+    private GameObject m_parent;
+    
+    private float m_spacing=1f;
+    private float m_lineHeight=0f;
+    private float m_margin;
+
     /// <summary/> The function called when the MenuItem is called to create the window
     [MenuItem("Tools/Window Placer 2")]
     static void Init()
     {
         // Instantiating or fetching the PrefabPicasso window 
-        WindowPlacerEditorTool window = (WindowPlacerEditorTool)GetWindow(typeof(WindowPlacerEditorTool));
+        WindowPlacer2 window = (WindowPlacer2)GetWindow(typeof(WindowPlacer2));
         
         // Giving the window the "Prefab Picasso" name
         window.titleContent = new GUIContent("Window Placer 2");
@@ -60,7 +70,7 @@ class WindowPlacerEditorTool : EditorWindow
         foreach (var triangle in triangles)
         {
             List<Intersections> localLine = new List<Intersections>();
-            triangle.DrawHorizontalLineAlongMesh(selection.transform.position,0,selection.transform.rotation, selection.transform.localScale, out localLine);
+            triangle.DrawHorizontalLineAlongMesh(selection.transform.position,m_lineHeight,selection.transform.rotation, selection.transform.localScale, out localLine);
             foreach (var item in localLine)
             {
                 bool canAdd = true;
@@ -135,10 +145,9 @@ class WindowPlacerEditorTool : EditorWindow
         // Debug.Log(links.Count);
         foreach (var link in links) link.DrawLink();
 
-        // if(!m_prefab.TryGetComponent(out MeshFilter prefabMeshFilter)) return;
-        //
-        // Mesh prefabMesh = prefabMeshFilter.sharedMesh;
-        // Bounds prefabBounds = prefabMesh.bounds;
+        
+        
+        
     }
     
     class Link
@@ -274,5 +283,18 @@ class WindowPlacerEditorTool : EditorWindow
             
             return viewportPoint.x !< 0 && viewportPoint.x !> 1 && viewportPoint.y !< 0 && viewportPoint.y !> 1;
         }
+    }
+    
+    private void OnGUI()
+    {
+        m_window = (GameObject) ObjectField("windowPrefab",m_window,typeof(object),true);
+        
+        if(m_window == null) return;
+        
+        m_spacing=FloatField("spacing", m_spacing);
+        m_margin=FloatField("horizontal", m_margin);
+        m_lineHeight=FloatField("lineHeight", m_lineHeight);
+        
+        m_parent = (GameObject) ObjectField("windowPrefab",m_parent,typeof(object),true);
     }
 }
