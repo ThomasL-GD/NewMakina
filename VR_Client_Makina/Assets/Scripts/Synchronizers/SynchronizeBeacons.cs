@@ -82,13 +82,11 @@ namespace Synchronizers {
             
             //Destroying every beacon ψ(` ͜ʖ´)ψ
             for(int i = 0; i < m_beacons.Count; i++) {
-                m_beacons[i].beaconScript.DestroyMaSoul();
                 
-                DestroyedBeacon param = new DestroyedBeacon {
-                    index = i,
-                    beaconID = m_beacons[i].serverID
-                };
-                DestroyBeacon(param);
+                //If the beacon is dep^loyed, we can't destroy it because it is already destroyed
+                if(!m_beacons[i].isOnTheGroundAndSetUp) m_beacons[i].beaconScript.DestroyMaSoul();
+                
+                Destroy(m_beacons[FindBeaconFromID(i, m_beacons[i].serverID)??0].deployedBeaconScript.gameObject);
             }
             
             m_beacons.Clear();

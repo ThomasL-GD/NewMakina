@@ -115,6 +115,8 @@ namespace Synchronizers {
             }
 
             if (OVRInput.Get(m_input) < m_upTriggerValue) {
+                
+                MyNetworkManager.singleton.SendVrData<VrLaser>(new VrLaser(){laserState = LaserState.CancelAiming});
                 m_isTriggerPressed = false;
                 m_isLoading = false;
                 m_laserAiming.enabled = false;
