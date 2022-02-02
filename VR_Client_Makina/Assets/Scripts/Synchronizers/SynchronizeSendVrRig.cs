@@ -8,7 +8,7 @@ namespace Synchronizers {
         [Header("VR elements to track")]
         [SerializeField] private Transform m_head;
         [SerializeField] private Transform m_leftHand;
-        [SerializeField] private Transform m_rightHand;
+        [SerializeField] public Transform m_rightHand;
         
         
         public void Update() {
