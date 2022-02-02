@@ -27,11 +27,7 @@ public class ClientManager : MonoBehaviour
     /// <summary/> The delegate that will be called each time the pc player's invisibility is updated
     public delegate void InvisibilityDelegator(PcInvisibility p_pcInvisibility);
     public static InvisibilityDelegator OnReceiveInvisibility;
-    
-    /// <summary/> The delegates that will be called each time the server updates the hearts
-    public delegate void HeartTransformDelegator(HeartTransforms p_heartTransforms);
-    public static HeartTransformDelegator OnReceiveHeartTransforms;
-    
+
     public delegate void HeartBreakDelegator(HeartBreak p_heartBreak);
     public static HeartBreakDelegator OnReceiveHeartBreak;
     
@@ -122,7 +118,6 @@ public class ClientManager : MonoBehaviour
         NetworkClient.RegisterHandler<Laser>(ReceiveLaser);
         NetworkClient.RegisterHandler<PcInvisibility>(ReceiveInvisibility);
         NetworkClient.RegisterHandler<ClientConnect>(ReceiveClientConnect);
-        NetworkClient.RegisterHandler<HeartTransforms>(ReceiveHeartTranforms);
         NetworkClient.RegisterHandler<HeartBreak>(ReceiveHeartBreak);
         NetworkClient.RegisterHandler<BeaconsPositions>(ReceiveBeaconsPositions);
         NetworkClient.RegisterHandler<DestroyedBeacon>(ReceiveDestroyedBeacon);
@@ -175,12 +170,7 @@ public class ClientManager : MonoBehaviour
     /// <param name="p_beaconDetectionUpdate"> The message sent by the Server to the Client </param>
     private void ReceiveBeaconDetectionUpdate(BeaconDetectionUpdate p_beaconDetectionUpdate) => OnReceiveBeaconDetectionUpdate?.Invoke(p_beaconDetectionUpdate);
 
-    
-    /// <summary/> The function called when the client receives a message of type HeartTransforms
-    /// <param name="p_heartTransforms"> The message sent by the Server to the Client </param>
-    private void ReceiveHeartTranforms(HeartTransforms p_heartTransforms) => OnReceiveHeartTransforms?.Invoke(p_heartTransforms); 
-    
-    
+
     /// <summary/> The function called when the client receives a message of type HeartTransforms
     /// <param name="p_heartBreak"> The message sent by the Server to the Client </param>
     private void ReceiveHeartBreak(HeartBreak p_heartBreak) => OnReceiveHeartBreak?.Invoke(p_heartBreak); 

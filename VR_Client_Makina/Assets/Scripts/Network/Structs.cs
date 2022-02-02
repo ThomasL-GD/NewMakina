@@ -91,7 +91,12 @@ namespace CustomMessages
     {
         public bool isInvisible;
     }
-
+    
+    public struct RestartGame : NetworkMessage
+    {
+        
+    }
+    
     #endregion
 
     #region Lazer
