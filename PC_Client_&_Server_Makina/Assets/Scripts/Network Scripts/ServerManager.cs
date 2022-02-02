@@ -146,10 +146,6 @@ public class ServerManager : MonoBehaviour
             Debug.LogWarning("BROOOOOOOOOOOOOOOOOOO ! There are too many Singletons broda", this);
         }else singleton = this;
 
-        #region Members assignment
-
-        #endregion
-        
         //linking NetworkManager functions
         // MyNetworkManager.del_onHostServer += StartGame;
         MyNetworkManager.del_onClientConnection += OnServerConnect;
@@ -250,6 +246,8 @@ public class ServerManager : MonoBehaviour
     /// </summary>
     private void StartGame()
     {
+        
+        #region Members assignment
         //Resetting the serialized values
         m_tickrate = f_tickrate;
         m_laserRadius = f_laserRadius;
@@ -311,8 +309,9 @@ public class ServerManager : MonoBehaviour
         m_leureBuffer = new LeureTransform();
         m_flairBuffer = new ActivateFlair();
         m_activateBlindBuffer = new ActivateBlind();
-        
 
+        #endregion
+        
         InitialData initialData = new InitialData() {
             healthPcPlayer = m_pcPlayerHealth,
             healthVrPlayer = m_vrPlayerHealth,
@@ -582,32 +581,6 @@ public class ServerManager : MonoBehaviour
         {
             StartGame();
         }
-
-        
-        InitialData initialData = new InitialData() {
-            healthPcPlayer = m_pcPlayerHealth,
-            healthVrPlayer = m_vrPlayerHealth,
-            beaconRange = m_beaconRange,
-            maximumBeaconCount = m_maxBeacons,
-            maximumBombsCount = m_maxBombs,
-            elevatorSpeed = m_elevatorSpeed,
-            elevatorWaitTime = m_elevatorWaitTime,
-            flairRaiseSpeed = m_flairRaiseSpeed,
-            flairDetonationTime = m_flairDetonationTime,
-            bombDetonationTime = m_bomDetonationTime
-        };
-        
-        p_conn.Send(initialData);
-        
-        if(m_beaconsPositionsBuffer.data != null)
-            foreach (BeaconData data in m_beaconsPositionsBuffer.data)
-                p_conn.Send(new SpawnBeacon() {beaconID = data.beaconID});
-        
-        if(m_bombsPositionsBuffer.data != null)
-            foreach (BombData data in m_bombsPositionsBuffer.data)
-            {
-                p_conn.Send(new SpawnBomb() {bombID = data.bombID});
-            }
         
         // if(m_beaconsPositionsBuffer.data != null)
         //     foreach (BeaconData data in m_beaconsPositionsBuffer.data)
@@ -684,18 +657,18 @@ public class ServerManager : MonoBehaviour
             Vector3 startingPoint = m_vrTransformBuffer.positionRightHand;
             Vector3 direction = m_vrTransformBuffer.rotationRightHand * Vector3.forward;
             Vector3 playerPos = m_pcTransformBuffer.position + Vector3.up * m_laserCheckOffset/2f;
-            Vector3 laserCriticalPath = (playerPos + Vector3.up * m_laserCheckOffset/2f) - startingPoint;
+            Vector3 laserCriticalPath = (playerPos + Vector3.up * m_laserCheckOffset / 2f) - startingPoint;
             
             Debug.DrawLine(playerPos,playerPos + Vector3.up * m_laserCheckOffset/2f,Color.red,5f);
             
             // Hitboxes Verification (blame Blue)
             bool hitAWall = Physics.Raycast(startingPoint, laserCriticalPath.normalized,out RaycastHit hited, laserCriticalPath.magnitude,m_playerLayers,QueryTriggerInteraction.Ignore);
-            Debug.Log(hitAWall?"hit":"miss");
-            Debug.DrawRay(hited.point, Vector3.up * 4f, Color.yellow, 15f);
+            Debug.LogError(hitAWall?"hit an obstacle":"hit nothing");
+            Debug.DrawRay(startingPoint, laserCriticalPath, hitAWall ? Color.green : Color.red,15f);
             RaycastHit rayHit;
             bool hitSmth = Physics.Raycast(startingPoint, direction.normalized, out rayHit, 10000f, m_playerLayers, QueryTriggerInteraction.Ignore);
 
-            Debug.DrawRay(startingPoint, laserCriticalPath, hitAWall ? Color.green : Color.red, 15f);
+            //Debug.DrawRay(startingPoint, laserCriticalPath, hitAWall ? Color.green : Color.red, 15f);
             
             Debug.LogWarning($"The laser hit ? {hitAWall}", this);
             
@@ -729,7 +702,7 @@ public class ServerManager : MonoBehaviour
                 break; }
             }
             
-            // Packing the vallues in a neat little message
+            // Packing the values in a neat little message
             m_laserBuffer.origin = startingPoint;
             m_laserBuffer.rotation = m_vrTransformBuffer.rotationRightHand;
             m_laserBuffer.hitPosition = m_pcTransformBuffer.position;
