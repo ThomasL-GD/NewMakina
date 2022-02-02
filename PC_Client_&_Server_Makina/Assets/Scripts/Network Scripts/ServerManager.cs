@@ -573,8 +573,6 @@ public class ServerManager : MonoBehaviour
         if (client.client == ClientConnection.VrPlayer) m_vrNetworkConnection = p_conn;
         else if (client.client == ClientConnection.PcPlayer) m_pcNetworkConnection = p_conn;
 
-        p_conn.Send(new HeartTransforms(){positions = m_heartPositions, rotations = m_heartRotations});
-        
         InitialData initialData = new InitialData() {
             healthPcPlayer = m_pcPlayerHealth,
             healthVrPlayer = m_vrPlayerHealth,
@@ -584,7 +582,9 @@ public class ServerManager : MonoBehaviour
             elevatorSpeed = m_elevatorSpeed,
             elevatorWaitTime = m_elevatorWaitTime,
             flairRaiseSpeed = m_flairRaiseSpeed,
-            flairDetonationTime = m_flairDetonationTime
+            flairDetonationTime = m_flairDetonationTime,
+            heartPositions = m_heartPositions,
+            heartRotations = m_heartRotations
         };
         
         p_conn.Send(initialData);
