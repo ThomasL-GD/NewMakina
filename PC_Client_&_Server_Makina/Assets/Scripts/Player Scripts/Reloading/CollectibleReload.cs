@@ -11,7 +11,8 @@ namespace Player_Scripts.Reloading {
         [SerializeField] [Tooltip("If true, will show a wireframe sphere with the gizmos to show the radius of each beacon\nIf false, show nothing")] private bool m_shouldShowRadius = true;
         [SerializeField] [Tooltip("If true, will disable the ameObject of the collectible eaten\nIf false, will let them be")] private bool m_shouldDisableGameObjects = true;
 
-        [Space] [SerializeField] [Tooltip("The reloading method for the collectibles to appear again once they are eaten\nIf this is empty, they will never respawn")] private ReloadingAbstract m_respawnCollectibles = null;
+        [Space] [SerializeField,Tooltip("The reloading method for the collectibles to appear again once they are eaten\nIf this is empty, they will never respawn")]
+        private ReloadingAbstract m_respawnCollectibles = null;
         
         [Serializable] private class Collectible {
             public Transform collectibleTransform;
@@ -63,6 +64,9 @@ namespace Player_Scripts.Reloading {
 
         private void OnDrawGizmos() {
             if (!m_shouldShowRadius) return;
+            if (m_collectiblesTransforms == null) return;
+            if (m_collectiblesTransforms.Length == 0) return;
+            if (m_collectiblesTransforms[0] == null) return;
             
             if (Application.isEditor) {
                 foreach (Transform t in m_collectiblesTransforms) {

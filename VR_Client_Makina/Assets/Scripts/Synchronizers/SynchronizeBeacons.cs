@@ -49,7 +49,6 @@ namespace Synchronizers {
         }
         
         private List<BeaconInfo> m_beacons = new List<BeaconInfo>();
-        private BeaconBehavior[] m_beaconsInTheArm = null;
 
         public delegate void BeaconDelegator(BeaconBehavior p_beaconBehavior);
 
@@ -69,18 +68,34 @@ namespace Synchronizers {
         protected override void Start() {
             base.Start();
             
-            MyNetworkManager.OnReceiveInitialData += SetMaxBeaconsSlots;
+            MyNetworkManager.OnReceiveInitialData += ReceiveInitialData;
             MyNetworkManager.OnReceiveSpawnBeacon += CreateBeacon;
             MyNetworkManager.OnReceiveBeaconDetectionUpdate += UpdateDetection;
             MyNetworkManager.OnReceiveDestroyedBeacon += DestroyBeacon;
             MyNetworkManager.OnReceiveInitialData += SetRangeOfBeacons;
+            MyNetworkManager.OnReceiveGameEnd += Reset;
+        }
+
+        /// <summary>Is called by the OnReceiveGameEnd and destroys every beacon to be ready to launch a new game </summary>
+        /// <param name="p_p_gameend">The message sent by the server</param>
+        private void Reset(GameEnd p_p_gameend) {
+            
+            //Destroying every beacon ψ(` ͜ʖ´)ψ
+            for(int i = 0; i < m_beacons.Count; i++) {
+                
+                //If the beacon is dep^loyed, we can't destroy it because it is already destroyed
+                if(!m_beacons[i].isOnTheGroundAndSetUp) m_beacons[i].beaconScript.DestroyMaSoul();
+                
+                Destroy(m_beacons[FindBeaconFromID(i, m_beacons[i].serverID)??0].deployedBeaconScript.gameObject);
+            }
+            
+            m_beacons.Clear();
         }
 
         /// <summary>Just sets maxSlotsForBeacons according to the server's InitialData</summary>
         /// <param name="p_initialData">The message sent by the server</param>
-        private void SetMaxBeaconsSlots(InitialData p_initialData) {
+        private void ReceiveInitialData(InitialData p_initialData) {
             m_maxSlotsLoading = p_initialData.maximumBeaconCount;
-            m_beaconsInTheArm = new BeaconBehavior[m_maxSlotsLoading];
         }
 
         private void Update() {
@@ -142,8 +157,8 @@ namespace Synchronizers {
         
         /// <summary> Is called when we receive a DestroyedBeacon message from server </summary>
         /// <param name="p_destroyedBeacon">The message from the server</param>
-        private void DestroyBeacon(DestroyedBeacon p_destroyedBeacon)
-        {
+        private void DestroyBeacon(DestroyedBeacon p_destroyedBeacon) {
+            
             int? index = FindBeaconFromID(p_destroyedBeacon.index, p_destroyedBeacon.beaconID);
             if (index == null) {
                 Debug.LogError($"What the fuck is that, horrible {p_destroyedBeacon.index} c'est und des selling point la du jeu {p_destroyedBeacon.beaconID}");

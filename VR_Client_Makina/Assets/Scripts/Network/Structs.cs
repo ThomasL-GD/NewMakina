@@ -71,20 +71,14 @@ namespace CustomMessages
         public float elevatorWaitTime;
         public float flairRaiseSpeed;
         public float flairDetonationTime;
+        public Vector3[] heartPositions;
+        public Quaternion[] heartRotations;
         public float bombDetonationTime;
     }
 
     public struct ElevatorActivation : NetworkMessage
     {
         public int index;
-    }
-    
-    //TODO add this to that Initial Data
-    /// <summary/> The position and rotations of all the Hearts in the game
-    public struct HeartTransforms : NetworkMessage
-    {
-        public Vector3[] positions;
-        public Quaternion[] rotations;
     }
     
     /// <summary/> The index of a destroyed heart
@@ -97,6 +91,11 @@ namespace CustomMessages
     public struct PcInvisibility : NetworkMessage
     {
         public bool isInvisible;
+    }
+    
+    public struct RestartGame : NetworkMessage
+    {
+        
     }
 
     #endregion

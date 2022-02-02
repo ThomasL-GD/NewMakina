@@ -17,7 +17,12 @@ namespace Synchronizers
             ClientManager.OnReceiveLaserPreview += SynchroniseLaserPreshot;
             ClientManager.OnReceiveLaser += SynchroniseLaserPreshot;
             ClientManager.OnReceiveLaser += SynchroniseShot;
+            ClientManager.OnReceiveInitialData += ReceiveInitialData;
 
+            m_lazerPreshot.enabled = false;
+        }
+
+        private void ReceiveInitialData(InitialData pitialData) {
             m_lazerPreshot.enabled = false;
         }
 

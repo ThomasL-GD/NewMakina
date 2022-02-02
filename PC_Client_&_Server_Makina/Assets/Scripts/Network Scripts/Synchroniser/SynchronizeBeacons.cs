@@ -55,11 +55,21 @@ namespace Synchronizers {
             ClientManager.OnReceiveBeaconsPositions += UpdatePositions;
             ClientManager.OnReceiveDestroyedBeacon += DestroyBeacon;
             ClientManager.OnReceiveBeaconDetectionUpdate += UpdateDetection;
-            ClientManager.OnReceiveInitialData += UpdateBeaconRange;
+            ClientManager.OnReceiveInitialData += ReceiveInitialData;
             ClientManager.OnReceiveActivateBeacon += UpdateBeaconActivation;
+            ClientManager.OnReceiveGameEnd += Reset;
             m_detectionFeedaback.enabled = false;
         }
-        
+
+        /// <summary>Will destroy all the beacons to be ready to launch another game </summary>
+        /// <param name="p_gameend">The message sent by the server</param>
+        private void Reset(GameEnd p_gameend) {
+            foreach (Beacons beacon in m_beacons) {
+                Destroy(beacon.beaconPrefabInstance);
+            }
+            m_beacons.Clear();
+        }
+
         /// <summary/> Updating a beacon to activate
         /// <param name="p_activatebeacon"> the beacon data to activate </param>
         private void UpdateBeaconActivation(ActivateBeacon p_activatebeacon)
@@ -78,10 +88,11 @@ namespace Synchronizers {
 
 
 
-        /// <summary/> Updating the beacon range
-        /// <param name="p_initialdata"></param>
-        private void UpdateBeaconRange(InitialData p_initialdata) {
-            m_prefabBeaconActive.transform.localScale = Vector3.one * (p_initialdata.beaconRange * 2f);
+        /// <summary/> Receiving initial data
+        /// <param name="p_initialData"></param>
+        private void ReceiveInitialData(InitialData p_initialData) {
+            
+            m_prefabBeaconActive.transform.localScale = Vector3.one * (p_initialData.beaconRange * 2f);
         }
 
         /// <summary/> Updating the beacon positions

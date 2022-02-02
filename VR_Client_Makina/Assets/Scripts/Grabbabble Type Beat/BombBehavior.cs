@@ -15,7 +15,7 @@ public class BombBehavior : GrabbablePhysickedObject {
     [HideInInspector] public float m_serverID;
     [HideInInspector] public float m_explosionTimeOnceOnGround = 0f;
 
-    public delegate void DestroyBombDelegator(BombBehavior p_bombBehavior);
+    private delegate void DestroyBombDelegator(BombBehavior p_bombBehavior);
     private static DestroyBombDelegator OnDestroyBomb;
 
     protected override void Start() {
@@ -63,7 +63,8 @@ public class BombBehavior : GrabbablePhysickedObject {
         m_synchronizer.ExplodeLol(m_index, m_serverID);
         
         OnDestroyBomb?.Invoke(this);
-        Destroy(gameObject);
+        DestroyMaSoul();
+        //Destroy(gameObject);
     }
 
     /// <summary> </summary>

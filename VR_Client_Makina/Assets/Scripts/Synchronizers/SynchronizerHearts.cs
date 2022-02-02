@@ -15,28 +15,39 @@ namespace Synchronizers
         [SerializeField] private AudioSource m_audioSource;
         [SerializeField] private AudioClip m_heartDestroyedSound = null;
         [SerializeField] private float m_heartDestructionTime = 6f;
-        [SerializeField] private float m_heartLazerFlashPhase = 1f;
+        [SerializeField] private float m_heartLaserFlashPhase = 0.5f;
         
         
         private GameObject[] m_hearts;
         
         void Awake()
         {
-            MyNetworkManager.OnReceiveHeartTransforms += ReceiveHeartTransforms;
+            MyNetworkManager.OnReceiveInitialData += ReceiveInitialData;
             MyNetworkManager.OnReceiveHeartBreak += ReceiveHeartBreak;
+            MyNetworkManager.OnReceiveGameEnd += Reset;
         }
 
-        /// <summary/> The function called when the heart positions are updated
-        /// <param name="p_heartTransforms"></param>
-        private void ReceiveHeartTransforms(HeartTransforms p_heartTransforms)
-        {
+        /// <summary>Destroy every heart to be ready to launch another game </summary>
+        /// <param name="p_gameend">The message sent by the server</param>
+        private void Reset(GameEnd p_gameend) {
+
+            //Destroy them all （￣ｗ￣）Ψ
+            foreach (GameObject heart in m_hearts) {
+                Destroy(heart);
+            }
+        }
+
+        /// <summary/> The function called when the heart heartPositions are updated
+        /// <param name="p_initialData"></param>
+        private void ReceiveInitialData(InitialData p_initialData) {
+            
             // Making a list of hearts to be able to modify the hearts array
             List<GameObject> hearts = new List<GameObject>();
             
             // Adding the hearts to the list
-            for (int i = 0; i < p_heartTransforms.positions.Length; i++)
+            for (int i = 0; i < p_initialData.heartPositions.Length; i++)
             {
-                hearts.Add(Instantiate(m_heartPrefabs, p_heartTransforms.positions[i], p_heartTransforms.rotations[i]));
+                hearts.Add(Instantiate(m_heartPrefabs, p_initialData.heartPositions[i], p_initialData.heartRotations[i]));
                 
                 if (hearts[i].TryGetComponent( out HeartIdentifier hi))
                     hi.heartIndex = i;
@@ -93,7 +104,7 @@ namespace Synchronizers
             while (p_heartLineRenderer != null)
             {
                 p_heartLineRenderer.enabled = !p_heartLineRenderer.enabled;
-                yield return new WaitForSeconds(m_heartLazerFlashPhase);
+                yield return new WaitForSeconds(m_heartLaserFlashPhase);
             }
         }
     }
