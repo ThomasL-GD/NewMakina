@@ -148,7 +148,7 @@ public class ServerManager : MonoBehaviour
         #endregion
         
         //linking NetworkManager functions
-        MyNetworkManager.del_onHostServer += StartGame;
+        // MyNetworkManager.del_onHostServer += StartGame;
         MyNetworkManager.del_onClientConnection += OnServerConnect;
         
         //Setting up senders
@@ -247,56 +247,39 @@ public class ServerManager : MonoBehaviour
     /// </summary>
     private void StartGame()
     {
+        //Resetting the serialized values
         m_tickrate = f_tickrate;
-
         m_laserRadius = f_laserRadius;
-
         m_elevatorSpeed = f_elevatorSpeed;
-        
         m_elevatorWaitTime = f_elevatorWaitTime;
-        
         m_heartTransforms = f_heartTransforms;
-        
         m_vrPlayerHealth = f_vrPlayerHealth;
-        
         m_pcPlayerHealth = f_pcPlayerHealth;
-        
         m_beaconSpawnPositions = f_beaconSpawnPositions;
-
         m_initialBeacons = f_initialBeacons;
-        
         m_initialBeaconSpawnDelay = f_initialBeaconSpawnDelay;
-        
         m_beaconRespawnTime = f_beaconRespawnTime;
-        
         m_beaconLifeTime = f_beaconLifeTime;
-        
-        m_maxBeacons = f_maxBeacons; 
-        
+        m_maxBeacons = f_maxBeacons;
         m_beaconRange = f_beaconRange;
-
         m_bombRespawnTime = f_bombRespawnTime;
-        
         m_maxBombs = f_maxBombs;
-        
         m_bombExplosionRange = f_bombExplosionRange;
-        
         m_flairRaiseSpeed = f_flairRaiseSpeed;
-        
         m_flairDetonationTime = f_flairDetonationTime;
-        
         m_flashDuration = f_flashDuration;
-        
         m_flashClamp = f_flashClamp;
-        
         m_laserCheckOffset = f_laserCheckOffset;
-
         m_playerLayers = f_playerLayers;
         
+        //Resetting the beacon values
         m_currentBeaconAmount = 0;
         m_currentBombAmount = 0;
-
         m_bombCoroutineRunning = false;
+
+        // Doing a small checkup
+        if (m_vrPlayerHealth > m_heartTransforms.Length) Debug.LogWarning("the Vr Player has more health than there are hearts... Big L?",this);
+        
         //Unpacking the heart position values from the transforms to send through messages
         List<Vector3> heartPositions = new List<Vector3>();
         List<Quaternion> heartRotations = new List<Quaternion>();
@@ -306,10 +289,11 @@ public class ServerManager : MonoBehaviour
             heartPositions.Add(pos.position);
             heartRotations.Add(pos.rotation);
         }
-
+        
         m_heartPositions = heartPositions.ToArray();
         m_heartRotations = heartRotations.ToArray();
         
+        //Resetting the buffers
         m_vrTransformBuffer = new VrTransform();
         m_pcTransformBuffer = new PcTransform();
         m_laserBuffer = new Laser();
@@ -324,8 +308,6 @@ public class ServerManager : MonoBehaviour
         m_flairBuffer = new ActivateFlair();
         m_activateBlindBuffer = new ActivateBlind();
         
-        if (m_vrPlayerHealth > m_heartTransforms.Length) Debug.LogWarning("the Vr Player has more health than there are hearts... Big L?",this);
-        
         //Coroutines
         if (!m_firstTime)
         {
@@ -337,6 +319,24 @@ public class ServerManager : MonoBehaviour
         {
             m_firstTime = false;
         }
+        
+        
+ 
+        InitialData initialData = new InitialData() {
+            healthPcPlayer = m_pcPlayerHealth,
+            healthVrPlayer = m_vrPlayerHealth,
+            beaconRange = m_beaconRange,
+            maximumBeaconCount = m_maxBeacons,
+            maximumBombsCount = m_maxBombs,
+            elevatorSpeed = m_elevatorSpeed,
+            elevatorWaitTime = m_elevatorWaitTime,
+            flairRaiseSpeed = m_flairRaiseSpeed,
+            flairDetonationTime = m_flairDetonationTime,
+            heartPositions = m_heartPositions,
+            heartRotations = m_heartRotations
+        };
+        
+        SendToBothClients(initialData);
         
         m_severTick = StartCoroutine(ServerTick());
         m_spawnInitialBeacons = StartCoroutine(SpawnInitialBeacons());
@@ -526,8 +526,7 @@ public class ServerManager : MonoBehaviour
     
     private void OnRestartGame(NetworkConnection arg1, RestartGame p_restartGame)
     {
-        StartGame();
-        SendToBothClients(p_restartGame);
+        if(m_vrNetworkConnection != null && m_pcNetworkConnection !=null) StartGame();
     }
 
     private void OnDestroyLeure(NetworkConnection arg1, DestroyLeure arg2)
@@ -573,31 +572,20 @@ public class ServerManager : MonoBehaviour
         if (client.client == ClientConnection.VrPlayer) m_vrNetworkConnection = p_conn;
         else if (client.client == ClientConnection.PcPlayer) m_pcNetworkConnection = p_conn;
 
-        InitialData initialData = new InitialData() {
-            healthPcPlayer = m_pcPlayerHealth,
-            healthVrPlayer = m_vrPlayerHealth,
-            beaconRange = m_beaconRange,
-            maximumBeaconCount = m_maxBeacons,
-            maximumBombsCount = m_maxBombs,
-            elevatorSpeed = m_elevatorSpeed,
-            elevatorWaitTime = m_elevatorWaitTime,
-            flairRaiseSpeed = m_flairRaiseSpeed,
-            flairDetonationTime = m_flairDetonationTime,
-            heartPositions = m_heartPositions,
-            heartRotations = m_heartRotations
-        };
-        
-        p_conn.Send(initialData);
-        
-        if(m_beaconsPositionsBuffer.data != null)
-            foreach (BeaconData data in m_beaconsPositionsBuffer.data)
-                p_conn.Send(new SpawnBeacon() {beaconID = data.beaconID});
-        
-        if(m_bombsPositionsBuffer.data != null)
-            foreach (BombData data in m_bombsPositionsBuffer.data)
-            {
-                p_conn.Send(new SpawnBomb() {bombID = data.bombID});
-            }
+        if (m_vrNetworkConnection != null && m_pcNetworkConnection != null)
+        {
+            StartGame();
+        }
+
+        // if(m_beaconsPositionsBuffer.data != null)
+        //     foreach (BeaconData data in m_beaconsPositionsBuffer.data)
+        //         p_conn.Send(new SpawnBeacon() {beaconID = data.beaconID});
+        //
+        // if(m_bombsPositionsBuffer.data != null)
+        //     foreach (BombData data in m_bombsPositionsBuffer.data)
+        //     {
+        //         p_conn.Send(new SpawnBomb() {bombID = data.bombID});
+        //     }
     }
     
     /// <summary/> function called when the server receives a message of type ActivateBeacon

@@ -90,16 +90,12 @@ public class ClientManager : MonoBehaviour
     public delegate void ActivateBlindDelegator(ActivateBlind p_activateBlind);
     public static ActivateBlindDelegator OnReceiveActivateBlind;
     #endregion
-    
-    [SerializeField, Tooltip("The player Object to be enabled on connection")] public GameObject m_player;
     [SerializeField, Tooltip("The player Object to get the player's location")] public GameObject m_playerObject;
     
     
     /// <summary/> Singleton type beat
     private void Awake()
     {
-        // Disabling the player to 
-        m_player.SetActive(false);
 
         // if the singleton hasn't been initialized yet
         if (singleton != null && singleton != this)
@@ -107,8 +103,6 @@ public class ClientManager : MonoBehaviour
             gameObject.SetActive(false);
             Debug.LogWarning("BROOOOOOOOOOOOOOOOOOO ! There are too many Singletons broda", this);
         }else singleton = this;
-
-        MyNetworkManager.del_onConnectAsClient += StartClient;
     }
     
     /// <summary/> Registering all the client side handlers
@@ -149,11 +143,6 @@ public class ClientManager : MonoBehaviour
     private void ReceiveActivateBeacon(ActivateBeacon p_activateBeacon) => OnReceiveActivateBeacon?.Invoke(p_activateBeacon);
 
     private void ReceiveSpawnBeacon(SpawnBeacon p_spawnBeacon) => OnReceiveSpawnBeacon?.Invoke(p_spawnBeacon);
-
-    private void StartClient()
-    {
-        m_player.SetActive(true);
-    }
     #region CLIENT HANDLERS
 
     /// <summary/> The function called when the client receives a message of type InitialData
