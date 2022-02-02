@@ -74,6 +74,7 @@ public class ServerManager : MonoBehaviour
     [SerializeField, Tooltip("The interval at which the bomb spawn"), Range(0f, 120f)] private float m_bombRespawnTime = 30f;
     [SerializeField, Tooltip("The maximum amount of bombs"), Range(1, 5)] private int m_maxBombs = 1;
     [SerializeField, Tooltip("The range of the bomb's explosion"), Range(1f, 100f)] private float m_bombExplosionRange = 50f;
+    [SerializeField, Tooltip("The time the bomb will take to explode"), Range(1f, 100f)] private float m_bomDetonationTime = 1f;
     
     [Header(" ")] [Header("Flair")] [Header(" ")]
     [SerializeField, Tooltip("The speed at which the flair will rise"), Range(0f, 120f)] private float m_flairRaiseSpeed = 30f;
@@ -469,7 +470,8 @@ public class ServerManager : MonoBehaviour
             elevatorSpeed = m_elevatorSpeed,
             elevatorWaitTime = m_elevatorWaitTime,
             flairRaiseSpeed = m_flairRaiseSpeed,
-            flairDetonationTime = m_flairDetonationTime
+            flairDetonationTime = m_flairDetonationTime,
+            bombDetonationTime = m_bomDetonationTime
         };
         
         p_conn.Send(initialData);
@@ -678,9 +680,12 @@ public class ServerManager : MonoBehaviour
     /// </summary>
     /// <param name="p_conn">The connection from which originated the message</param>
     /// <param name="p_bombExplosion">The message sent by the Client to the Server</param>
-    private void OnServerReceiveBombExplosion(NetworkConnection p_conn, BombExplosion p_bombExplosion) {
+    private void OnServerReceiveBombExplosion(NetworkConnection p_conn, BombExplosion p_bombExplosion)
+    {
 
-        bool hit = Vector3.Distance(p_bombExplosion.position, m_pcTransformBuffer.position) < m_bombExplosionRange;
+        Vector2 pcFlatPosition = new Vector2(m_pcTransformBuffer.position.x,m_pcTransformBuffer.position.z);
+        Vector2 bombFlatPosition = new Vector2(p_bombExplosion.position.x,p_bombExplosion.position.z);
+        bool hit = Vector2.Distance(p_bombExplosion.position, m_pcTransformBuffer.position) < m_bombExplosionRange;
         m_currentBombAmount--;
         if (hit) m_pcPlayerHealth--;
         

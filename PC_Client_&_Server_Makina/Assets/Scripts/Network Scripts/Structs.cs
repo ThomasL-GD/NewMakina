@@ -71,6 +71,7 @@ namespace CustomMessages
         public float elevatorWaitTime;
         public float flairRaiseSpeed;
         public float flairDetonationTime;
+        public float bombDetonationTime;
     }
 
     public struct ElevatorActivation : NetworkMessage
