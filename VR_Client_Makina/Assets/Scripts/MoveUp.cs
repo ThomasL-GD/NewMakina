@@ -34,4 +34,8 @@ public class MoveUp : MonoBehaviour
         m_raiseSpeed = p_raiseSpeed;
         m_raiseTime = p_raiseTime;
     }
+
+    public void Reset() {
+        transform.position = Vector3.down * 1000f;
+    }
 }
