@@ -15,7 +15,7 @@ namespace Synchronizers
         [SerializeField] private AudioSource m_audioSource;
         [SerializeField] private AudioClip m_heartDestroyedSound = null;
         [SerializeField] private float m_heartDestructionTime = 6f;
-        [SerializeField] private float m_heartLazerFlashPhase = 1f;
+        [SerializeField] private float m_heartLaserFlashPhase = 0.5f;
         
         
         private GameObject[] m_hearts;
@@ -28,8 +28,13 @@ namespace Synchronizers
 
         /// <summary/> The function called when the heart heartPositions are updated
         /// <param name="p_initialData"></param>
-        private void ReceiveInitialData(InitialData p_initialData)
-        {
+        private void ReceiveInitialData(InitialData p_initialData) {
+
+            //Destroy them all （￣ｗ￣）Ψ
+            foreach (GameObject heart in m_hearts) {
+                Destroy(heart);
+            }
+            
             // Making a list of hearts to be able to modify the hearts array
             List<GameObject> hearts = new List<GameObject>();
             
@@ -93,7 +98,7 @@ namespace Synchronizers
             while (p_heartLineRenderer != null)
             {
                 p_heartLineRenderer.enabled = !p_heartLineRenderer.enabled;
-                yield return new WaitForSeconds(m_heartLazerFlashPhase);
+                yield return new WaitForSeconds(m_heartLaserFlashPhase);
             }
         }
     }
