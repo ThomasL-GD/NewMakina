@@ -9,13 +9,11 @@ namespace Synchronizers {
 
         [SerializeField] private GameObject m_prefabBomb = null;
 
-        [SerializeField] [Range(0f, 5f)] private float m_explosionTimeOnceTouchingTheGround = 0f;
+        private float m_explosionTime = 0f;
         [SerializeField] private Color m_colorWhenAlmostExploding = Color.red;
 
         [SerializeField] private float m_bombScale = 1f;
         
-        /*[SerializeField] [Range(1f, 100f)] [Tooltip("This shall be replaced by server data sent to this")] */private float m_explosionRange = 5f;
-
         [SerializeField] private GameObject m_prefabFxBoomHit = null;
         [SerializeField] private GameObject m_prefabFxBoomMiss = null;
 
@@ -64,6 +62,7 @@ namespace Synchronizers {
         /// <param name="p_initialData">The message sent by the server</param>
         private void ReceiveIntialData(InitialData p_initialData) {
             m_maxSlotsLoading = p_initialData.maximumBombsCount;
+            m_explosionTime = p_initialData.bombDetonationTime;
         }
 
         private void Update() {
@@ -91,7 +90,7 @@ namespace Synchronizers {
             script.m_synchronizer = this;
             script.m_index = m_bombs.Count;
             script.m_serverID = p_spawnBomb.bombID;
-            script.m_explosionTimeOnceOnGround = m_explosionTimeOnceTouchingTheGround;
+            script.m_explosionTimeOnceOnGround = m_explosionTime;
             script.m_mustDropDown = m_dropDown;
             script.m_prefabDropDownFeedback = m_prefabDropDownFeedback;
             

@@ -73,6 +73,7 @@ namespace CustomMessages
         public float flairDetonationTime;
         public Vector3[] heartPositions;
         public Quaternion[] heartRotations;
+        public float bombDetonationTime;
     }
 
     public struct ElevatorActivation : NetworkMessage
@@ -96,7 +97,7 @@ namespace CustomMessages
     {
         
     }
-    
+
     #endregion
 
     #region Lazer

@@ -93,6 +93,9 @@ public class ServerManager : MonoBehaviour
     [SerializeField, Tooltip("The range of the bomb's explosion"), Range(1f, 100f)] private float f_bombExplosionRange = 50f;
     private float m_bombExplosionRange = 50f;
     
+    [SerializeField, Tooltip("The time the bomb will take to explode"), Range(1f, 100f)] private float f_bomDetonationTime = 1f;
+    private float m_bomDetonationTime = 1f;
+    
     [Header(" ")] [Header("Flair")] [Header(" ")]
     [SerializeField, Tooltip("The speed at which the flair will rise"), Range(0f, 120f)] private float f_flairRaiseSpeed = 30f;
     private float m_flairRaiseSpeed = 30f;
@@ -265,6 +268,7 @@ public class ServerManager : MonoBehaviour
         m_bombRespawnTime = f_bombRespawnTime;
         m_maxBombs = f_maxBombs;
         m_bombExplosionRange = f_bombExplosionRange;
+        m_bomDetonationTime = f_bomDetonationTime;
         m_flairRaiseSpeed = f_flairRaiseSpeed;
         m_flairDetonationTime = f_flairDetonationTime;
         m_flashDuration = f_flashDuration;
@@ -579,6 +583,32 @@ public class ServerManager : MonoBehaviour
             StartGame();
         }
 
+        
+        InitialData initialData = new InitialData() {
+            healthPcPlayer = m_pcPlayerHealth,
+            healthVrPlayer = m_vrPlayerHealth,
+            beaconRange = m_beaconRange,
+            maximumBeaconCount = m_maxBeacons,
+            maximumBombsCount = m_maxBombs,
+            elevatorSpeed = m_elevatorSpeed,
+            elevatorWaitTime = m_elevatorWaitTime,
+            flairRaiseSpeed = m_flairRaiseSpeed,
+            flairDetonationTime = m_flairDetonationTime,
+            bombDetonationTime = m_bomDetonationTime
+        };
+        
+        p_conn.Send(initialData);
+        
+        if(m_beaconsPositionsBuffer.data != null)
+            foreach (BeaconData data in m_beaconsPositionsBuffer.data)
+                p_conn.Send(new SpawnBeacon() {beaconID = data.beaconID});
+        
+        if(m_bombsPositionsBuffer.data != null)
+            foreach (BombData data in m_bombsPositionsBuffer.data)
+            {
+                p_conn.Send(new SpawnBomb() {bombID = data.bombID});
+            }
+        
         // if(m_beaconsPositionsBuffer.data != null)
         //     foreach (BeaconData data in m_beaconsPositionsBuffer.data)
         //         p_conn.Send(new SpawnBeacon() {beaconID = data.beaconID});
@@ -784,9 +814,12 @@ public class ServerManager : MonoBehaviour
     /// </summary>
     /// <param name="p_conn">The connection from which originated the message</param>
     /// <param name="p_bombExplosion">The message sent by the Client to the Server</param>
-    private void OnServerReceiveBombExplosion(NetworkConnection p_conn, BombExplosion p_bombExplosion) {
+    private void OnServerReceiveBombExplosion(NetworkConnection p_conn, BombExplosion p_bombExplosion)
+    {
 
-        bool hit = Vector3.Distance(p_bombExplosion.position, m_pcTransformBuffer.position) < m_bombExplosionRange;
+        Vector2 pcFlatPosition = new Vector2(m_pcTransformBuffer.position.x,m_pcTransformBuffer.position.z);
+        Vector2 bombFlatPosition = new Vector2(p_bombExplosion.position.x,p_bombExplosion.position.z);
+        bool hit = Vector2.Distance(p_bombExplosion.position, m_pcTransformBuffer.position) < m_bombExplosionRange;
         m_currentBombAmount--;
         if (hit) m_pcPlayerHealth--;
         
