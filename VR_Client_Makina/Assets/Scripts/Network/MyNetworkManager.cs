@@ -37,10 +37,6 @@ namespace Network {
         public delegate void InvisibilityDelegator(PcInvisibility p_pcInvisibility);
         public static InvisibilityDelegator OnInvisibilityUpdate;
     
-        /// <summary/> The delegates that will be called each time the server updates the hearts
-        public delegate void HeartTransformDelegator(HeartTransforms p_heartTransforms);
-        public static HeartTransformDelegator OnReceiveHeartTransforms;
-    
         public delegate void HeartBreakDelegator(HeartBreak p_heartBreak);
         public static HeartBreakDelegator OnReceiveHeartBreak;
     
@@ -146,7 +142,6 @@ namespace Network {
             NetworkClient.RegisterHandler<Laser>(ReceivePcTransform);
             NetworkClient.RegisterHandler<PcInvisibility>(ReceivePcInvisibility);
             NetworkClient.RegisterHandler<ClientConnect>(ReceiveClientConnect);
-            NetworkClient.RegisterHandler<HeartTransforms>(ReceiveHeartTranforms);
             NetworkClient.RegisterHandler<HeartBreak>(ReceiveHeartBreak);
             NetworkClient.RegisterHandler<SpawnBeacon>(ReceiveSpawnBeacon);
             NetworkClient.RegisterHandler<DestroyedBeacon>(ReceiveDestroyedBeacon);
@@ -183,10 +178,6 @@ namespace Network {
         /// <summary/> The function called when the client receives a message of type InitialData
         /// <param name="p_initialData"> The message sent by the Server to the Client </param>
         private void ReceiveInitialData(InitialData p_initialData) => OnReceiveInitialData?.Invoke(p_initialData);
-
-        /// <summary/> The function called when the client receives a message of type HeartTransforms
-        /// <param name="p_heartTransforms"> The message sent by the Server to the Client </param>
-        private void ReceiveHeartTranforms(HeartTransforms p_heartTransforms) => OnReceiveHeartTransforms?.Invoke(p_heartTransforms); 
     
         /// <summary/> The function called when the client receives a message of type HeartTransforms
         /// <param name="p_heartBreak"> The message sent by the Server to the Client </param>

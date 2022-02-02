@@ -22,21 +22,21 @@ namespace Synchronizers
         
         void Awake()
         {
-            MyNetworkManager.OnReceiveHeartTransforms += ReceiveHeartTransforms;
+            MyNetworkManager.OnReceiveInitialData += ReceiveInitialData;
             MyNetworkManager.OnReceiveHeartBreak += ReceiveHeartBreak;
         }
 
-        /// <summary/> The function called when the heart positions are updated
-        /// <param name="p_heartTransforms"></param>
-        private void ReceiveHeartTransforms(HeartTransforms p_heartTransforms)
+        /// <summary/> The function called when the heart heartPositions are updated
+        /// <param name="p_initialData"></param>
+        private void ReceiveInitialData(InitialData p_initialData)
         {
             // Making a list of hearts to be able to modify the hearts array
             List<GameObject> hearts = new List<GameObject>();
             
             // Adding the hearts to the list
-            for (int i = 0; i < p_heartTransforms.positions.Length; i++)
+            for (int i = 0; i < p_initialData.heartPositions.Length; i++)
             {
-                hearts.Add(Instantiate(m_heartPrefabs, p_heartTransforms.positions[i], p_heartTransforms.rotations[i]));
+                hearts.Add(Instantiate(m_heartPrefabs, p_initialData.heartPositions[i], p_initialData.heartRotations[i]));
                 
                 if (hearts[i].TryGetComponent( out HeartIdentifier hi))
                     hi.heartIndex = i;
