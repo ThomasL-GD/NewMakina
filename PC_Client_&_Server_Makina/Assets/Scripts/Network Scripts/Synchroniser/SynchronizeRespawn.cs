@@ -31,15 +31,21 @@ namespace Synchronizers
 
         public static OnPlayerDeathDelegator OnPlayerRespawn;
 
-        void Awake() => OnPlayerDeath += ReceiveLaser;
+        void Awake() {
+            OnPlayerDeath += ReceiveLaser;
+            ClientManager.OnReceiveInitialData += InitialSpawn;
+        }
+
+        /// <summary>Teleports the player to a random spawn point on start
+        /// I should add that this documentation is very well made (ღゝ◡╹)ノ♡</summary>
+        /// <param name="p_initialdata">The message sent by the server, NO SHiT !</param>
+        private void InitialSpawn(InitialData p_initialdata) => m_player.transform.position = m_spawnPoints[Random.Range(0, m_spawnPoints.Length)].position;
 
 
         /// <summary>
-        /// The function called when the synchroniser receives a laser
+        /// The function called when the synchronizer receives a laser
         /// </summary>
-        /// <param name="p_laser"> the LaserShotInfo </param>
-        void ReceiveLaser()
-        {
+        void ReceiveLaser() {
             if (InputMovement3.instance.m_isDead) return;
             StartCoroutine(DeathLoop());
         }
