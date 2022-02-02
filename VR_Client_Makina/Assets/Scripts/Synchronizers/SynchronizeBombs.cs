@@ -104,7 +104,7 @@ namespace Synchronizers {
         public void ExplodeLol(int p_index, float p_serverID) {
 
             int? index = FindBombFromID(p_index, p_serverID);
-            Debug.LogWarning($"The index value is {index} but the initial one was {p_index}, the list contains {m_bombs.Count} elements");
+            if(index != p_index)Debug.LogWarning($"The index value is {index} but the initial one was {p_index}, the list contains {m_bombs.Count} elements");
             
             MyNetworkManager.singleton.SendVrData(new BombExplosion(){
                 position = m_bombs[index??0].transform.position,
@@ -140,7 +140,7 @@ namespace Synchronizers {
             for(int i = 0; i < m_availblePositions.Length; i++) if(m_availblePositions[i]) currentAvailablePositions.Add(i);
 
             int random = Random.Range(0, currentAvailablePositions.Count);
-            Debug.Log($"Index technically wrong : {random}   (btw, the list has {currentAvailablePositions.Count} elements)");
+//            Debug.Log($"Index technically wrong : {random}   (btw, the list has {currentAvailablePositions.Count} elements)");
             LoadObjectFromIndex(p_script, currentAvailablePositions[random]);
         }
 
