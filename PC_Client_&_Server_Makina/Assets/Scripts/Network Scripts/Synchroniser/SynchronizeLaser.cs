@@ -36,11 +36,7 @@ namespace Synchronizers
         private void SynchroniseShot(Laser p_laser)
         {
             // Instantiating the shot
-            GameObject instantiate = Instantiate(m_laserPrefab,p_laser.origin,p_laser.rotation);
-
-            // Setting the instances position and rotation
-            // instantiate.transform.position = p_laser.origin;
-            // instantiate.transform.rotation = p_laser.rotation;
+            Instantiate(m_laserPrefab,p_laser.origin,p_laser.rotation);
         }
     }
 }

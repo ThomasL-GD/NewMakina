@@ -238,7 +238,7 @@ public class ServerManager : MonoBehaviour
 
     #region SERVER ACTIONS
 
-    /// <summary/> Only use in OnStartServer
+    /// <summary/> DONT FUCKING TOUCH THIS
     private bool m_firstTime = true;
     
     /// <summary>
@@ -308,20 +308,7 @@ public class ServerManager : MonoBehaviour
         m_flairBuffer = new ActivateFlair();
         m_activateBlindBuffer = new ActivateBlind();
         
-        //Coroutines
-        if (!m_firstTime)
-        {
-            StopCoroutine(m_severTick);
-            StopCoroutine(m_spawnInitialBeacons);
-            StopCoroutine(m_spawnBombs);
-        }
-        else
-        {
-            m_firstTime = false;
-        }
-        
-        
- 
+
         InitialData initialData = new InitialData() {
             healthPcPlayer = m_pcPlayerHealth,
             healthVrPlayer = m_vrPlayerHealth,
@@ -338,9 +325,22 @@ public class ServerManager : MonoBehaviour
         
         SendToBothClients(initialData);
         
-        m_severTick = StartCoroutine(ServerTick());
+        
+        
+        if(m_firstTime) {
+            m_severTick = StartCoroutine(ServerTick());
+            m_firstTime = false;
+        }
         m_spawnInitialBeacons = StartCoroutine(SpawnInitialBeacons());
         m_spawnBombs = StartCoroutine(BombSpawnTimer());
+    }
+
+    private void EndGame(ClientConnection p_winner = ClientConnection.PcPlayer)
+    {
+        SendToBothClients( new GameEnd(){winningClient = p_winner});
+        
+        StopCoroutine(m_spawnInitialBeacons);
+        StopCoroutine(m_spawnBombs);
     }
 
  IEnumerator SpawnInitialBeacons()
@@ -457,14 +457,13 @@ public class ServerManager : MonoBehaviour
     /// <summary/> the function called to check the winning conditions
     private void CheckHealths()
     {
-        if (m_pcPlayerHealth <= 0)
-        {
-            SendToBothClients(new GameEnd(){winningClient = ClientConnection.VrPlayer});
+        if (m_pcPlayerHealth <= 0) {
+            EndGame(ClientConnection.VrPlayer);
             return;
         }
         
         if (m_vrPlayerHealth <= 0)
-            SendToBothClients(new GameEnd(){winningClient = ClientConnection.PcPlayer});
+            EndGame(ClientConnection.PcPlayer);
     }
     
     /// <summary/> The function called when the server has to spawn a beacon
@@ -526,7 +525,10 @@ public class ServerManager : MonoBehaviour
     
     private void OnRestartGame(NetworkConnection arg1, RestartGame p_restartGame)
     {
-        if(m_vrNetworkConnection != null && m_pcNetworkConnection !=null) StartGame();
+        if(m_vrNetworkConnection != null && m_pcNetworkConnection !=null) {
+            EndGame();
+            StartGame();
+        }
     }
 
     private void OnDestroyLeure(NetworkConnection arg1, DestroyLeure arg2)
@@ -689,7 +691,7 @@ public class ServerManager : MonoBehaviour
                         m_laserBuffer.length = hitSmth ? rayHit.distance : valueIfNoHit;
                     }
 
-                break; }
+                    break; }
 
                 case true : {
                     m_laserBuffer.length = hitSmth ? rayHit.distance : valueIfNoHit;
@@ -744,6 +746,7 @@ public class ServerManager : MonoBehaviour
     private void OnServerReceiveBeaconsPositions(NetworkConnection p_conn, BeaconsPositions p_beaconsPositions)
     {
         //m_beaconsPositionsBuffer = p_beaconsPositions; FUUUUUUUUUUUUUCK
+        if(m_beaconsPositionsBuffer.data == null) return;
         int count = m_beaconsPositionsBuffer.data.Length;
 
         for (int i = 0; i < count; i++)
