@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NUnit.Compatibility;
 using UnityEngine;
 using UnityEditor;
 using static UnityEngine.Mathf;
@@ -7,13 +8,13 @@ using static UnityEngine.GUILayout;
 
 class WindowPlacer2 : EditorWindow
 {
+    private Material m_previewMat;
+    private static GameObject m_window;
+    private static GameObject m_parent;
     
-    private GameObject m_window;
-    private GameObject m_parent;
-    
-    private float m_spacing=1f;
-    private float m_lineHeight=0f;
-    private float m_margin;
+    private static float m_spacing=1f;
+    private static float m_lineHeight=0f;
+    private static float m_margin;
 
     /// <summary/> The function called when the MenuItem is called to create the window
     [MenuItem("Tools/Window Placer 2")]
@@ -145,9 +146,10 @@ class WindowPlacer2 : EditorWindow
         // Debug.Log(links.Count);
         foreach (var link in links) link.DrawLink();
 
-        
-        
-        
+        Material previewMat = Resources.Load("Editor/Tools Material/PreviewMaterial", typeof(Material)) as Material;
+
+        previewMat.SetPass(0);
+        Graphics.DrawMeshNow(m_window.transform.GetChild(0).GetComponent<MeshFilter>().sharedMesh,Vector3.one * 10,m_window.transform.rotation);
     }
     
     class Link
@@ -202,9 +204,9 @@ class WindowPlacer2 : EditorWindow
 
         private void DrawFace(Vector3 p_position, Camera p_cam, Quaternion p_rotation, Vector3 p_scale)
         {
-            Vector3 v1 = Vector3.Scale(p_rotation * vertex1, p_scale);
-            Vector3 v2 = Vector3.Scale(p_rotation * vertex2, p_scale);
-            Vector3 v3 = Vector3.Scale(p_rotation * vertex3, p_scale);
+            Vector3 v1 = p_rotation * Vector3.Scale( vertex1, p_scale);
+            Vector3 v2 = p_rotation * Vector3.Scale(vertex2, p_scale);
+            Vector3 v3 = p_rotation * Vector3.Scale(vertex3, p_scale);
 
             if ((CheckIfInCameraView(p_cam, p_position + v1) && CheckIfInCameraView(p_cam, p_position + v2)
                                                              && CheckIfInCameraView(p_cam, p_position + v3))) return;
@@ -213,29 +215,21 @@ class WindowPlacer2 : EditorWindow
             Handles.DrawLine(p_position + v1,p_position + v2);
             Handles.DrawLine(p_position + v2,p_position + v3);
             Handles.DrawLine(p_position + v3,p_position + v1);
-
-            Color color = Handles.color;
-            color.a = .5f;
-            Handles.color = color;
-            Mesh face = new Mesh();
-            face.vertices = new[] {vertex1,vertex2,vertex3};
-            face.triangles = new[] {0,1,2};
-            face.normals = new[] {normal,normal,normal};
         }
 
         public void DrawHorizontalLineAlongMesh(Vector3 p_position, float p_lineHeight, Quaternion p_rotation, Vector3 p_scale, out List<Intersections> p_intersections)
         {
             p_intersections = new List<Intersections>();
-            Vector3 v1 = Vector3.Scale(p_rotation * vertex1, p_scale);
-            Vector3 v2 = Vector3.Scale(p_rotation * vertex2, p_scale);
-            Vector3 v3 = Vector3.Scale(p_rotation * vertex3, p_scale);
+            Vector3 v1 = p_rotation * Vector3.Scale(vertex1, p_scale);
+            Vector3 v2 = p_rotation * Vector3.Scale(vertex2, p_scale);
+            Vector3 v3 = p_rotation * Vector3.Scale(vertex3, p_scale);
             Vector3 n = p_rotation * normal;
             bool tooHigh = v1.y >= p_lineHeight && v2.y >= p_lineHeight && v3.y >= p_lineHeight;
             bool tooLow = v1.y <= p_lineHeight && v2.y <= p_lineHeight && v3.y <= p_lineHeight;
             
             if (!tooHigh && !tooLow)
             {
-                DrawFace(p_position,Camera.current,p_rotation,p_scale);
+                //DrawFace(p_position,Camera.current,p_rotation,p_scale);
 
                 Vector3 intersection;
                 if (GetSegmentPlaneIntersection(v1, v2, out intersection, p_lineHeight))
@@ -287,7 +281,9 @@ class WindowPlacer2 : EditorWindow
     
     private void OnGUI()
     {
+        
         m_window = (GameObject) ObjectField("windowPrefab",m_window,typeof(object),true);
+        m_previewMat = (Material) ObjectField("windowPrefab",m_previewMat,typeof(object),true);
         
         if(m_window == null) return;
         
@@ -295,6 +291,6 @@ class WindowPlacer2 : EditorWindow
         m_margin=FloatField("horizontal", m_margin);
         m_lineHeight=FloatField("lineHeight", m_lineHeight);
         
-        m_parent = (GameObject) ObjectField("windowPrefab",m_parent,typeof(object),true);
+        m_parent = (GameObject) ObjectField("parent",m_parent,typeof(object),true);
     }
 }
