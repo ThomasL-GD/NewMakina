@@ -47,18 +47,23 @@ namespace Synchronizers {
             MyNetworkManager.OnReceiveSpawnBomb += SpawnBomb;
             MyNetworkManager.OnReceiveBombExplosion += ExplosionFeedback;
             MyNetworkManager.OnReceiveInitialData += ReceiveIntialData;
+            MyNetworkManager.OnReceiveGameEnd += Reset;
         }
 
-        /// <summary>Just sets maxSlotsForBombs according to the server's InitialData
-        /// Additionally and supposically, resets everything too restart a game</summary>
-        /// <param name="p_initialData">The message sent by the server</param>
-        private void ReceiveIntialData(InitialData p_initialData) {
-            m_maxSlotsLoading = p_initialData.maximumBombsCount;
+        /// <summary>Is called by the OnReceiveGameEnd and destroys every bomb to be ready to launch a new game </summary>
+        /// <param name="p_p_gameend">The message sent by the server</param>
+        private void Reset(GameEnd p_p_gameend) {
 
             foreach (BombInfo info in m_bombs) {
                 info.transform.GetComponent<BombBehavior>().DestroyMaSoul();
             }
             m_bombs.Clear();
+        }
+
+        /// <summary>Just sets maxSlotsForBombs according to the server's InitialData</summary>
+        /// <param name="p_initialData">The message sent by the server</param>
+        private void ReceiveIntialData(InitialData p_initialData) {
+            m_maxSlotsLoading = p_initialData.maximumBombsCount;
         }
 
         private void Update() {

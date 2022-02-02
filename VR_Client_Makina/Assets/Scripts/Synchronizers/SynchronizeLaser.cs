@@ -52,9 +52,10 @@ namespace Synchronizers {
             m_laserAiming.enabled = false;
         }
 
-        /// <summary/> Function called when the client received the initial data
+        /// <summary/> Function called when the client receives the initial data
         /// <param name="p_initialData"> The message sent by the server</param>
         void ReceiveInitialData(InitialData p_initialData) {
+            //TODO light be annoying if the menuing is fluid
             m_elapsedTime = 0f;
             m_isTriggerPressed = false;
             m_isLoading = false;

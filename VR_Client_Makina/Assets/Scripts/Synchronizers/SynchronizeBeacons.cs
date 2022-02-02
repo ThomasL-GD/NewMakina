@@ -73,12 +73,12 @@ namespace Synchronizers {
             MyNetworkManager.OnReceiveBeaconDetectionUpdate += UpdateDetection;
             MyNetworkManager.OnReceiveDestroyedBeacon += DestroyBeacon;
             MyNetworkManager.OnReceiveInitialData += SetRangeOfBeacons;
+            MyNetworkManager.OnReceiveGameEnd += Reset;
         }
 
-        /// <summary>Just sets maxSlotsForBeacons according to the server's InitialData</summary>
-        /// <param name="p_initialData">The message sent by the server</param>
-        private void ReceiveInitialData(InitialData p_initialData) {
-            m_maxSlotsLoading = p_initialData.maximumBeaconCount;
+        /// <summary>Is called by the OnReceiveGameEnd and destroys every beacon to be ready to launch a new game </summary>
+        /// <param name="p_p_gameend">The message sent by the server</param>
+        private void Reset(GameEnd p_p_gameend) {
             
             //Destroying every beacon ψ(` ͜ʖ´)ψ
             for(int i = 0; i < m_beacons.Count; i++) {
@@ -92,6 +92,12 @@ namespace Synchronizers {
             }
             
             m_beacons.Clear();
+        }
+
+        /// <summary>Just sets maxSlotsForBeacons according to the server's InitialData</summary>
+        /// <param name="p_initialData">The message sent by the server</param>
+        private void ReceiveInitialData(InitialData p_initialData) {
+            m_maxSlotsLoading = p_initialData.maximumBeaconCount;
         }
 
         private void Update() {

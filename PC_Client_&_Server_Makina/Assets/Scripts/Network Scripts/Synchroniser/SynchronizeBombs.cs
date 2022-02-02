@@ -34,6 +34,16 @@ namespace Synchronizers {
             ClientManager.OnReceiveBombsPositions += UpdatePositions;
             ClientManager.OnReceiveBombExplosion += DestroyBomb;
             ClientManager.OnReceiveBombActivation += ActivateBomb;
+            ClientManager.OnReceiveGameEnd += Reset;
+        }
+
+        /// <summary>Will destroy all the bombs to be ready to launch another game </summary>
+        /// <param name="p_gameend">The message sent by the server</param>
+        private void Reset(GameEnd p_gameend) {
+            foreach (Bomb bomb in m_bombs) {
+                Destroy(bomb.bombPrefabInstance);
+            }
+            m_bombs.Clear();
         }
 
         /// <summary> YES ! You actually guessed, this function will spawn a freaking bomb ! </summary>

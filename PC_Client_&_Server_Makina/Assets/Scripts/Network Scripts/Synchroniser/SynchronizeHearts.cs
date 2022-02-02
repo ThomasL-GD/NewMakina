@@ -21,15 +21,27 @@ namespace Synchronizers
             // Setting up the synchronizers with the delegates
             
             ClientManager.OnReceiveInitialData += SynchronizeInitialDataLocal;
+            ClientManager.OnReceiveGameEnd += Reset;
             ClientManager.OnReceiveHeartBreak += SynchronizeHeartBreak;
         }
-        
+
+        private void Reset(GameEnd p_p_gameend) {
+
+            //Destroy them all （￣ｗ￣）Ψ
+            foreach (GameObject heart in m_hearts) {
+                Destroy(heart);
+            }
+
+            m_hearts = new GameObject[]{ };
+        }
+
         /// <summary>
         ///  Spawning in the hearts
         /// </summary>
         /// <param name="p_heartTransforms"> the network message </param>
         private void SynchronizeInitialDataLocal(InitialData p_initialData)
         {
+            
             // Creating a list to be able to iterate on the hearts
             List<GameObject> hearts = new List<GameObject>();
             
