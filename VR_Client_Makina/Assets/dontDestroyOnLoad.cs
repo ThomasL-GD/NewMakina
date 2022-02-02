@@ -1,0 +1,1 @@
+using UnityEngine; public class dontDestroyOnLoad : MonoBehaviour {void Awake() => DontDestroyOnLoad(gameObject);}

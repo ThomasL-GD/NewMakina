@@ -4,6 +4,8 @@ using System.Linq;
 using Mirror;
 using UnityEngine;
 using CustomMessages;
+using Unity.Mathematics;
+using UnityEngine.Serialization;
 
 /// <summary/> The server side manager will handle all of the server side network dealings of the game
 
@@ -37,54 +39,78 @@ public class ServerManager : MonoBehaviour
     
     #region Server Data
 
-
     [Header("Server Settings")]
-    [SerializeField, Range(1,120), Tooltip("the server's tick rate in Hz")] private int m_tickrate = 30;
+    [SerializeField, Range(1,120), Tooltip("the server's tick rate in Hz")] private int f_tickrate = 30;
+    private int m_tickrate = 30;
     private float m_tickDelta = 1f;
     
     /// <summary/> The custom variables added onto the Network Manager
     [Header("Laser :")]
     [Header("Game Settings")]
-    [SerializeField, Tooltip("The radius of the VR laser")] private float m_laserRadius = 20f;
-    [SerializeField, Tooltip("The speed of the elevators in m/s")] private float m_elevatorSpeed = 5.8f;
-    [SerializeField, Tooltip("The speed of the elevators in m/s")] private float m_elevatorWaitTime = 1f;
+    [SerializeField, Tooltip("The radius of the VR laser")] private float f_laserRadius = 20f;
+    private float m_laserRadius = 20f;
+    [SerializeField, Tooltip("The speed of the elevators in m/s")] private float f_elevatorSpeed = 5.8f;
+    private float m_elevatorSpeed = 5.8f;
+    [SerializeField, Tooltip("The speed of the elevators in m/s")] private float f_elevatorWaitTime = 1f;
+    private float m_elevatorWaitTime = 1f;
     
 
     [Header("Hearts")]
     [Header(" ")]
-    [SerializeField, Tooltip("The positions of the hearts on the map")] private Transform[] m_heartTransforms;
-    [SerializeField, Tooltip("The amount of hearts that need to be destroyed for the VR player to lose")] private int m_vrPlayerHealth = 3;
-    [SerializeField, Tooltip("The amount of times the PC player has to eliminated to lose")] private int m_pcPlayerHealth = 3;
-    [SerializeField, Tooltip("The possible spawn positions of the PC player on the map")] private Transform[] m_beaconSpawnPositions;
+    [SerializeField, Tooltip("The positions of the hearts on the map")] private Transform[] f_heartTransforms;
+    private Transform[] m_heartTransforms;
+    [SerializeField, Tooltip("The amount of hearts that need to be destroyed for the VR player to lose")] private int f_vrPlayerHealth = 3;
+    private int m_vrPlayerHealth = 3;
+    [SerializeField, Tooltip("The amount of times the PC player has to eliminated to lose")] private int f_pcPlayerHealth = 3;
+    private int m_pcPlayerHealth = 3;
+    [SerializeField, Tooltip("The possible spawn positions of the PC player on the map")] private Transform[] f_beaconSpawnPositions;
+    private Transform[] m_beaconSpawnPositions;
 
     
     [Header("Beacons")]
     [Header(" ")]
-    [SerializeField, Tooltip("The amount of beacons that will spawn at the start of the game")]private int m_initialBeacons = 2;
-    [SerializeField, Tooltip("The time after which the initial beacons will spawn")]private float m_initialBeaconSpawnDelay = 10f;
+    [SerializeField, Tooltip("The amount of beacons that will spawn at the start of the game")]private int f_initialBeacons = 2;
+    private int m_initialBeacons = 2;
+    [SerializeField, Tooltip("The time after which the initial beacons will spawn")]private float f_initialBeaconSpawnDelay = 10f;
+    private float m_initialBeaconSpawnDelay = 10f;
     [Header(" ")]
-    [SerializeField, Tooltip("The interval at which the beacons spawn")] private float m_beaconRespawnTime = 30f;
-    [SerializeField, Tooltip("The lifetime of a beacon")] private float m_beaconLifeTime = 10f;
-    [SerializeField, Tooltip("The maximum amount of beacons")] private int m_maxBeacons = 3; 
+    [SerializeField, Tooltip("The interval at which the beacons spawn")] private float f_beaconRespawnTime = 30f;
+    private float m_beaconRespawnTime = 30f;
+    [SerializeField, Tooltip("The lifetime of a beacon")] private float f_beaconLifeTime = 10f;
+    private float m_beaconLifeTime = 10f;
+    [SerializeField, Tooltip("The maximum amount of beacons")] private int f_maxBeacons = 3;
+    private int m_maxBeacons = 3; 
     private int m_currentBeaconAmount = 0;
     [Header(" ")]
-    [SerializeField, Tooltip("The range of the beacons")] private float m_beaconRange = 400f;
+    [SerializeField, Tooltip("The range of the beacons")] private float f_beaconRange = 400f;
+    private float m_beaconRange = 400f;
 
     [Header(" ")] [Header("Bombs")] [Header(" ")]
-    [SerializeField, Tooltip("The interval at which the bomb spawn"), Range(0f, 120f)] private float m_bombRespawnTime = 30f;
-    [SerializeField, Tooltip("The maximum amount of bombs"), Range(1, 5)] private int m_maxBombs = 1;
-    [SerializeField, Tooltip("The range of the bomb's explosion"), Range(1f, 100f)] private float m_bombExplosionRange = 50f;
-    [SerializeField, Tooltip("The time the bomb will take to explode"), Range(1f, 100f)] private float m_bomDetonationTime = 1f;
+    [SerializeField, Tooltip("The interval at which the bomb spawn"), Range(0f, 120f)] private float f_bombRespawnTime = 30f;
+    private float m_bombRespawnTime = 30f;
+    [SerializeField, Tooltip("The maximum amount of bombs"), Range(1, 5)] private int f_maxBombs = 1;
+    private int m_maxBombs = 1;
+    [SerializeField, Tooltip("The range of the bomb's explosion"), Range(1f, 100f)] private float f_bombExplosionRange = 50f;
+    private float m_bombExplosionRange = 50f;
+    
+    [SerializeField, Tooltip("The time the bomb will take to explode"), Range(1f, 100f)] private float f_bomDetonationTime = 1f;
+    private float m_bomDetonationTime = 1f;
     
     [Header(" ")] [Header("Flair")] [Header(" ")]
-    [SerializeField, Tooltip("The speed at which the flair will rise"), Range(0f, 120f)] private float m_flairRaiseSpeed = 30f;
-    [SerializeField, Tooltip("The amount of time before the flair detonates"), Range(1, 15)] private float m_flairDetonationTime = 2f;
-    [SerializeField, Tooltip("The amount of time before the flair detonates"), Range(1, 15)] private float m_flashDuration = 5f;
-    [SerializeField, Tooltip("the minimum and maximum dot product from the look angle to clamp")]private Vector2 m_flashClamp;
+    [SerializeField, Tooltip("The speed at which the flair will rise"), Range(0f, 120f)] private float f_flairRaiseSpeed = 30f;
+    private float m_flairRaiseSpeed = 30f;
+    [SerializeField, Tooltip("The amount of time before the flair detonates"), Range(1, 15)] private float f_flairDetonationTime = 2f;
+    private float m_flairDetonationTime = 2f;
+    [SerializeField, Tooltip("The amount of time before the flair detonates"), Range(1, 15)] private float f_flashDuration = 5f;
+    private float m_flashDuration = 5f;
+    [SerializeField, Tooltip("the minimum and maximum dot product from the look angle to clamp")]private Vector2 f_flashClamp;
+    private Vector2 m_flashClamp;
     [Space]
-    [SerializeField, Tooltip("The offset of the raycast shot to the player to check if the lazer hit")] private float m_laserCheckOffset = 2f;
+    [SerializeField, Tooltip("The offset of the raycast shot to the player to check if the lazer hit")] private float f_laserCheckOffset = 2f;
+    private float m_laserCheckOffset = 2f;
 
-    [SerializeField] private LayerMask m_playerLayers;
+    [SerializeField] private LayerMask f_playerLayers;
+    private LayerMask m_playerLayers;
     private int m_currentBombAmount = 0;
     
 
@@ -100,6 +126,10 @@ public class ServerManager : MonoBehaviour
     
     private bool m_bombCoroutineRunning;
 
+    private Coroutine m_severTick;
+    private Coroutine m_spawnInitialBeacons;
+    private Coroutine m_spawnBombs;
+    
     #endregion
     
     /// <summary>
@@ -115,9 +145,13 @@ public class ServerManager : MonoBehaviour
             gameObject.SetActive(false);
             Debug.LogWarning("BROOOOOOOOOOOOOOOOOOO ! There are too many Singletons broda", this);
         }else singleton = this;
+
+        #region Members assignment
+
+        #endregion
         
         //linking NetworkManager functions
-        MyNetworkManager.del_onHostServer += OnStartServer;
+        // MyNetworkManager.del_onHostServer += StartGame;
         MyNetworkManager.del_onClientConnection += OnServerConnect;
         
         //Setting up senders
@@ -150,36 +184,18 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<ClientConnect>(OnServerReceiveClientConnect);
         NetworkServer.RegisterHandler<HeartBreak>(OnServerReceiveHeartBreak);
         NetworkServer.RegisterHandler<BeaconsPositions>(OnServerReceiveBeaconsPositions);
-        //NetworkServer.RegisterHandler<DestroyedBeacon>(OnServerReceiveDestroyedBeacon);
         NetworkServer.RegisterHandler<ActivateBeacon>(OnServerReceiveActivateBeacon);
         NetworkServer.RegisterHandler<BombsPositions>(OnServerReceiveBombsPositions);
         NetworkServer.RegisterHandler<BombExplosion>(OnServerReceiveBombExplosion);
         NetworkServer.RegisterHandler<BombActivation>(OnReceiveBombActivation);
         NetworkServer.RegisterHandler<ElevatorActivation>(OnElevatorActivation);
         NetworkServer.RegisterHandler<ActivateFlair>(OnActivateFlair);
-        //NetworkServer.RegisterHandler<ActivateBlind>(OnActivateBlind);
-        //NetworkServer.RegisterHandler<DeActivateBlind>(OnDeActivateBlind);
         NetworkServer.RegisterHandler<SpawnLeure>(OnSpawnLeure);
         NetworkServer.RegisterHandler<DestroyLeure>(OnDestroyLeure);
         NetworkServer.RegisterHandler<LeureTransform>(OnLeureTransform);
-
-        //Unpacking the heart position values from the transforms to send through messages
-        List<Vector3> heartPositions = new List<Vector3>();
-        List<Quaternion> heartRotations = new List<Quaternion>();
-
-        foreach (Transform pos in m_heartTransforms)
-        {
-            heartPositions.Add(pos.position);
-            heartRotations.Add(pos.rotation);
-        }
-
-        m_heartPositions = heartPositions.ToArray();
-        m_heartRotations = heartRotations.ToArray();
+        NetworkServer.RegisterHandler<RestartGame>(OnRestartGame);
         
-        
-        if (m_vrPlayerHealth > m_heartTransforms.Length) Debug.LogWarning("the Vr Player has more health than there are hearts... Big L?",this);
     }
-
 
     /// <summary/> The Server Loop
     IEnumerator ServerTick()
@@ -221,7 +237,117 @@ public class ServerManager : MonoBehaviour
         Debug.DrawRay(Vector3.zero, m_vrTransformBuffer.rotationHead * Vector3.forward * 300f);
     }
 
-    IEnumerator SpawnInitialBeacons()
+   
+
+    #region SERVER ACTIONS
+
+    /// <summary/> DONT FUCKING TOUCH THIS
+    private bool m_firstTime = true;
+    
+    /// <summary>
+    /// The function that is called when the server is hosted.
+    /// This function takes the serialized properties and applies them to their modifiable counterpart thereby conserving the initial values.
+    /// </summary>
+    private void StartGame()
+    {
+        //Resetting the serialized values
+        m_tickrate = f_tickrate;
+        m_laserRadius = f_laserRadius;
+        m_elevatorSpeed = f_elevatorSpeed;
+        m_elevatorWaitTime = f_elevatorWaitTime;
+        m_heartTransforms = f_heartTransforms;
+        m_vrPlayerHealth = f_vrPlayerHealth;
+        m_pcPlayerHealth = f_pcPlayerHealth;
+        m_beaconSpawnPositions = f_beaconSpawnPositions;
+        m_initialBeacons = f_initialBeacons;
+        m_initialBeaconSpawnDelay = f_initialBeaconSpawnDelay;
+        m_beaconRespawnTime = f_beaconRespawnTime;
+        m_beaconLifeTime = f_beaconLifeTime;
+        m_maxBeacons = f_maxBeacons;
+        m_beaconRange = f_beaconRange;
+        m_bombRespawnTime = f_bombRespawnTime;
+        m_maxBombs = f_maxBombs;
+        m_bombExplosionRange = f_bombExplosionRange;
+        m_bomDetonationTime = f_bomDetonationTime;
+        m_flairRaiseSpeed = f_flairRaiseSpeed;
+        m_flairDetonationTime = f_flairDetonationTime;
+        m_flashDuration = f_flashDuration;
+        m_flashClamp = f_flashClamp;
+        m_laserCheckOffset = f_laserCheckOffset;
+        m_playerLayers = f_playerLayers;
+        
+        //Resetting the beacon values
+        m_currentBeaconAmount = 0;
+        m_currentBombAmount = 0;
+        m_bombCoroutineRunning = false;
+
+        // Doing a small checkup
+        if (m_vrPlayerHealth > m_heartTransforms.Length) Debug.LogWarning("the Vr Player has more health than there are hearts... Big L?",this);
+        
+        //Unpacking the heart position values from the transforms to send through messages
+        List<Vector3> heartPositions = new List<Vector3>();
+        List<Quaternion> heartRotations = new List<Quaternion>();
+
+        foreach (Transform pos in m_heartTransforms)
+        {
+            heartPositions.Add(pos.position);
+            heartRotations.Add(pos.rotation);
+        }
+        
+        m_heartPositions = heartPositions.ToArray();
+        m_heartRotations = heartRotations.ToArray();
+        
+        //Resetting the buffers
+        m_vrTransformBuffer = new VrTransform();
+        m_pcTransformBuffer = new PcTransform();
+        m_laserBuffer = new Laser();
+        m_pcInvisibilityBuffer = new PcInvisibility();
+        m_heartBreakBuffer = new HeartBreak();
+        m_beaconsPositionsBuffer = new BeaconsPositions();
+        m_bombsPositionsBuffer = new BombsPositions();
+        m_newPositions = false;
+        m_destroyedBeaconBuffer = new DestroyedBeacon();
+        m_elevatorActivationBuffer = new ElevatorActivation();
+        m_leureBuffer = new LeureTransform();
+        m_flairBuffer = new ActivateFlair();
+        m_activateBlindBuffer = new ActivateBlind();
+        
+
+        InitialData initialData = new InitialData() {
+            healthPcPlayer = m_pcPlayerHealth,
+            healthVrPlayer = m_vrPlayerHealth,
+            beaconRange = m_beaconRange,
+            maximumBeaconCount = m_maxBeacons,
+            maximumBombsCount = m_maxBombs,
+            elevatorSpeed = m_elevatorSpeed,
+            elevatorWaitTime = m_elevatorWaitTime,
+            flairRaiseSpeed = m_flairRaiseSpeed,
+            flairDetonationTime = m_flairDetonationTime,
+            heartPositions = m_heartPositions,
+            heartRotations = m_heartRotations
+        };
+        
+        SendToBothClients(initialData);
+        
+        
+        
+        if(m_firstTime) {
+            m_severTick = StartCoroutine(ServerTick());
+            m_firstTime = false;
+        }
+        m_spawnInitialBeacons = StartCoroutine(SpawnInitialBeacons());
+        m_spawnBombs = StartCoroutine(BombSpawnTimer());
+    }
+
+    private void EndGame(ClientConnection p_winner = ClientConnection.PcPlayer)
+    {
+        SendToBothClients( new GameEnd(){winningClient = p_winner});
+        
+        StopCoroutine(m_spawnInitialBeacons);
+        StopCoroutine(m_spawnBombs);
+    }
+
+ IEnumerator SpawnInitialBeacons()
     {
         yield return new WaitForSeconds(m_initialBeaconSpawnDelay);
         for (int i = 0; i < m_initialBeacons; i++)
@@ -298,19 +424,6 @@ public class ServerManager : MonoBehaviour
         m_bombCoroutineRunning = false;
     }
 
-    #region SERVER ACTIONS
-
-    
-    /// <summary/> The function that is called when the server is hosted.
-    private void OnStartServer()
-    {
-        StartCoroutine(ServerTick());
-        StartCoroutine(SpawnInitialBeacons());
-        StartCoroutine(BombSpawnTimer());
-    }
-
-
-
     /// <summary>
     /// The function that is called each time a player connects to the server.
     /// We assume that the latest player to connect is the VR player.
@@ -348,14 +461,13 @@ public class ServerManager : MonoBehaviour
     /// <summary/> the function called to check the winning conditions
     private void CheckHealths()
     {
-        if (m_pcPlayerHealth <= 0)
-        {
-            SendToBothClients(new GameEnd(){winningClient = ClientConnection.VrPlayer});
+        if (m_pcPlayerHealth <= 0) {
+            EndGame(ClientConnection.VrPlayer);
             return;
         }
         
         if (m_vrPlayerHealth <= 0)
-            SendToBothClients(new GameEnd(){winningClient = ClientConnection.PcPlayer});
+            EndGame(ClientConnection.PcPlayer);
     }
     
     /// <summary/> The function called when the server has to spawn a beacon
@@ -414,6 +526,14 @@ public class ServerManager : MonoBehaviour
 
         m_leureBuffer = p_leureTransform;
     }
+    
+    private void OnRestartGame(NetworkConnection arg1, RestartGame p_restartGame)
+    {
+        if(m_vrNetworkConnection != null && m_pcNetworkConnection !=null) {
+            EndGame();
+            StartGame();
+        }
+    }
 
     private void OnDestroyLeure(NetworkConnection arg1, DestroyLeure arg2)
     {
@@ -458,7 +578,10 @@ public class ServerManager : MonoBehaviour
         if (client.client == ClientConnection.VrPlayer) m_vrNetworkConnection = p_conn;
         else if (client.client == ClientConnection.PcPlayer) m_pcNetworkConnection = p_conn;
 
-        p_conn.Send(new HeartTransforms(){positions = m_heartPositions, rotations = m_heartRotations});
+        if (m_vrNetworkConnection != null && m_pcNetworkConnection != null)
+        {
+            StartGame();
+        }
 
         
         InitialData initialData = new InitialData() {
@@ -485,6 +608,16 @@ public class ServerManager : MonoBehaviour
             {
                 p_conn.Send(new SpawnBomb() {bombID = data.bombID});
             }
+        
+        // if(m_beaconsPositionsBuffer.data != null)
+        //     foreach (BeaconData data in m_beaconsPositionsBuffer.data)
+        //         p_conn.Send(new SpawnBeacon() {beaconID = data.beaconID});
+        //
+        // if(m_bombsPositionsBuffer.data != null)
+        //     foreach (BombData data in m_bombsPositionsBuffer.data)
+        //     {
+        //         p_conn.Send(new SpawnBomb() {bombID = data.bombID});
+        //     }
     }
     
     /// <summary/> function called when the server receives a message of type ActivateBeacon
@@ -588,7 +721,7 @@ public class ServerManager : MonoBehaviour
                         m_laserBuffer.length = hitSmth ? rayHit.distance : valueIfNoHit;
                     }
 
-                break; }
+                    break; }
 
                 case true : {
                     m_laserBuffer.length = hitSmth ? rayHit.distance : valueIfNoHit;
@@ -643,6 +776,7 @@ public class ServerManager : MonoBehaviour
     private void OnServerReceiveBeaconsPositions(NetworkConnection p_conn, BeaconsPositions p_beaconsPositions)
     {
         //m_beaconsPositionsBuffer = p_beaconsPositions; FUUUUUUUUUUUUUCK
+        if(m_beaconsPositionsBuffer.data == null) return;
         int count = m_beaconsPositionsBuffer.data.Length;
 
         for (int i = 0; i < count; i++)

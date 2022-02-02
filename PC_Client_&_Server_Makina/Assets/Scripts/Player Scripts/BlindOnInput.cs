@@ -1,3 +1,4 @@
+using System;
 using CustomMessages;
 using Mirror;
 using Player_Scripts.Reloading;
@@ -20,10 +21,14 @@ public class BlindOnInput : MonoBehaviour
     {
         m_coolDownScript.OnReloading += ResetCooldown;
         ClientManager.OnReceiveDeActivateBlind += SayVRIsBlind;
+    }
+
+    private void Start()
+    {
         m_uiElement.enabled = true;
         m_vrBlindUiElement.enabled = false;
     }
-    
+
     private void ResetCooldown()
     {
         m_canFlash = true;

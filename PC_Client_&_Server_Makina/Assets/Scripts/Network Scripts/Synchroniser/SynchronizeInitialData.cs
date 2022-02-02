@@ -13,6 +13,7 @@ namespace Synchronizers
 
         [SerializeField] private Texture[] m_pcHealthTextures;
         [SerializeField] private Texture[] m_vrHealthTextures;
+        [SerializeField, Tooltip("The player Object to be enabled on connection")] public GameObject m_playerContainer;
         /// <summary/> The PC Health data saved localy
         private int m_pcHealth;
         
@@ -21,9 +22,14 @@ namespace Synchronizers
         
         /// <summary/> The singleton instance of SynchronizeInitialData
         public static SynchronizeInitialData instance;
-        
+
+
         /// <summary/> Adding functions to the client delegate
-        void Awake() => ClientManager.OnReceiveInitialData += ReceiveInitialData;
+        void Awake()
+        {
+            m_playerContainer.SetActive(false);
+            ClientManager.OnReceiveInitialData += ReceiveInitialData;
+        }
         
         
         /// <summary/> Singleton type beat
@@ -44,6 +50,9 @@ namespace Synchronizers
         {
             m_pcHealth = p_initialData.healthPcPlayer;
             m_vrHealth = p_initialData.healthVrPlayer;
+            
+            m_playerContainer.SetActive(true);
+            
             UpdateHealthText();
         }
         

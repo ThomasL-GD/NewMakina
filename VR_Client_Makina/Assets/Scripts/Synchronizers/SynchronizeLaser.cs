@@ -43,13 +43,23 @@ namespace Synchronizers {
         private bool m_isLoading = false;
 
         // Start is called before the first frame update
-        private void Awake()
-        {
+        private void Awake() {
+
+            MyNetworkManager.OnReceiveInitialData += ReceiveInitialData;
             MyNetworkManager.OnLaserAimingUpdate += SynchroniseLaserAiming;
             MyNetworkManager.OnLaserShootingUpdate += SynchroniseLaserAiming;
             MyNetworkManager.OnLaserShootingUpdate += SynchroniseShot;
 
             m_laserAiming.enabled = false;
+        }
+
+        /// <summary/> Function called when the client receives the initial data
+        /// <param name="p_initialData"> The message sent by the server</param>
+        void ReceiveInitialData(InitialData p_initialData) {
+            //TODO light be annoying if the menuing is fluid
+            m_elapsedTime = 0f;
+            m_isTriggerPressed = false;
+            m_isLoading = false;
         }
 
         /// <summary>
@@ -106,6 +116,8 @@ namespace Synchronizers {
             }
 
             if (OVRInput.Get(m_input) < m_upTriggerValue) {
+                
+                MyNetworkManager.singleton.SendVrData<VrLaser>(new VrLaser(){laserState = LaserState.CancelAiming});
                 m_isTriggerPressed = false;
                 m_isLoading = false;
                 m_laserAiming.enabled = false;

@@ -17,7 +17,12 @@ namespace Synchronizers
             ClientManager.OnReceiveLaserPreview += SynchroniseLaserPreshot;
             ClientManager.OnReceiveLaser += SynchroniseLaserPreshot;
             ClientManager.OnReceiveLaser += SynchroniseShot;
+            ClientManager.OnReceiveInitialData += ReceiveInitialData;
 
+            m_lazerPreshot.enabled = false;
+        }
+
+        private void ReceiveInitialData(InitialData pitialData) {
             m_lazerPreshot.enabled = false;
         }
 
@@ -31,11 +36,7 @@ namespace Synchronizers
         private void SynchroniseShot(Laser p_laser)
         {
             // Instantiating the shot
-            GameObject instantiate = Instantiate(m_laserPrefab,p_laser.origin,p_laser.rotation);
-
-            // Setting the instances position and rotation
-            // instantiate.transform.position = p_laser.origin;
-            // instantiate.transform.rotation = p_laser.rotation;
+            Instantiate(m_laserPrefab,p_laser.origin,p_laser.rotation);
         }
     }
 }
