@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using NUnit.Compatibility;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.UIElements;
 using static UnityEngine.Mathf;
 using static UnityEditor.EditorGUILayout;
 using static UnityEngine.GUILayout;
@@ -12,9 +14,13 @@ class WindowPlacer2 : EditorWindow
     private static GameObject m_window;
     private static GameObject m_parent;
     
-    private static float m_spacing=1f;
-    private static float m_lineHeight=0f;
-    private static float m_margin;
+    private static float m_spacing = 2.5f;
+    private static float m_margin = 2f;
+    private static float m_lineHeight = 2f;
+
+    private static List<Point> m_points;
+
+    private GameObject m_selection;
 
     /// <summary/> The function called when the MenuItem is called to create the window
     [MenuItem("Tools/Window Placer 2")]
@@ -47,13 +53,15 @@ class WindowPlacer2 : EditorWindow
     
     public void SceneViewUpdate(EditorWindow window)
     {
+        if(m_window == null) return;
         if(Selection.count == 0) return;
         
         GameObject selection = (GameObject)Selection.objects[0];
         if(selection==null || !((GameObject)Selection.objects[0]).TryGetComponent(out MeshFilter filter)) return;
         
         Mesh mesh = filter.sharedMesh;
-        
+
+        m_selection = selection;
         
         // making a list of all the triangles of the mesh
         List<Triangle> triangles = new List<Triangle>();
@@ -144,12 +152,50 @@ class WindowPlacer2 : EditorWindow
         }
         
         // Debug.Log(links.Count);
-        foreach (var link in links) link.DrawLink();
+        //foreach (var link in links) link.DrawLink();
 
-        Material previewMat = Resources.Load("Editor/Tools Material/PreviewMaterial", typeof(Material)) as Material;
+        GameObject prefab = m_window;
+        if(!prefab.TryGetComponent(out MeshFilter meshFilter))
+        {
+            for (int i = 0; i < prefab.transform.childCount; i++)
+            {
+                if(prefab.transform.GetChild(i).TryGetComponent(out meshFilter)) break;
+            }
+        }
 
-        previewMat.SetPass(0);
-        Graphics.DrawMeshNow(m_window.transform.GetChild(0).GetComponent<MeshFilter>().sharedMesh,Vector3.one * 10,m_window.transform.rotation);
+        Mesh windowMesh = meshFilter.sharedMesh;
+        
+        Material previewMat = EditorGUIUtility.Load("Assets/Editor/PreviewMaterial.mat") as Material;
+        if (previewMat != null) previewMat.SetPass(0);
+
+        m_points = new List<Point>();
+        
+        foreach (var link in links)
+        {
+            float length = Vector3.Distance(link.A, link.B);
+            if (length < m_margin * 2f) continue;
+            int amount = (int)Ceil((length - m_margin*2f) / m_spacing);
+            for (int i = 0; i <= amount; i++)
+            {
+                Vector3 position = link.A + (link.B - link.A).normalized * (((length - m_margin*2) / amount) * i + m_margin);
+                Quaternion rotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward, new Vector3(link.normal.x,0,link.normal.z), Vector3.up) + m_window.transform.GetChild(0).transform.rotation.eulerAngles);
+                Graphics.DrawMeshNow(windowMesh, position, rotation);
+                rotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward, new Vector3(link.normal.x,0,link.normal.z), Vector3.up) + m_window.transform.eulerAngles);
+                m_points.Add(new Point(position,rotation));
+            }
+        }
+    }
+
+    struct Point
+    {
+        public Vector3 position;
+        public Quaternion rotation;
+
+        public Point(Vector3 p_position, Quaternion p_rotation)
+        {
+            position = p_position;
+            rotation = p_rotation;
+        }
     }
     
     class Link
@@ -167,6 +213,7 @@ class WindowPlacer2 : EditorWindow
 
         public void DrawLink()
         {
+            if (Vector3.Dot(Camera.current.transform.forward, normal) >= 0) return;
             Handles.color = Color.red;
             Handles.DrawLine(A, B);
             Handles.color = Color.yellow;
@@ -281,16 +328,30 @@ class WindowPlacer2 : EditorWindow
     
     private void OnGUI()
     {
-        
         m_window = (GameObject) ObjectField("windowPrefab",m_window,typeof(object),true);
-        m_previewMat = (Material) ObjectField("windowPrefab",m_previewMat,typeof(object),true);
         
         if(m_window == null) return;
         
         m_spacing=FloatField("spacing", m_spacing);
-        m_margin=FloatField("horizontal", m_margin);
+        m_margin=FloatField("margin", m_margin);
         m_lineHeight=FloatField("lineHeight", m_lineHeight);
-        
-        m_parent = (GameObject) ObjectField("parent",m_parent,typeof(object),true);
+
+        if (m_parent == null) m_parent = m_selection;
+        m_parent = (GameObject)ObjectField("parent", m_parent, typeof(object), true);
+
+        if (Button("\nPlace Windows!\n"))
+        {
+            var parent = new GameObject();
+            parent.name = "windows";
+
+            parent.transform.parent = m_parent.transform;
+            
+            Undo.RegisterCreatedObjectUndo(parent, "created parent");
+            foreach (Point point in m_points)
+            {
+                GameObject window = Instantiate(m_window, point.position, point.rotation);
+                window.transform.parent = parent.transform;
+            }
+        }
     }
 }
