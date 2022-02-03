@@ -20,7 +20,7 @@ namespace Network.Connexion_Menu {
         protected override void OnFirstTimeTouchingGround(Collision p_other) {
             base.OnFirstTimeTouchingGround(p_other);
 
-            if (p_other.gameObject.TryGetComponent(out ConnexionMenuButtonBehavior script)) {
+            if (p_other.gameObject.TryGetComponent(out AttackSensitiveButton script)) {
                 MyNetworkManager.OnConnection += DestroyMyself;
                 script.OnBeingActivated();
             }

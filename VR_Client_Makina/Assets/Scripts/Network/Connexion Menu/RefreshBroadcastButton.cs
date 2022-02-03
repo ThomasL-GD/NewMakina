@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Network.Connexion_Menu {
 
-    public class RefreshBroadcastButton : ConnexionMenuButtonBehavior {
+    public class RefreshBroadcastButton : AttackSensitiveButton {
         
         readonly Dictionary<long, ServerResponse> discoveredServers = new Dictionary<long, ServerResponse>();
         

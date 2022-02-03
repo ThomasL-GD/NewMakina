@@ -1,7 +1,7 @@
 using Mirror.Discovery;
 
 namespace Network.Connexion_Menu {
-    public class ServerConnectButton : ConnexionMenuButtonBehavior {
+    public class ServerConnectButton : AttackSensitiveButton {
 
         public ServerResponse serverResponse;
 

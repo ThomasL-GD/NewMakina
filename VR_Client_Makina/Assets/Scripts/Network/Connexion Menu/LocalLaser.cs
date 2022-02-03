@@ -25,6 +25,8 @@ namespace Network.Connexion_Menu {
         private bool m_shutDown = false;
         private float m_elapsedTime = 0f;
 
+        private bool m_isActive = true;
+
         // Start is called before the first frame update
         void Start() {
             m_line = GetComponent<LineRenderer>();
@@ -34,6 +36,7 @@ namespace Network.Connexion_Menu {
         // Update is called once per frame
         void Update() {
 
+            if (!m_isActive) return;
             if (m_shutDown) return;
 
             if (OVRInput.Get(m_input) < m_upTriggerValue) {
@@ -49,7 +52,7 @@ namespace Network.Connexion_Menu {
                 bool hasRaycastHit = Physics.Raycast(transform.position, transform.forward, out hit, 1000f, m_mask);
                 if (hasRaycastHit) {
                     m_shutDown = true;
-                    if(hit.transform.gameObject.TryGetComponent(out ConnexionMenuButtonBehavior script)) script.OnBeingActivated();
+                    if(hit.transform.gameObject.TryGetComponent(out AttackSensitiveButton script)) script.OnBeingActivated();
                     m_line.enabled = false;
                 }
                 
@@ -91,6 +94,6 @@ namespace Network.Connexion_Menu {
             }
         }
 
-        private void DestroyMyself() => Destroy(gameObject);
+        private void DestroyMyself() => m_isActive = false;
     }
 }

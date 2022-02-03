@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using CustomMessages;
 using Network;
+using Network.Connexion_Menu;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -101,6 +102,11 @@ namespace Synchronizers {
                 
                 SynchronizeInitialData.instance.LosePcHealth();
             }
+            
+            RaycastHit hit;
+            Transform transform1 = transform;
+            bool hasRaycastHit = Physics.Raycast(transform1.position, transform1.forward, out hit, 1000f, 1 << 7);
+            if (hasRaycastHit && hit.transform.gameObject.TryGetComponent(out AttackSensitiveButton script)) script.OnBeingActivated();
         }
 
         private void Update() {
