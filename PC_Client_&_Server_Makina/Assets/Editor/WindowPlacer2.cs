@@ -1,16 +1,27 @@
 using System.Collections.Generic;
+using NUnit.Compatibility;
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.EditorTools;
+using static UnityEngine.Mathf;
+using static UnityEditor.EditorGUILayout;
+using static UnityEngine.GUILayout;
 
-class WindowPlacerEditorTool : EditorWindow
+class WindowPlacer2 : EditorWindow
 {
+    private Material m_previewMat;
+    private static GameObject m_window;
+    private static GameObject m_parent;
+    
+    private static float m_spacing=1f;
+    private static float m_lineHeight=0f;
+    private static float m_margin;
+
     /// <summary/> The function called when the MenuItem is called to create the window
     [MenuItem("Tools/Window Placer 2")]
     static void Init()
     {
         // Instantiating or fetching the PrefabPicasso window 
-        WindowPlacerEditorTool window = (WindowPlacerEditorTool)GetWindow(typeof(WindowPlacerEditorTool));
+        WindowPlacer2 window = (WindowPlacer2)GetWindow(typeof(WindowPlacer2));
         
         // Giving the window the "Prefab Picasso" name
         window.titleContent = new GUIContent("Window Placer 2");
@@ -60,7 +71,7 @@ class WindowPlacerEditorTool : EditorWindow
         foreach (var triangle in triangles)
         {
             List<Intersections> localLine = new List<Intersections>();
-            triangle.DrawHorizontalLineAlongMesh(selection.transform.position,0,selection.transform.rotation, selection.transform.localScale, out localLine);
+            triangle.DrawHorizontalLineAlongMesh(selection.transform.position,m_lineHeight,selection.transform.rotation, selection.transform.localScale, out localLine);
             foreach (var item in localLine)
             {
                 bool canAdd = true;
@@ -135,10 +146,10 @@ class WindowPlacerEditorTool : EditorWindow
         // Debug.Log(links.Count);
         foreach (var link in links) link.DrawLink();
 
-        // if(!m_prefab.TryGetComponent(out MeshFilter prefabMeshFilter)) return;
-        //
-        // Mesh prefabMesh = prefabMeshFilter.sharedMesh;
-        // Bounds prefabBounds = prefabMesh.bounds;
+        Material previewMat = Resources.Load("Editor/Tools Material/PreviewMaterial", typeof(Material)) as Material;
+
+        previewMat.SetPass(0);
+        Graphics.DrawMeshNow(m_window.transform.GetChild(0).GetComponent<MeshFilter>().sharedMesh,Vector3.one * 10,m_window.transform.rotation);
     }
     
     class Link
@@ -193,9 +204,9 @@ class WindowPlacerEditorTool : EditorWindow
 
         private void DrawFace(Vector3 p_position, Camera p_cam, Quaternion p_rotation, Vector3 p_scale)
         {
-            Vector3 v1 = Vector3.Scale(p_rotation * vertex1, p_scale);
-            Vector3 v2 = Vector3.Scale(p_rotation * vertex2, p_scale);
-            Vector3 v3 = Vector3.Scale(p_rotation * vertex3, p_scale);
+            Vector3 v1 = p_rotation * Vector3.Scale( vertex1, p_scale);
+            Vector3 v2 = p_rotation * Vector3.Scale(vertex2, p_scale);
+            Vector3 v3 = p_rotation * Vector3.Scale(vertex3, p_scale);
 
             if ((CheckIfInCameraView(p_cam, p_position + v1) && CheckIfInCameraView(p_cam, p_position + v2)
                                                              && CheckIfInCameraView(p_cam, p_position + v3))) return;
@@ -204,29 +215,21 @@ class WindowPlacerEditorTool : EditorWindow
             Handles.DrawLine(p_position + v1,p_position + v2);
             Handles.DrawLine(p_position + v2,p_position + v3);
             Handles.DrawLine(p_position + v3,p_position + v1);
-
-            Color color = Handles.color;
-            color.a = .5f;
-            Handles.color = color;
-            Mesh face = new Mesh();
-            face.vertices = new[] {vertex1,vertex2,vertex3};
-            face.triangles = new[] {0,1,2};
-            face.normals = new[] {normal,normal,normal};
         }
 
         public void DrawHorizontalLineAlongMesh(Vector3 p_position, float p_lineHeight, Quaternion p_rotation, Vector3 p_scale, out List<Intersections> p_intersections)
         {
             p_intersections = new List<Intersections>();
-            Vector3 v1 = Vector3.Scale(p_rotation * vertex1, p_scale);
-            Vector3 v2 = Vector3.Scale(p_rotation * vertex2, p_scale);
-            Vector3 v3 = Vector3.Scale(p_rotation * vertex3, p_scale);
+            Vector3 v1 = p_rotation * Vector3.Scale(vertex1, p_scale);
+            Vector3 v2 = p_rotation * Vector3.Scale(vertex2, p_scale);
+            Vector3 v3 = p_rotation * Vector3.Scale(vertex3, p_scale);
             Vector3 n = p_rotation * normal;
             bool tooHigh = v1.y >= p_lineHeight && v2.y >= p_lineHeight && v3.y >= p_lineHeight;
             bool tooLow = v1.y <= p_lineHeight && v2.y <= p_lineHeight && v3.y <= p_lineHeight;
             
             if (!tooHigh && !tooLow)
             {
-                DrawFace(p_position,Camera.current,p_rotation,p_scale);
+                //DrawFace(p_position,Camera.current,p_rotation,p_scale);
 
                 Vector3 intersection;
                 if (GetSegmentPlaneIntersection(v1, v2, out intersection, p_lineHeight))
@@ -274,5 +277,20 @@ class WindowPlacerEditorTool : EditorWindow
             
             return viewportPoint.x !< 0 && viewportPoint.x !> 1 && viewportPoint.y !< 0 && viewportPoint.y !> 1;
         }
+    }
+    
+    private void OnGUI()
+    {
+        
+        m_window = (GameObject) ObjectField("windowPrefab",m_window,typeof(object),true);
+        m_previewMat = (Material) ObjectField("windowPrefab",m_previewMat,typeof(object),true);
+        
+        if(m_window == null) return;
+        
+        m_spacing=FloatField("spacing", m_spacing);
+        m_margin=FloatField("horizontal", m_margin);
+        m_lineHeight=FloatField("lineHeight", m_lineHeight);
+        
+        m_parent = (GameObject) ObjectField("parent",m_parent,typeof(object),true);
     }
 }

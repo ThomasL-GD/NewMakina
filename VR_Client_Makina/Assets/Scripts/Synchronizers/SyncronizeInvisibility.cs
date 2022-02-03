@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using CustomMessages;
 using Network;
@@ -14,6 +15,11 @@ public class SyncronizeInvisibility : Synchronizer<SyncronizeInvisibility>
     private void Awake()
     {
         MyNetworkManager.OnInvisibilityUpdate += OnReceiveInvisibility;
+        MyNetworkManager.OnReceiveInitialData += ReceiveInitialData;
+    }
+
+    private void ReceiveInitialData(InitialData p_initialdata) {
+        OnReceiveInvisibility(new PcInvisibility(){isInvisible = false});
     }
 
     /// <summary>

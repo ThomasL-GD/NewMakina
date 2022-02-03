@@ -17,11 +17,19 @@ namespace Synchronizers {
         {
             m_text.gameObject.SetActive(false);
             MyNetworkManager.OnReceiveGameEnd += GameEnd;
+            MyNetworkManager.OnReceiveInitialData += Reset;
             
             foreach (GameObject go in m_GOToSetActive) {
                 go.SetActive(false);
             }
             
+        }
+
+        /// <summary>Does the opposite of GameEnd to be sure nothing is displayed when a new game starts </summary>
+        /// <param name="p_initialdata">The message sent by the server</param>
+        private void Reset(InitialData p_initialdata) {
+            m_text.gameObject.SetActive(false);
+            foreach (GameObject go in m_GOToSetActive) { go.SetActive(false); }
         }
 
         void GameEnd(GameEnd p_gameEnd)

@@ -20,23 +20,36 @@ namespace Synchronizers
         {
             // Setting up the synchronizers with the delegates
             
-            ClientManager.OnReceiveHeartTransforms += SynchronizeHeartTransforms;
+            ClientManager.OnReceiveInitialData += SynchronizeInitialDataLocal;
+            ClientManager.OnReceiveGameEnd += Reset;
             ClientManager.OnReceiveHeartBreak += SynchronizeHeartBreak;
         }
-        
+
+        private void Reset(GameEnd p_p_gameend) {
+
+            //Destroy them all （￣ｗ￣）Ψ
+            foreach (GameObject heart in m_hearts) {
+                Destroy(heart);
+            }
+
+            m_hearts = new GameObject[]{ };
+        }
+
         /// <summary>
         ///  Spawning in the hearts
         /// </summary>
         /// <param name="p_heartTransforms"> the network message </param>
-        private void SynchronizeHeartTransforms(HeartTransforms p_heartTransforms)
+        private void SynchronizeInitialDataLocal(InitialData p_initialData)
         {
+            
             // Creating a list to be able to iterate on the hearts
             List<GameObject> hearts = new List<GameObject>();
             
             // Fetching all the hearts and adding them to the list
-            for (int i = 0; i < p_heartTransforms.positions.Length; i++)
+            for (int i = 0; i < p_initialData.heartPositions.Length; i++)
             {
-                hearts.Add(Instantiate(m_heartPrefabs, p_heartTransforms.positions[i], m_heartPrefabs.transform.rotation));
+                //Todo : set a rotation
+                hearts.Add(Instantiate(m_heartPrefabs, p_initialData.heartPositions[i], m_heartPrefabs.transform.rotation));
                 
                 // Giving them a heart identifier component
                 if (hearts[i].TryGetComponent( out HeartIdentifier hi))

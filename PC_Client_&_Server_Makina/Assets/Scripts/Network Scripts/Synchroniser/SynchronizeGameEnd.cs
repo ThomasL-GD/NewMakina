@@ -12,10 +12,15 @@ public class SynchronizeGameEnd : Synchronizer<SynchronizeGameEnd>
     /// <summary>
     /// Awake is called before the Start
     /// </summary>
-    void Awake()
-    {
-        m_text.gameObject.SetActive(false);
+    void Awake() {
         ClientManager.OnReceiveGameEnd += GameEnd;
+        ClientManager.OnReceiveInitialData += Prepare;
+    }
+
+    /// <summary> </summary>
+    /// <param name="p_p_initialdata"></param>
+    private void Prepare(InitialData p_p_initialdata) {
+        m_text.gameObject.SetActive(false);
     }
 
     void GameEnd(GameEnd p_gameEnd)

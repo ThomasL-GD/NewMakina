@@ -7,8 +7,7 @@ public class SynchroniseBlindAndFlair : Synchronizer<SynchroniseBlindAndFlair>
 {
     [SerializeField] private MoveUp m_flair;
     [SerializeField] private UIOpacityTransition m_blindObject;
-    void Awake()
-    {
+    void Awake() {
         MyNetworkManager.OnReceiveInitialData += FlairInitialData;
         MyNetworkManager.OnReceiveActivateFlair += ActivateFlair;
         MyNetworkManager.OnReceiveActivateBlind += ActivateBlindness;
@@ -18,8 +17,11 @@ public class SynchroniseBlindAndFlair : Synchronizer<SynchroniseBlindAndFlair>
     private void ActivateFlair(ActivateFlair p_activateflair) =>
         m_flair.StartRaise(p_activateflair.startPosition);
 
-    private void FlairInitialData(InitialData p_initialdata) =>
+    private void FlairInitialData(InitialData p_initialdata) {
+        m_flair.Reset();
         m_flair.SetRaiseSpeedAndTime(p_initialdata.flairRaiseSpeed,p_initialdata.flairDetonationTime);
+        DeactivateBlindness(new DeActivateBlind());
+    }
     
     void ActivateBlindness(ActivateBlind p_activateBlind) 
     {

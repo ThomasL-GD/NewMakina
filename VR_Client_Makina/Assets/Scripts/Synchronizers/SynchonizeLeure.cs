@@ -20,7 +20,16 @@ public class SynchonizeLeure : Synchronizer<SynchonizeLeure>
         m_leure.transform.position = Vector3.down * 1000f;
         m_leure.SetActive(true);
     }
-    void ReceiveDestroyLeure(DestroyLeure p_destroyLeure)  => m_leure.SetActive(false);
 
-    void UpdateLeurePosition(LeureTransform p_leureTransform) => m_leure.transform.SetPositionAndRotation(p_leureTransform.position,p_leureTransform.rotation);
+    void ReceiveDestroyLeure(DestroyLeure p_destroyLeure)
+    {
+        m_leure.SetActive(false);
+        m_leure.transform.position = Vector3.down * 1000f;
+    }
+
+    void UpdateLeurePosition(LeureTransform p_leureTransform)
+    {
+        if(!m_leure.activeSelf) return;
+        m_leure.transform.SetPositionAndRotation(p_leureTransform.position, p_leureTransform.rotation);
+    }
 }

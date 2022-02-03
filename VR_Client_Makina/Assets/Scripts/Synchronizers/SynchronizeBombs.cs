@@ -9,13 +9,11 @@ namespace Synchronizers {
 
         [SerializeField] private GameObject m_prefabBomb = null;
 
-        [SerializeField] [Range(0f, 5f)] private float m_explosionTimeOnceTouchingTheGround = 0f;
+        private float m_explosionTime = 0f;
         [SerializeField] private Color m_colorWhenAlmostExploding = Color.red;
 
         [SerializeField] private float m_bombScale = 1f;
         
-        /*[SerializeField] [Range(1f, 100f)] [Tooltip("This shall be replaced by server data sent to this")] */private float m_explosionRange = 5f;
-
         [SerializeField] private GameObject m_prefabFxBoomHit = null;
         [SerializeField] private GameObject m_prefabFxBoomMiss = null;
 
@@ -46,13 +44,25 @@ namespace Synchronizers {
             
             MyNetworkManager.OnReceiveSpawnBomb += SpawnBomb;
             MyNetworkManager.OnReceiveBombExplosion += ExplosionFeedback;
-            MyNetworkManager.OnReceiveInitialData += SetMaxBombsSlots;
+            MyNetworkManager.OnReceiveInitialData += ReceiveIntialData;
+            MyNetworkManager.OnReceiveGameEnd += Reset;
+        }
+
+        /// <summary>Is called by the OnReceiveGameEnd and destroys every bomb to be ready to launch a new game </summary>
+        /// <param name="p_p_gameend">The message sent by the server</param>
+        private void Reset(GameEnd p_p_gameend) {
+
+            foreach (BombInfo info in m_bombs) {
+                info.transform.GetComponent<BombBehavior>().DestroyMaSoul();
+            }
+            m_bombs.Clear();
         }
 
         /// <summary>Just sets maxSlotsForBombs according to the server's InitialData</summary>
         /// <param name="p_initialData">The message sent by the server</param>
-        private void SetMaxBombsSlots(InitialData p_initialData) {
+        private void ReceiveIntialData(InitialData p_initialData) {
             m_maxSlotsLoading = p_initialData.maximumBombsCount;
+            m_explosionTime = p_initialData.bombDetonationTime;
         }
 
         private void Update() {
@@ -80,7 +90,7 @@ namespace Synchronizers {
             script.m_synchronizer = this;
             script.m_index = m_bombs.Count;
             script.m_serverID = p_spawnBomb.bombID;
-            script.m_explosionTimeOnceOnGround = m_explosionTimeOnceTouchingTheGround;
+            script.m_explosionTimeOnceOnGround = m_explosionTime;
             script.m_mustDropDown = m_dropDown;
             script.m_prefabDropDownFeedback = m_prefabDropDownFeedback;
             
@@ -92,8 +102,8 @@ namespace Synchronizers {
         /// <param name="p_serverID">The server ID of the bomb</param>
         public void ExplodeLol(int p_index, float p_serverID) {
 
-            int? index = FindBeaconFromID(p_index, p_serverID);
-            Debug.LogWarning($"The index value is {index} but the initial one was {p_index}, the list contains {m_bombs.Count} elements");
+            int? index = FindBombFromID(p_index, p_serverID);
+            if(index != p_index)Debug.LogWarning($"The index value is {index} but the initial one was {p_index}, the list contains {m_bombs.Count} elements");
             
             MyNetworkManager.singleton.SendVrData(new BombExplosion(){
                 position = m_bombs[index??0].transform.position,
@@ -129,12 +139,12 @@ namespace Synchronizers {
             for(int i = 0; i < m_availblePositions.Length; i++) if(m_availblePositions[i]) currentAvailablePositions.Add(i);
 
             int random = Random.Range(0, currentAvailablePositions.Count);
-            Debug.Log($"Index technically wrong : {random}   (btw, the list has {currentAvailablePositions.Count} elements)");
+//            Debug.Log($"Index technically wrong : {random}   (btw, the list has {currentAvailablePositions.Count} elements)");
             LoadObjectFromIndex(p_script, currentAvailablePositions[random]);
         }
 
         public void ChangeMaterialOfABomb(int p_index, float p_serverID) {
-            int index = FindBeaconFromID(p_index, p_serverID)??-1;
+            int index = FindBombFromID(p_index, p_serverID)??-1;
             m_bombs[index].transform.GetComponent<MeshRenderer>().material.color = m_colorWhenAlmostExploding;
         }
         
@@ -142,7 +152,7 @@ namespace Synchronizers {
         /// <param name="p_index"> the estimated index of the wanted bomb </param>
         /// <param name="p_beaconID"> the ID of the wanted bomb </param>
         /// <returns> returns the index of the beacon with the right ID if none are found, returns null </returns>
-        private int? FindBeaconFromID(int p_index, float p_beaconID)
+        private int? FindBombFromID(int p_index, float p_beaconID)
         {
             int index = p_index;
             float ID = p_beaconID;
