@@ -246,7 +246,6 @@ public class ServerManager : MonoBehaviour
     /// </summary>
     private void StartGame()
     {
-        
         #region Members assignment
         //Resetting the serialized values
         m_tickrate = f_tickrate;

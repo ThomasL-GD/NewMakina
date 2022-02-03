@@ -139,6 +139,7 @@ namespace Synchronizers {
                 Vector3 position = Synchronizer<SynchronizeSendVrRig>.Instance.m_rightHand.position;
                 bool isHitting = Physics.Raycast(position, forward, out RaycastHit ray, Mathf.Infinity, m_layersThatCollidesWithLaser);
                 m_laserAiming.SetPosition(1, position + (forward * (isHitting ? ray.distance : 100000f)));
+                m_laserAiming.SetPosition(0, position);
 
                 if (m_elapsedTime > m_laserLoadingTime) {
                     

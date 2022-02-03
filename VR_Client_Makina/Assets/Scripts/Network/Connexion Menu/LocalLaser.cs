@@ -1,4 +1,5 @@
 using System.Collections;
+using Synchronizers;
 using UnityEngine;
 
 namespace Network.Connexion_Menu {
@@ -61,6 +62,13 @@ namespace Network.Connexion_Menu {
                 m_line.materials[0].color = new Color(((m_firstColor.r * (1-ratio)) + (m_lastColor.r * ratio)), ((m_firstColor.g * (1-ratio)) + (m_lastColor.g * ratio)), ((m_firstColor.b * (1-ratio)) + (m_lastColor.b * ratio)));
 
                 m_line.widthMultiplier = m_initialLaserSize * (1 - ratio) + (m_endLaserSize * ratio);
+
+                //Setting the right length for the laser aiming previsualization
+                Vector3 forward = Synchronizer<SynchronizeSendVrRig>.Instance.m_rightHand.forward;
+                Vector3 position = Synchronizer<SynchronizeSendVrRig>.Instance.m_rightHand.position;
+                bool isHitting = Physics.Raycast(position, forward, out RaycastHit ray, Mathf.Infinity, m_mask);
+                m_line.SetPosition(1, position + (forward * (isHitting ? ray.distance : 100000f)));
+                m_line.SetPosition(0, position);
             }
             else if (OVRInput.Get (m_input) >= m_upTriggerValue) { // If the player press the trigger hard enough
                 m_isShooting = true;
