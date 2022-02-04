@@ -68,9 +68,9 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
             
             if(m_mustDropDown) return; // Watch out, this line can kill your code if you put line afterwards
                 
-            m_rb.velocity = (m_lastCoordinates[0].position - m_lastCoordinates[m_lastCoordinates.Length - 1].position) * ((1 / Time.fixedDeltaTime) / m_lastCoordinates.Length);
+            //m_rb.velocity = (m_lastCoordinates[0].position - m_lastCoordinates[m_lastCoordinates.Length - 1].position) * ((1 / Time.fixedDeltaTime) / m_lastCoordinates.Length);
             //m_rb.angularVelocity += m_lastCoordinates[0].rotation.eulerAngles - m_lastCoordinates[m_lastCoordinates.Length - 1].rotation.eulerAngles;
-            // m_rb.velocity = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);
+            m_rb.velocity = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.LHand);
             m_rb.angularVelocity = OVRInput.GetLocalControllerAngularVelocity(OVRInput.Controller.RTouch);
             
             //Debug.Log(OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch));

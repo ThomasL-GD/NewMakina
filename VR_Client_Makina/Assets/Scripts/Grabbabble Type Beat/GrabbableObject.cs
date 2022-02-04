@@ -8,8 +8,6 @@ public abstract class GrabbableObject : MonoBehaviour {
     protected bool m_isCaught = false;
     protected bool m_hasBeenCaughtInLifetime = false;
     [HideInInspector] public bool m_isGrabbable = true; 
-    
-    [HideInInspector] /**/public List<Transform> m_originalParent = new List<Transform>(); //TODO : comment this variable cuz it's a mess
 
     protected bool m_isPuttableOnlyOnce = false; // If true, once this object is let go somewhere, it can NOT be picked up again
 
@@ -25,8 +23,6 @@ public abstract class GrabbableObject : MonoBehaviour {
         }
 
         gameObject.layer = 6; //The sixth layer is the one for Catchable Objects
-
-        m_originalParent.Add(transform.parent);
     }
 
     /// <summary>
@@ -60,6 +56,14 @@ public abstract class GrabbableObject : MonoBehaviour {
         
         if (m_hasBeenCaughtInLifetime && !m_isCaught) {
             m_isGrabbable = false;
+        }
+    }
+
+    private void OnTriggerStay(Collider p_other) {
+        if (p_other.gameObject.layer == VrHandBehaviour.s_layer && p_other.TryGetComponent(out VrHandBehaviour script)) {
+            if (script.isFree) {
+                script.Catch(this);
+            }
         }
     }
 }
