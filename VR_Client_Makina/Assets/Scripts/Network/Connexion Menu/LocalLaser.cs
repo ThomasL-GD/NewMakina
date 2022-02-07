@@ -1,4 +1,5 @@
 using System.Collections;
+using CustomMessages;
 using Synchronizers;
 using UnityEngine;
 
@@ -31,6 +32,7 @@ namespace Network.Connexion_Menu {
         void Start() {
             m_line = GetComponent<LineRenderer>();
             m_line.enabled = false;
+            MyNetworkManager.OnReceiveGameEnd += ActiveMe;
         }
 
         // Update is called once per frame
@@ -85,15 +87,16 @@ namespace Network.Connexion_Menu {
             m_line.enabled = false;
                     
             if (MyNetworkManager.singleton.m_canSend) {
-                MyNetworkManager.OnConnection += DestroyMyself;
+                MyNetworkManager.OnReceiveInitialData += DestroyMyself;
             }
-            else {
-                m_elapsedTime = 0f;
-                m_isShooting = false;
-                m_shutDown = false;
-            }
+            
+            m_elapsedTime = 0f;
+            m_isShooting = false;
+            m_shutDown = false;
         }
 
-        private void DestroyMyself() => m_isActive = false;
+        private void DestroyMyself(InitialData p_initialData) => m_isActive = false;
+
+        private void ActiveMe(GameEnd p_gameend) => m_isActive = true;
     }
 }

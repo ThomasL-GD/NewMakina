@@ -18,9 +18,10 @@ namespace Network.Connexion_Menu {
         /// Override this function if you want something to happen when this object is being shot
         /// </remarks>
         public virtual void OnBeingActivated() {
-            MyNetworkManager.OnConnection += DestroyMyself;
+            
         }
 
-        private void DestroyMyself() => Destroy(gameObject);
+        /// <summary>Yeah it's literally just that</summary>
+        protected void DestroyMyself() => Destroy(gameObject);
     }
 }

@@ -227,35 +227,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5469d51c64153694a86a6c66393a5ed9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1458416909 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3611048692802888144, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
-  m_PrefabInstance: {fileID: 3611048692076519165}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1458416911 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3611048692802888143, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
-  m_PrefabInstance: {fileID: 3611048692076519165}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1458416909}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a9691e782d9179418b4c3bccf9149af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1458416915
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1458416909}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88c37d3deca7a834d80cfd8d3cfcc510, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  networkDiscovery: {fileID: 1458416911}
 --- !u!1 &1637636480
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,14 +409,14 @@ PrefabInstance:
     - target: {fileID: 3611048691882084979, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
       propertyPath: networkDiscovery
       value: 
-      objectReference: {fileID: 1458416911}
+      objectReference: {fileID: 0}
     - target: {fileID: 3611048692110909751, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
       propertyPath: m_LocalPosition.y
       value: -1000
       objectReference: {fileID: 0}
     - target: {fileID: 3611048692802888141, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
       propertyPath: m_IPadress
-      value: 10.31.241.112
+      value: 10.31.240.229
       objectReference: {fileID: 0}
     - target: {fileID: 3611048692802888141, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
       propertyPath: m_localHost
@@ -546,4 +517,5 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 3611048692519340852, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
     - {fileID: 7984681526904007795, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
+    - {fileID: 3611048692802888143, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e5b9d2e081229c34da4fcc8ad1630e03, type: 3}
