@@ -7,7 +7,7 @@ namespace Synchronizers {
     /// <typeparam name="T"></typeparam>
     public abstract class Synchronizer<T> : MonoBehaviour where T : Component {
 
-        protected static T m_instance;
+        private static T m_instance;
         
         public static T Instance
         {

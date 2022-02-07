@@ -50,12 +50,6 @@ namespace Synchronizers
             StartCoroutine(DeathLoop());
         }
 
-        [ContextMenu("test")]
-        void Test()
-        {
-            StartCoroutine(DeathLoop());
-        }
-
         /// <summary>
         /// The coroutine called that will handle the player's death
         /// </summary>
@@ -71,11 +65,12 @@ namespace Synchronizers
             
             //Todo Make this no cursed for the love of baby jesus
             m_player.transform.position = Vector3.one * -1000f;
+            
+            Debug.Log(SynchronizeInitialData.Instance != false);
+            
             //Updating the feedback
-            SynchronizeInitialData.instance.LosePcHealth();
+            SynchronizeInitialData.Instance.LosePcHealth();
 
-            
-            
             //Waiting for the respawn time
             yield return new WaitForSeconds(m_respawnTime);
 

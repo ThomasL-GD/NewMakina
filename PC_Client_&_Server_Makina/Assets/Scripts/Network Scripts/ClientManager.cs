@@ -89,6 +89,11 @@ public class ClientManager : MonoBehaviour
     /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
     public delegate void ActivateBlindDelegator(ActivateBlind p_activateBlind);
     public static ActivateBlindDelegator OnReceiveActivateBlind;
+        
+    /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+    public delegate void ReadyDelegator(ReadyToPlay p_activateBlind);
+    public static ReadyDelegator OnReceiveReadyToPlay;
+    
     #endregion
     [SerializeField, Tooltip("The player Object to get the player's location")] public GameObject m_playerObject;
     
@@ -128,7 +133,10 @@ public class ClientManager : MonoBehaviour
         NetworkClient.RegisterHandler<ActivateFlair>(ReceiveActivateFlair);
         NetworkClient.RegisterHandler<ActivateBlind>(ReceiveActivateBlind);
         NetworkClient.RegisterHandler<DeActivateBlind>(ReceiveDeActivateBlind);
+        NetworkClient.RegisterHandler<ReadyToPlay>(ReceiveReadyMessage);
     }
+
+    private void ReceiveReadyMessage(ReadyToPlay p_readyMessage) => OnReceiveReadyToPlay?.Invoke(p_readyMessage);
 
     private void ReceiveActivateFlair(ActivateFlair p_activateFlair) => OnReceiveActivateFlair?.Invoke(p_activateFlair);
     

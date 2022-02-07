@@ -33,7 +33,10 @@ public class ServerManager : MonoBehaviour
     private LeureTransform m_leureBuffer;
     private ActivateFlair m_flairBuffer;
     private ActivateBlind m_activateBlindBuffer;
-
+    
+    private bool m_vrReadyBuffer;
+    private bool m_pcReadyBuffer;
+    
     #endregion
     
     
@@ -190,6 +193,7 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<DestroyLeure>(OnDestroyLeure);
         NetworkServer.RegisterHandler<LeureTransform>(OnLeureTransform);
         NetworkServer.RegisterHandler<RestartGame>(OnRestartGame);
+        NetworkServer.RegisterHandler<ReadyToPlay>(OnReadyMessage);
         
     }
 
@@ -237,9 +241,16 @@ public class ServerManager : MonoBehaviour
 
     #region SERVER ACTIONS
 
+    private void SendReady()
+    {
+        SendToBothClients(new ReadyToPlay());
+    }
+    
     /// <summary/> DONT FUCKING TOUCH THIS
     private bool m_firstTime = true;
-    
+
+    private bool m_gameEnded;
+
     /// <summary>
     /// The function that is called when the server is hosted.
     /// This function takes the serialized properties and applies them to their modifiable counterpart thereby conserving the initial values.
@@ -277,7 +288,12 @@ public class ServerManager : MonoBehaviour
         m_currentBeaconAmount = 0;
         m_currentBombAmount = 0;
         m_bombCoroutineRunning = false;
+        
+        m_pcReadyBuffer = false;
+        m_vrReadyBuffer = false;
 
+        m_gameEnded = false;
+        
         // Doing a small checkup
         if (m_vrPlayerHealth > m_heartTransforms.Length) Debug.LogWarning("the Vr Player has more health than there are hearts... Big L?",this);
         
@@ -339,6 +355,8 @@ public class ServerManager : MonoBehaviour
 
     private void EndGame(ClientConnection p_winner = ClientConnection.PcPlayer)
     {
+        m_gameEnded = true;
+        
         SendToBothClients( new GameEnd(){winningClient = p_winner});
         
         StopCoroutine(m_spawnInitialBeacons);
@@ -459,6 +477,7 @@ public class ServerManager : MonoBehaviour
     /// <summary/> the function called to check the winning conditions
     private void CheckHealths()
     {
+        if (m_gameEnded) return;
         if (m_pcPlayerHealth <= 0) {
             EndGame(ClientConnection.VrPlayer);
             return;
@@ -527,9 +546,10 @@ public class ServerManager : MonoBehaviour
     
     private void OnRestartGame(NetworkConnection arg1, RestartGame p_restartGame)
     {
+        Debug.Log($"Received RestartGame message from client :{arg1.address}");
         if(m_vrNetworkConnection != null && m_pcNetworkConnection !=null) {
             EndGame();
-            StartGame();
+            SendReady();
         }
     }
 
@@ -578,20 +598,19 @@ public class ServerManager : MonoBehaviour
 
         if (m_vrNetworkConnection != null && m_pcNetworkConnection != null)
         {
-            StartGame();
+            SendReady();
         }
-        
-        // if(m_beaconsPositionsBuffer.data != null)
-        //     foreach (BeaconData data in m_beaconsPositionsBuffer.data)
-        //         p_conn.Send(new SpawnBeacon() {beaconID = data.beaconID});
-        //
-        // if(m_bombsPositionsBuffer.data != null)
-        //     foreach (BombData data in m_bombsPositionsBuffer.data)
-        //     {
-        //         p_conn.Send(new SpawnBomb() {bombID = data.bombID});
-        //     }
     }
-    
+
+    private void OnReadyMessage(NetworkConnection p_connection, ReadyToPlay p_message)
+    {
+        Debug.Log("Called OnReadyMessage");
+        if (p_connection == m_vrNetworkConnection) m_vrReadyBuffer = true;
+        else if (p_connection == m_pcNetworkConnection) m_pcReadyBuffer = true;
+        
+        if(m_vrReadyBuffer && m_pcReadyBuffer) StartGame();
+    }
+
     /// <summary/> function called when the server receives a message of type ActivateBeacon
     /// <param name="p_conn"> The connection from which originated the message </param>
     /// <param name="p_ativateBeacon"> The message sent by the Client to the Server  </param>
@@ -662,14 +681,15 @@ public class ServerManager : MonoBehaviour
             
             // Hitboxes Verification (blame Blue)
             bool hitAWall = Physics.Raycast(startingPoint, laserCriticalPath.normalized,out RaycastHit hited, laserCriticalPath.magnitude,m_playerLayers,QueryTriggerInteraction.Ignore);
-            Debug.LogError(hitAWall?"hit an obstacle":"hit nothing");
+            
+#if UNITY_EDITOR
             Debug.DrawRay(startingPoint, laserCriticalPath, hitAWall ? Color.green : Color.red,15f);
+#endif
+            
             RaycastHit rayHit;
             bool hitSmth = Physics.Raycast(startingPoint, direction.normalized, out rayHit, 10000f, m_playerLayers, QueryTriggerInteraction.Ignore);
 
             //Debug.DrawRay(startingPoint, laserCriticalPath, hitAWall ? Color.green : Color.red, 15f);
-            
-            Debug.LogWarning($"The laser hit ? {hitAWall}", this);
             
             bool hit;
             const float valueIfNoHit = 0f; //BE WARY THE VR NEEDS TO KNOW WHICH VALUE THIS IS AND WE DON'T SEND IT THROUGH NETWORK!
@@ -681,15 +701,11 @@ public class ServerManager : MonoBehaviour
                     //if the distance between the line of fire and the player's position is blablablbalalboom... he ded
                     hit = distance <= m_laserRadius && Vector3.Angle(playerPos - startingPoint, direction) < 90f;
 
-                    Debug.Log("yay maybe");
                     if (hit) {
                         m_pcPlayerHealth--;
                         m_laserBuffer.length = laserCriticalPath.magnitude;
-                        
-                        Debug.Log("yay");
                     }
                     else {
-                        Debug.Log("fuuuuck");
                         m_laserBuffer.length = hitSmth ? rayHit.distance : valueIfNoHit;
                     }
 
