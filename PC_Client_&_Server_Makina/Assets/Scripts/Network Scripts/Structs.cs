@@ -75,6 +75,15 @@ namespace CustomMessages
         public Quaternion[] heartRotations;
         public float bombDetonationTime;
     }
+    
+    public struct RestartGame : NetworkMessage
+    {
+        
+    }
+    
+    public struct ReadyToPlay : NetworkMessage {
+        
+    }
 
     public struct ElevatorActivation : NetworkMessage
     {
@@ -91,11 +100,6 @@ namespace CustomMessages
     public struct PcInvisibility : NetworkMessage
     {
         public bool isInvisible;
-    }
-    
-    public struct RestartGame : NetworkMessage
-    {
-        
     }
 
     #endregion

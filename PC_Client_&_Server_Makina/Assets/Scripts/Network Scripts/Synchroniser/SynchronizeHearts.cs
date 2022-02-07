@@ -72,7 +72,7 @@ namespace Synchronizers
         private void SynchronizeHeartBreak(HeartBreak p_heartbreak)
         {
             Destroy(m_hearts[p_heartbreak.index]);
-            SynchronizeInitialData.instance.LoseVrHealth();
+            SynchronizeInitialData.Instance.LoseVrHealth();
         }
     }
 }
