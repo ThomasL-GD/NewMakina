@@ -10,6 +10,7 @@ namespace Synchronizers {
         [SerializeField] private GameObject m_prefabBomb = null;
 
         private float m_explosionTime = 0f;
+        private float m_bombRange = 0f;
         [SerializeField] private Color m_colorWhenAlmostExploding = Color.red;
 
         [SerializeField] private float m_bombScale = 1f;
@@ -61,6 +62,7 @@ namespace Synchronizers {
         /// <summary>Just sets maxSlotsForBombs according to the server's InitialData</summary>
         /// <param name="p_initialData">The message sent by the server</param>
         private void ReceiveIntialData(InitialData p_initialData) {
+            m_bombRange = p_initialData.bombExplosionRange;
             m_maxSlotsLoading = p_initialData.maximumBombsCount;
             m_explosionTime = p_initialData.bombDetonationTime;
         }
@@ -120,7 +122,7 @@ namespace Synchronizers {
             //TODO if(p_bombExplosion)
             
             GameObject go = Instantiate(p_bombExplosion.hit?m_prefabFxBoomHit:m_prefabFxBoomMiss, p_bombExplosion.position, Quaternion.Euler(0f, 0f, 0f));
-            go.transform.localScale *= m_bombScale;
+            go.transform.localScale *= m_bombRange*2;
             go.GetComponent<ParticleSystem>().Play();
 
             if(p_bombExplosion.hit) SynchronizeInitialData.instance.LosePcHealth();
