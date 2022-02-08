@@ -29,8 +29,12 @@ namespace Synchronizers
             Reset();
             ClientManager.OnReceiveGameEnd += Reset;
             ClientManager.OnReceiveInitialData += ReceiveInitialData;
+            ClientManager.OnReceiveReadyToPlay += ReceiveReady;
         }
+
+        private void ReceiveReady(ReadyToPlay p_activateblind) => m_waitingForPlayerFeddback.SetActive(false);
         
+
         private void Reset(GameEnd p_gameEnd = new GameEnd())
         {
             foreach (var obj in m_unloadOnInitialData) obj.SetActive(true);
@@ -46,7 +50,6 @@ namespace Synchronizers
         /// <param name="p_initialData"> The message sent by the server</param>
         void ReceiveInitialData(InitialData p_initialData)
         {
-            m_waitingForPlayerFeddback.SetActive(false);
             
             foreach (var obj in m_unloadOnInitialData) obj.SetActive(false);
 
