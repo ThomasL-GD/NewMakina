@@ -38,19 +38,20 @@ public abstract class GrabbableObject : MonoBehaviour {
     /// <remarks> Override this to do code after the call of OnDestroyGrabbable but before the destruction of this gameobject </remarks>
     protected virtual void BeingDestroyed(){}
 
-    /// <summary>
-    /// Will change the parent of this object to the latest correct one
-    /// </summary>
-    public virtual void ActualiseParent() {
-        transform.SetParent(m_originalParent[m_originalParent.Count - 1]);
+    /// <summary>Will set a new parent to this object</summary>
+    /// <param name="p_newParent">The new parent you want for thi object</param>
+    public virtual void BeGrabbed(Transform p_newParent) {
+        transform.SetParent(p_newParent);
+        
+        m_isCaught = true;
+        m_hasBeenCaughtInLifetime = true;
+    }
 
-        //If there is only one cell in the array, it means the object is back to its original parent and thus, is not grabbed
-        if (m_originalParent.Count <= 1) m_isCaught = false;
-        else if (m_originalParent.Count > 1) {
-            m_isCaught = true;
-            m_hasBeenCaughtInLifetime = true;
-        }
-
+    /// <summary>Will let the item go and be the child of no one</summary>
+    public virtual void BeLetGo() {
+        transform.SetParent(null);
+        
+        m_isCaught = false;
 
         if (!m_isPuttableOnlyOnce) return;
         

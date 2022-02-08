@@ -47,7 +47,7 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
     }
     
     public override void ActualiseParent() {
-        base.ActualiseParent();
+        base.BeGrabbed();
 
         if (m_mustDropDown && m_isCaught) {
             if (m_lineFeedback != null) {

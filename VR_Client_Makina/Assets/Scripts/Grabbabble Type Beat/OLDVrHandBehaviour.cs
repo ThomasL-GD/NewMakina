@@ -54,7 +54,7 @@ public class OLDVrHandBehaviour : MonoBehaviour {
 
                 m_objectsGrabbed.Add(script);
                 script.m_originalParent.Add(transform);
-                script.ActualiseParent();
+                script.BeGrabbed();
                 if(m_animator != null)m_animator.SetBool(IsGrabbing, true);
             }
             
@@ -64,7 +64,7 @@ public class OLDVrHandBehaviour : MonoBehaviour {
 
                 m_objectsGrabbed.Remove(script);
                 script.m_originalParent.Remove(transform);
-                script.ActualiseParent();
+                script.BeGrabbed();
                 if(m_animator != null)m_animator.SetBool(IsGrabbing, false);
             }
         }
@@ -83,7 +83,7 @@ public class OLDVrHandBehaviour : MonoBehaviour {
                 if (m_objectsGrabbed[i] == script) {
                     m_objectsGrabbed.Remove(script);
                     script.m_originalParent.Remove(transform);
-                    script.ActualiseParent();
+                    script.BeGrabbed();
                     return;
                 }
             }

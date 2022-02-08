@@ -36,13 +36,22 @@ public class VrHandBehaviour : MonoBehaviour {
 
     private void Update() {
         m_isPressingTrigger = OVRInput.Get(m_grabInput) >= m_triggerGrabSensitivity; //if the trigger is pressed enough, the boolean becomes true
+
+        if (m_objectHeld == null) return;
+        
+        if(!m_isPressingTrigger) {
+            m_objectHeld.BeLetGo();
+            m_objectHeld = null;
+        }
     }
 
     /// <summary>Will attach an object to this hand</summary>
     /// <param name="p_whoAmIEvenCatching">The object which is being grabbed by this hand</param>
     public void Catch(GrabbableObject p_whoAmIEvenCatching) {
+#if UNITY_EDITOR
         if(m_objectHeld != null) Debug.LogWarning($"The object {m_objectHeld.gameObject.name} is already in this hand but i'm supposed to grab {p_whoAmIEvenCatching.gameObject.name} so what do i do ?!", this);
+#endif
         m_objectHeld = p_whoAmIEvenCatching;
-        p_whoAmIEvenCatching.transform.SetParent(transform);
+        p_whoAmIEvenCatching.BeGrabbed(transform);
     }
 }

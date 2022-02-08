@@ -37,7 +37,7 @@ public class BeaconBehavior : GrabbablePhysickedObject {
     }
 
     /// <summary>
-    /// We override ActualiseParent to let the SynchronizeBeacons know when beacons are grabbed or not
+    /// We override BeGrabbed to let the SynchronizeBeacons know when beacons are grabbed or not
     /// </summary>
     public override void ActualiseParent() {
         base.ActualiseParent();
