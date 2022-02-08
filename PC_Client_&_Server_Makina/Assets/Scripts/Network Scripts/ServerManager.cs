@@ -52,10 +52,18 @@ public class ServerManager : MonoBehaviour
     [Header("Game Settings")]
     [SerializeField, Tooltip("The radius of the VR laser")] private float f_laserRadius = 20f;
     private float m_laserRadius = 20f;
+    
     [SerializeField, Tooltip("The speed of the elevators in m/s")] private float f_elevatorSpeed = 5.8f;
     private float m_elevatorSpeed = 5.8f;
+    
     [SerializeField, Tooltip("The speed of the elevators in m/s")] private float f_elevatorWaitTime = 1f;
     private float m_elevatorWaitTime = 1f;
+    
+    [SerializeField, Tooltip("The offset of the raycast shot to the player to check if the lazer hit")] private float f_laserCheckOffset = 2f;
+    private float m_laserCheckOffset = 2f;
+
+    [SerializeField] private LayerMask f_playerLayers;
+    private LayerMask m_playerLayers;
     
 
     [Header("Hearts")]
@@ -108,12 +116,6 @@ public class ServerManager : MonoBehaviour
     private float m_flashDuration = 5f;
     [SerializeField, Tooltip("the minimum and maximum dot product from the look angle to clamp")]private Vector2 f_flashClamp;
     private Vector2 m_flashClamp;
-    [Space]
-    [SerializeField, Tooltip("The offset of the raycast shot to the player to check if the lazer hit")] private float f_laserCheckOffset = 2f;
-    private float m_laserCheckOffset = 2f;
-
-    [SerializeField] private LayerMask f_playerLayers;
-    private LayerMask m_playerLayers;
     private int m_currentBombAmount = 0;
     
 
@@ -338,7 +340,8 @@ public class ServerManager : MonoBehaviour
             flairRaiseSpeed = m_flairRaiseSpeed,
             flairDetonationTime = m_flairDetonationTime,
             heartPositions = m_heartPositions,
-            heartRotations = m_heartRotations
+            heartRotations = m_heartRotations,
+            bombDetonationTime = m_bomDetonationTime
         };
         
         SendToBothClients(initialData);
