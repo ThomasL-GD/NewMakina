@@ -29,6 +29,19 @@ namespace CustomMessages
     
     #endregion
 
+
+    #region Tp_Rollback
+    
+    public struct DropTp : NetworkMessage {
+        public Vector3 tpPosition;
+    }
+
+    public struct RemoveTp : NetworkMessage {
+        
+    }
+
+    #endregion
+
     #region Misc Data
 
     public struct ActivateFlair : NetworkMessage

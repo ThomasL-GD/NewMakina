@@ -33,6 +33,7 @@ public class ServerManager : MonoBehaviour
     private LeureTransform m_leureBuffer;
     private ActivateFlair m_flairBuffer;
     private ActivateBlind m_activateBlindBuffer;
+    private DropTp m_dropTpBuffer;
     
     private bool m_vrReadyBuffer;
     private bool m_pcReadyBuffer;
@@ -196,6 +197,8 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<LeureTransform>(OnLeureTransform);
         NetworkServer.RegisterHandler<RestartGame>(OnRestartGame);
         NetworkServer.RegisterHandler<ReadyToPlay>(OnReadyMessage);
+        NetworkServer.RegisterHandler<DropTp>(OnDropTp);
+        NetworkServer.RegisterHandler<RemoveTp>(OnRemoveTp);
         
     }
 
@@ -614,6 +617,20 @@ public class ServerManager : MonoBehaviour
         
         if(m_vrReadyBuffer && m_pcReadyBuffer) StartGame();
     }
+    
+    
+    private void OnRemoveTp(NetworkConnection p_connection, RemoveTp p_message)
+    {
+        OnServerTick -= SendRemoveTp;
+        OnServerTick += SendRemoveTp;
+    }
+    private void OnDropTp(NetworkConnection p_connection, DropTp p_message)
+    {
+        m_dropTpBuffer = p_message;
+        OnServerTick -= SendDropTp;
+        OnServerTick += SendDropTp;
+    }
+
 
     /// <summary/> function called when the server receives a message of type ActivateBeacon
     /// <param name="p_conn"> The connection from which originated the message </param>
@@ -811,7 +828,7 @@ public class ServerManager : MonoBehaviour
 
         Vector2 pcFlatPosition = new Vector2(m_pcTransformBuffer.position.x,m_pcTransformBuffer.position.z);
         Vector2 bombFlatPosition = new Vector2(p_bombExplosion.position.x,p_bombExplosion.position.z);
-        bool hit = Vector2.Distance(p_bombExplosion.position, m_pcTransformBuffer.position) < m_bombExplosionRange;
+        bool hit = Vector2.Distance(pcFlatPosition, bombFlatPosition) < m_bombExplosionRange;
         m_currentBombAmount--;
         if (hit) m_pcPlayerHealth--;
         
@@ -836,6 +853,19 @@ public class ServerManager : MonoBehaviour
 
     #region SERVER SENDERS
 
+    
+    private void SendRemoveTp()
+    {
+        m_vrNetworkConnection?.Send(new RemoveTp());
+        OnServerTick -= SendRemoveTp;
+    } 
+    
+    private void SendDropTp()
+    {
+        m_vrNetworkConnection?.Send(m_dropTpBuffer);
+        OnServerTick -= SendDropTp;
+    }
+    
     /// <summary>
     /// The function that send the VrTransform to the pc client
     /// </summary>
