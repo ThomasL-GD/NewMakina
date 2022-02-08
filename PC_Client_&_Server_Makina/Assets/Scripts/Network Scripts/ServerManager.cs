@@ -341,7 +341,8 @@ public class ServerManager : MonoBehaviour
             flairDetonationTime = m_flairDetonationTime,
             heartPositions = m_heartPositions,
             heartRotations = m_heartRotations,
-            bombDetonationTime = m_bomDetonationTime
+            bombDetonationTime = m_bomDetonationTime,
+            bombExplosionRange = m_bombExplosionRange
         };
         
         SendToBothClients(initialData);

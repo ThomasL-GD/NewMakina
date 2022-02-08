@@ -74,6 +74,7 @@ namespace CustomMessages
         public Vector3[] heartPositions;
         public Quaternion[] heartRotations;
         public float bombDetonationTime;
+        public float bombExplosionRange;
     }
     
     public struct RestartGame : NetworkMessage

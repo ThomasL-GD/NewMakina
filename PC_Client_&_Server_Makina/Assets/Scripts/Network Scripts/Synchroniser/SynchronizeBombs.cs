@@ -8,6 +8,8 @@ namespace Synchronizers {
 
         [SerializeField,Tooltip("The bomb prefab that will be instantiated")]
         private GameObject m_prefabBomb = null;
+
+        private float m_bombScale = 1f;
         
         [Serializable]
         private struct Bomb
@@ -15,10 +17,11 @@ namespace Synchronizers {
             public GameObject bombPrefabInstance;
             public float ID;
 
-            public Bomb(GameObject p_bombPrefab, float p_id, Vector3? p_position = null)
+            public Bomb(GameObject p_bombPrefab, float p_id, float p_bombScale, Vector3? p_position = null)
             {
                 p_bombPrefab.name += p_id.ToString();
                 bombPrefabInstance = Instantiate(p_bombPrefab);
+                bombPrefabInstance.transform.localScale = Vector3.one * p_bombScale;
                 bombPrefabInstance.transform.position = p_position?? Vector3.zero;
                     
                 ID = p_id;
@@ -28,13 +31,19 @@ namespace Synchronizers {
         private List<Bomb> m_bombs = new List<Bomb>();
         
         // Start is called before the first frame update
-        void Start() {
-
+        void Start()
+        {
+            ClientManager.OnReceiveInitialData += ReceiveInitialData;
             ClientManager.OnReceiveSpawnBomb += SpawnBomb;
             ClientManager.OnReceiveBombsPositions += UpdatePositions;
             ClientManager.OnReceiveBombExplosion += DestroyBomb;
             ClientManager.OnReceiveBombActivation += ActivateBomb;
             ClientManager.OnReceiveGameEnd += Reset;
+        }
+
+        private void ReceiveInitialData(InitialData p_initialdata)
+        {
+            m_bombScale = p_initialdata.bombExplosionRange;
         }
 
         /// <summary>Will destroy all the bombs to be ready to launch another game </summary>
@@ -50,7 +59,7 @@ namespace Synchronizers {
         /// <param name="p_spawnBomb">The message received by the ClientManager</param>
         private void SpawnBomb(SpawnBomb p_spawnBomb)
         {
-            m_bombs.Add(new Bomb(m_prefabBomb, p_spawnBomb.bombID));
+            m_bombs.Add(new Bomb(m_prefabBomb, p_spawnBomb.bombID, m_bombScale));
         }
 
         /// <summary>
