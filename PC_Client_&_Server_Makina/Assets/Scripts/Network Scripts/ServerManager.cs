@@ -4,8 +4,6 @@ using System.Linq;
 using Mirror;
 using UnityEngine;
 using CustomMessages;
-using Unity.Mathematics;
-using UnityEngine.Serialization;
 
 /// <summary/> The server side manager will handle all of the server side network dealings of the game
 
@@ -34,6 +32,7 @@ public class ServerManager : MonoBehaviour
     private ActivateFlair m_flairBuffer;
     private ActivateBlind m_activateBlindBuffer;
     private DropTp m_dropTpBuffer;
+    private Teleported m_teleporttedBuffer;
     
     private bool m_vrReadyBuffer;
     private bool m_pcReadyBuffer;
@@ -199,8 +198,9 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<ReadyToPlay>(OnReadyMessage);
         NetworkServer.RegisterHandler<DropTp>(OnDropTp);
         NetworkServer.RegisterHandler<RemoveTp>(OnRemoveTp);
-        
+        NetworkServer.RegisterHandler<Teleported>(OnTeleported);
     }
+
 
     /// <summary/> The Server Loop
     IEnumerator ServerTick()
@@ -228,12 +228,16 @@ public class ServerManager : MonoBehaviour
 
         if (flashStrength < m_flashClamp.x) flashStrength = 0f;
         else if (flashStrength > m_flashClamp.y) flashStrength = 1f;
+        
+        if(m_flashCoroutine != null)StopCoroutine(m_flashCoroutine);
+        m_flashCoroutine = StartCoroutine(Flash(p_flashDuration * flashStrength));
+    }
 
-        m_activateBlindBuffer.blindIntensity = p_flashDuration * flashStrength;
-        
+    IEnumerator Flash(float p_flashDuration)
+    {
+        m_activateBlindBuffer.blindIntensity = p_flashDuration;
         SendActivateBlind();
-        
-        yield return new WaitForSeconds(p_flashDuration * flashStrength);
+        yield return new WaitForSeconds(p_flashDuration);
         SendDeActivateBlind();
     }
 
@@ -255,6 +259,7 @@ public class ServerManager : MonoBehaviour
     private bool m_firstTime = true;
 
     private bool m_gameEnded;
+    private Coroutine m_flashCoroutine;
 
     /// <summary>
     /// The function that is called when the server is hosted.
@@ -611,7 +616,6 @@ public class ServerManager : MonoBehaviour
 
     private void OnReadyMessage(NetworkConnection p_connection, ReadyToPlay p_message)
     {
-        Debug.Log("Called OnReadyMessage");
         if (p_connection == m_vrNetworkConnection) m_vrReadyBuffer = true;
         else if (p_connection == m_pcNetworkConnection) m_pcReadyBuffer = true;
         
@@ -619,6 +623,13 @@ public class ServerManager : MonoBehaviour
     }
     
     
+    private void OnTeleported(NetworkConnection p_connection, Teleported p_message)
+    {
+        m_teleporttedBuffer = p_message;
+        OnServerTick -= SendTeleported;
+        OnServerTick += SendTeleported;
+    }
+
     private void OnRemoveTp(NetworkConnection p_connection, RemoveTp p_message)
     {
         OnServerTick -= SendRemoveTp;
@@ -714,15 +725,17 @@ public class ServerManager : MonoBehaviour
             
             bool hit;
             const float valueIfNoHit = 0f; //BE WARY THE VR NEEDS TO KNOW WHICH VALUE THIS IS AND WE DON'T SEND IT THROUGH NETWORK!
+            float distance;
             switch (hitAWall) {
                 case false : { //If there's no wall between
                     // So we measure the distance of the player's position from the line of the laser
-                    float distance = Vector3.Cross(direction, playerPos - startingPoint).magnitude;
+                    distance = Vector3.Cross(direction, playerPos - startingPoint).magnitude;
 
                     //if the distance between the line of fire and the player's position is blablablbalalboom... he ded
                     hit = distance <= m_laserRadius && Vector3.Angle(playerPos - startingPoint, direction) < 90f;
 
                     if (hit) {
+                        // todo : yeah it's not a feature Blue.. nice try..
                         m_pcPlayerHealth--;
                         m_laserBuffer.length = laserCriticalPath.magnitude;
                     }
@@ -735,13 +748,34 @@ public class ServerManager : MonoBehaviour
                 case true : {
                     m_laserBuffer.length = hitSmth ? rayHit.distance : valueIfNoHit;
                     hit = false;
-                break; }
+                    break; }
+            }
+
+            bool hitLeure = false;
+            if(!hit)
+            {
+                Debug.Log("1");
+                Vector3 leurePosition = m_leureBuffer.position + Vector3.up * m_laserCheckOffset / 2f;
+                laserCriticalPath = (leurePosition + Vector3.up * m_laserCheckOffset / 2f) - startingPoint;
+
+                distance = Vector3.Cross(direction, leurePosition - startingPoint).magnitude;
+                hitLeure = distance <= m_laserRadius && Vector3.Angle(leurePosition - startingPoint, direction) < 90f;
+
+                
+                if (hitLeure && !Physics.Raycast(startingPoint, laserCriticalPath.normalized, out hited, laserCriticalPath.magnitude, m_playerLayers, QueryTriggerInteraction.Ignore))
+                {
+                    Debug.Log("2");
+                    if(m_flashCoroutine != null)StopCoroutine(m_flashCoroutine);
+                    m_flashCoroutine = StartCoroutine(Flash(m_flashDuration));
+                    m_pcNetworkConnection.Send(new DestroyLeure());
+                    Debug.Log("3");
+                }
             }
             
             // Packing the values in a neat little message
             m_laserBuffer.origin = startingPoint;
             m_laserBuffer.rotation = m_vrTransformBuffer.rotationRightHand;
-            m_laserBuffer.hitPosition = m_pcTransformBuffer.position;
+            m_laserBuffer.hitPosition = hitLeure?m_leureBuffer.position:m_pcTransformBuffer.position;
             m_laserBuffer.hit = hit;
         }
         //preparing to send the message
@@ -852,7 +886,12 @@ public class ServerManager : MonoBehaviour
 
 
     #region SERVER SENDERS
-
+    
+    private void SendTeleported()
+    {
+        m_vrNetworkConnection.Send(m_teleporttedBuffer);
+        OnServerTick -= SendTeleported;
+    }
     
     private void SendRemoveTp()
     {

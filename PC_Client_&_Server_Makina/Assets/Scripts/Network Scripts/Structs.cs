@@ -28,10 +28,15 @@ namespace CustomMessages
     }
     
     #endregion
-
-
-    #region Tp_Rollback
     
+    #region Tp_Rollback
+
+    public struct Teleported : NetworkMessage
+    {
+        public Vector3 teleportOrigin;
+        public Vector3 teleportDestination;
+    }
+
     public struct DropTp : NetworkMessage {
         public Vector3 tpPosition;
     }
