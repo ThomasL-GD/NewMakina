@@ -23,6 +23,11 @@ namespace Network {
         public static ServerDelegator OnConnection;
     
 
+        /// <summary/> Is called when we receive new Teleported data from server
+        public delegate void TeleportedDelegator(Teleported p_ready);
+        public static TeleportedDelegator OnReceiveTeleported;
+    
+
         /// <summary/> Is called when we receive new RemoveTp data from server
         public delegate void RemoveTpDelegator(RemoveTp p_ready);
         public static RemoveTpDelegator OnReceiveRemoveTp;
@@ -175,9 +180,12 @@ namespace Network {
             NetworkClient.RegisterHandler<ReadyToPlay>(ReceiveReadyToPlay);
             NetworkClient.RegisterHandler<DropTp>(ReceiveDropTp);
             NetworkClient.RegisterHandler<RemoveTp>(ReceiveRemoveTp);
+            NetworkClient.RegisterHandler<Teleported>(ReceiveTeleported);
         
             OnConnection?.Invoke();
         }
+
+        private void ReceiveTeleported(Teleported p_teleported) => OnReceiveTeleported?.Invoke(p_teleported);
 
         private void ReceiveRemoveTp(RemoveTp p_removeTp) => OnReceiveRemoveTp?.Invoke(p_removeTp);
 

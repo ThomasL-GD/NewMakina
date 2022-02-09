@@ -3,8 +3,8 @@ using UnityEngine;
 
 /// <summary/>The structs derived from the NetworkMessage interface of Mirror that wil be sent between clients and servers as messages.
 
-namespace CustomMessages
-{
+namespace CustomMessages {
+    
     #region Transforms
     
     /// <summary/> The position and rotation of the pc player
@@ -28,9 +28,15 @@ namespace CustomMessages
     }
     
     #endregion
-
-    #region Tp_Rollback
     
+    #region Tp_Rollback
+
+    public struct Teleported : NetworkMessage
+    {
+        public Vector3 teleportOrigin;
+        public Vector3 teleportDestination;
+    }
+
     public struct DropTp : NetworkMessage {
         public Vector3 tpPosition;
     }
