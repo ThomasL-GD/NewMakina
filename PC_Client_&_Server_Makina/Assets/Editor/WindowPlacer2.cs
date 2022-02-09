@@ -1,26 +1,39 @@
 using System.Collections.Generic;
-using NUnit.Compatibility;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEditor;
-using UnityEngine.UIElements;
+using UnityEngine.Rendering;
 using static UnityEngine.Mathf;
 using static UnityEditor.EditorGUILayout;
 using static UnityEngine.GUILayout;
 
 class WindowPlacer2 : EditorWindow
 {
+    /// <summary/> The material of the preview material
     private Material m_previewMat;
+    /// <summary/> the window prefab
     private static GameObject m_window;
+    /// <summary/> the corner prefab
+    private static GameObject m_corner;
+    /// <summary/> the parent object that will contain the placed parents
     private static GameObject m_parent;
     
+    /// <summary/> the spacing between the elements
     private static float m_spacing = 2.5f;
+    /// <summary/> the margin on the face
     private static float m_margin = 2f;
+    /// <summary/> the height at which the object will be placed
     private static float m_lineHeight = 2f;
+    /// <summary/> the y offset of the corner
+    private static float m_cornerOffset = 0f;
 
+    /// <summary/> the points on which the windows will be placed
     private static List<Point> m_points;
+    private static List<Point> m_corners;
 
+    /// <summary/> the selected object
     private GameObject m_selection;
+
+    private static bool m_useCorners = true;
 
     /// <summary/> The function called when the MenuItem is called to create the window
     [MenuItem("Tools/Window Placer 2")]
@@ -53,14 +66,15 @@ class WindowPlacer2 : EditorWindow
     
     public void SceneViewUpdate(EditorWindow window)
     {
+        // checking if the selected object is a GameObject
         if(m_window == null) return;
         if(Selection.count == 0) return;
         
         GameObject selection = (GameObject)Selection.objects[0];
         if(selection==null || !((GameObject)Selection.objects[0]).TryGetComponent(out MeshFilter filter)) return;
         
+        // Getting the mesh of the elected object
         Mesh mesh = filter.sharedMesh;
-
         m_selection = selection;
         
         // making a list of all the triangles of the mesh
@@ -71,19 +85,21 @@ class WindowPlacer2 : EditorWindow
         Vector3[] n = mesh.normals;
         int[] tr = mesh.triangles;
         
+        // Converting everyting to triangles
         for (int i = 0; i < tr.Length;) 
             triangles.Add(new Triangle(v[tr[i]], n[tr[i++]], v[tr[i]], n[tr[i++]], v[tr[i]], n[tr[i]], tr[i++]));
         
+        // Getting the intersection of all the triangles on the line
         List<Intersections> intersections = new List<Intersections>();
-
+        
         foreach (var triangle in triangles)
         {
             List<Intersections> localLine = new List<Intersections>();
+            // finding the triangles on the line
             triangle.DrawHorizontalLineAlongMesh(selection.transform.position,m_lineHeight,selection.transform.rotation, selection.transform.localScale, out localLine);
             foreach (var item in localLine)
             {
                 bool canAdd = true;
-
                 for (int i = 0; i < intersections.Count; i++)
                 {
                    
@@ -98,10 +114,9 @@ class WindowPlacer2 : EditorWindow
             }
         }
 
+        // Getting all the links
         List<Link> links = new List<Link>();
-        
         Handles.color = Color.red;
-        
         for (int i = 0; i < intersections.Count; i++)
         {
             for (int j = i; j < intersections.Count; j++)
@@ -112,6 +127,7 @@ class WindowPlacer2 : EditorWindow
                     for (int l = 0; l < intersections[j].triangles.Count; l++)
                     {
                         if (intersections[i].triangles[k] == intersections[j].triangles[l])
+                        if (intersections[i].triangles[k] == intersections[j].triangles[l])
                             links.Add(new Link(intersections[i].position, intersections[j].position,intersections[i].normal[k]));
                     }
                 }
@@ -119,6 +135,8 @@ class WindowPlacer2 : EditorWindow
         }
 
         
+        
+        // Removing the double links and making the aligned links join
         for (int i = 0; i < links.Count; i++)
         {
             for (int j = i; j < links.Count; j++)
@@ -127,9 +145,9 @@ class WindowPlacer2 : EditorWindow
                 
                 bool connected = links[i].A == links[j].A || links[i].A == links[j].B || links[i].B == links[j].A || links[i].B == links[j].B;
                 
-                float dotAbs = Mathf.Abs(Vector3.Dot((links[i].A - links[i].B).normalized, (links[j].A - links[j].B).normalized));
+                float dotAbs = Abs(Vector3.Dot((links[i].A - links[i].B).normalized, (links[j].A - links[j].B).normalized));
         
-                if (connected && Mathf.Approximately(dotAbs, 1f))
+                if (connected && Approximately(dotAbs, 1f))
                 {
                     if (links[i].A == links[j].A)
                     {
@@ -151,20 +169,69 @@ class WindowPlacer2 : EditorWindow
             }
         }
         
-        // Debug.Log(links.Count);
-        //foreach (var link in links) link.DrawLink();
+        MeshFilter meshFilter;
 
+        // Getting the corners
+        if(m_useCorners && m_corner != null)
+        {
+            m_corners = new List<Point>();
+
+            // Getting the corners
+            foreach (var link in links)
+            {
+                Quaternion rotation = m_corner.transform.GetChild(0)!= null ? m_corner.transform.GetChild(0).rotation : m_corner.transform.rotation;
+                rotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward, new Vector3(link.normal.x,0,link.normal.z), Vector3.up) + rotation.eulerAngles);
+
+                m_corners.Add(new Point(link.A, rotation));
+                m_corners.Add(new Point(link.B, rotation));
+            }
+
+            // Removing corner dupes
+            for (int i = 0; i < m_corners.Count; i++)
+            {
+                for (int j = i+1; j < m_corners.Count; j++)
+                {
+                    if (m_corners[i].position == m_corners[j].position)
+                    {
+                        m_corners.RemoveAt(j);
+                    }
+                }
+            }
+            
+            // Getting the mesh filter for the preview
+            GameObject cornerPrefab = m_corner;
+            if(!cornerPrefab.TryGetComponent(out meshFilter))
+            {
+                for (int i = 0; i < cornerPrefab.transform.childCount; i++)
+                {
+                    if(cornerPrefab.transform.GetChild(i).TryGetComponent(out meshFilter)) break;
+                }
+            }
+            Mesh cornerMesh = meshFilter.sharedMesh;
+        
+            // Setting the material before drawing 
+            Material previewMatCorner = EditorGUIUtility.Load("Assets/Editor/PreviewMaterialCorner.mat") as Material;
+            if (previewMatCorner != null) previewMatCorner.SetPass(0);
+            
+            foreach (var corner in m_corners)
+            {
+                Graphics.DrawMeshNow(cornerMesh, corner.position, corner.rotation);
+            }
+        }
+
+        
+        // Getting the mesh filter for the preview
         GameObject prefab = m_window;
-        if(!prefab.TryGetComponent(out MeshFilter meshFilter))
+        if(!prefab.TryGetComponent(out meshFilter))
         {
             for (int i = 0; i < prefab.transform.childCount; i++)
             {
                 if(prefab.transform.GetChild(i).TryGetComponent(out meshFilter)) break;
             }
         }
-
         Mesh windowMesh = meshFilter.sharedMesh;
         
+        // Setting the material before drawing 
         Material previewMat = EditorGUIUtility.Load("Assets/Editor/PreviewMaterial.mat") as Material;
         if (previewMat != null) previewMat.SetPass(0);
 
@@ -178,7 +245,9 @@ class WindowPlacer2 : EditorWindow
             for (int i = 0; i <= amount; i++)
             {
                 Vector3 position = link.A + (link.B - link.A).normalized * (((length - m_margin*2) / amount) * i + m_margin);
-                Quaternion rotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward, new Vector3(link.normal.x,0,link.normal.z), Vector3.up) + m_window.transform.GetChild(0).transform.rotation.eulerAngles);
+                
+                Quaternion rotation = m_window.transform.GetChild(0)!= null ? m_window.transform.GetChild(0).rotation : m_window.transform.rotation;
+                rotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward, new Vector3(link.normal.x,0,link.normal.z), Vector3.up) + rotation.eulerAngles);
                 Graphics.DrawMeshNow(windowMesh, position, rotation);
                 rotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward, new Vector3(link.normal.x,0,link.normal.z), Vector3.up) + m_window.transform.eulerAngles);
                 m_points.Add(new Point(position,rotation));
@@ -186,6 +255,7 @@ class WindowPlacer2 : EditorWindow
         }
     }
 
+    
     struct Point
     {
         public Vector3 position;
@@ -359,6 +429,33 @@ class WindowPlacer2 : EditorWindow
                 windowTransform.parent = parent.transform;
                 
             }
+
+            if (m_useCorners)
+            {
+                parent = new GameObject();
+                parent.name = "corners";
+
+                parent.transform.parent = m_parent.transform;
+                Undo.RegisterCreatedObjectUndo(parent, "created parent");
+            
+                foreach (Point corner in m_corners)
+                {
+                    GameObject cornerPrefab = PrefabUtility.InstantiatePrefab(m_corner) as GameObject;
+
+                    if (cornerPrefab == null) continue;
+                
+                    Transform cornerTransform = cornerPrefab.transform;
+                    cornerTransform.position = corner.position + Vector3.up * m_cornerOffset;
+                    cornerTransform.rotation = corner.rotation;
+                    cornerTransform.parent = parent.transform;
+                }
+            }
         }
+
+        m_useCorners = Toggle("Place corners ?", m_useCorners);
+        if(!m_useCorners) return;
+        
+        m_corner = (GameObject)ObjectField("corner prefab", m_corner, typeof(object), true);
+        m_cornerOffset = FloatField("corner offset", m_cornerOffset);
     }
 }
