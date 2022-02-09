@@ -93,6 +93,10 @@ public class ClientManager : MonoBehaviour
     /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
     public delegate void ReadyDelegator(ReadyToPlay p_activateBlind);
     public static ReadyDelegator OnReceiveReadyToPlay;
+        
+    /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+    public delegate void DestoyLeureDelegator(DestroyLeure p_activateBlind);
+    public static DestoyLeureDelegator OnReceiveDestroyLeure;
     
     #endregion
     [SerializeField, Tooltip("The player Object to get the player's location")] public GameObject m_playerObject;
@@ -134,7 +138,10 @@ public class ClientManager : MonoBehaviour
         NetworkClient.RegisterHandler<ActivateBlind>(ReceiveActivateBlind);
         NetworkClient.RegisterHandler<DeActivateBlind>(ReceiveDeActivateBlind);
         NetworkClient.RegisterHandler<ReadyToPlay>(ReceiveReadyMessage);
+        NetworkClient.RegisterHandler<DestroyLeure>(ReceiveDestroyLeure);
     }
+
+    private void ReceiveDestroyLeure(DestroyLeure p_destroyLeureMessage) => OnReceiveDestroyLeure?.Invoke(p_destroyLeureMessage);
 
     private void ReceiveReadyMessage(ReadyToPlay p_readyMessage) => OnReceiveReadyToPlay?.Invoke(p_readyMessage);
 

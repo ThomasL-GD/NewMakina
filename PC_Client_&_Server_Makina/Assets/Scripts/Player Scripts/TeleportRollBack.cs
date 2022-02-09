@@ -47,23 +47,30 @@ public class TeleportRollBack : MonoBehaviour
         {
             if (m_placed)
             {
-                transform.position = m_teleportLocation.transform.position;
-                m_canUse = false;
-                m_coolDownScript.StartReloading();
-                m_teleportIcon.enabled = false;
-                m_podIcon.enabled = false;
-                Destroy(m_teleportLocation);
-                NetworkClient.Send(new RemoveTp());
+                Teleport(m_teleportLocation.transform.position);
                 return;
             }
 
             Vector3 position = transform.position;
 
-            m_teleportLocation = Instantiate(m_teleportLocationPrefab, position,transform.rotation);
-            NetworkClient.Send(new DropTp(){tpPosition = position});
+            m_teleportLocation = Instantiate(m_teleportLocationPrefab, position, transform.rotation);
+            NetworkClient.Send(new DropTp() {tpPosition = position});
             m_teleportIcon.enabled = true;
             m_podIcon.enabled = false;
             m_placed = true;
         }
+    }
+    
+    private void Teleport(Vector3 p_destination)
+    {
+        NetworkClient.Send(new Teleported(){teleportDestination = p_destination, teleportOrigin = transform.position});
+        transform.position = p_destination;
+        m_canUse = false;
+        m_coolDownScript.StartReloading();
+        m_teleportIcon.enabled = false;
+        m_podIcon.enabled = false;
+        if(m_placed) NetworkClient.Send(new RemoveTp());
+        m_placed = false;
+        Destroy(m_teleportLocation);
     }
 }
