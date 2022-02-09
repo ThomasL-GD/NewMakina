@@ -349,8 +349,15 @@ class WindowPlacer2 : EditorWindow
             Undo.RegisterCreatedObjectUndo(parent, "created parent");
             foreach (Point point in m_points)
             {
-                GameObject window = Instantiate(m_window, point.position, point.rotation);
-                window.transform.parent = parent.transform;
+                GameObject window = PrefabUtility.InstantiatePrefab(m_window) as GameObject;
+
+                if (window == null) continue;
+                
+                Transform windowTransform = window.transform;
+                windowTransform.position = point.position;
+                windowTransform.rotation = point.rotation;
+                windowTransform.parent = parent.transform;
+                
             }
         }
     }
