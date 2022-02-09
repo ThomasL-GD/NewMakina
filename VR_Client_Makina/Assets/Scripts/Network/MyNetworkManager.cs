@@ -23,7 +23,17 @@ namespace Network {
         public static ServerDelegator OnConnection;
     
 
-        /// <summary/> Is called when we receive new PcTransform data from server
+        /// <summary/> Is called when we receive new RemoveTp data from server
+        public delegate void RemoveTpDelegator(RemoveTp p_ready);
+        public static RemoveTpDelegator OnReceiveRemoveTp;
+    
+
+        /// <summary/> Is called when we receive new DropTp data from server
+        public delegate void DropTpDelegator(DropTp p_ready);
+        public static DropTpDelegator OnReceiveDropTp;
+    
+
+        /// <summary/> Is called when we receive new ReadyToPlay data from server
         public delegate void ReadyOrNotDelegator(ReadyToPlay p_ready);
         public static ReadyOrNotDelegator OnReadyToPlay;
     
@@ -163,9 +173,15 @@ namespace Network {
             NetworkClient.RegisterHandler<DestroyLeure>(ReceiveDestroyLeure);
             NetworkClient.RegisterHandler<LeureTransform>(ReceiveLeureTransform);
             NetworkClient.RegisterHandler<ReadyToPlay>(ReceiveReadyToPlay);
+            NetworkClient.RegisterHandler<DropTp>(ReceiveDropTp);
+            NetworkClient.RegisterHandler<RemoveTp>(ReceiveRemoveTp);
         
             OnConnection?.Invoke();
         }
+
+        private void ReceiveRemoveTp(RemoveTp p_removeTp) => OnReceiveRemoveTp?.Invoke(p_removeTp);
+
+        private void ReceiveDropTp(DropTp p_dropTp) => OnReceiveDropTp?.Invoke(p_dropTp);
 
         private void ReceiveReadyToPlay(ReadyToPlay p_readyToPlay) => OnReadyToPlay?.Invoke(p_readyToPlay);
 

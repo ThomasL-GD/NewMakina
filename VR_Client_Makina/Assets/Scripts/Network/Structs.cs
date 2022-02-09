@@ -29,6 +29,18 @@ namespace CustomMessages
     
     #endregion
 
+    #region Tp_Rollback
+    
+    public struct DropTp : NetworkMessage {
+        public Vector3 tpPosition;
+    }
+
+    public struct RemoveTp : NetworkMessage {
+        
+    }
+
+    #endregion
+
     #region Misc Data
 
     public struct ActivateFlair : NetworkMessage
@@ -74,6 +86,7 @@ namespace CustomMessages
         public Vector3[] heartPositions;
         public Quaternion[] heartRotations;
         public float bombDetonationTime;
+        public float bombExplosionRange;
     }
     
     public struct RestartGame : NetworkMessage
