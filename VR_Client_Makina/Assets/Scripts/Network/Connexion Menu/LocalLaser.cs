@@ -1,4 +1,6 @@
 using System.Collections;
+using CustomMessages;
+using Synchronizers;
 using UnityEngine;
 
 namespace Network.Connexion_Menu {
@@ -24,15 +26,19 @@ namespace Network.Connexion_Menu {
         private bool m_shutDown = false;
         private float m_elapsedTime = 0f;
 
+        private bool m_isActive = true;
+
         // Start is called before the first frame update
         void Start() {
             m_line = GetComponent<LineRenderer>();
             m_line.enabled = false;
+            MyNetworkManager.OnReceiveGameEnd += ActiveMe;
         }
 
         // Update is called once per frame
         void Update() {
 
+            if (!m_isActive) return;
             if (m_shutDown) return;
 
             if (OVRInput.Get(m_input) < m_upTriggerValue) {
@@ -48,7 +54,7 @@ namespace Network.Connexion_Menu {
                 bool hasRaycastHit = Physics.Raycast(transform.position, transform.forward, out hit, 1000f, m_mask);
                 if (hasRaycastHit) {
                     m_shutDown = true;
-                    if(hit.transform.gameObject.TryGetComponent(out ConnexionMenuButtonBehavior script)) script.OnBeingActivated();
+                    if(hit.transform.gameObject.TryGetComponent(out AttackSensitiveButton script)) script.OnBeingActivated();
                     m_line.enabled = false;
                 }
                 
@@ -61,6 +67,13 @@ namespace Network.Connexion_Menu {
                 m_line.materials[0].color = new Color(((m_firstColor.r * (1-ratio)) + (m_lastColor.r * ratio)), ((m_firstColor.g * (1-ratio)) + (m_lastColor.g * ratio)), ((m_firstColor.b * (1-ratio)) + (m_lastColor.b * ratio)));
 
                 m_line.widthMultiplier = m_initialLaserSize * (1 - ratio) + (m_endLaserSize * ratio);
+
+                //Setting the right length for the laser aiming previsualization
+                Vector3 forward = Synchronizer<SynchronizeSendVrRig>.Instance.m_rightHand.forward;
+                Vector3 position = Synchronizer<SynchronizeSendVrRig>.Instance.m_rightHand.position;
+                bool isHitting = Physics.Raycast(position, forward, out RaycastHit ray, Mathf.Infinity, m_mask);
+                m_line.SetPosition(1, position + (forward * (isHitting ? ray.distance : 100000f)));
+                m_line.SetPosition(0, position);
             }
             else if (OVRInput.Get (m_input) >= m_upTriggerValue) { // If the player press the trigger hard enough
                 m_isShooting = true;
@@ -74,15 +87,16 @@ namespace Network.Connexion_Menu {
             m_line.enabled = false;
                     
             if (MyNetworkManager.singleton.m_canSend) {
-                MyNetworkManager.OnConnection += DestroyMyself;
+                MyNetworkManager.OnReceiveInitialData += DestroyMyself;
             }
-            else {
-                m_elapsedTime = 0f;
-                m_isShooting = false;
-                m_shutDown = false;
-            }
+            
+            m_elapsedTime = 0f;
+            m_isShooting = false;
+            m_shutDown = false;
         }
 
-        private void DestroyMyself() => Destroy(gameObject);
+        private void DestroyMyself(InitialData p_initialData) => m_isActive = false;
+
+        private void ActiveMe(GameEnd p_gameend) => m_isActive = true;
     }
 }

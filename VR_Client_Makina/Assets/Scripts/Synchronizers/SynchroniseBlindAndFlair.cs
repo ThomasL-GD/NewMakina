@@ -7,6 +7,8 @@ public class SynchroniseBlindAndFlair : Synchronizer<SynchroniseBlindAndFlair>
 {
     [SerializeField] private MoveUp m_flair;
     [SerializeField] private UIOpacityTransition m_blindObject;
+    private Coroutine m_coco;
+
     void Awake() {
         MyNetworkManager.OnReceiveInitialData += FlairInitialData;
         MyNetworkManager.OnReceiveActivateFlair += ActivateFlair;
@@ -26,7 +28,8 @@ public class SynchroniseBlindAndFlair : Synchronizer<SynchroniseBlindAndFlair>
     void ActivateBlindness(ActivateBlind p_activateBlind) 
     {
         m_blindObject.gameObject.SetActive(true);
-        StartCoroutine(m_blindObject.WaitFortransition(Mathf.Max(p_activateBlind.blindIntensity-1f,0)));
+        if(m_coco != null) StopCoroutine(m_coco);
+        m_coco = StartCoroutine(m_blindObject.WaitFortransition(Mathf.Max(p_activateBlind.blindIntensity-1f,0)));
     }
 
     void DeactivateBlindness(DeActivateBlind p_deActivateBlind) => m_blindObject.gameObject.SetActive(false);

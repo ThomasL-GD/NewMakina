@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using CustomMessages;
 using Network;
+using Network.Connexion_Menu;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -10,6 +11,7 @@ namespace Synchronizers {
     {
         
         [SerializeField] private LineRenderer m_laserAiming;
+        [SerializeField] private LayerMask m_layersThatCollidesWithLaser;
         
         [Header("Colors")]
         [SerializeField] private Color m_firstColor = Color.yellow;
@@ -100,6 +102,11 @@ namespace Synchronizers {
                 
                 SynchronizeInitialData.instance.LosePcHealth();
             }
+            
+            RaycastHit hit;
+            Transform transform1 = transform;
+            bool hasRaycastHit = Physics.Raycast(transform1.position, transform1.forward, out hit, 1000f, 1 << 7);
+            if (hasRaycastHit && hit.transform.gameObject.TryGetComponent(out AttackSensitiveButton script)) script.OnBeingActivated();
         }
 
         private void Update() {
@@ -132,7 +139,13 @@ namespace Synchronizers {
                 m_laserAiming.materials[0].color = new Color(((m_firstColor.r * (1-ratio)) + (m_lastColor.r * ratio)), ((m_firstColor.g * (1-ratio)) + (m_lastColor.g * ratio)), ((m_firstColor.b * (1-ratio)) + (m_lastColor.b * ratio)));
 
                 m_laserAiming.widthMultiplier = m_initialLaserSize * (1 - ratio) + (m_endLaserSize * ratio);
-            
+
+                //Setting the right length for the laser aiming previsualization
+                Vector3 forward = Synchronizer<SynchronizeSendVrRig>.Instance.m_rightHand.forward;
+                Vector3 position = Synchronizer<SynchronizeSendVrRig>.Instance.m_rightHand.position;
+                bool isHitting = Physics.Raycast(position, forward, out RaycastHit ray, Mathf.Infinity, m_layersThatCollidesWithLaser);
+                m_laserAiming.SetPosition(1, position + (forward * (isHitting ? ray.distance : 100000f)));
+                m_laserAiming.SetPosition(0, position);
 
                 if (m_elapsedTime > m_laserLoadingTime) {
                     

@@ -32,8 +32,10 @@ namespace Synchronizers {
         /// <param name="p_pcTransform">The actual data we received</param>
         private void MoveMyself(PcTransform p_pcTransform) {
             m_explorerTransform.position = p_pcTransform.position;
-            
-            m_explorerTransform.rotation = Quaternion.Euler(m_explorerTransform.rotation.eulerAngles.x, p_pcTransform.rotation.eulerAngles.y, m_explorerTransform.rotation.eulerAngles.z);
+
+            Quaternion rotation = m_explorerTransform.rotation;
+            rotation = Quaternion.Euler(rotation.eulerAngles.x, p_pcTransform.rotation.eulerAngles.y, rotation.eulerAngles.z);
+            m_explorerTransform.rotation = rotation;
             m_explorerHeadTransform.rotation = Quaternion.Euler(p_pcTransform.rotation.eulerAngles.x, m_explorerHeadTransform.rotation.eulerAngles.y, p_pcTransform.rotation.eulerAngles.z);
         }
     }
