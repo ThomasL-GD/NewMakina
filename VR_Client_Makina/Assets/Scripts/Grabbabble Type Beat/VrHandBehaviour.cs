@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using JetBrains.Annotations;
-using Synchronizers;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider), typeof(Rigidbody))]
@@ -36,11 +33,12 @@ public class VrHandBehaviour : MonoBehaviour {
 
     private void Update() {
         m_isPressingTrigger = OVRInput.Get(m_grabInput) >= m_triggerGrabSensitivity; //if the trigger is pressed enough, the boolean becomes true
+        m_animator.SetBool(IsGrabbing, m_isPressingTrigger);
 
-        if (m_objectHeld == null) return;
+        if (m_objectHeld == null) return; //We keep going if an item is held
         
         if(!m_isPressingTrigger) {
-            m_objectHeld.BeLetGo();
+            m_objectHeld.BeLetGo(m_grabInput);
             m_objectHeld = null;
         }
     }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.031782452, g: 0.04127828, b: 0.11297851, a: 1}
+  m_IndirectSpecularColor: {r: 0.03178236, g: 0.04127807, b: 0.11297812, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2056,6 +2056,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 88736850591173243, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 931195234572616512, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
       propertyPath: m_Name
       value: DefaultSceneComponents
@@ -2147,6 +2151,14 @@ PrefabInstance:
     - target: {fileID: 4761549967752731086, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5687228402130184919, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 5687228402130184919, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 12.64
       objectReference: {fileID: 0}
     - target: {fileID: 7326766765409136338, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
       propertyPath: f_maxBombs
@@ -2312,6 +2324,10 @@ PrefabInstance:
       propertyPath: m_spawnPoints.Array.data[12]
       value: 
       objectReference: {fileID: 136076583}
+    - target: {fileID: 7326766765447975174, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
+      propertyPath: m_playerHead
+      value: 
+      objectReference: {fileID: 1378244888}
     - target: {fileID: 8523757767401828596, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
       propertyPath: m_collectiblesTransforms.Array.data[0]
       value: 
@@ -2396,7 +2412,9 @@ PrefabInstance:
       propertyPath: m_collectiblesTransforms.Array.data[20]
       value: 
       objectReference: {fileID: 1787491725}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5114814311047383306, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
+    - {fileID: 846883496, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
 --- !u!4 &279846112 stripped
 Transform:
@@ -11435,6 +11453,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -7594352380643253941, guid: 3ad396c782033dc4ba4f6f543c3f5a79, type: 3}
+--- !u!4 &1378244888 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3410370340517598269, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
+  m_PrefabInstance: {fileID: 279846111}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1378355717 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6102142928413848426, guid: 3ad396c782033dc4ba4f6f543c3f5a79, type: 3}

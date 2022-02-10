@@ -5,6 +5,10 @@ using UnityEngine.PlayerLoop;
 [RequireComponent(typeof(Rigidbody))]
 public abstract class GrabbablePhysickedObject : GrabbableObject {
 
+    [Header("Physics")]
+    [SerializeField] [Range(1f, 1000f)] private float m_throwMultiplier;
+    [SerializeField] [Range(1f, 1000f)] private float m_gravityMultiplier;
+
     private bool m_hasTouchedGround = false;
 
     //Dropdown type beat
@@ -14,25 +18,6 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
 
     /// <summary> The layers this object will collide with, only layer 8 (ground) is selected by default </summary>
     protected LayerMask m_layersThatCollides = 1 << 8;
-
-    /// <summary>Well, it was a transform but... err... I kinda amputated it so... it's just a position and rotation sticked together now... (￣ー￣; )ゞ </summary>
-    [Serializable]
-    protected struct AmputatedTransform {
-        public Vector3 position;
-        public Quaternion rotation;
-
-        /// <summary/>Will simply amputate a transform to have an amputated one lol
-        /// <param name="p_transform"/>The transform you want to amputate
-        /// <returns/>The amputated transform
-        public static AmputatedTransform AmputateTransform(Transform p_transform) {
-            return new AmputatedTransform() {position = p_transform.position, rotation = p_transform.rotation};
-        }
-    }
-
-    [SerializeField] [Range(1, 50)] [Tooltip("The number of values used to calculate the direction of the throw.\nUnit : values, can be seen as 1 value = 1 frame")]/**/ private int m_throwValuesNumber = 3;
-
-    /// <summary/>The last positions & rotations of this object, its length depends on m_throwValuesNumber
-    protected AmputatedTransform[] m_lastCoordinates = null;
     
     protected Rigidbody m_rb = null;
     
@@ -40,14 +25,11 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
     protected override void Start() {
         base.Start();
 
-        m_originalParent[0] = null;
-
         m_rb = GetComponent<Rigidbody>();
-        m_lastCoordinates = new AmputatedTransform[m_throwValuesNumber];
     }
     
-    public override void ActualiseParent() {
-        base.BeGrabbed();
+    public override void BeGrabbed(Transform p_parent) {
+        base.BeGrabbed(p_parent);
 
         if (m_mustDropDown && m_isCaught) {
             if (m_lineFeedback != null) {
@@ -60,32 +42,34 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
             
         }
 
-        if (m_isCaught || (!m_isCaught && !m_hasBeenCaughtInLifetime)) { //If it's either caught or spawned but never has been caught
+        if (m_isCaught) {
             m_rb.isKinematic = true;
-        }
-        else { //If the item is let go
-            m_rb.isKinematic = false;
-            
-            if(m_mustDropDown) return; // Watch out, this line can kill your code if you put line afterwards
-                
-            //m_rb.velocity = (m_lastCoordinates[0].position - m_lastCoordinates[m_lastCoordinates.Length - 1].position) * ((1 / Time.fixedDeltaTime) / m_lastCoordinates.Length);
-            //m_rb.angularVelocity += m_lastCoordinates[0].rotation.eulerAngles - m_lastCoordinates[m_lastCoordinates.Length - 1].rotation.eulerAngles;
-            m_rb.velocity = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.LHand);
-            m_rb.angularVelocity = OVRInput.GetLocalControllerAngularVelocity(OVRInput.Controller.RTouch);
-            
-            //Debug.Log(OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch));
         }
     }
 
-    private void FixedUpdate() {
+    public override void BeLetGo(OVRInput.Axis1D p_handInput) {
+        base.BeLetGo(p_handInput);
         
-        //Will move every value to the next index
-        for (int i = m_lastCoordinates.Length - 1; i > 0; i--) {
-            m_lastCoordinates[i] = m_lastCoordinates[i - 1];
+        m_rb.isKinematic = false;
+        
+        if(m_mustDropDown) return; // Watch out, this line can kill your code if you put line afterwards
+
+        OVRInput.Controller hand = OVRInput.Controller.None;
+            
+        //m_rb.velocity = (m_lastCoordinates[0].position - m_lastCoordinates[m_lastCoordinates.Length - 1].position) * ((1 / Time.fixedDeltaTime) / m_lastCoordinates.Length);
+        //m_rb.angularVelocity += m_lastCoordinates[0].rotation.eulerAngles - m_lastCoordinates[m_lastCoordinates.Length - 1].rotation.eulerAngles;
+        if (p_handInput.HasFlag(OVRInput.Axis1D.PrimaryHandTrigger) || p_handInput.HasFlag(OVRInput.Axis1D.PrimaryIndexTrigger)) {
+            hand |= OVRInput.Controller.LTouch;
         }
-    
-        //Then, we store the last position & rotation of this object
-        m_lastCoordinates[0] = AmputatedTransform.AmputateTransform(transform);
+        if (p_handInput.HasFlag(OVRInput.Axis1D.SecondaryHandTrigger) || p_handInput.HasFlag(OVRInput.Axis1D.SecondaryIndexTrigger)) {
+            hand |= OVRInput.Controller.RTouch;
+        }
+        Debug.LogWarning($"Theoretical velocity : {OVRInput.GetLocalControllerVelocity(hand)}");
+        m_rb.velocity = OVRInput.GetLocalControllerVelocity(hand) * m_throwMultiplier;
+        m_rb.angularVelocity = OVRInput.GetLocalControllerAngularVelocity(hand);
+        
+        //Debug.Log(OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch));
+            
     }
 
     private void OnCollisionEnter(Collision p_other) {
@@ -104,5 +88,9 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
             m_lineFeedback.GetComponent<DropDownFeedback>().DestroyMe();
             m_lineFeedback = null;
         }
+    }
+
+    private void FixedUpdate() {
+        m_rb.AddForce(Physics.gravity * m_gravityMultiplier);
     }
 }

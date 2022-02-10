@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,9 +12,14 @@ public abstract class GrabbableObject : MonoBehaviour {
 
     protected bool m_isPuttableOnlyOnce = false; // If true, once this object is let go somewhere, it can NOT be picked up again
 
+    private Coroutine m_getGrabbedCoroutine;
+
     public delegate void DestroyGrabbableDelegator(GrabbableObject p_grabbableObject);
     /// <summary>Is called when this object will be destroyed</summary>
     public DestroyGrabbableDelegator OnDestroyGrabbable;
+
+    [Header("Hand animation")]
+    [SerializeField] private float m_timeToGoInHand;
 
     // Start is called before the first frame update
     protected virtual void Start() {
@@ -42,13 +48,16 @@ public abstract class GrabbableObject : MonoBehaviour {
     /// <param name="p_newParent">The new parent you want for thi object</param>
     public virtual void BeGrabbed(Transform p_newParent) {
         transform.SetParent(p_newParent);
+        m_getGrabbedCoroutine = StartCoroutine(GoToHandCenter(m_timeToGoInHand, Vector3.zero));
         
         m_isCaught = true;
         m_hasBeenCaughtInLifetime = true;
     }
 
     /// <summary>Will let the item go and be the child of no one</summary>
-    public virtual void BeLetGo() {
+    public virtual void BeLetGo(OVRInput.Axis1D p_handInput) {
+        if(m_getGrabbedCoroutine != null) StopCoroutine(m_getGrabbedCoroutine);
+        
         transform.SetParent(null);
         
         m_isCaught = false;
@@ -66,5 +75,20 @@ public abstract class GrabbableObject : MonoBehaviour {
                 script.Catch(this);
             }
         }
+    }
+
+    IEnumerator GoToHandCenter(float p_time, Vector3 p_localPosToGo) {
+        float elapsedTime = 0f;
+        Vector3 originalLocalPos = transform.localPosition;
+        Vector3 pathToGo = p_localPosToGo - originalLocalPos;
+        
+        while (elapsedTime < p_time){
+            yield return new WaitForSeconds(Time.fixedDeltaTime);
+            elapsedTime += Time.fixedDeltaTime;
+            float ratio = elapsedTime / p_time;
+            transform.localPosition = originalLocalPos + (pathToGo * ratio);
+        }
+
+        transform.localPosition = p_localPosToGo;
     }
 }
