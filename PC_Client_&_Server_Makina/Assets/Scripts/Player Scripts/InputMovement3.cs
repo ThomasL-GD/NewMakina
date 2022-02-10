@@ -6,7 +6,7 @@ namespace Player_Scripts
     public class InputMovement3 : MonoBehaviour
     {
         public static InputMovement3 instance;
-        public bool m_isDead;
+        [HideInInspector]public bool m_isDead;
         [SerializeField, HideInInspector, Min(0f)] private float m_edgeAutoStopCheckDistance = .25f;
         [SerializeField, HideInInspector, Range(0f,1f)] private float m_minSpeedFactor=.5f;
         [SerializeField, HideInInspector] private bool m_edgeSafety = true;

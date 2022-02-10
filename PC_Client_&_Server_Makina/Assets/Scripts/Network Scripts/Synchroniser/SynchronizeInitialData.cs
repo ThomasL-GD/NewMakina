@@ -13,45 +13,48 @@ namespace Synchronizers
 
         [SerializeField] private Texture[] m_pcHealthTextures;
         [SerializeField] private Texture[] m_vrHealthTextures;
-        [SerializeField, Tooltip("The player Object to be enabled on connection")] public GameObject m_playerContainer;
+
+        [SerializeField] private GameObject m_waitingForPlayerFeddback;
+        [SerializeField] private GameObject[] m_unloadOnInitialData;
         /// <summary/> The PC Health data saved localy
         private int m_pcHealth;
         
         /// <summary/> The VR Health data saved localy
         private int m_vrHealth;
-        
-        /// <summary/> The singleton instance of SynchronizeInitialData
-        public static SynchronizeInitialData instance;
 
 
         /// <summary/> Adding functions to the client delegate
         void Awake()
         {
-            m_playerContainer.SetActive(false);
+            Reset();
+            ClientManager.OnReceiveGameEnd += Reset;
             ClientManager.OnReceiveInitialData += ReceiveInitialData;
+            ClientManager.OnReceiveReadyToPlay += ReceiveReady;
         }
+
+        private void ReceiveReady(ReadyToPlay p_activateblind) => m_waitingForPlayerFeddback.SetActive(false);
         
+
+        private void Reset(GameEnd p_gameEnd = new GameEnd())
+        {
+            foreach (var obj in m_unloadOnInitialData) obj.SetActive(true);
+        }
         
         /// <summary/> Singleton type beat
         private void Start()
         {
-            // Singleton type beat
-            if (instance == null) instance = this;
-            else
-            {
-                gameObject.SetActive(false);
-                Debug.LogWarning("BROOOOOOOOOOOOOOOOOOO ! There are too many Singletons broda", this);
-            }
+            m_waitingForPlayerFeddback.SetActive(true);
         }
 
         /// <summary/> Function called when the client received the initial data
         /// <param name="p_initialData"> The message sent by the server</param>
         void ReceiveInitialData(InitialData p_initialData)
         {
+            
+            foreach (var obj in m_unloadOnInitialData) obj.SetActive(false);
+
             m_pcHealth = p_initialData.healthPcPlayer;
             m_vrHealth = p_initialData.healthVrPlayer;
-            
-            m_playerContainer.SetActive(true);
             
             UpdateHealthText();
         }

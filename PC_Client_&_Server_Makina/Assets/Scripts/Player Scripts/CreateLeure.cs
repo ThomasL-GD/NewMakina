@@ -22,9 +22,13 @@ public class CreateLeure : MonoBehaviour
     
     private bool m_canSpawnLeure = true;
 
+    private GameObject m_leure;
+    private Coroutine m_killLeureCoroutine;
+
     private void Awake()
     {
         m_coolDownScript.OnReloading += ResetCooldown;
+        ClientManager.OnReceiveDestroyLeure += DestroyLeure;
     }
 
     // Update is called once per frame
@@ -33,28 +37,37 @@ public class CreateLeure : MonoBehaviour
         if (m_canSpawnLeure && Input.GetKeyDown(m_leureKey))
         {
             m_canSpawnLeure = false;
-            GameObject leure = Instantiate(m_leurePrefab, transform.position + (transform.forward * m_leureForwardOffset),transform.rotation);
+            m_leure = Instantiate(m_leurePrefab, transform.position + (transform.forward * m_leureForwardOffset),transform.rotation);
             
-            leure.GetComponent<LeurreMovement>().SetSpeedAndGravity(10f,m_leureGravity);
-            StartCoroutine(KillLeure(leure));
+            m_leure.GetComponent<LeurreMovement>().SetSpeedAndGravity(10f,m_leureGravity);
+            m_killLeureCoroutine = StartCoroutine(KillLeure());
         }
     }
     
-    IEnumerator KillLeure(GameObject p_leure)
+    IEnumerator KillLeure()
     {
-        
         NetworkClient.Send(new SpawnLeure());
         NetworkClient.Send(new PcInvisibility{isInvisible = true});
         m_uiElement.enabled = false;
         yield return new WaitForSeconds(m_leureLifeTime);
-        Destroy(p_leure);
+
+        DestroyLeure();
+    }
+
+    private void DestroyLeure(DestroyLeure p_message)
+    {
+        DestroyLeure();
+    }
+    private void DestroyLeure()
+    {
+        StopCoroutine(m_killLeureCoroutine);
         
+        Destroy(m_leure);
         NetworkClient.Send(new DestroyLeure());
         NetworkClient.Send(new PcInvisibility{isInvisible = false});
         
         m_coolDownScript.StartReloading();
     }
-
     void ResetCooldown()
     {
         m_canSpawnLeure = true;

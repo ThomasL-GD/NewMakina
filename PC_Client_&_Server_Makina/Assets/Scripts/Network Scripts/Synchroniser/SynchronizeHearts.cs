@@ -65,14 +65,13 @@ namespace Synchronizers
             m_hearts = hearts.ToArray();
         }
         
-        /// <summary>
-        /// Destroying the objects localy when the server tells this client to do it
-        /// </summary>
+        /// <summary/> Destroying the objects locally when the server tells this client to do it
         /// <param name="p_heartbreak"> the network message </param>
         private void SynchronizeHeartBreak(HeartBreak p_heartbreak)
         {
-            Destroy(m_hearts[p_heartbreak.index]);
-            SynchronizeInitialData.instance.LoseVrHealth();
+            int index = p_heartbreak.index;
+            if(m_hearts.Length > index)Destroy(m_hearts[index]);
+            SynchronizeInitialData.Instance.LoseVrHealth();
         }
     }
 }

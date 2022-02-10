@@ -7,7 +7,6 @@ using UnityEngine;
 /// </summary>
 public class MyNetworkManager : NetworkManager
 {
-    
     //Singleton time ! 	(˵ ͡° ͜ʖ ͡°˵)
     public new static MyNetworkManager singleton { get; private set; }
 
@@ -39,7 +38,9 @@ public class MyNetworkManager : NetworkManager
             Debug.LogWarning("BROOOOOOOOOOOOOOOOOOO ! There are too many Singletons broda", this);
         }else singleton = this;
     }
-    
+
+    private new void Start() => StartHost();
+
     /// <summary>
     /// The function that is called each time a player connects to the server.
     /// We assume that the latest player to connect is the VR player.

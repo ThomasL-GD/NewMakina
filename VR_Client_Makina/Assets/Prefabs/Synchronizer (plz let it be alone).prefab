@@ -19,6 +19,9 @@ GameObject:
   - component: {fileID: 5783733579950633030}
   - component: {fileID: 2047781738407387244}
   - component: {fileID: 6688492148997597000}
+  - component: {fileID: 434578376286307432}
+  - component: {fileID: 1469819181140471706}
+  - component: {fileID: 1661527278798300204}
   m_Layer: 0
   m_Name: Synchronizer (plz let it be alone)
   m_TagString: Untagged
@@ -68,6 +71,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_laserAiming: {fileID: 0}
+  m_layersThatCollidesWithLaser:
+    serializedVersion: 2
+    m_Bits: 0
   m_firstColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   m_lastColor: {r: 1, g: 1, b: 1, a: 1}
   m_initialLaserSize: 8.8
@@ -80,7 +86,7 @@ MonoBehaviour:
   m_prefabParticlesWallHit: {fileID: 6027568845842637197, guid: 4a34f0e0f9120c7488999a80f7c6b0a8, type: 3}
   m_audioSource: {fileID: 0}
   m_niceShotQuestionMark: 1
-  m_niceShotSound: {fileID: 8300000, guid: 096c2eeb437d590429b07b282afedc7f, type: 3}
+  m_niceShotSound: {fileID: 8300000, guid: 40acfb257e1855345b2222c5a5a63ab9, type: 3}
 --- !u!114 &5783733579950633029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,9 +134,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_heartPrefabs: {fileID: 7644008082715404871, guid: cb55a4dc6ddda614aa75aca13cdf79ac, type: 3}
   m_audioSource: {fileID: 0}
-  m_heartDestroyedSound: {fileID: 8300000, guid: f2b751fb621e9d748a6b69b4cf407fe0, type: 3}
+  m_heartDestroyedSound: {fileID: 8300000, guid: a6f5d3b53fcdf9342b13c0abc931c9d9, type: 3}
   m_heartDestructionTime: 6
-  m_heartLazerFlashPhase: 0.5
+  m_heartLaserFlashPhase: 0.5
 --- !u!114 &5783733579950633026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,14 +149,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 050f212302b0ba44fb00629d9500621b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_loadingPositions: []
+  m_loadingPositions:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   m_maxSlotsLoading: 1
+  m_dropDown: 0
   m_prefabBeaconAmmo: {fileID: 0}
   m_prefabDeployedBeacon: {fileID: 0}
   m_range: 20
   m_inflateTime: 0.2
   m_undetectedColor: {r: 1, g: 0, b: 0, a: 1}
   m_detectedColor: {r: 0, g: 1, b: 0, a: 1}
+  m_prefabDropDownFeedback: {fileID: 0}
 --- !u!114 &5783733579950633025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,8 +215,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   m_maxSlotsLoading: 1
+  m_dropDown: 0
   m_prefabBomb: {fileID: 5767537656552913653, guid: 61e04b72ef96e234f836b698dac2f3c1, type: 3}
-  m_explosionTimeOnceTouchingTheGround: 0
   m_colorWhenAlmostExploding: {r: 1, g: 0, b: 0, a: 1}
   m_bombScale: 1
   m_prefabFxBoomHit: {fileID: 2578695409718655044, guid: 7f12a1289625b5848b0eeca163c0fcbd, type: 3}
@@ -212,6 +224,7 @@ MonoBehaviour:
   m_audioSource: {fileID: 0}
   m_niceShotQuestionMark: 1
   m_niceShotSound: {fileID: 0}
+  m_prefabDropDownFeedback: {fileID: 0}
 --- !u!114 &6688492148997597000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,3 +239,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_flair: {fileID: 0}
   m_blindObject: {fileID: 0}
+--- !u!114 &434578376286307432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5783733579950633034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dfde674e1bc2fd42b174f07ef865e61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_elevators:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &1469819181140471706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5783733579950633034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 952864cd1aaef3d419b5ffc3d9540d11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_objectToActiveOnReady: {fileID: 0}
+--- !u!114 &1661527278798300204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5783733579950633034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6593e4ff94ec53b4a9e4521cda062dcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_prefabTpPoint: {fileID: 5780574956763540240, guid: a6f8cd8a9d1197d459bf8799a02af2cf, type: 3}
+  m_particlesSpeed: 15.9
+  m_prefabParticles: {fileID: 7130397999828551174, guid: fd9bcf479ebec7d4db0faaecd1844c47, type: 3}

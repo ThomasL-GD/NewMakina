@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using CustomMessages;
 using Mirror;
 using UnityEngine;
@@ -22,6 +21,26 @@ namespace Network {
         /// <summary/> The delegate that is called when the client's connection is confirmed
         public delegate void ServerDelegator();
         public static ServerDelegator OnConnection;
+    
+
+        /// <summary/> Is called when we receive new Teleported data from server
+        public delegate void TeleportedDelegator(Teleported p_ready);
+        public static TeleportedDelegator OnReceiveTeleported;
+    
+
+        /// <summary/> Is called when we receive new RemoveTp data from server
+        public delegate void RemoveTpDelegator(RemoveTp p_ready);
+        public static RemoveTpDelegator OnReceiveRemoveTp;
+    
+
+        /// <summary/> Is called when we receive new DropTp data from server
+        public delegate void DropTpDelegator(DropTp p_ready);
+        public static DropTpDelegator OnReceiveDropTp;
+    
+
+        /// <summary/> Is called when we receive new ReadyToPlay data from server
+        public delegate void ReadyOrNotDelegator(ReadyToPlay p_ready);
+        public static ReadyOrNotDelegator OnReadyToPlay;
     
 
         /// <summary/> Is called when we receive new PcTransform data from server
@@ -158,9 +177,21 @@ namespace Network {
             NetworkClient.RegisterHandler<SpawnLeure>(ReceiveSpawnLeure);
             NetworkClient.RegisterHandler<DestroyLeure>(ReceiveDestroyLeure);
             NetworkClient.RegisterHandler<LeureTransform>(ReceiveLeureTransform);
+            NetworkClient.RegisterHandler<ReadyToPlay>(ReceiveReadyToPlay);
+            NetworkClient.RegisterHandler<DropTp>(ReceiveDropTp);
+            NetworkClient.RegisterHandler<RemoveTp>(ReceiveRemoveTp);
+            NetworkClient.RegisterHandler<Teleported>(ReceiveTeleported);
         
             OnConnection?.Invoke();
         }
+
+        private void ReceiveTeleported(Teleported p_teleported) => OnReceiveTeleported?.Invoke(p_teleported);
+
+        private void ReceiveRemoveTp(RemoveTp p_removeTp) => OnReceiveRemoveTp?.Invoke(p_removeTp);
+
+        private void ReceiveDropTp(DropTp p_dropTp) => OnReceiveDropTp?.Invoke(p_dropTp);
+
+        private void ReceiveReadyToPlay(ReadyToPlay p_readyToPlay) => OnReadyToPlay?.Invoke(p_readyToPlay);
 
         private void ReceiveActivateFlair(ActivateFlair p_activateFlair) => OnReceiveActivateFlair?.Invoke(p_activateFlair);
 

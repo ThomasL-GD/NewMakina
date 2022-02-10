@@ -4,8 +4,6 @@ using System.Linq;
 using Mirror;
 using UnityEngine;
 using CustomMessages;
-using Unity.Mathematics;
-using UnityEngine.Serialization;
 
 /// <summary/> The server side manager will handle all of the server side network dealings of the game
 
@@ -33,7 +31,12 @@ public class ServerManager : MonoBehaviour
     private LeureTransform m_leureBuffer;
     private ActivateFlair m_flairBuffer;
     private ActivateBlind m_activateBlindBuffer;
-
+    private DropTp m_dropTpBuffer;
+    private Teleported m_teleporttedBuffer;
+    
+    private bool m_vrReadyBuffer;
+    private bool m_pcReadyBuffer;
+    
     #endregion
     
     
@@ -49,10 +52,18 @@ public class ServerManager : MonoBehaviour
     [Header("Game Settings")]
     [SerializeField, Tooltip("The radius of the VR laser")] private float f_laserRadius = 20f;
     private float m_laserRadius = 20f;
+    
     [SerializeField, Tooltip("The speed of the elevators in m/s")] private float f_elevatorSpeed = 5.8f;
     private float m_elevatorSpeed = 5.8f;
+    
     [SerializeField, Tooltip("The speed of the elevators in m/s")] private float f_elevatorWaitTime = 1f;
     private float m_elevatorWaitTime = 1f;
+    
+    [SerializeField, Tooltip("The offset of the raycast shot to the player to check if the lazer hit")] private float f_laserCheckOffset = 2f;
+    private float m_laserCheckOffset = 2f;
+
+    [SerializeField] private LayerMask f_playerLayers;
+    private LayerMask m_playerLayers;
     
 
     [Header("Hearts")]
@@ -105,12 +116,6 @@ public class ServerManager : MonoBehaviour
     private float m_flashDuration = 5f;
     [SerializeField, Tooltip("the minimum and maximum dot product from the look angle to clamp")]private Vector2 f_flashClamp;
     private Vector2 m_flashClamp;
-    [Space]
-    [SerializeField, Tooltip("The offset of the raycast shot to the player to check if the lazer hit")] private float f_laserCheckOffset = 2f;
-    private float m_laserCheckOffset = 2f;
-
-    [SerializeField] private LayerMask f_playerLayers;
-    private LayerMask m_playerLayers;
     private int m_currentBombAmount = 0;
     
 
@@ -146,10 +151,6 @@ public class ServerManager : MonoBehaviour
             Debug.LogWarning("BROOOOOOOOOOOOOOOOOOO ! There are too many Singletons broda", this);
         }else singleton = this;
 
-        #region Members assignment
-
-        #endregion
-        
         //linking NetworkManager functions
         // MyNetworkManager.del_onHostServer += StartGame;
         MyNetworkManager.del_onClientConnection += OnServerConnect;
@@ -194,8 +195,12 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<DestroyLeure>(OnDestroyLeure);
         NetworkServer.RegisterHandler<LeureTransform>(OnLeureTransform);
         NetworkServer.RegisterHandler<RestartGame>(OnRestartGame);
-        
+        NetworkServer.RegisterHandler<ReadyToPlay>(OnReadyMessage);
+        NetworkServer.RegisterHandler<DropTp>(OnDropTp);
+        NetworkServer.RegisterHandler<RemoveTp>(OnRemoveTp);
+        NetworkServer.RegisterHandler<Teleported>(OnTeleported);
     }
+
 
     /// <summary/> The Server Loop
     IEnumerator ServerTick()
@@ -223,12 +228,16 @@ public class ServerManager : MonoBehaviour
 
         if (flashStrength < m_flashClamp.x) flashStrength = 0f;
         else if (flashStrength > m_flashClamp.y) flashStrength = 1f;
+        
+        if(m_flashCoroutine != null)StopCoroutine(m_flashCoroutine);
+        m_flashCoroutine = StartCoroutine(Flash(p_flashDuration * flashStrength));
+    }
 
-        m_activateBlindBuffer.blindIntensity = p_flashDuration * flashStrength;
-        
+    IEnumerator Flash(float p_flashDuration)
+    {
+        m_activateBlindBuffer.blindIntensity = p_flashDuration;
         SendActivateBlind();
-        
-        yield return new WaitForSeconds(p_flashDuration * flashStrength);
+        yield return new WaitForSeconds(p_flashDuration);
         SendDeActivateBlind();
     }
 
@@ -241,15 +250,24 @@ public class ServerManager : MonoBehaviour
 
     #region SERVER ACTIONS
 
+    private void SendReady()
+    {
+        SendToBothClients(new ReadyToPlay());
+    }
+    
     /// <summary/> DONT FUCKING TOUCH THIS
     private bool m_firstTime = true;
-    
+
+    private bool m_gameEnded;
+    private Coroutine m_flashCoroutine;
+
     /// <summary>
     /// The function that is called when the server is hosted.
     /// This function takes the serialized properties and applies them to their modifiable counterpart thereby conserving the initial values.
     /// </summary>
     private void StartGame()
     {
+        #region Members assignment
         //Resetting the serialized values
         m_tickrate = f_tickrate;
         m_laserRadius = f_laserRadius;
@@ -280,7 +298,12 @@ public class ServerManager : MonoBehaviour
         m_currentBeaconAmount = 0;
         m_currentBombAmount = 0;
         m_bombCoroutineRunning = false;
+        
+        m_pcReadyBuffer = false;
+        m_vrReadyBuffer = false;
 
+        m_gameEnded = false;
+        
         // Doing a small checkup
         if (m_vrPlayerHealth > m_heartTransforms.Length) Debug.LogWarning("the Vr Player has more health than there are hearts... Big L?",this);
         
@@ -311,8 +334,9 @@ public class ServerManager : MonoBehaviour
         m_leureBuffer = new LeureTransform();
         m_flairBuffer = new ActivateFlair();
         m_activateBlindBuffer = new ActivateBlind();
-        
 
+        #endregion
+        
         InitialData initialData = new InitialData() {
             healthPcPlayer = m_pcPlayerHealth,
             healthVrPlayer = m_vrPlayerHealth,
@@ -324,7 +348,9 @@ public class ServerManager : MonoBehaviour
             flairRaiseSpeed = m_flairRaiseSpeed,
             flairDetonationTime = m_flairDetonationTime,
             heartPositions = m_heartPositions,
-            heartRotations = m_heartRotations
+            heartRotations = m_heartRotations,
+            bombDetonationTime = m_bomDetonationTime,
+            bombExplosionRange = m_bombExplosionRange
         };
         
         SendToBothClients(initialData);
@@ -341,6 +367,8 @@ public class ServerManager : MonoBehaviour
 
     private void EndGame(ClientConnection p_winner = ClientConnection.PcPlayer)
     {
+        m_gameEnded = true;
+        
         SendToBothClients( new GameEnd(){winningClient = p_winner});
         
         StopCoroutine(m_spawnInitialBeacons);
@@ -461,6 +489,7 @@ public class ServerManager : MonoBehaviour
     /// <summary/> the function called to check the winning conditions
     private void CheckHealths()
     {
+        if (m_gameEnded) return;
         if (m_pcPlayerHealth <= 0) {
             EndGame(ClientConnection.VrPlayer);
             return;
@@ -529,9 +558,10 @@ public class ServerManager : MonoBehaviour
     
     private void OnRestartGame(NetworkConnection arg1, RestartGame p_restartGame)
     {
+        Debug.Log($"Received RestartGame message from client :{arg1.address}");
         if(m_vrNetworkConnection != null && m_pcNetworkConnection !=null) {
             EndGame();
-            StartGame();
+            SendReady();
         }
     }
 
@@ -580,46 +610,39 @@ public class ServerManager : MonoBehaviour
 
         if (m_vrNetworkConnection != null && m_pcNetworkConnection != null)
         {
-            StartGame();
+            SendReady();
         }
+    }
 
+    private void OnReadyMessage(NetworkConnection p_connection, ReadyToPlay p_message)
+    {
+        if (p_connection == m_vrNetworkConnection) m_vrReadyBuffer = true;
+        else if (p_connection == m_pcNetworkConnection) m_pcReadyBuffer = true;
         
-        InitialData initialData = new InitialData() {
-            healthPcPlayer = m_pcPlayerHealth,
-            healthVrPlayer = m_vrPlayerHealth,
-            beaconRange = m_beaconRange,
-            maximumBeaconCount = m_maxBeacons,
-            maximumBombsCount = m_maxBombs,
-            elevatorSpeed = m_elevatorSpeed,
-            elevatorWaitTime = m_elevatorWaitTime,
-            flairRaiseSpeed = m_flairRaiseSpeed,
-            flairDetonationTime = m_flairDetonationTime,
-            bombDetonationTime = m_bomDetonationTime
-        };
-        
-        p_conn.Send(initialData);
-        
-        if(m_beaconsPositionsBuffer.data != null)
-            foreach (BeaconData data in m_beaconsPositionsBuffer.data)
-                p_conn.Send(new SpawnBeacon() {beaconID = data.beaconID});
-        
-        if(m_bombsPositionsBuffer.data != null)
-            foreach (BombData data in m_bombsPositionsBuffer.data)
-            {
-                p_conn.Send(new SpawnBomb() {bombID = data.bombID});
-            }
-        
-        // if(m_beaconsPositionsBuffer.data != null)
-        //     foreach (BeaconData data in m_beaconsPositionsBuffer.data)
-        //         p_conn.Send(new SpawnBeacon() {beaconID = data.beaconID});
-        //
-        // if(m_bombsPositionsBuffer.data != null)
-        //     foreach (BombData data in m_bombsPositionsBuffer.data)
-        //     {
-        //         p_conn.Send(new SpawnBomb() {bombID = data.bombID});
-        //     }
+        if(m_vrReadyBuffer && m_pcReadyBuffer) StartGame();
     }
     
+    
+    private void OnTeleported(NetworkConnection p_connection, Teleported p_message)
+    {
+        m_teleporttedBuffer = p_message;
+        OnServerTick -= SendTeleported;
+        OnServerTick += SendTeleported;
+    }
+
+    private void OnRemoveTp(NetworkConnection p_connection, RemoveTp p_message)
+    {
+        OnServerTick -= SendRemoveTp;
+        OnServerTick += SendRemoveTp;
+    }
+    private void OnDropTp(NetworkConnection p_connection, DropTp p_message)
+    {
+        m_dropTpBuffer = p_message;
+        OnServerTick -= SendDropTp;
+        OnServerTick += SendDropTp;
+    }
+
+
     /// <summary/> function called when the server receives a message of type ActivateBeacon
     /// <param name="p_conn"> The connection from which originated the message </param>
     /// <param name="p_ativateBeacon"> The message sent by the Client to the Server  </param>
@@ -684,40 +707,39 @@ public class ServerManager : MonoBehaviour
             Vector3 startingPoint = m_vrTransformBuffer.positionRightHand;
             Vector3 direction = m_vrTransformBuffer.rotationRightHand * Vector3.forward;
             Vector3 playerPos = m_pcTransformBuffer.position + Vector3.up * m_laserCheckOffset/2f;
-            Vector3 laserCriticalPath = (playerPos + Vector3.up * m_laserCheckOffset/2f) - startingPoint;
+            Vector3 laserCriticalPath = (playerPos + Vector3.up * m_laserCheckOffset / 2f) - startingPoint;
             
             Debug.DrawLine(playerPos,playerPos + Vector3.up * m_laserCheckOffset/2f,Color.red,5f);
             
             // Hitboxes Verification (blame Blue)
             bool hitAWall = Physics.Raycast(startingPoint, laserCriticalPath.normalized,out RaycastHit hited, laserCriticalPath.magnitude,m_playerLayers,QueryTriggerInteraction.Ignore);
-            Debug.Log(hitAWall?"hit":"miss");
-            Debug.DrawRay(hited.point, Vector3.up * 4f, Color.yellow, 15f);
+            
+#if UNITY_EDITOR
+            Debug.DrawRay(startingPoint, laserCriticalPath, hitAWall ? Color.green : Color.red,15f);
+#endif
+            
             RaycastHit rayHit;
             bool hitSmth = Physics.Raycast(startingPoint, direction.normalized, out rayHit, 10000f, m_playerLayers, QueryTriggerInteraction.Ignore);
 
-            Debug.DrawRay(startingPoint, laserCriticalPath, hitAWall ? Color.green : Color.red, 15f);
-            
-            Debug.LogWarning($"The laser hit ? {hitAWall}", this);
+            //Debug.DrawRay(startingPoint, laserCriticalPath, hitAWall ? Color.green : Color.red, 15f);
             
             bool hit;
             const float valueIfNoHit = 0f; //BE WARY THE VR NEEDS TO KNOW WHICH VALUE THIS IS AND WE DON'T SEND IT THROUGH NETWORK!
+            float distance;
             switch (hitAWall) {
                 case false : { //If there's no wall between
                     // So we measure the distance of the player's position from the line of the laser
-                    float distance = Vector3.Cross(direction, playerPos - startingPoint).magnitude;
+                    distance = Vector3.Cross(direction, playerPos - startingPoint).magnitude;
 
                     //if the distance between the line of fire and the player's position is blablablbalalboom... he ded
                     hit = distance <= m_laserRadius && Vector3.Angle(playerPos - startingPoint, direction) < 90f;
 
-                    Debug.Log("yay maybe");
                     if (hit) {
+                        // todo : yeah it's not a feature Blue.. nice try..
                         m_pcPlayerHealth--;
                         m_laserBuffer.length = laserCriticalPath.magnitude;
-                        
-                        Debug.Log("yay");
                     }
                     else {
-                        Debug.Log("fuuuuck");
                         m_laserBuffer.length = hitSmth ? rayHit.distance : valueIfNoHit;
                     }
 
@@ -726,13 +748,34 @@ public class ServerManager : MonoBehaviour
                 case true : {
                     m_laserBuffer.length = hitSmth ? rayHit.distance : valueIfNoHit;
                     hit = false;
-                break; }
+                    break; }
+            }
+
+            bool hitLeure = false;
+            if(!hit)
+            {
+                Debug.Log("1");
+                Vector3 leurePosition = m_leureBuffer.position + Vector3.up * m_laserCheckOffset / 2f;
+                laserCriticalPath = (leurePosition + Vector3.up * m_laserCheckOffset / 2f) - startingPoint;
+
+                distance = Vector3.Cross(direction, leurePosition - startingPoint).magnitude;
+                hitLeure = distance <= m_laserRadius && Vector3.Angle(leurePosition - startingPoint, direction) < 90f;
+
+                
+                if (hitLeure && !Physics.Raycast(startingPoint, laserCriticalPath.normalized, out hited, laserCriticalPath.magnitude, m_playerLayers, QueryTriggerInteraction.Ignore))
+                {
+                    Debug.Log("2");
+                    if(m_flashCoroutine != null)StopCoroutine(m_flashCoroutine);
+                    m_flashCoroutine = StartCoroutine(Flash(m_flashDuration));
+                    m_pcNetworkConnection.Send(new DestroyLeure());
+                    Debug.Log("3");
+                }
             }
             
-            // Packing the vallues in a neat little message
+            // Packing the values in a neat little message
             m_laserBuffer.origin = startingPoint;
             m_laserBuffer.rotation = m_vrTransformBuffer.rotationRightHand;
-            m_laserBuffer.hitPosition = m_pcTransformBuffer.position;
+            m_laserBuffer.hitPosition = hitLeure?m_leureBuffer.position:m_pcTransformBuffer.position;
             m_laserBuffer.hit = hit;
         }
         //preparing to send the message
@@ -819,7 +862,7 @@ public class ServerManager : MonoBehaviour
 
         Vector2 pcFlatPosition = new Vector2(m_pcTransformBuffer.position.x,m_pcTransformBuffer.position.z);
         Vector2 bombFlatPosition = new Vector2(p_bombExplosion.position.x,p_bombExplosion.position.z);
-        bool hit = Vector2.Distance(p_bombExplosion.position, m_pcTransformBuffer.position) < m_bombExplosionRange;
+        bool hit = Vector2.Distance(pcFlatPosition, bombFlatPosition) < m_bombExplosionRange;
         m_currentBombAmount--;
         if (hit) m_pcPlayerHealth--;
         
@@ -843,7 +886,25 @@ public class ServerManager : MonoBehaviour
 
 
     #region SERVER SENDERS
-
+    
+    private void SendTeleported()
+    {
+        m_vrNetworkConnection.Send(m_teleporttedBuffer);
+        OnServerTick -= SendTeleported;
+    }
+    
+    private void SendRemoveTp()
+    {
+        m_vrNetworkConnection?.Send(new RemoveTp());
+        OnServerTick -= SendRemoveTp;
+    } 
+    
+    private void SendDropTp()
+    {
+        m_vrNetworkConnection?.Send(m_dropTpBuffer);
+        OnServerTick -= SendDropTp;
+    }
+    
     /// <summary>
     /// The function that send the VrTransform to the pc client
     /// </summary>
