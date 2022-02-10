@@ -1,9 +1,11 @@
+using System;
 using CustomMessages;
 using Mirror;
+using Network;
 using UnityEngine;
 
-public class ElevatorBehavior : MonoBehaviour
-{
+[RequireComponent(typeof(BoxCollider))]
+public class ElevatorBehavior : MonoBehaviour {
     private float m_bottomPosition;
     
     [SerializeField, Tooltip("The top position that the elevator will go to")] private float m_topPosition;
@@ -67,5 +69,11 @@ public class ElevatorBehavior : MonoBehaviour
         m_speed = p_speed;
         m_waitTime = p_waitTime;
         m_index = p_index;
+    }
+
+    private void OnTriggerEnter(Collider p_other) {
+        if (p_other.gameObject.layer == VrHandBehaviour.s_layer) {
+            MyNetworkManager.singleton.SendVrData(new ElevatorActivation(){index = m_index});
+        }
     }
 }
