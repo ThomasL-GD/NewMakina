@@ -12,7 +12,7 @@ namespace Synchronizers
         private GameObject m_player;
 
         [SerializeField] [Tooltip("The player's respawn points")]
-        private Transform[] m_spawnPoints;
+        public Transform[] m_spawnPoints;
 
         [SerializeField] [Tooltip("The player's respawn Time in seconds")]
         private float m_respawnTime = 3f;
