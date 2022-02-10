@@ -9,6 +9,10 @@ public class FollowTransform : MonoBehaviour {
     [SerializeField, HideInInspector] private bool m_rotations = false;
     [SerializeField, HideInInspector] private bool m_scale = false;
     
+    private Vector3 positionDifference = Vector3.zero;
+    private Quaternion rotationDifference = Quaternion.Euler(Vector3.zero);
+    private Vector3 scaleDifference = Vector3.zero;
+    
     //Positions
     [SerializeField, HideInInspector] private bool m_pX = false;
     [SerializeField, HideInInspector] private bool m_pY = false;
@@ -23,6 +27,14 @@ public class FollowTransform : MonoBehaviour {
     [SerializeField, HideInInspector] private bool m_sX = false;
     [SerializeField, HideInInspector] private bool m_sY = false;
     [SerializeField, HideInInspector] private bool m_sZ = false;
+
+    private void OnEnable() {
+        Transform transform1 = transform;
+        positionDifference = transform1.position - m_transformToFollow.position;
+        rotationDifference = transform1.rotation * Quaternion.Inverse(m_transformToFollow.rotation);
+        scaleDifference = transform1.localScale - m_transformToFollow.localScale;
+    }
+
 
     private void Update() {
 
