@@ -35,8 +35,9 @@ class WindowPlacer2 : EditorWindow
     private GameObject m_selection;
 
     private static bool m_useCorners = true;
-    private int m_lines = 3;
-    private float m_lineStep;
+    private static int m_lines = 3;
+    private static float m_lineStep;
+    private static Vector3 m_previewRotationOffset = Vector3.zero;
 
     /// <summary/> The function called when the MenuItem is called to create the window
     [MenuItem("Tools/Window Placer 2")]
@@ -56,6 +57,8 @@ class WindowPlacer2 : EditorWindow
         
         // Updating the GUI of the window
         window.Repaint();
+
+        if (m_previewRotationOffset == Vector3.zero) m_previewRotationOffset = new Vector3(-90f, 0f, 0f);
     }
     
     /// <summary>
@@ -246,8 +249,15 @@ class WindowPlacer2 : EditorWindow
                 for (int i = 0; i < prefab.transform.childCount; i++)
                 {
                     if(prefab.transform.GetChild(i).TryGetComponent(out meshFilter)) break;
+                    
+                    for (int j = 0; j < prefab.transform.GetChild(i).childCount; j++)
+                    
+                        if(prefab.transform.GetChild(i).GetChild(j).TryGetComponent(out meshFilter)) break;
+                        
+                    
                 }
             }
+            
             Mesh windowMesh = meshFilter.sharedMesh;
             
             // Setting the material before drawing 
@@ -262,12 +272,11 @@ class WindowPlacer2 : EditorWindow
                 for (int i = 0; i <= amount; i++)
                 {
                     Vector3 position = link.A + (link.B - link.A).normalized * (((length - m_margin*2) / amount) * i + m_margin);
-                    
-                    Quaternion rotation = m_facade.transform.GetChild(0)!= null ? m_facade.transform.GetChild(0).rotation : m_facade.transform.rotation;
-                    rotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward, new Vector3(link.normal.x,0,link.normal.z), Vector3.up) + rotation.eulerAngles);
-                    Graphics.DrawMeshNow(windowMesh, position, rotation);
-                    rotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward, new Vector3(link.normal.x,0,link.normal.z), Vector3.up) + m_facade.transform.eulerAngles);
-                    m_points.Add(new Point(position,rotation,facadeState));
+                    Quaternion prefabRotation;
+                    prefabRotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward, new Vector3(link.normal.x,0,link.normal.z), Vector3.up) + m_previewRotationOffset);
+                    Graphics.DrawMeshNow(windowMesh, position, prefabRotation);
+                    prefabRotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward, new Vector3(link.normal.x,0,link.normal.z), Vector3.up) + m_facade.transform.eulerAngles);
+                    m_points.Add(new Point(position,prefabRotation,facadeState));
                 }
             }
         }
@@ -504,6 +513,11 @@ class WindowPlacer2 : EditorWindow
         }
 
         m_useCorners = Toggle("Place corners ?", m_useCorners);
+        
+        Space();
+        m_previewRotationOffset = Vector3Field("Preview Offset", m_previewRotationOffset);
+        Space();
+        
         if(!m_useCorners) return;
         
         m_corner = (GameObject)ObjectField("corner prefab", m_corner, typeof(object), true);
