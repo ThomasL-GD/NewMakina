@@ -7,9 +7,6 @@ public class ObjectLoading : MonoBehaviour {
     [HideInInspector] public SynchronizeLoadedObjectsAbstract m_synchronizer;
     
     /*[SerializeField] [Tooltip("For Debug Only.")]/**/ protected int m_indexInArm = 0;
-
-    /// <summary> If true, when this object will be loaded, it will be set child of the transform position this will be placed to </summary>
-    [HideInInspector] public bool mustPreserveParent = false;
     
     /// <summary>
     /// You MUST call this function to initialize the loading in arm.
@@ -35,6 +32,6 @@ public class ObjectLoading : MonoBehaviour {
         Transform reference = m_synchronizer.m_loadingPositions[m_indexInArm];
         transform.position = reference.position;
         
-        if(mustPreserveParent)transform.SetParent(reference);
+        if(m_synchronizer.m_stickToSpawnPosition)transform.SetParent(reference);
     }
 }

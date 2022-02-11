@@ -36,12 +36,13 @@ public class BombBehavior : GrabbablePhysickedObject {
         OnDestroyBomb += ActualiseIndex;
     }
 
-    public override void ActualiseParent() {
-        base.ActualiseParent();
+    public override void BeGrabbed(Transform p_parent) {
 
-        if (m_isCaught) {
+        if (!m_hasBeenCaughtInLifetime) {
             m_bombLoading.Unloading();
         }
+        
+        base.BeGrabbed(p_parent);
     }
 
     protected override void OnFirstTimeTouchingGround(Collision p_other) {
