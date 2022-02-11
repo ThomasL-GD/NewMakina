@@ -484,8 +484,7 @@ class WindowPlacer2 : EditorWindow
 
         if (Button("\nPlace Windows!\n"))
         {
-            var gigaParent = new GameObject();
-            gigaParent.name = "facades";
+            var gigaParent = new GameObject(){name =  "facades", tag = "HoudinAllRight Select Ignore"};
             gigaParent.transform.parent = m_parent.transform;
             Undo.RegisterCreatedObjectUndo(gigaParent, "created parent");
 
