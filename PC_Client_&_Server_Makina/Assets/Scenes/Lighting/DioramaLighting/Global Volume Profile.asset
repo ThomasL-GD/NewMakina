@@ -16,6 +16,7 @@ MonoBehaviour:
   - {fileID: 7576749875930094875}
   - {fileID: 589523968703661289}
   - {fileID: 4875782892923347895}
+  - {fileID: 4926626560880451759}
 --- !u!114 &589523968703661289
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -32,15 +33,15 @@ MonoBehaviour:
   m_AdvancedMode: 0
   postExposure:
     m_OverrideState: 1
-    m_Value: 0.35
+    m_Value: 0.9
   contrast:
     m_OverrideState: 1
-    m_Value: -2.1
+    m_Value: -2.8
     min: -100
     max: 100
   colorFilter:
     m_OverrideState: 1
-    m_Value: {r: 0.9685104, g: 0.99553853, b: 1.1486983, a: 1}
+    m_Value: {r: 0.6734603, g: 0.70255107, b: 0.8867924, a: 1}
     hdr: 1
     showAlpha: 0
     showEyeDropper: 1
@@ -51,7 +52,7 @@ MonoBehaviour:
     max: 180
   saturation:
     m_OverrideState: 1
-    m_Value: -5.6
+    m_Value: -0.8
     min: -100
     max: 100
 --- !u!114 &4875782892923347895
@@ -89,7 +90,7 @@ MonoBehaviour:
     m_Value: 0
   focusDistance:
     m_OverrideState: 1
-    m_Value: 8.27
+    m_Value: 8
     min: 0.1
   aperture:
     m_OverrideState: 1
@@ -116,6 +117,25 @@ MonoBehaviour:
     m_Value: 0
     min: -180
     max: 180
+--- !u!114 &4926626560880451759
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81180773991d8724ab7f2d216912b564, type: 3}
+  m_Name: ChromaticAberration
+  m_EditorClassIdentifier: 
+  active: 1
+  m_AdvancedMode: 0
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0.15
+    min: 0
+    max: 1
 --- !u!114 &7576749875930094875
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -132,11 +152,11 @@ MonoBehaviour:
   m_AdvancedMode: 0
   threshold:
     m_OverrideState: 1
-    m_Value: 1.08
+    m_Value: 0.88
     min: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 4.65
+    m_Value: 0.63
     min: 0
   scatter:
     m_OverrideState: 0
@@ -148,8 +168,8 @@ MonoBehaviour:
     m_Value: 65472
     min: 0
   tint:
-    m_OverrideState: 0
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_OverrideState: 1
+    m_Value: {r: 0.18867922, g: 0.09478266, b: 0.029369881, a: 1}
     hdr: 0
     showAlpha: 0
     showEyeDropper: 1
