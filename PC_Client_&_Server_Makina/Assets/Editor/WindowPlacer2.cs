@@ -275,7 +275,6 @@ class WindowPlacer2 : EditorWindow
                 float length = Vector3.Distance(link.A, link.B);
                 if (length < m_margin  * 2f + m_spacing)
                 {
-                    if(length <m_spacing) continue;
                     Vector3 position = (link.A + link.B)/2f;
                     Quaternion prefabRotation;
                     prefabRotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward, new Vector3(link.normal.x,0,link.normal.z), Vector3.up) + m_previewRotationOffset);
@@ -485,23 +484,32 @@ class WindowPlacer2 : EditorWindow
 
         if (Button("\nPlace Windows!\n"))
         {
-            var parent = new GameObject();
-            parent.name = "windows";
+            var gigaParent = new GameObject();
+            gigaParent.name = "facades";
+            gigaParent.transform.parent = m_parent.transform;
+            Undo.RegisterCreatedObjectUndo(gigaParent, "created parent");
 
-            parent.transform.parent = m_parent.transform;
+            var middleParent = new GameObject(){name = "middle facades"};
+            var topParent = new GameObject(){name = "top facades"};
+            var bottomParent = new GameObject(){name = "bottom facades"};
+
+            middleParent.transform.parent = gigaParent.transform;
+            topParent.transform.parent = gigaParent.transform;
+            bottomParent.transform.parent = gigaParent.transform;
             
-            Undo.RegisterCreatedObjectUndo(parent, "created parent");
             foreach (Point point in m_points)
             {
                 GameObject prefab = m_facade;
-                
+                GameObject parent = middleParent;
                 switch (point.facadeState)
                 {
                     case FacadeState.top:
                         prefab = m_facadeTop;
+                        parent = topParent;
                         break;
                     case FacadeState.bottom:
                         prefab = m_facadeBottom;
+                        parent = bottomParent;
                         break;
                 }
                 
@@ -521,12 +529,9 @@ class WindowPlacer2 : EditorWindow
 
             if (m_useCorners && m_corner != null)
             {
-                parent = new GameObject();
-                parent.name = "corners";
+                GameObject cornerParent = new GameObject(){name = "corners"};
+                cornerParent.transform.parent = gigaParent.transform;
 
-                parent.transform.parent = m_parent.transform;
-                Undo.RegisterCreatedObjectUndo(parent, "created parent");
-            
                 foreach (Point corner in m_corners)
                 {
                     GameObject cornerPrefab = PrefabUtility.InstantiatePrefab(m_corner) as GameObject;
@@ -536,7 +541,7 @@ class WindowPlacer2 : EditorWindow
                     Transform cornerTransform = cornerPrefab.transform;
                     cornerTransform.position = corner.position + Vector3.up * m_cornerOffset;
                     cornerTransform.rotation = corner.rotation;
-                    cornerTransform.parent = parent.transform;
+                    cornerTransform.parent = cornerParent.transform;
                 }
             }
         }
