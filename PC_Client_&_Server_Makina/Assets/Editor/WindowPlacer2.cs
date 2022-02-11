@@ -152,7 +152,7 @@ class WindowPlacer2 : EditorWindow
             // Removing the double links and making the aligned links join
             for (int i = 0; i < links.Count; i++)
             {
-                for (int j = i; j < links.Count; j++)
+                for (int j = 0; j < links.Count; j++)
                 {
                     if(j==i) continue;
                     
