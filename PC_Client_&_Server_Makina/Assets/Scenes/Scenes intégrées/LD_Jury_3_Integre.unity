@@ -14,13 +14,13 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 0
+  m_Fog: 1
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.01
+  m_FogDensity: 0.002
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.125, g: 0.125, b: 0.125, a: 1}
+  m_AmbientSkyColor: {r: 0.2509804, g: 0.2509804, b: 0.2509804, a: 1}
   m_AmbientEquatorColor: {r: 0.022230178, g: 0.005384479, b: 0.103773594, a: 1}
   m_AmbientGroundColor: {r: 0.0076170876, g: 0.0028924893, b: 0.047169805, a: 1}
   m_AmbientIntensity: 1.75
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0.99999905, b: 0.99999905, a: 1}
+  m_IndirectSpecularColor: {r: 0.00033631196, g: 0.0004664025, b: 0.008867656, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2157,6 +2157,14 @@ PrefabInstance:
     - target: {fileID: 3410370340419816768, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
       propertyPath: m_maxMovementSpeed
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3994620251892983908, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
+      propertyPath: m_StopNaN
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3994620251892983908, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
+      propertyPath: m_Dithering
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3994620251892983908, guid: 181b7f65563c6cc478a7c83ea01da396, type: 3}
       propertyPath: m_Antialiasing
