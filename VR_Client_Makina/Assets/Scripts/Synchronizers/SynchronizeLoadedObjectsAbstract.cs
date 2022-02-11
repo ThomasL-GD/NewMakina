@@ -10,6 +10,8 @@ namespace Synchronizers {
         [Header("Loading in Arm")]
         [SerializeField] public Transform[] m_loadingPositions;
 
+        [SerializeField, Tooltip("If true, the object will become child of its spawnpoint's transform until it is picked up\nIf false, will spawn normally and wait to be picked up without moving even tough it spawn point moved")] public bool m_stickToSpawnPosition = false;
+
         protected bool[] m_availblePositions = null;
         
         [HideInInspector] public int m_maxSlotsLoading = 1;

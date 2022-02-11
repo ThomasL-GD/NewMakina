@@ -48,7 +48,7 @@ public class FollowTransform : MonoBehaviour {
                 if (m_pX) newPosition.x = m_transformToFollow.position.x;
                 if (m_pY) newPosition.y = m_transformToFollow.position.y;
                 if (m_pZ) newPosition.z = m_transformToFollow.position.z;
-                transform.position = newPosition;
+                transform.position = newPosition + positionDifference;
             }
         }
 
@@ -62,7 +62,7 @@ public class FollowTransform : MonoBehaviour {
                 if (m_rX) newEulerRotation.x = m_transformToFollow.rotation.eulerAngles.x;
                 if (m_rY) newEulerRotation.y = m_transformToFollow.rotation.eulerAngles.y;
                 if (m_rZ) newEulerRotation.z = m_transformToFollow.rotation.eulerAngles.z;
-                transform.position = newEulerRotation;
+                transform.rotation = Quaternion.Euler(newEulerRotation);
             }
         }
 
@@ -76,7 +76,7 @@ public class FollowTransform : MonoBehaviour {
                 if (m_sX) newLocalScale.x = m_transformToFollow.localScale.x;
                 if (m_sY) newLocalScale.y = m_transformToFollow.localScale.y;
                 if (m_sZ) newLocalScale.z = m_transformToFollow.localScale.z;
-                transform.localScale = newLocalScale;
+                transform.localScale = newLocalScale + scaleDifference;
             }
         }
     }

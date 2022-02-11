@@ -93,7 +93,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5767537656552913653}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 150
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -114,10 +114,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_isGrabbable: 1
-  m_originalParent: []
+  m_timeToGoInHand: 0.2
+  m_throwMultiplier: 33
+  m_gravityMultiplier: 104
   m_mustDropDown: 0
   m_prefabDropDownFeedback: {fileID: 0}
-  m_throwValuesNumber: 4
   m_synchronizer: {fileID: 0}
   m_index: 0
   m_serverID: 0
@@ -148,4 +149,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_synchronizer: {fileID: 0}
-  mustPreserveParent: 0

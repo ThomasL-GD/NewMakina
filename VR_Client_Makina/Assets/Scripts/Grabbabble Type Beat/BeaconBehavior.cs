@@ -35,18 +35,14 @@ public class BeaconBehavior : GrabbablePhysickedObject {
 
         BeaconBehavior.OnDestroyBeacon += ActualiseIndex;
     }
+    
+    public override void BeGrabbed(Transform p_parent) {
 
-    /// <summary>
-    /// We override ActualiseParent to let the SynchronizeBeacons know when beacons are grabbed or not
-    /// </summary>
-    public override void ActualiseParent() {
-        base.ActualiseParent();
-
-        if(!MyNetworkManager.singleton.m_canSend) return;
-        
-        if (m_isCaught) {
+        if (!m_hasBeenCaughtInLifetime) {
             m_beaconLoading.Unloading();
         }
+        
+        base.BeGrabbed(p_parent);
     }
     
     // private void OnDrawGizmos() {
