@@ -22,11 +22,11 @@ public class SelectParent : MonoBehaviour
                 continue;
             }
             
-            if (go.TryGetComponent(out HoudinAllRight ha))
-            {
-                newSelection.Add(go.transform.parent.gameObject);
-                continue;
-            }
+            // if (go.TryGetComponent(out  ha))
+            // {
+            //     newSelection.Add(go.transform.parent.gameObject);
+            //     continue;
+            // }
             
             newSelection.Add(go);
         }
