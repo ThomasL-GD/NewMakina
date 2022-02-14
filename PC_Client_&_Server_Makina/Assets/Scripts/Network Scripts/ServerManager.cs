@@ -29,6 +29,7 @@ public class ServerManager : MonoBehaviour
     private DestroyedBeacon m_destroyedBeaconBuffer = new DestroyedBeacon();
     private ElevatorActivation m_elevatorActivationBuffer;
     private LeureTransform m_leureBuffer;
+    private bool m_isLeureAliveBuffer = false;
     private ActivateFlair m_flairBuffer;
     private ActivateBlind m_activateBlindBuffer;
     private DropTp m_dropTpBuffer;
@@ -475,7 +476,7 @@ public class ServerManager : MonoBehaviour
             if(!data.isActive)continue;
             
             bool detected = Vector3.Distance(data.position, m_pcTransformBuffer.position) < m_beaconRange;
-            detected = detected || Vector3.Distance(data.position, m_leureBuffer.position) < m_beaconRange;
+            if (m_isLeureAliveBuffer)detected = detected || Vector3.Distance(data.position, m_leureBuffer.position) < m_beaconRange;
 
             if (data.detectingPlayer != detected)
             {
@@ -567,12 +568,14 @@ public class ServerManager : MonoBehaviour
 
     private void OnDestroyLeure(NetworkConnection arg1, DestroyLeure arg2)
     {
+        m_isLeureAliveBuffer = false;
         OnServerTick -= SendDestroyLeure;
         OnServerTick += SendDestroyLeure;
     }
     
     private void OnSpawnLeure(NetworkConnection arg1, SpawnLeure arg2)
     {
+        m_isLeureAliveBuffer = true;
         OnServerTick -= SendSpawnLeure;
         OnServerTick += SendSpawnLeure;
     }
