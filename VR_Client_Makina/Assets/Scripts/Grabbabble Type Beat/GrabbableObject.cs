@@ -70,6 +70,8 @@ public abstract class GrabbableObject : MonoBehaviour {
     }
 
     private void OnTriggerStay(Collider p_other) {
+        if (!m_isGrabbable) return;
+        
         if (p_other.gameObject.layer == VrHandBehaviour.s_layer && p_other.TryGetComponent(out VrHandBehaviour script)) {
             if (script.isFree) {
                 script.Catch(this);

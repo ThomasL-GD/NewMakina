@@ -17,7 +17,7 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
     private GameObject m_lineFeedback = null;
 
     /// <summary> The layers this object will collide with, only layer 8 (ground) is selected by default </summary>
-    protected LayerMask m_layersThatCollides = 1 << 8;
+    [SerializeField] protected LayerMask m_layersThatCollides = 1 << 8;
     
     protected Rigidbody m_rb = null;
     
