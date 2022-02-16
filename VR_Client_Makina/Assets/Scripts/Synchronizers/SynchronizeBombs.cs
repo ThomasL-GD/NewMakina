@@ -45,7 +45,7 @@ namespace Synchronizers {
             
             MyNetworkManager.OnReceiveSpawnBomb += SpawnBomb;
             MyNetworkManager.OnReceiveBombExplosion += ExplosionFeedback;
-            MyNetworkManager.OnReceiveInitialData += ReceiveIntialData;
+            MyNetworkManager.OnReceiveInitialData += ReceiveInitialData;
             MyNetworkManager.OnReceiveGameEnd += Reset;
         }
 
@@ -61,7 +61,8 @@ namespace Synchronizers {
 
         /// <summary>Just sets maxSlotsForBombs according to the server's InitialData</summary>
         /// <param name="p_initialData">The message sent by the server</param>
-        private void ReceiveIntialData(InitialData p_initialData) {
+        protected override void ReceiveInitialData(InitialData p_initialData) {
+            base.ReceiveInitialData(p_initialData);
             m_bombRange = p_initialData.bombExplosionRange;
             m_maxSlotsLoading = p_initialData.maximumBombsCount;
             m_explosionTime = p_initialData.bombDetonationTime;

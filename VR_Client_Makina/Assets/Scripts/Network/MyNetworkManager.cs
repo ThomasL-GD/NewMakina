@@ -146,6 +146,7 @@ namespace Network {
             if (NetworkClient.active && m_canSend) {
 #if UNITY_EDITOR
                 if(p_vrDataToSend is DestroyedBeacon) Debug.LogError($"WTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+                if(p_vrDataToSend is BeaconsPositions) Debug.LogError($"EYOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO : {p_vrDataToSend}");
                 //Debug.Log($"I'm sending {p_vrDataToSend}");
 #endif
                 NetworkClient.Send(p_vrDataToSend);

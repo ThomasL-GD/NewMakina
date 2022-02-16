@@ -64,7 +64,7 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
         if (p_handInput.HasFlag(OVRInput.Axis1D.SecondaryHandTrigger) || p_handInput.HasFlag(OVRInput.Axis1D.SecondaryIndexTrigger)) {
             hand |= OVRInput.Controller.RTouch;
         }
-        Debug.LogWarning($"Theoretical velocity : {OVRInput.GetLocalControllerVelocity(hand)}");
+        //Debug.LogWarning($"Theoretical velocity : {OVRInput.GetLocalControllerVelocity(hand)}");
         m_rb.velocity = OVRInput.GetLocalControllerVelocity(hand) * m_throwMultiplier;
         m_rb.angularVelocity = OVRInput.GetLocalControllerAngularVelocity(hand);
         

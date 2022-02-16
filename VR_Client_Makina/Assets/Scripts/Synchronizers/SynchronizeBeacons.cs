@@ -94,7 +94,8 @@ namespace Synchronizers {
 
         /// <summary>Just sets maxSlotsForBeacons according to the server's InitialData</summary>
         /// <param name="p_initialData">The message sent by the server</param>
-        private void ReceiveInitialData(InitialData p_initialData) {
+        protected override void ReceiveInitialData(InitialData p_initialData) {
+            base.ReceiveInitialData(p_initialData);
             m_maxSlotsLoading = p_initialData.maximumBeaconCount;
         }
 
@@ -117,6 +118,7 @@ namespace Synchronizers {
             }
             
             MyNetworkManager.singleton.SendVrData(new BeaconsPositions(){data = positionses});
+            Debug.Log($"Positions are like {positionses.Length} long");
         }
 
         /// <summary>
@@ -147,11 +149,20 @@ namespace Synchronizers {
         /// <summary> Will load a beacon in a random available position </summary>
         /// <param name="p_script">The ObjectLoading script of the beacon you want to load</param>
         public void LoadBeaconRandomly(ObjectLoading p_script) {
+            Debug.LogWarning($"1");
             List<int> currentAvailablePositions = new List<int>();
-            for(int i = 0; i < m_availblePositions.Length; i++) if(m_availblePositions[i]) currentAvailablePositions.Add(i);
+            for(int i = 0; i < m_availblePositions.Length; i++) {
+                if (m_availblePositions[i]) {
+                    Debug.LogWarning($"available : {i}");
+                    currentAvailablePositions.Add(i);
+                }
+            }
+            Debug.LogWarning($"2");
 
             int random = Random.Range(0, currentAvailablePositions.Count);
+            Debug.LogWarning($"3 : count = {currentAvailablePositions.Count} & random : {random}");
             LoadObjectFromIndex(p_script, currentAvailablePositions[random]);
+            Debug.LogWarning($"4");
         }
         
         
