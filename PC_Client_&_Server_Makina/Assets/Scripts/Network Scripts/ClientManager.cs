@@ -100,6 +100,9 @@ public class ClientManager : MonoBehaviour
     
     #endregion
     [SerializeField, Tooltip("The player Object to get the player's location")] public GameObject m_playerObject;
+
+    /// <summary>Becomes true when the game starts and is false during th menuing</summary>
+    [HideInInspector] public bool m_isInGame = false;
     
     
     /// <summary/> Singleton type beat
@@ -143,7 +146,11 @@ public class ClientManager : MonoBehaviour
 
     private void ReceiveDestroyLeure(DestroyLeure p_destroyLeureMessage) => OnReceiveDestroyLeure?.Invoke(p_destroyLeureMessage);
 
-    private void ReceiveReadyMessage(ReadyToPlay p_readyMessage) => OnReceiveReadyToPlay?.Invoke(p_readyMessage);
+    private void ReceiveReadyMessage(ReadyToPlay p_readyMessage)
+    {
+        Debug.LogWarning("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ READY MESSAGE");
+        OnReceiveReadyToPlay?.Invoke(p_readyMessage);
+    }
 
     private void ReceiveActivateFlair(ActivateFlair p_activateFlair) => OnReceiveActivateFlair?.Invoke(p_activateFlair);
     
@@ -162,14 +169,22 @@ public class ClientManager : MonoBehaviour
 
     /// <summary/> The function called when the client receives a message of type InitialData
     /// <param name="p_initialData"> The message sent by the Server to the Client </param>
-    private void ReceiveInitialData(InitialData p_initialData) => OnReceiveInitialData?.Invoke(p_initialData);
-    
-    
+    private void ReceiveInitialData(InitialData p_initialData) {
+        m_isInGame = true;
+        Debug.LogWarning("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ INITIAL DATA");
+        OnReceiveInitialData?.Invoke(p_initialData);
+    }
+
+
     /// <summary/> The function called when the client receives a message of type GameEnd
     /// <param name="p_gameEnd"> The message sent by the Server to the Client </param>
-    private void ReceiveGameEnd(GameEnd p_gameEnd) => OnReceiveGameEnd?.Invoke(p_gameEnd);
-    
-    
+    private void ReceiveGameEnd(GameEnd p_gameEnd) {
+        m_isInGame = false;
+        Debug.LogWarning("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ END GAME");
+        OnReceiveGameEnd?.Invoke(p_gameEnd);
+    }
+
+
     /// <summary/> The function called when the client receives a message of type BeaconDetectionUpdate
     /// <param name="p_beaconDetectionUpdate"> The message sent by the Server to the Client </param>
     private void ReceiveBeaconDetectionUpdate(BeaconDetectionUpdate p_beaconDetectionUpdate) => OnReceiveBeaconDetectionUpdate?.Invoke(p_beaconDetectionUpdate);

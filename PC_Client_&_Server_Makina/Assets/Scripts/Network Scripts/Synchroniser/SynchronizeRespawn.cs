@@ -73,10 +73,15 @@ namespace Synchronizers
 
             //Waiting for the respawn time
             yield return new WaitForSeconds(m_respawnTime);
-
+            
             //Disabling the feedback and teleporting the player to his new position
             InputMovement3.instance.m_isDead = false;
             m_deathFeedback.SetActive(false);
+
+            //TODO this might be causing isue, w are 10h before a jury and i am alone
+            //If the game is ont running anymore, we don't make it respawn
+            if (!ClientManager.singleton.m_isInGame) yield break;
+            
             m_player.transform.position = m_spawnPoints[respawnIndex].position;
 
             OnPlayerRespawn?.Invoke();

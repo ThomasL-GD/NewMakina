@@ -155,16 +155,6 @@ public class ServerManager : MonoBehaviour
         //linking NetworkManager functions
         // MyNetworkManager.del_onHostServer += StartGame;
         MyNetworkManager.del_onClientConnection += OnServerConnect;
-        
-        //Setting up senders
-        OnServerTick += SendVrTransform;
-        OnServerTick += SendPcTransform;
-        OnServerTick += SendLaser;
-        OnServerTick += SendPcInvisbility;
-        OnServerTick += SendBeaconsPositions;
-        OnServerTick += CheckHealths;
-        OnServerTick += BeaconDetectionCheck;
-        OnServerTick += SendBombPositions;
     }
     
     
@@ -268,6 +258,16 @@ public class ServerManager : MonoBehaviour
     /// </summary>
     private void StartGame()
     {
+        //Setting up senders
+        OnServerTick += SendVrTransform;
+        OnServerTick += SendPcTransform;
+        OnServerTick += SendLaser;
+        OnServerTick += SendPcInvisbility;
+        OnServerTick += SendBeaconsPositions;
+        OnServerTick += BeaconDetectionCheck;
+        OnServerTick += SendBombPositions;
+        OnServerTick += CheckHealths;
+        
         #region Members assignment
         //Resetting the serialized values
         m_tickrate = f_tickrate;
@@ -374,6 +374,8 @@ public class ServerManager : MonoBehaviour
         
         StopCoroutine(m_spawnInitialBeacons);
         StopCoroutine(m_spawnBombs);
+        //Setting up senders
+        OnServerTick = null;
     }
 
  IEnumerator SpawnInitialBeacons()

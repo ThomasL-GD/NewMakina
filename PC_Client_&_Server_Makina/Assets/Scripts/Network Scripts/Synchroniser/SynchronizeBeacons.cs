@@ -99,6 +99,8 @@ namespace Synchronizers {
         /// <param name="p_beaconsPositions"></param>
         private void UpdatePositions(BeaconsPositions p_beaconsPositions)
         {
+            
+            Debug.LogWarning($"EYOOOOOOOOOOOOOOOOOOOOOOOOO, lengths  m_ : {m_beacons.Count} & p_ : {p_beaconsPositions.data.Length}");
             for (int i = 0; i < m_beacons.Count; i++)
             {
                 BeaconData data = p_beaconsPositions.data[i];
