@@ -4081,7 +4081,7 @@ GameObject:
   - component: {fileID: 800929251}
   - component: {fileID: 800929250}
   m_Layer: 5
-  m_Name: BreakHeartFeedback (1)
+  m_Name: Heart Radius Feedback
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8133,6 +8133,24 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1696966280}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1706782369 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6910523798249253942, guid: f00c174165e77ef4fb824c7266c1afab, type: 3}
+  m_PrefabInstance: {fileID: 4200445898133840360}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1706782370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1706782369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e3665264cab23342906f3e42232c4d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_heartRadiusFeedback: {fileID: 800929250}
 --- !u!1 &1725379243
 GameObject:
   m_ObjectHideFlags: 0
@@ -12228,6 +12246,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 941789794}
+    - target: {fileID: 6910523798214464485, guid: f00c174165e77ef4fb824c7266c1afab, type: 3}
+      propertyPath: f_heartZoneRadius
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 6910523798214464485, guid: f00c174165e77ef4fb824c7266c1afab, type: 3}
       propertyPath: m_heartZoneRadius
       value: 100
