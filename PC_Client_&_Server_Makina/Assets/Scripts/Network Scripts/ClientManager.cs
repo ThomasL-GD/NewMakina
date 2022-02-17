@@ -98,6 +98,14 @@ public class ClientManager : MonoBehaviour
     public delegate void DestoyLeureDelegator(DestroyLeure p_activateBlind);
     public static DestoyLeureDelegator OnReceiveDestroyLeure;
     
+    /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+    public delegate void HeartConquerStopDelegator(HeartConquerStop p_heartConquerStop);
+    public static HeartConquerStopDelegator OnReceiveHeartConquerStop;
+
+    /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+    public delegate void ReceiveHeartConquerStartDelegator(HeartConquerStart p_heartConquerStart);
+    public static ReceiveHeartConquerStartDelegator OnReceiveHeartConquerStart;
+    
     #endregion
     [SerializeField, Tooltip("The player Object to get the player's location")] public GameObject m_playerObject;
 
@@ -142,15 +150,18 @@ public class ClientManager : MonoBehaviour
         NetworkClient.RegisterHandler<DeActivateBlind>(ReceiveDeActivateBlind);
         NetworkClient.RegisterHandler<ReadyToPlay>(ReceiveReadyMessage);
         NetworkClient.RegisterHandler<DestroyLeure>(ReceiveDestroyLeure);
+        NetworkClient.RegisterHandler<HeartConquerStart>(ReceiveHeartConquerStart);
+        NetworkClient.RegisterHandler<HeartConquerStop>(ReceiveHeartConquerStop);
     }
+
+    private void ReceiveHeartConquerStop(HeartConquerStop p_heartConquerStop)=>OnReceiveHeartConquerStop?.Invoke(p_heartConquerStop);
+
+    private void ReceiveHeartConquerStart(HeartConquerStart p_heartConquerStart)=>OnReceiveHeartConquerStart?.Invoke(p_heartConquerStart);
 
     private void ReceiveDestroyLeure(DestroyLeure p_destroyLeureMessage) => OnReceiveDestroyLeure?.Invoke(p_destroyLeureMessage);
 
-    private void ReceiveReadyMessage(ReadyToPlay p_readyMessage)
-    {
-        Debug.LogWarning("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ READY MESSAGE");
-        OnReceiveReadyToPlay?.Invoke(p_readyMessage);
-    }
+    private void ReceiveReadyMessage(ReadyToPlay p_readyMessage) => OnReceiveReadyToPlay?.Invoke(p_readyMessage);
+    
 
     private void ReceiveActivateFlair(ActivateFlair p_activateFlair) => OnReceiveActivateFlair?.Invoke(p_activateFlair);
     

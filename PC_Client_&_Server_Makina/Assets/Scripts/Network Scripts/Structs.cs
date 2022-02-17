@@ -93,6 +93,8 @@ namespace CustomMessages
         public Quaternion[] heartRotations;
         public float bombDetonationTime;
         public float bombExplosionRange;
+        public float heartRange;
+        public float heartConquerTime;
     }
     
     public struct RestartGame : NetworkMessage
@@ -118,7 +120,7 @@ namespace CustomMessages
     /// <summary/> The index of a destroyed heart
         public struct HeartConquerStart : NetworkMessage
     {
-        public int index;
+        public float time;
     }
     
     /// <summary/> The index of a destroyed heart
