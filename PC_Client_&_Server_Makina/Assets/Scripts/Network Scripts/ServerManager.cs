@@ -118,6 +118,16 @@ public class ServerManager : MonoBehaviour
     private Vector2 m_flashClamp;
     private int m_currentBombAmount = 0;
     
+    [Header(" ")] [Header("Heart Radius")] [Header(" ")]
+    [SerializeField, Range(0f,100f)]private float f_heartZoneRadius = 5f;
+    private float m_heartZoneRadius = 0f;
+    
+    private float m_heartTimer = 0f;
+    
+    [SerializeField, Range(0f,100f)] private float f_heartDestroyTime = 5f;
+    private float m_heartDestroyTime = 0f;
+
+    
 
     /// <summary/> The positions of the hearts
     private Vector3[] m_heartPositions;
@@ -250,7 +260,6 @@ public class ServerManager : MonoBehaviour
 
     private bool m_gameEnded;
     private Coroutine m_flashCoroutine;
-    [SerializeField, Range(0f,100f)]private float m_heartZoneRadius = 5f;
 
     /// <summary>
     /// The function that is called when the server is hosted.
@@ -267,7 +276,7 @@ public class ServerManager : MonoBehaviour
         OnServerTick += BeaconDetectionCheck;
         OnServerTick += SendBombPositions;
         OnServerTick += CheckHealths;
-        OnServerTick += CheckHeartDestroy;
+        OnServerTick += CheckHeartDestroyRange;
         
         #region Members assignment
         //Resetting the serialized values
@@ -294,6 +303,9 @@ public class ServerManager : MonoBehaviour
         m_flashClamp = f_flashClamp;
         m_laserCheckOffset = f_laserCheckOffset;
         m_playerLayers = f_playerLayers;
+
+        m_heartZoneRadius = f_heartZoneRadius;
+        m_heartDestroyTime = f_heartDestroyTime;
         
         //Resetting the beacon values
         m_currentBeaconAmount = 0;
@@ -351,7 +363,9 @@ public class ServerManager : MonoBehaviour
             heartPositions = m_heartPositions,
             heartRotations = m_heartRotations,
             bombDetonationTime = m_bomDetonationTime,
-            bombExplosionRange = m_bombExplosionRange
+            bombExplosionRange = m_bombExplosionRange,
+            heartRange = m_heartZoneRadius,
+            heartConquerTime = m_heartDestroyTime
         };
         
         SendToBothClients(initialData);
@@ -501,11 +515,10 @@ public class ServerManager : MonoBehaviour
         if (m_vrPlayerHealth <= 0)
             EndGame(ClientConnection.PcPlayer);
     }
-    
-    private void CheckHeartDestroy()
+    private void CheckHeartDestroyRange()
     {
         Vector2 horizontalPlayerPosition = new Vector2(m_pcTransformBuffer.position.x, m_pcTransformBuffer.position.z);
-
+        
         for (int i = 0; i < m_heartTransforms.Length; i++)
         {
             if(m_heartTransforms[i] == null) continue;
@@ -514,9 +527,25 @@ public class ServerManager : MonoBehaviour
             if (Vector2.Distance(horizontalPlayerPosition, horizontalheartPosition) < m_heartZoneRadius)
             {
                 m_heartTransforms[i] = null;
-                SendToBothClients(new HeartBreak(){index = i});
+                m_heartTimer += m_tickDelta;
+                
+                Debug.Log($"heyyyy {m_heartTimer}");
+                
+                if (m_heartTimer == 0) SendToBothClients(new HeartConquerStart() {time = m_heartTimer});
+                
+                if (m_heartTimer>m_heartDestroyTime)
+                {
+                    Debug.Log($"Destroyed");
+                    SendToBothClients(new HeartBreak() {index = i});
+                }
+                return;
             }
         }
+
+        if (m_heartTimer == 0) return;
+        
+        SendToBothClients(new HeartConquerStop());
+        m_heartTimer = 0f;
     }
     
     
