@@ -78,31 +78,31 @@ public class ClientManager : MonoBehaviour
     public delegate void ElevatorActivationDelegator(ElevatorActivation p_bombActivation);
     public static ElevatorActivationDelegator OnReceiveElevatorActivation;
         
-    /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+    /// <summary/> The delegate that will be called each time the client receives a ActivateFlair message
     public delegate void ActivateFlairDelegator(ActivateFlair p_activateFlair);
     public static ActivateFlairDelegator OnReceiveActivateFlair;
         
-    /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+    /// <summary/> The delegate that will be called each time the client receives a DeActivateBlind message
     public delegate void DeActivateBlindDelegator(DeActivateBlind p_deActivateBlind);
     public static DeActivateBlindDelegator OnReceiveDeActivateBlind;
         
-    /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+    /// <summary/> The delegate that will be called each time the client receives a ActivateBlind message
     public delegate void ActivateBlindDelegator(ActivateBlind p_activateBlind);
     public static ActivateBlindDelegator OnReceiveActivateBlind;
         
-    /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+    /// <summary/> The delegate that will be called each time the client receives a DestroyLeure message
     public delegate void ReadyDelegator(ReadyToPlay p_activateBlind);
     public static ReadyDelegator OnReceiveReadyToPlay;
         
-    /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+    /// <summary/> The delegate that will be called each time the client receives a DestroyLeure message
     public delegate void DestoyLeureDelegator(DestroyLeure p_activateBlind);
     public static DestoyLeureDelegator OnReceiveDestroyLeure;
     
-    /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+    /// <summary/> The delegate that will be called each time the client receives a HeartConquerStop message
     public delegate void HeartConquerStopDelegator(HeartConquerStop p_heartConquerStop);
     public static HeartConquerStopDelegator OnReceiveHeartConquerStop;
 
-    /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+    /// <summary/> The delegate that will be called each time the client receives a HeartConquerStart message
     public delegate void ReceiveHeartConquerStartDelegator(HeartConquerStart p_heartConquerStart);
     public static ReceiveHeartConquerStartDelegator OnReceiveHeartConquerStart;
     

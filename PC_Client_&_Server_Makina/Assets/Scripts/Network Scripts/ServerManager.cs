@@ -518,24 +518,22 @@ public class ServerManager : MonoBehaviour
     private void CheckHeartDestroyRange()
     {
         Vector2 horizontalPlayerPosition = new Vector2(m_pcTransformBuffer.position.x, m_pcTransformBuffer.position.z);
-        
+        float playerHeight = m_pcTransformBuffer.position.y;
         for (int i = 0; i < m_heartTransforms.Length; i++)
         {
             if(m_heartTransforms[i] == null) continue;
             
+            if(Mathf.Abs(playerHeight - m_heartTransforms[i].position.y) > 10f) continue;
+            
             Vector2 horizontalheartPosition = new Vector2(m_heartTransforms[i].position.x,m_heartTransforms[i].position.z);
             if (Vector2.Distance(horizontalPlayerPosition, horizontalheartPosition) < m_heartZoneRadius)
             {
-                m_heartTransforms[i] = null;
                 m_heartTimer += m_tickDelta;
-                
-                Debug.Log($"heyyyy {m_heartTimer}");
-                
-                if (m_heartTimer == 0) SendToBothClients(new HeartConquerStart() {time = m_heartTimer});
+                SendToBothClients(new HeartConquerStart() {time = m_heartTimer});
                 
                 if (m_heartTimer>m_heartDestroyTime)
                 {
-                    Debug.Log($"Destroyed");
+                    m_heartTransforms[i] = null;
                     SendToBothClients(new HeartBreak() {index = i});
                 }
                 return;
