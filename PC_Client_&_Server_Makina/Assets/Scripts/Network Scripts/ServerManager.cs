@@ -4,6 +4,7 @@ using System.Linq;
 using Mirror;
 using UnityEngine;
 using CustomMessages;
+using JetBrains.Annotations;
 
 /// <summary/> The server side manager will handle all of the server side network dealings of the game
 
@@ -70,7 +71,7 @@ public class ServerManager : MonoBehaviour
     [Header("Hearts")]
     [Header(" ")]
     [SerializeField, Tooltip("The positions of the hearts on the map")] private Transform[] f_heartTransforms;
-    private Transform[] m_heartTransforms;
+    [ItemCanBeNull] private Transform[] m_heartTransforms;
     [SerializeField, Tooltip("The amount of hearts that need to be destroyed for the VR player to lose")] private int f_vrPlayerHealth = 3;
     private int m_vrPlayerHealth = 3;
     [SerializeField, Tooltip("The amount of times the PC player has to eliminated to lose")] private int f_pcPlayerHealth = 3;
@@ -251,6 +252,7 @@ public class ServerManager : MonoBehaviour
 
     private bool m_gameEnded;
     private Coroutine m_flashCoroutine;
+    [SerializeField, Range(0f,100f)]private float m_heartZoneRadius = 5f;
 
     /// <summary>
     /// The function that is called when the server is hosted.
@@ -267,6 +269,7 @@ public class ServerManager : MonoBehaviour
         OnServerTick += BeaconDetectionCheck;
         OnServerTick += SendBombPositions;
         OnServerTick += CheckHealths;
+        OnServerTick += CheckHeartDestroy;
         
         #region Members assignment
         //Resetting the serialized values
@@ -501,6 +504,24 @@ public class ServerManager : MonoBehaviour
         if (m_vrPlayerHealth <= 0)
             EndGame(ClientConnection.PcPlayer);
     }
+    
+    private void CheckHeartDestroy()
+    {
+        Vector2 horizontalPlayerPosition = new Vector2(m_pcTransformBuffer.position.x, m_pcTransformBuffer.position.z);
+
+        for (int i = 0; i < m_heartTransforms.Length; i++)
+        {
+            if(m_heartTransforms[i] == null) continue;
+            
+            Vector2 horizontalheartPosition = new Vector2(m_heartTransforms[i].position.x,m_heartTransforms[i].position.z);
+            if (Vector2.Distance(horizontalPlayerPosition, horizontalheartPosition) < m_heartZoneRadius)
+            {
+                m_heartTransforms[i] = null;
+                SendToBothClients(new HeartBreak(){index = i});
+            }
+        }
+    }
+    
     
     /// <summary/> The function called when the server has to spawn a beacon
     /// <param name="p_customID"/> Only set a custom ID if you have to, if you don't it will by default be Time.time
