@@ -1,12 +1,12 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Slider : GrabbableObject {
+public abstract class Slider<T> : GrabbableObject {
 
     [SerializeField] private Transform m_minimumPosition = null;
     [SerializeField] private Transform m_maximumPosition = null;
+    
+    public delegate T GetValueDelegator();
+    public delegate void SetValueDelegator(T p_value);
     
     //TODO : All of this script but only once the entire grab architecture will be renewed
 
