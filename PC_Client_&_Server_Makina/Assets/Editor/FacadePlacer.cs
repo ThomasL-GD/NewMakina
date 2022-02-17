@@ -6,7 +6,7 @@ using static UnityEngine.Mathf;
 using static UnityEditor.EditorGUILayout;
 using static UnityEngine.GUILayout;
 
-class WindowPlacer2 : EditorWindow
+class FacadePlacer : EditorWindow
 {
     /// <summary/> The material of the preview material
     private Material m_previewMat;
@@ -16,8 +16,6 @@ class WindowPlacer2 : EditorWindow
     private static GameObject m_facadeBottom;
     /// <summary/> the corner prefab
     private static GameObject m_corner;
-    /// <summary/> the parent object that will contain the placed parents
-    private static GameObject m_parent;
     
     /// <summary/> the spacing between the elements
     private static float m_spacing = 7.64f;
@@ -46,10 +44,10 @@ class WindowPlacer2 : EditorWindow
     static void Init()
     {
         // Instantiating or fetching the PrefabPicasso window 
-        WindowPlacer2 window = (WindowPlacer2)GetWindow(typeof(WindowPlacer2));
+        FacadePlacer window = (FacadePlacer)GetWindow(typeof(FacadePlacer));
         
         // Giving the window the "Prefab Picasso" name
-        window.titleContent = new GUIContent("Window Placer 2");
+        window.titleContent = new GUIContent("Facade Placer");
         
         // Display the window that has been created
         window.Show();
@@ -473,10 +471,8 @@ class WindowPlacer2 : EditorWindow
         
         m_lines = IntField("line amount", m_lines);
         m_lineStep = FloatField("line step", m_lineStep);
-        
-        if (m_parent == null) m_parent = m_selection;
-        m_parent = (GameObject)ObjectField("parent", m_parent, typeof(object), true);
 
+        if(m_selection==null) return;
         if (Button("\nCenter!\n"))
         {
             m_lineHeight = m_selection.GetComponent<MeshFilter>().sharedMesh.bounds.center.y * m_selection.transform.lossyScale.y;
@@ -485,7 +481,7 @@ class WindowPlacer2 : EditorWindow
         if (Button("\nPlace Windows!\n"))
         {
             var gigaParent = new GameObject(){name =  "facades", tag = "HoudinAllRight Select Ignore"};
-            gigaParent.transform.parent = m_parent.transform;
+            gigaParent.transform.parent = m_selection.transform;
             Undo.RegisterCreatedObjectUndo(gigaParent, "created parent");
 
             var middleParent = new GameObject(){name = "middle facades"};
