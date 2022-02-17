@@ -115,6 +115,15 @@ namespace CustomMessages
         public int index;
     }
     
+    /// <summary/> The index of a destroyed heart
+        public struct HeartConquerStart : NetworkMessage
+    {
+        public int index;
+    }
+    
+    /// <summary/> The index of a destroyed heart
+        public struct HeartConquerStop : NetworkMessage {}
+    
     /// <summary/> The ping sent to the server telling it if the players is visible or invisible
     public struct PcInvisibility : NetworkMessage
     {
