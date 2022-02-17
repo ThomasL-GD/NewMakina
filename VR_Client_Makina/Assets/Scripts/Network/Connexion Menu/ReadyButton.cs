@@ -24,6 +24,13 @@ namespace Network.Connexion_Menu {
         private void EraseFeedback(InitialData p_initialdata) {
             m_waitForOtherToBeReadyGameObject.SetActive(false);
         }
+    
+#if UNITY_EDITOR
+        [ContextMenu("SetReady")]
+        private void SetReadyDebug() {
+            MyNetworkManager.singleton.SendVrData(new ReadyToPlay(){});
+        }
+#endif
     }
 
 }
