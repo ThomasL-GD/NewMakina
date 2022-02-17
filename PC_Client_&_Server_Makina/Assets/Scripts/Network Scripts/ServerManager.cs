@@ -76,8 +76,6 @@ public class ServerManager : MonoBehaviour
     private int m_vrPlayerHealth = 3;
     [SerializeField, Tooltip("The amount of times the PC player has to eliminated to lose")] private int f_pcPlayerHealth = 3;
     private int m_pcPlayerHealth = 3;
-    [SerializeField, Tooltip("The possible spawn positions of the PC player on the map")] private Transform[] f_beaconSpawnPositions;
-    private Transform[] m_beaconSpawnPositions;
 
     
     [Header("Beacons")]
@@ -280,7 +278,6 @@ public class ServerManager : MonoBehaviour
         m_heartTransforms = f_heartTransforms;
         m_vrPlayerHealth = f_vrPlayerHealth;
         m_pcPlayerHealth = f_pcPlayerHealth;
-        m_beaconSpawnPositions = f_beaconSpawnPositions;
         m_initialBeacons = f_initialBeacons;
         m_initialBeaconSpawnDelay = f_initialBeaconSpawnDelay;
         m_beaconRespawnTime = f_beaconRespawnTime;
