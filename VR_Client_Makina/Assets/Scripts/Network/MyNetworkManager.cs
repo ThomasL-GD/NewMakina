@@ -23,6 +23,16 @@ namespace Network {
         public static ServerDelegator OnConnection;
     
 
+        /// <summary/> Is called when we receive new HeartConquerStart data from server
+        public delegate void HeartConquerStartDelegator(HeartConquerStart p_heartConquerStart);
+        public static HeartConquerStartDelegator OnReceiveHeartConquerStart;
+    
+
+        /// <summary/> Is called when we receive new HeartConquerStop data from server
+        public delegate void HeartConquerStopDelegator(HeartConquerStop p_ready);
+        public static HeartConquerStopDelegator OnReceiveHeartConquerStop;
+    
+
         /// <summary/> Is called when we receive new Teleported data from server
         public delegate void TeleportedDelegator(Teleported p_ready);
         public static TeleportedDelegator OnReceiveTeleported;
@@ -146,7 +156,6 @@ namespace Network {
             if (NetworkClient.active && m_canSend) {
 #if UNITY_EDITOR
                 if(p_vrDataToSend is DestroyedBeacon) Debug.LogError($"WTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
-                if(p_vrDataToSend is BeaconsPositions) Debug.LogError($"EYOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO : {p_vrDataToSend}");
                 //Debug.Log($"I'm sending {p_vrDataToSend}");
 #endif
                 NetworkClient.Send(p_vrDataToSend);
@@ -182,9 +191,15 @@ namespace Network {
             NetworkClient.RegisterHandler<DropTp>(ReceiveDropTp);
             NetworkClient.RegisterHandler<RemoveTp>(ReceiveRemoveTp);
             NetworkClient.RegisterHandler<Teleported>(ReceiveTeleported);
+            NetworkClient.RegisterHandler<HeartConquerStart>(ReceiveHeartConquerStart);
+            NetworkClient.RegisterHandler<HeartConquerStop>(ReceiveHeartConquerStop);
         
             OnConnection?.Invoke();
         }
+
+        private void ReceiveHeartConquerStart(HeartConquerStart p_conquerStart) => OnReceiveHeartConquerStart?.Invoke(p_conquerStart);
+        
+        private void ReceiveHeartConquerStop(HeartConquerStop p_conquerStop) => OnReceiveHeartConquerStop?.Invoke(p_conquerStop);
 
         private void ReceiveTeleported(Teleported p_teleported) => OnReceiveTeleported?.Invoke(p_teleported);
 

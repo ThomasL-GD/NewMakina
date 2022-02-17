@@ -39,16 +39,12 @@ namespace Synchronizers {
         /// <param name="p_script">The ObjectLoading script that is on the object you want to load</param>
         /// <param name="p_index">The index in the possible loading array you want to set the object in</param>
         protected void LoadObjectFromIndex(ObjectLoading p_script, int p_index) {
-            Debug.LogWarning("77777777777");
 #if UNITY_EDITOR
             if(p_index < 0 || p_index > m_availblePositions.Length - 1) Debug.LogError($"Why would you have an index ({p_index}) out of bounds of the array ≖_≖", this);
             if(m_availblePositions[p_index] == false) Debug.LogError($"You messed it up, the position n°{p_index} is unavailable", this);
 #endif
-            Debug.LogWarning("88888888888");
             m_availblePositions[p_index] = false;
-            Debug.LogWarning("99999999999");
             p_script.Initialization(p_index);
-            Debug.LogWarning("100000000000");
         }
 
         public void RestoreAvailability(int p_index) {
