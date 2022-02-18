@@ -9,9 +9,9 @@ namespace Synchronizers
     public class SynchronizerHearts : Synchronizer<SynchronizerHearts>
     {
         
-        [SerializeField] [Tooltip("The prefab of the hearts that will be spawned on server connection")]
-        private GameObject m_heartPrefabs;
-        
+        [SerializeField] [Tooltip("The prefab of the hearts that will be spawned on server connection")] private GameObject m_heartPrefabs;
+        [SerializeField,Tooltip("The prefab of the area around a heart \n WARNING : Will be rescaled leave at 1,1,1 in prefab")] private GameObject m_heartRangePrefab;
+
         [SerializeField] private AudioSource m_audioSource;
         [SerializeField] private AudioClip m_heartDestroyedSound = null;
         [SerializeField] private float m_heartDestructionTime = 6f;
@@ -48,6 +48,9 @@ namespace Synchronizers
             for (int i = 0; i < p_initialData.heartPositions.Length; i++)
             {
                 hearts.Add(Instantiate(m_heartPrefabs, p_initialData.heartPositions[i], p_initialData.heartRotations[i]));
+                GameObject radius = Instantiate(m_heartRangePrefab, p_initialData.heartPositions[i],m_heartRangePrefab.transform.rotation);
+                radius.transform.localScale = p_initialData.heartRange * 2f * Vector3.one;
+                radius.transform.parent = hearts[i].transform;
                 
                 if (hearts[i].TryGetComponent( out HeartIdentifier hi))
                     hi.heartIndex = i;
