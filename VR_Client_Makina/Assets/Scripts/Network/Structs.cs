@@ -22,9 +22,11 @@ namespace CustomMessages
 
         public Vector3 positionLeftHand;
         public Quaternion rotationLeftHand;
+        public bool isLeftHandClenched;
 
         public Vector3 positionRightHand;
         public Quaternion rotationRightHand;
+        public bool isRightHandClenched;
     }
     
     #endregion

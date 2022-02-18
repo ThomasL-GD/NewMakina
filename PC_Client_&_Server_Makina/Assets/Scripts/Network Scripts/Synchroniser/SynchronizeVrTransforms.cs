@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using CustomMessages;
 
@@ -18,6 +19,9 @@ namespace Synchronizers
 
         [SerializeField] private Transform m_leftHandVR;
         [SerializeField] private Transform m_rightHandVR;
+        private VrHand m_leftScript;
+        private VrHand m_rightScript;
+        private static readonly int IsGrabbing = Animator.StringToHash("IsGrabbing");
 
         /// <summary>
         /// Awake is called before the first frame update.
@@ -26,6 +30,18 @@ namespace Synchronizers
         private /*new*/ void Awake() {
             // base.Awake();
             ClientManager.OnReceiveVrTransform += SynchroniseVrTransform;
+        }
+
+        private void Start() {
+            if (m_leftHandVR.TryGetComponent(out VrHand lScript)) m_leftScript = lScript;
+#if UNITY_EDITOR
+            else Debug.LogError("The left hand doesn't have any hand script on them !");
+#endif
+            
+            if (m_rightHandVR.TryGetComponent(out VrHand rScript)) m_rightScript = rScript;
+#if UNITY_EDITOR
+            else Debug.LogError("The left hand doesn't have any hand script on them !");
+#endif
         }
 
         /// <summary>
@@ -39,9 +55,11 @@ namespace Synchronizers
 
             m_leftHandVR.position = p_vrTransform.positionLeftHand;
             m_leftHandVR.rotation = p_vrTransform.rotationLeftHand;
+            m_leftScript.m_animator.SetBool(IsGrabbing, p_vrTransform.isLeftHandClenched);
 
             m_rightHandVR.position = p_vrTransform.positionRightHand;
-            m_rightHandVR.rotation = p_vrTransform.rotationRightHand;
+            m_rightHandVR.rotation = p_vrTransform.rotationRightHand;;
+            m_rightScript.m_animator.SetBool(IsGrabbing, p_vrTransform.isRightHandClenched);
         }
     }
 }
