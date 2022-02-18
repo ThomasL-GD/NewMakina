@@ -11,7 +11,8 @@ public class VrHandBehaviour : MonoBehaviour {
 
     [CanBeNull] private GrabbableObject m_objectHeld = null;
     public bool isFree => m_objectHeld == null && m_isPressingTrigger;
-    private bool m_isPressingTrigger = false;
+
+    public bool m_isPressingTrigger { get; private set; } = false;
 
     private Animator m_animator = null;
     private static readonly int IsGrabbing = Animator.StringToHash("IsGrabbing");
