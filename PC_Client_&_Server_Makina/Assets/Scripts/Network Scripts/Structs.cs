@@ -108,6 +108,10 @@ namespace CustomMessages
         
     }
 
+    public struct Tutorial : NetworkMessage {
+        public bool isInTutorial;
+    }
+
     public struct ElevatorActivation : NetworkMessage
     {
         public int index;

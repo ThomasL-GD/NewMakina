@@ -35,27 +35,45 @@ public class FollowTranformEditor : Editor {
         
         Space();
 
+        EditorGUIUtility.labelWidth = 60f;
         PropertyField(positions);
         if (positions.boolValue) {
+            BeginHorizontal("positions");
+            EditorGUIUtility.labelWidth = 20f;
+            //EditorGUI.indentLevel += 2;
             PropertyField(pX);
             PropertyField(pY);
             PropertyField(pZ);
+            //EditorGUI.indentLevel -= 2;
+            EndHorizontal();
         }
         Space();
         
+        EditorGUIUtility.labelWidth = 60f;
         PropertyField(rotations);
         if (rotations.boolValue) {
+            BeginHorizontal("rotations");
+            EditorGUIUtility.labelWidth = 20f;
+            //EditorGUI.indentLevel += 2;
             PropertyField(rX);
             PropertyField(rY);
             PropertyField(rZ);
+            //EditorGUI.indentLevel -= 2;
+            EndHorizontal();
         }
         Space();
         
+        EditorGUIUtility.labelWidth = 60f;
         PropertyField(scale);
         if (scale.boolValue) {
+            BeginHorizontal("scale");
+            EditorGUIUtility.labelWidth = 20f;
+            //EditorGUI.indentLevel += 2;
             PropertyField(sX);
             PropertyField(sY);
             PropertyField(sZ);
+            //EditorGUI.indentLevel -= 2;
+            EndHorizontal();
         }
         
         serializedObject.ApplyModifiedProperties();

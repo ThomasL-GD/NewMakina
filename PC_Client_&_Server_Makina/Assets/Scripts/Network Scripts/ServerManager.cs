@@ -48,6 +48,8 @@ public class ServerManager : MonoBehaviour
     [SerializeField, Range(1,120), Tooltip("the server's tick rate in Hz")] private int f_tickrate = 30;
     private int m_tickrate = 30;
     private float m_tickDelta = 1f;
+
+    [SerializeField] [Tooltip("Do not edit this value, it id for debug only.\nYou can remove this SerializeField if everything is working fine")] private bool m_isInTutorial = false;
     
     /// <summary/> The custom variables added onto the Network Manager
     [Header("Laser :")]
@@ -199,6 +201,7 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<DropTp>(OnDropTp);
         NetworkServer.RegisterHandler<RemoveTp>(OnRemoveTp);
         NetworkServer.RegisterHandler<Teleported>(OnTeleported);
+        NetworkServer.RegisterHandler<Tutorial>(OnReceiveTutorial);
     }
 
 
@@ -728,8 +731,11 @@ public class ServerManager : MonoBehaviour
     /// </summary>
     /// <param name="p_conn"> The connection from which originated the message </param>
     /// <param name="p_pcTransform"> The message sent by the Client to the Server  </param>
-    private void OnServerReceivePctransform(NetworkConnection p_conn,PcTransform p_pcTransform)
-    {
+    private void OnServerReceivePctransform(NetworkConnection p_conn,PcTransform p_pcTransform) {
+#if UNITY_EDITOR
+        //TODO : maybe cancel the receive ? Only if we really want this to be cheat-proof
+        if(p_conn == m_vrNetworkConnection && !m_isInTutorial)Debug.LogWarning("I just received PC position from the Vr side ﴾͡๏̯͡๏﴿");
+#endif
         m_pcTransformBuffer = p_pcTransform;
     }
 
@@ -740,8 +746,8 @@ public class ServerManager : MonoBehaviour
     /// </summary>
     /// <param name="p_conn"> The connection from which originated the message </param>
     /// <param name="p_vrlaser"> The message sent by the Client to the Server </param>
-    private void OnServerReceiveVrLaser(NetworkConnection p_conn, VrLaser p_vrlaser)
-    {
+    private void OnServerReceiveVrLaser(NetworkConnection p_conn, VrLaser p_vrlaser) {
+        
         m_laserBuffer = new Laser();
         m_laserBuffer.laserState = p_vrlaser.laserState;
         
@@ -817,7 +823,7 @@ public class ServerManager : MonoBehaviour
                     Debug.Log("2");
                     if(m_flashCoroutine != null)StopCoroutine(m_flashCoroutine);
                     m_flashCoroutine = StartCoroutine(Flash(m_flashDuration));
-                    m_pcNetworkConnection.Send(new DestroyLeure());
+                    SendToBothClients(new DestroyLeure());
                     Debug.Log("3");
                 }
             }
@@ -931,6 +937,8 @@ public class ServerManager : MonoBehaviour
         OnServerTick -= SendElevatorActivation;
         OnServerTick += SendElevatorActivation;
     }
+
+    private void OnReceiveTutorial(NetworkConnection p_conn, Tutorial p_tutorial) => m_isInTutorial = p_tutorial.isInTutorial;
     
     #endregion
 
