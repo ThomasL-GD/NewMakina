@@ -6,6 +6,7 @@ namespace Player_Scripts
     public class InputMovement3 : MonoBehaviour
     {
         public static InputMovement3 instance;
+        public static bool cancelInput = false;
         [HideInInspector]public bool m_isDead;
         [SerializeField, HideInInspector, Min(0f)] private float m_edgeAutoStopCheckDistance = .25f;
         [SerializeField, HideInInspector, Range(0f,1f)] private float m_minSpeedFactor=.5f;
@@ -271,7 +272,7 @@ namespace Player_Scripts
             }
 
             // Getting the input
-            if(Input.GetKeyDown(m_jumpKey))
+            if(!cancelInput && Input.GetKeyDown(m_jumpKey))
             {
                 if(m_jumpCoroutine != null) StopCoroutine(m_jumpCoroutine);
                 m_jumpCoroutine = StartCoroutine(JumpCoroutine());
@@ -425,7 +426,7 @@ namespace Player_Scripts
             float maxMovementSpeed = m_sprinting? m_maxMovementSpeedSprinting : m_maxMovementSpeed;
 
             //Getting the player input
-            Vector2 playerInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+            Vector2 playerInput = cancelInput?Vector2.zero:new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
             m_inputDirection = Vector2.MoveTowards(m_inputDirection,playerInput,directionChangeSpeed * Time.deltaTime);
             
