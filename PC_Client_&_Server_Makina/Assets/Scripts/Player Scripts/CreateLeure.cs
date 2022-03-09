@@ -1,15 +1,11 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using CustomMessages;
 using Mirror;
 using Player_Scripts.Reloading;
-using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CreateLeure : MonoBehaviour
+public class CreateLeure : AbstractMechanic
 {
     [SerializeField] private KeyCode m_leureKey = KeyCode.E;
     [SerializeField] private GameObject m_leurePrefab;
@@ -17,6 +13,7 @@ public class CreateLeure : MonoBehaviour
     [SerializeField] private float m_leureForwardOffset = .5f;
     [SerializeField] private float m_leureLifeTime = 5f;
     [SerializeField] private RawImage m_uiElement;
+    [SerializeField] private float m_speed = 10f;
     
     [SerializeField] private ReloadingAbstract m_coolDownScript;
     
@@ -39,7 +36,7 @@ public class CreateLeure : MonoBehaviour
             m_canSpawnLeure = false;
             m_leure = Instantiate(m_leurePrefab, transform.position + (transform.forward * m_leureForwardOffset),transform.rotation);
             
-            m_leure.GetComponent<LeurreMovement>().SetSpeedAndGravity(10f,m_leureGravity);
+            m_leure.GetComponent<LeurreMovement>().SetSpeedAndGravity(m_speed,m_leureGravity);
             m_killLeureCoroutine = StartCoroutine(KillLeure());
         }
     }
