@@ -47,6 +47,11 @@ namespace Tutorial {
         #endregion
 
 
+        private void Start() {
+            StartTutorial();
+        }
+
+
         public void StartTutorial() {
 #if UNITY_EDITOR
             if(m_currentStep != 0) Debug.LogWarning("Tutorial has already started but you are trying to set it up again ?!");

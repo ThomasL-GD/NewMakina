@@ -1,16 +1,18 @@
 using System;
 using CustomMessages;
 using Network;
+using Network.Connexion_Menu;
 using UnityEditor.Experimental.TerrainAPI;
 using UnityEngine;
 
 namespace Tutorial {
 
     [RequireComponent(typeof(Emerge))]
-    public class FakePCPlayer : MonoBehaviour {
+    public class FakePCPlayer : AttackSensitiveButton {
 
         [SerializeField] private Transform[] m_path = null;
         [SerializeField] private bool m_mustLoopPath = true;
+        [SerializeField] private MeshRenderer[] m_renderers;
         [SerializeField, Range(0f, 50f)] private float m_speed = 15f;
         [SerializeField, Range(0f, 5f)] private float m_uncertainty = 15f;
 
@@ -20,15 +22,18 @@ namespace Tutorial {
 
         private void Start() {
             GetComponent<Emerge>().OnEmergeDone += StartRunning;
-            GetComponent<MeshRenderer>().enabled = false;
-            
+            foreach (MeshRenderer meshRenderer in m_renderers) {
+                meshRenderer.enabled = false;
+            }
         }
 
         /// <summary>Initialize everything in order to start running around and have the correct consequences</summary>
         private void StartRunning() {
-            MyNetworkManager.OnLaserShootingUpdate += MaybeIllDie;
             m_isRunning = true;
-            GetComponent<MeshRenderer>().enabled = true;
+            foreach (MeshRenderer meshRenderer in m_renderers) {
+                meshRenderer.enabled = true;
+            }
+            LocalLaser.SetNewSensitiveTargetForAll?.Invoke(this);
         }
 
         // Update is called once per frame
@@ -37,7 +42,6 @@ namespace Tutorial {
             Transform transform1 = transform;
             transform1.Translate((m_path[m_currentPathIndex].position - transform1.position).normalized * (m_speed * Time.deltaTime));
             transform1.LookAt(m_path[m_currentPathIndex].position);
-            MyNetworkManager.singleton.SendVrData(new PcTransform(){position = transform1.position, rotation = transform1.rotation});
             
             if (!((transform.position - m_path[m_currentPathIndex].position).magnitude < m_uncertainty)) return; //If we've the position we were seeking
                 m_currentPathIndex++;
@@ -53,14 +57,10 @@ namespace Tutorial {
                     }
         }
 
-        /// <summary>Maybe i'll die, maybe not... Who knows ?</summary>
-        /// <param name="p_laser">The message sent by the server</param>
-        private void MaybeIllDie(Laser p_laser) {
-            
-            if (!p_laser.hit) return;
-            
-            MyNetworkManager.OnLaserShootingUpdate -= MaybeIllDie;
+        /// <summary>Guess I'll die</summary>
+        private void GuessIllDie() {
             GetComponent<Emerge>().OnEmergeDone -= StartRunning;
+            LocalLaser.SetNewSensitiveTargetForAll?.Invoke(null);
             TutorialManager.singleton.NextStep();
         }
 
@@ -70,6 +70,11 @@ namespace Tutorial {
             foreach (Transform tran in m_path) {
                 Gizmos.DrawWireSphere(tran.position, m_uncertainty);
             }
+        }
+
+        public override void OnBeingActivated() {
+            base.OnBeingActivated();
+            GuessIllDie();
         }
     }
 

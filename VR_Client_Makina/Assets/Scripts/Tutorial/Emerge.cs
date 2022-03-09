@@ -17,11 +17,10 @@ namespace Tutorial {
         public EmergeStateDelegator OnSinkDone;
         
         private void Awake() {
-            Transform transform1 = transform;
-            Vector3 position = transform1.position;
+            Vector3 position = transform.position;
             m_targetPos = position;
-            transform1.position = new Vector3(position.x, TutorialManager.singleton.heightThatIsConsideredUnderground, position.z);
-            m_originalPos = transform1.position;
+            transform.position = new Vector3(position.x, TutorialManager.singleton.heightThatIsConsideredUnderground, position.z);
+            m_originalPos = transform.position;
         }
 
         public void StartEmerging() {

@@ -840,7 +840,7 @@ public class ServerManager : MonoBehaviour
     }
 
     /// <summary>
-    /// function called when the server receives a message of type Invisbility
+    /// function called when the server receives a message of type PcInvisibility
     /// </summary>
     /// <param name="p_conn"> The connection from which originated the message </param>
     /// <param name="p_pcInvisibility"> The message sent by the Client to the Server  </param>
