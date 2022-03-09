@@ -655,11 +655,11 @@ public class ServerManager : MonoBehaviour
     /// function called when the server receives a message of type ClientConnect
     /// </summary>
     /// <param name="p_conn"> The connection from which originated the message </param>
-    /// <param name="p_vrTransform"> The message sent by the Client to the Server  </param>
-    private void OnServerReceiveClientConnect(NetworkConnection p_conn, ClientConnect client)
+    /// <param name="p_client"> The message sent by the Client to the Server  </param>
+    private void OnServerReceiveClientConnect(NetworkConnection p_conn, ClientConnect p_client)
     {
-        if (client.client == ClientConnection.VrPlayer) m_vrNetworkConnection = p_conn;
-        else if (client.client == ClientConnection.PcPlayer) m_pcNetworkConnection = p_conn;
+        if (p_client.client == ClientConnection.VrPlayer) m_vrNetworkConnection = p_conn;
+        else if (p_client.client == ClientConnection.PcPlayer) m_pcNetworkConnection = p_conn;
 
         if (m_vrNetworkConnection != null && m_pcNetworkConnection != null)
         {
@@ -818,7 +818,7 @@ public class ServerManager : MonoBehaviour
                 hitLeure = distance <= m_laserRadius && Vector3.Angle(leurePosition - startingPoint, direction) < 90f;
 
                 
-                if (hitLeure && !Physics.Raycast(startingPoint, laserCriticalPath.normalized, out hited, laserCriticalPath.magnitude, m_playerLayers, QueryTriggerInteraction.Ignore))
+                if (hitLeure && !Physics.Raycast(startingPoint, laserCriticalPath.normalized, out hited, laserCriticalPath.magnitude, m_playerLayers, QueryTriggerInteraction.Ignore)) 
                 {
                     Debug.Log("2");
                     if(m_flashCoroutine != null)StopCoroutine(m_flashCoroutine);
