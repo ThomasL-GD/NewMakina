@@ -18,7 +18,7 @@ namespace Tutorial {
 
         private int m_currentPathIndex = 0;
 
-        private bool m_isRunning = true;
+        private bool m_isRunning = false;
 
         private void Start() {
             GetComponent<Emerge>().OnEmergeDone += StartRunning;
@@ -63,6 +63,7 @@ namespace Tutorial {
         /// <summary>Guess I'll die</summary>
         private void GuessIllDie() {
             GetComponent<Emerge>().OnEmergeDone -= StartRunning;
+            m_isRunning = false;
             LocalLaser.SetNewSensitiveTargetForAll?.Invoke(null);
             LocalBeaconFeedback.fakePcPlayerTarget = null;
             TutorialManager.singleton.NextStep();
