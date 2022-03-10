@@ -315,15 +315,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_firstColor: {r: 0.95266485, g: 1, b: 0.015686274, a: 1}
   m_lastColor: {r: 1, g: 1, b: 1, a: 1}
-  m_shotColor: {r: 1, g: 0, b: 0, a: 1}
+  m_laserShotPrefab: {fileID: 0}
+  m_prefabParticlesWhenKill: {fileID: 0}
+  m_prefabParticlesWallHit: {fileID: 0}
   m_input: 2
   m_upTriggerValue: 0.58
   m_laserLoadingTime: 0.93
   m_laserDuration: 0.55
   m_initialLaserSize: 9
   m_endLaserSize: 0.01
-  m_shotLaserSize: 5.9
-  m_mask:
+  m_laserRadius: 0
+  m_targetThatIsSensitive: {fileID: 0}
+  m_target: {fileID: 0}
+  m_whatDoIHitMask:
     serializedVersion: 2
     m_Bits: 128
 --- !u!54 &587870745
@@ -804,15 +808,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_firstColor: {r: 0.95266485, g: 1, b: 0.015686274, a: 1}
   m_lastColor: {r: 1, g: 1, b: 1, a: 1}
-  m_shotColor: {r: 1, g: 0, b: 0, a: 1}
+  m_laserShotPrefab: {fileID: 5777138034286177843, guid: e2cb3604f1d3e5e46b7298c10065f9e7, type: 3}
+  m_prefabParticlesWhenKill: {fileID: 6186801345535467989, guid: 119ea4ac7361edb49996679ff68e6819, type: 3}
+  m_prefabParticlesWallHit: {fileID: 6027568845842637197, guid: 4a34f0e0f9120c7488999a80f7c6b0a8, type: 3}
   m_input: 2
   m_upTriggerValue: 0.58
-  m_laserLoadingTime: 0.93
+  m_laserLoadingTime: 3
   m_laserDuration: 0.55
   m_initialLaserSize: 9
   m_endLaserSize: 0.01
-  m_shotLaserSize: 5.9
-  m_mask:
+  m_laserRadius: 0
+  m_targetThatIsSensitive: {fileID: 0}
+  m_target: {fileID: 0}
+  m_whatDoIHitMask:
     serializedVersion: 2
     m_Bits: 128
 --- !u!1001 &1566061570224963059

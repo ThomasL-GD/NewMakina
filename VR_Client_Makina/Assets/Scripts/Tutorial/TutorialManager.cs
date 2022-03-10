@@ -13,7 +13,8 @@ namespace Tutorial {
         [Header("Emerging values"), Range(-1000f, 100f)] public float heightThatIsConsideredUnderground;
         [SerializeField] [Range(0f, 2f)] public float emergingTime = 0.5f;
         [SerializeField] public AnimationCurve speedToGoUp = AnimationCurve.Linear(0f, 0f, 1f, 1f);
-
+        
+        [SerializeField] [Range(5f, 100f)] public float beaconRange = 50f;
         
         
         [Serializable] public class Step {
