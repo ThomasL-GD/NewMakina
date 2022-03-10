@@ -46,7 +46,7 @@ namespace Synchronizers
             float intensity = m_volume.weight;
             intensity = Mathf.MoveTowards(intensity, m_targetIntensity, m_smoothTransitionSpeed * Time.deltaTime);
             m_volume.weight = intensity;
-            if (m_lazerPreshot.enabled)
+            if (!m_lazerPreshot.enabled)
             {
                 m_volume.weight = 0;
                 return;
