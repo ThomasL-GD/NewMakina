@@ -1,10 +1,13 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Tutorial {
 
     [RequireComponent(typeof(InflateToSize))]
     public class LocalBeaconFeedback : MonoBehaviour {
+
+        [HideInInspector] public int m_index;
 
         public static Transform fakePcPlayerTarget = null;
         private bool m_isDetecting = false;
@@ -15,8 +18,9 @@ namespace Tutorial {
         private void Start() {
             InflateToSize script = GetComponent<InflateToSize>();
             m_range = TutorialManager.singleton.beaconRange;
-            script.m_targetScale = m_range;
+            script.m_targetScale = m_range * 2;
             script.StartInflating();
+            StartCoroutine(DieRetardly(TutorialManager.singleton.beaconLifetime));
         }
 
         private void Update() { 
@@ -49,6 +53,12 @@ namespace Tutorial {
             
             GetComponent<MeshRenderer>().material.SetColor(CodeBeaconColor, newColor);
             
+        }
+
+        IEnumerator DieRetardly(float p_lifeTime) {
+            yield return new WaitForSeconds(p_lifeTime);
+            TutorialManager.singleton.SpawnBeacon(m_index);
+            Destroy(gameObject);
         }
     }
 }

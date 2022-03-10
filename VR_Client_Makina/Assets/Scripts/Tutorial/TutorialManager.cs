@@ -1,5 +1,6 @@
 using System;
 using Network;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,7 +15,13 @@ namespace Tutorial {
         [SerializeField] [Range(0f, 2f)] public float emergingTime = 0.5f;
         [SerializeField] public AnimationCurve speedToGoUp = AnimationCurve.Linear(0f, 0f, 1f, 1f);
         
+        [Header("Beacons")]
+        [SerializeField] [Range(0, 20)] private int m_firststepWithBeacons = 4;
         [SerializeField] [Range(5f, 100f)] public float beaconRange = 50f;
+        [SerializeField] [Range(0.1f, 20f)] public float beaconLifetime = 5f;
+        [SerializeField] private GameObject m_prefabBeacon;
+        [SerializeField] public GameObject prefabDeployedBeacon;
+        [SerializeField] private Transform[] m_beaconsSpawnPos;
         
         
         [Serializable] public class Step {
@@ -68,6 +75,12 @@ namespace Tutorial {
             NextStep();
         }
 
+        public void SpawnBeacon(int p_index) {
+            GameObject go = Instantiate(m_prefabBeacon, m_beaconsSpawnPos[p_index].position, Quaternion.Euler(Vector3.zero));
+            go.transform.SetParent(m_beaconsSpawnPos[p_index]);
+            go.GetComponent<LocalBeaconBehaviour>().m_index = p_index;
+        }
+
         public void NextStep() {
             
             Debug.LogWarning("Next step !");
@@ -84,6 +97,12 @@ namespace Tutorial {
                 return;
             }
 
+            if (m_currentStep == m_firststepWithBeacons) {
+                for (var index = 0; index < m_beaconsSpawnPos.Length; index++) {
+                    SpawnBeacon(index);
+                }
+            }
+
             foreach (Emerge script in m_gameObjectsToActivateForEachStep[m_currentStep].objectsOfThisStep) {
                 script.gameObject.SetActive(true);
                 script.StartEmerging();
@@ -96,6 +115,8 @@ namespace Tutorial {
             SceneManager.LoadScene(m_sceneToLoadWhenDone.buildIndex);
             Destroy(this);
         }
+        
+        
     }
 
 }
