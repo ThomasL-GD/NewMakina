@@ -1,18 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
-public class LocalBeaconBehaviour : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
+namespace Tutorial {
+    
+    public class LocalBeaconBehaviour : GrabbablePhysickedObject {
+    
+    
+    
+        // Start is called before the first frame update
+        protected override void Start() {
+            base.Start();
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
         
+        }
+
+        protected override void OnFirstTimeTouchingGround(Collision p_other) {
+            base.OnFirstTimeTouchingGround(p_other);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

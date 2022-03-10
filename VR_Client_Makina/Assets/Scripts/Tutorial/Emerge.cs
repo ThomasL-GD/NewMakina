@@ -9,6 +9,8 @@ namespace Tutorial {
         private Vector3 m_targetPos;
         private Vector3 m_originalPos;
 
+        [SerializeField, Tooltip("Let 0 for automatic")] private float m_heightThatIsConsideredUnderground = 0f;
+
         private bool m_isEmerged;
         private bool m_isMoving;
 
@@ -19,7 +21,7 @@ namespace Tutorial {
         private void Start() {
             Vector3 position = transform.position;
             m_targetPos = position;
-            transform.position = new Vector3(position.x, TutorialManager.singleton.heightThatIsConsideredUnderground, position.z);
+            transform.position = new Vector3(position.x,  (m_heightThatIsConsideredUnderground == 0) ? TutorialManager.singleton.heightThatIsConsideredUnderground : m_heightThatIsConsideredUnderground, position.z);
             m_originalPos = transform.position;
         }
 

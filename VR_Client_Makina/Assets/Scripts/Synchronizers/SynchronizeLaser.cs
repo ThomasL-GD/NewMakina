@@ -27,7 +27,7 @@ namespace Synchronizers {
         private bool m_isTriggerPressed = false;
         
         [Header("Timings")]
-        [SerializeField] [Range(0.1f,5f)] private float m_laserLoadingTime;
+        [SerializeField] [Range(0.1f,5f)] private float m_laserLoadingTime; //TODO : move that to initial data
         private float m_elapsedTime = 0f;
         
         [Header("Prefabs")]
