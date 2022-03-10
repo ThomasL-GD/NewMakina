@@ -40,7 +40,9 @@ namespace Tutorial {
         void Update() {
             if (!m_isRunning) return;
             Transform transform1 = transform;
-            transform1.Translate((m_path[m_currentPathIndex].position - transform1.position).normalized * (m_speed * Time.deltaTime));
+            Vector3 position = transform1.position;
+            position += ((m_path[m_currentPathIndex].position - position).normalized * (m_speed * Time.deltaTime));
+            transform1.position = position;
             transform1.LookAt(m_path[m_currentPathIndex].position);
             
             if (!((transform.position - m_path[m_currentPathIndex].position).magnitude < m_uncertainty)) return; //If we've the position we were seeking

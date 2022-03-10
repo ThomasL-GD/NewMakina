@@ -24,11 +24,17 @@ namespace Tutorial {
         [SerializeField, Tooltip("Each cell represent a step contains an array.\nIn each array, put every object you want to make appear and give them the Emerge script.\nThe number of cells will determine the number of steps")] private Step[] m_gameObjectsToActivateForEachStep;
 
         private int m_currentStep = 0;
-        
+
+
         #region singleton
         //Singleton time ! 	(˵ ͡° ͜ʖ ͡°˵)
         public new static TutorialManager singleton { get; private set; }
-        
+
+        public float heightThatIsConsideredUnderground1 {
+            get => heightThatIsConsideredUnderground;
+            set => heightThatIsConsideredUnderground = value;
+        }
+
         /// <summary>
         /// Is that... a singleton setup ?
         /// *Pokédex's voice* A singleton, a pretty common pokécode you can find in a lot of projects, it allows anyone to
@@ -56,12 +62,14 @@ namespace Tutorial {
 #if UNITY_EDITOR
             if(m_currentStep != 0) Debug.LogWarning("Tutorial has already started but you are trying to set it up again ?!");
 #endif
-            MyNetworkManager.singleton.SendVrData(new CustomMessages.Tutorial(){isInTutorial = true});
+            //MyNetworkManager.singleton.SendVrData(new CustomMessages.Tutorial(){isInTutorial = true});
             m_currentStep = -1;
             NextStep();
         }
 
         public void NextStep() {
+            
+            Debug.LogWarning("Next step !");
 
             if (m_currentStep >= 0) {
                 foreach (Emerge script in m_gameObjectsToActivateForEachStep[m_currentStep].objectsOfThisStep) {
