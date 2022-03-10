@@ -34,6 +34,7 @@ namespace Tutorial {
                 meshRenderer.enabled = true;
             }
             LocalLaser.SetNewSensitiveTargetForAll?.Invoke(this);
+            LocalBeaconFeedback.fakePcPlayerTarget = transform;
         }
 
         // Update is called once per frame
@@ -63,6 +64,7 @@ namespace Tutorial {
         private void GuessIllDie() {
             GetComponent<Emerge>().OnEmergeDone -= StartRunning;
             LocalLaser.SetNewSensitiveTargetForAll?.Invoke(null);
+            LocalBeaconFeedback.fakePcPlayerTarget = null;
             TutorialManager.singleton.NextStep();
         }
 
