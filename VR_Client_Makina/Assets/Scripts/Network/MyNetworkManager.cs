@@ -168,7 +168,7 @@ namespace Network {
         /// <summary/> Is called when we get connected
         public override void OnStartClient() {
             NetworkClient.RegisterHandler<PcTransform>(ReceivePcTransform);
-            NetworkClient.RegisterHandler<Laser>(ReceivePcTransform);
+            NetworkClient.RegisterHandler<Laser>(ReceiveLaser);
             NetworkClient.RegisterHandler<PcInvisibility>(ReceivePcInvisibility);
             NetworkClient.RegisterHandler<ClientConnect>(ReceiveClientConnect);
             NetworkClient.RegisterHandler<HeartBreak>(ReceiveHeartBreak);
@@ -243,7 +243,9 @@ namespace Network {
 
         /// <summary/> Is called when we receive data of type Laser from the server
         /// <param name="p_laser">The actual data we received</param>
-        private void ReceivePcTransform(Laser p_laser) {
+        private void ReceiveLaser(Laser p_laser) {
+            
+            Debug.LogWarning("fhgf jhytfrvikjybfn,uybrfuj dc tfjhtgfvhkhflutdolygejyiytfoytlhgfhgjgv");
 
             switch (p_laser.laserState) { //We do different things if the server is telling us that the laser is aiming or shooting
             
@@ -300,6 +302,7 @@ namespace Network {
         /// Connects to the default serialized ip
         /// (can be set to localhost)
         /// </summary>
+        [ContextMenu("Custom Connect")]
         public void CustomConnect() {
             networkAddress = m_localHost ? "localhost" : m_IPadress;
             StartClient();

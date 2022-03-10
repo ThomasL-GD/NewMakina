@@ -151,6 +151,7 @@ namespace Synchronizers {
                     
                     m_laserAiming.enabled = false;
                     m_elapsedTime = 0f;
+                    
                     MyNetworkManager.singleton.SendVrData<VrLaser>(new VrLaser(){laserState = LaserState.Shooting});
                     m_isLoading = false;
 
