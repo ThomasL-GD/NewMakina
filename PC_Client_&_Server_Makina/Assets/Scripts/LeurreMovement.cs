@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using CustomMessages;
@@ -12,6 +13,13 @@ public class LeurreMovement : MonoBehaviour
 
     [SerializeField] private CharacterController m_characterController;
     private float m_gravityVelocity;
+
+    public static GameObject m_instance;
+
+    private void Start()
+    {
+        m_instance = gameObject;
+    }
 
     // Update is called once per frame
     void Update()

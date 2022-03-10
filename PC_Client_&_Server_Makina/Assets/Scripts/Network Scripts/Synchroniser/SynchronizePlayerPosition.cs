@@ -1,11 +1,7 @@
- using System;
  using Mirror;
  using UnityEngine;
  using CustomMessages;
- using UnityEngine.Rendering;
- using UnityEngine.Rendering.Universal;
- using UnityEngine.Serialization;
-
+ 
  namespace Synchronizers
  {
      public class SynchronizePlayerPosition : Synchronizer<SynchronizePlayerPosition>
@@ -15,6 +11,7 @@
 
          [SerializeField] private GameObject[] m_invisbilityFeedbacks = null;
          [SerializeField] private AudioSource m_invisibiltySound;
+         [SerializeField] private AudioSource m_mainMusic;
 
          private void Start() {
              ClientManager.OnReceiveInvisibility += UpdateInvisibility;
@@ -35,6 +32,8 @@
              foreach (GameObject go in m_invisbilityFeedbacks) go.SetActive(p_pcInvisibility.isInvisible);
              
              if(p_pcInvisibility.isInvisible) m_invisibiltySound.Play();
+             
+             m_mainMusic.pitch = p_pcInvisibility.isInvisible ? .3f : 1f;
          }
      }
  }

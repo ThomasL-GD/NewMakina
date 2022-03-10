@@ -14,7 +14,6 @@ public class Hosting : MonoBehaviour
             return;
         }
         
-        Debug.Log($"Server {NetworkServer.active} | Client {NetworkClient.active}");
         m_notConnectedPrompt.SetActive(true);
         if(Input.GetKeyDown(m_hostInput)) MyNetworkManager.singleton.StartHost();
     }

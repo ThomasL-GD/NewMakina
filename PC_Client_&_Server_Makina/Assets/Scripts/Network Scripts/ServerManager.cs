@@ -609,7 +609,6 @@ public class ServerManager : MonoBehaviour
     
     private void OnRestartGame(NetworkConnection arg1, RestartGame p_restartGame)
     {
-        Debug.Log($"Received RestartGame message from client :{arg1.address}");
         if(m_vrNetworkConnection != null && m_pcNetworkConnection !=null) {
             EndGame();
             SendReady();
@@ -764,7 +763,6 @@ public class ServerManager : MonoBehaviour
             Vector3 direction = m_vrTransformBuffer.rotationRightHand * Vector3.forward;
             Vector3 playerPos = m_pcTransformBuffer.position + Vector3.up * m_laserCheckOffset/2f;
             Vector3 laserCriticalPath = (playerPos + Vector3.up * m_laserCheckOffset / 2f) - startingPoint;
-            
             Debug.DrawLine(playerPos,playerPos + Vector3.up * m_laserCheckOffset/2f,Color.red,5f);
             
             // Hitboxes Verification (blame Blue)
@@ -810,7 +808,6 @@ public class ServerManager : MonoBehaviour
             bool hitLeure = false;
             if(!hit)
             {
-                Debug.Log("1");
                 Vector3 leurePosition = m_leureBuffer.position + Vector3.up * m_laserCheckOffset / 2f;
                 laserCriticalPath = (leurePosition + Vector3.up * m_laserCheckOffset / 2f) - startingPoint;
 
@@ -820,11 +817,9 @@ public class ServerManager : MonoBehaviour
                 
                 if (hitLeure && !Physics.Raycast(startingPoint, laserCriticalPath.normalized, out hited, laserCriticalPath.magnitude, m_playerLayers, QueryTriggerInteraction.Ignore)) 
                 {
-                    Debug.Log("2");
                     if(m_flashCoroutine != null)StopCoroutine(m_flashCoroutine);
                     m_flashCoroutine = StartCoroutine(Flash(m_flashDuration));
                     SendToBothClients(new DestroyLeure());
-                    Debug.Log("3");
                 }
             }
             

@@ -2,11 +2,10 @@ using CustomMessages;
 using Mirror;
 using Player_Scripts.Reloading;
 using Synchronizers;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TeleportRollBack : MonoBehaviour
+public class TeleportRollBack : AbstractMechanic
 {
     [SerializeField] private KeyCode m_placeOrTeleportKey;
     [SerializeField] private GameObject m_teleportLocationPrefab;
