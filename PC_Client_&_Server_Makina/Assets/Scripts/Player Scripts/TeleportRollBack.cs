@@ -42,6 +42,7 @@ public class TeleportRollBack : AbstractMechanic
     // Update is called once per frame
     void Update()
     {
+        if(!SynchronizeInitialData.vrConnected) return;
         if (m_canUse && Input.GetKeyDown(m_placeOrTeleportKey))
         {
             if (m_placed)

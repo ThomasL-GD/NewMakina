@@ -16,11 +16,8 @@ public class SynchroniseBlindAndFlair : Synchronizer<SynchroniseBlindAndFlair>
         ClientManager.OnReceiveActivateBlind += ActivateBlind;
     }
 
-    private void ActivateBlind(ActivateBlind p_activateflair)
-    {
-        m_postProcessEffect.weight = 1;
-        Debug.Log("Blind");
-    }
+    private void ActivateBlind(ActivateBlind p_activateflair) => m_postProcessEffect.weight = 1;
+    
 
     private void Update()
     {

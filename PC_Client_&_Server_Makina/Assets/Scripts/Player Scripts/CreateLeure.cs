@@ -2,6 +2,7 @@ using System.Collections;
 using CustomMessages;
 using Mirror;
 using Player_Scripts.Reloading;
+using Synchronizers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,6 +32,7 @@ public class CreateLeure : AbstractMechanic
     // Update is called once per frame
     void Update()
     {
+        if(!SynchronizeInitialData.vrConnected) return;
         if (m_canSpawnLeure && Input.GetKeyDown(m_leureKey))
         {
             m_canSpawnLeure = false;
