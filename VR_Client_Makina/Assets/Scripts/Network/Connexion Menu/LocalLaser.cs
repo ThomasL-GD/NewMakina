@@ -56,6 +56,7 @@ namespace Network.Connexion_Menu {
         void Start() {
             m_line = GetComponent<LineRenderer>();
             m_line.enabled = false;
+            MyNetworkManager.OnReceiveInitialData += DestroyMyself;
             MyNetworkManager.OnReceiveGameEnd += ActiveMe;
             SetNewTargetForAll += SetNewTarget;
             SetNewSensitiveTargetForAll += SetNewSensitiveTarget;
@@ -77,8 +78,8 @@ namespace Network.Connexion_Menu {
             if (m_elapsedHoldingTime > m_laserLoadingTime) { //shot
                 
                 
-                Vector3 handForward = Synchronizer<SynchronizeSendVrRig>.Instance.m_rightHand.forward;
-                Vector3 handPosition = Synchronizer<SynchronizeSendVrRig>.Instance.m_rightHand.position;
+                Vector3 handForward = transform.forward;
+                Vector3 handPosition = transform.position;
                 
                 if(m_transformTarget != null) {
 
@@ -92,7 +93,7 @@ namespace Network.Connexion_Menu {
                     
                     bool hitSmth = Physics.Raycast(handPosition, handForward.normalized, out RaycastHit hitInfo, 10000f, m_whatDoIHitMask, QueryTriggerInteraction.Ignore);
                     
-                    bool hit;
+                    bool hitTheTarget;
                     Vector3 direction;
                     switch (hitAWall) {
                         case false : { //If there's no wall between
@@ -100,26 +101,33 @@ namespace Network.Connexion_Menu {
                             float distance = Vector3.Cross(handForward, targetPos - handPosition).magnitude;
 
                             //if the distance between the line of fire and the player's position is blablablbalalboom... he ded
-                            hit = distance <= m_laserRadius && Vector3.Angle(targetPos - handPosition, handForward) < 90f;
+                            hitTheTarget = distance <= m_laserRadius && Vector3.Angle(targetPos - handPosition, handForward) < 90f;
 
                             //Giving the 
-                            direction = hit ? (laserCriticalPath) : (hitSmth ? hitInfo.point - handPosition : handForward * 10000f);
+                            direction = hitTheTarget ? (laserCriticalPath) : (hitSmth ? hitInfo.point - handPosition : handForward * 10000f);
 
                             break; }
 
                         case true : { //If there's a wall between the target and the hand
-                            hit = false;
+                            hitTheTarget = false;
                             direction = hitSmth ? hitInfo.point - handPosition : handForward * 10000f;
                             break; }
                     }
                     
-                    StartCoroutine(ShotDownLaser(handPosition, direction, hit));
+                    StartCoroutine(ShotDownLaser(handPosition, direction, hitTheTarget));
 
 
-                    if (!hitSmth) return;
-                        m_shutDown = true;
-                        if(hitInfo.transform.gameObject.TryGetComponent(out AttackSensitiveButton script)) script.OnBeingActivated();
-                        m_line.enabled = false;
+                    m_shutDown = true;
+                    m_line.enabled = false;
+                    
+                    if (!hitTheTarget) return;
+                        if (m_targetThatIsSensitive != null) m_targetThatIsSensitive.OnBeingActivated();
+                        else{
+                            if(hitInfo.transform.gameObject.TryGetComponent(out AttackSensitiveButton script)) script.OnBeingActivated();
+#if UNITY_EDITOR
+                            else Debug.LogError("No script found on target ???");
+#endif
+                        }
                         
                 }
                 else if (m_transformTarget == null) {
@@ -157,8 +165,8 @@ namespace Network.Connexion_Menu {
                 m_line.widthMultiplier = m_initialLaserSize * (1 - ratio) + (m_endLaserSize * ratio);
 
                 //Setting the right length for the laser aiming previsualization
-                Vector3 forward = Synchronizer<SynchronizeSendVrRig>.Instance.m_rightHand.forward;
-                Vector3 position = Synchronizer<SynchronizeSendVrRig>.Instance.m_rightHand.position;
+                Vector3 forward = transform.forward;
+                Vector3 position = transform.position;
                 bool isHitting = Physics.Raycast(position, forward, out RaycastHit ray, Mathf.Infinity, m_whatDoIHitMask);
                 m_line.SetPosition(1, position + (forward * (isHitting ? ray.distance : 100000f)));
                 m_line.SetPosition(0, position);
@@ -198,10 +206,6 @@ namespace Network.Connexion_Menu {
             
             
             Destroy(instantiate);
-                    
-            if (MyNetworkManager.singleton.m_canSend) {
-                MyNetworkManager.OnReceiveInitialData += DestroyMyself;
-            }
             
             m_elapsedHoldingTime = 0f;
             m_isShooting = false;

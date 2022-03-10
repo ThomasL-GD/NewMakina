@@ -16,7 +16,7 @@ namespace Tutorial {
         public EmergeStateDelegator OnEmergeDone;
         public EmergeStateDelegator OnSinkDone;
         
-        private void Awake() {
+        private void Start() {
             Vector3 position = transform.position;
             m_targetPos = position;
             transform.position = new Vector3(position.x, TutorialManager.singleton.heightThatIsConsideredUnderground, position.z);
