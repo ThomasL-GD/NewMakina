@@ -6,7 +6,6 @@ using UnityEngine.Rendering;
 
 public class SynchroniseBlindAndFlair : Synchronizer<SynchroniseBlindAndFlair>
 {
-    [SerializeField] private MoveUp m_flair;
     [SerializeField] private Volume m_postProcessEffect;
     [SerializeField] private float m_fadeOutSpeed = .3f;
     
@@ -14,16 +13,8 @@ public class SynchroniseBlindAndFlair : Synchronizer<SynchroniseBlindAndFlair>
     
     void Awake()
     {
-        ClientManager.OnReceiveInitialData += FlairInitialData;
-        ClientManager.OnReceiveActivateFlair += ActivateFlair;
         ClientManager.OnReceiveActivateBlind += ActivateBlind;
     }
-
-    private void ActivateFlair(ActivateFlair p_activateflair) =>
-        m_flair.StartRaise(p_activateflair.startPosition);
-
-    private void FlairInitialData(InitialData p_initialdata) =>
-        m_flair.SetRaiseSpeedAndTime(p_initialdata.flairRaiseSpeed,p_initialdata.flairDetonationTime);
 
     private void ActivateBlind(ActivateBlind p_activateflair)
     {
