@@ -58,5 +58,6 @@ public class LeureTargeter : MonoBehaviour
         
         TutorialPrompt.OnPrompt?.Invoke(m_promptText, m_promptKeycode == KeyCode.None ? null : (KeyCode?)m_promptKeycode);
         ClientManager.OnReceiveDestroyLeure.Invoke(new DestroyLeure());
+        ClientManager.OnReceiveActivateBlind.Invoke(new ActivateBlind());
     }
 }
