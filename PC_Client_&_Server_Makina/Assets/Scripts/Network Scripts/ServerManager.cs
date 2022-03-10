@@ -764,7 +764,6 @@ public class ServerManager : MonoBehaviour
             Vector3 direction = m_vrTransformBuffer.rotationRightHand * Vector3.forward;
             Vector3 playerPos = m_pcTransformBuffer.position + Vector3.up * m_laserCheckOffset/2f;
             Vector3 laserCriticalPath = (playerPos + Vector3.up * m_laserCheckOffset / 2f) - startingPoint;
-            
             Debug.DrawLine(playerPos,playerPos + Vector3.up * m_laserCheckOffset/2f,Color.red,5f);
             
             // Hitboxes Verification (blame Blue)
