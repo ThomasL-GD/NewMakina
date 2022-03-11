@@ -288,6 +288,9 @@ public class ServerManager : MonoBehaviour
         m_elevatorSpeed = f_elevatorSpeed;
         m_elevatorWaitTime = f_elevatorWaitTime;
         m_heartTransforms = f_heartTransforms;
+
+        foreach (var tr in m_heartTransforms) tr.localScale = Vector3.one;
+        
         m_vrPlayerHealth = f_vrPlayerHealth;
         m_pcPlayerHealth = f_pcPlayerHealth;
         m_initialBeacons = f_initialBeacons;
@@ -321,13 +324,13 @@ public class ServerManager : MonoBehaviour
         m_gameEnded = false;
         
         // Doing a small checkup
-        if (m_vrPlayerHealth > m_heartTransforms.Length) Debug.LogWarning("the Vr Player has more health than there are hearts... Big L?",this);
+        if (f_vrPlayerHealth > f_heartTransforms.Length) Debug.LogWarning("the Vr Player has more health than there are hearts... Big L?",this);
         
         //Unpacking the heart position values from the transforms to send through messages
         List<Vector3> heartPositions = new List<Vector3>();
         List<Quaternion> heartRotations = new List<Quaternion>();
 
-        foreach (Transform pos in m_heartTransforms)
+        foreach (Transform pos in f_heartTransforms)
         {
             heartPositions.Add(pos.position);
             heartRotations.Add(pos.rotation);
@@ -524,7 +527,7 @@ public class ServerManager : MonoBehaviour
         float playerHeight = m_pcTransformBuffer.position.y;
         for (int i = 0; i < m_heartTransforms.Length; i++)
         {
-            if(m_heartTransforms[i] == null) continue;
+            if(m_heartTransforms[i].localScale == Vector3.zero) continue;
             
             if(Mathf.Abs(playerHeight - m_heartTransforms[i].position.y) > 10f) continue;
             
@@ -536,8 +539,9 @@ public class ServerManager : MonoBehaviour
                 
                 if (m_heartTimer>m_heartDestroyTime)
                 {
-                    m_heartTransforms[i] = null;
+                    m_heartTransforms[i].localScale = Vector3.zero;
                     SendToBothClients(new HeartBreak() {index = i});
+                    m_vrPlayerHealth--;
                 }
                 return;
             }
