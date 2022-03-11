@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Network;
 using Unity.Mathematics;
 using UnityEngine;
@@ -72,7 +73,7 @@ namespace Tutorial {
 #endif
             //MyNetworkManager.singleton.SendVrData(new CustomMessages.Tutorial(){isInTutorial = true});
             m_currentStep = -1;
-            NextStep();
+            StartCoroutine(NextStep());
         }
 
         public void SpawnBeacon(int p_index) {
@@ -81,7 +82,7 @@ namespace Tutorial {
             go.GetComponent<LocalBeaconBehaviour>().m_index = p_index;
         }
 
-        public void NextStep() {
+        public IEnumerator NextStep() {
             
             Debug.LogWarning("Next step !");
 
@@ -90,11 +91,13 @@ namespace Tutorial {
                     script.StartDemerging();
                 }
             }
+
+            yield return new WaitForSeconds(emergingTime);
             
             m_currentStep++;
             if (m_currentStep >= m_gameObjectsToActivateForEachStep.Length) {
                 EndTutorial();
-                return;
+                yield break;
             }
 
             if (m_currentStep == m_firststepWithBeacons) {

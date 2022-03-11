@@ -2,7 +2,6 @@ using System;
 using CustomMessages;
 using Network;
 using Network.Connexion_Menu;
-using UnityEditor.Experimental.TerrainAPI;
 using UnityEngine;
 
 namespace Tutorial {
@@ -11,12 +10,15 @@ namespace Tutorial {
     public class FakePCPlayer : AttackSensitiveButton {
 
         [SerializeField] private Transform[] m_path = null;
+        [SerializeField] private Vector3[] m_pathIfDetected = null;
+        private Vector3[] m_originalPathStamp = null;
         [SerializeField] private bool m_mustLoopPath = true;
         [SerializeField] private MeshRenderer[] m_renderers;
         [SerializeField, Range(0f, 50f)] private float m_speed = 15f;
         [SerializeField, Range(0f, 5f)] private float m_uncertainty = 15f;
 
         private int m_currentPathIndex = 0;
+        private bool m_isOnAlternative = false;
 
         private bool m_isRunning = false;
 
@@ -34,7 +36,7 @@ namespace Tutorial {
                 meshRenderer.enabled = true;
             }
             LocalLaser.SetNewSensitiveTargetForAll?.Invoke(this);
-            LocalBeaconFeedback.fakePcPlayerTarget = transform;
+            LocalBeaconFeedback.fakePcPlayerTarget = this;
         }
 
         // Update is called once per frame
@@ -66,7 +68,7 @@ namespace Tutorial {
             m_isRunning = false;
             LocalLaser.SetNewSensitiveTargetForAll?.Invoke(null);
             LocalBeaconFeedback.fakePcPlayerTarget = null;
-            TutorialManager.singleton.NextStep();
+            TutorialManager.singleton.StartCoroutine(TutorialManager.singleton.NextStep());
         }
 
         private void OnDrawGizmosSelected() {
@@ -75,6 +77,34 @@ namespace Tutorial {
             foreach (Transform tran in m_path) {
                 Gizmos.DrawWireSphere(tran.position, m_uncertainty);
             }
+            Gizmos.color = Color.grey;
+            foreach (Vector3 pos in m_pathIfDetected) {
+                Gizmos.DrawWireSphere(pos, m_uncertainty);
+            }
+        }
+
+        public void ChangeToAlternativePath() {
+            if(m_isOnAlternative) return;
+            m_originalPathStamp = new Vector3[m_path.Length];
+            for (int i = 0; i < m_originalPathStamp.Length; i++) {
+                m_originalPathStamp[i] = m_path[i].position;
+                m_path[i].position = m_pathIfDetected[i];
+            }
+            m_isOnAlternative = true;
+        }
+
+        public void GoBackToOriginalPath() {
+            if(!m_isOnAlternative) return;
+            for (int i = 0; i < m_originalPathStamp.Length; i++) {
+                m_path[i].position = m_originalPathStamp[i];
+            }
+            m_isOnAlternative = false;
+        }
+
+        public void ResetPosition() {
+            transform.position = m_path[0].position;
+            m_currentPathIndex = 0;
+            m_isRunning = true;
         }
 
         public override void OnBeingActivated() {

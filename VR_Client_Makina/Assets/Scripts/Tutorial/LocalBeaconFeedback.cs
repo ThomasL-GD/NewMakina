@@ -9,7 +9,7 @@ namespace Tutorial {
 
         [HideInInspector] public int m_index;
 
-        public static Transform fakePcPlayerTarget = null;
+        public static FakePCPlayer fakePcPlayerTarget = null;
         private bool m_isDetecting = false;
         private float m_range;
         private static readonly int CodeBeaconColor = Shader.PropertyToID("_Beacon_Color");
@@ -31,7 +31,7 @@ namespace Tutorial {
                     return;
             }
 
-            bool isDetectingThisFrame = Vector3.Distance(fakePcPlayerTarget.position, transform.position) < m_range;
+            bool isDetectingThisFrame = Vector3.Distance(fakePcPlayerTarget.transform.position, transform.position) < m_range;
 
             if (m_isDetecting == isDetectingThisFrame) return;
                 m_isDetecting = isDetectingThisFrame;
@@ -45,9 +45,11 @@ namespace Tutorial {
             switch (m_isDetecting) {
                 case true:
                     newColor = Color.green;
+                    if (fakePcPlayerTarget != null)fakePcPlayerTarget.ChangeToAlternativePath();
                     break;
                 case false:
                     newColor = Color.red;
+                    if (fakePcPlayerTarget != null)fakePcPlayerTarget.GoBackToOriginalPath();
                     break;
             }
             
