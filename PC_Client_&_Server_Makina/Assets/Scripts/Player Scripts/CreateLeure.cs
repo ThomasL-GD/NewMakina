@@ -18,6 +18,8 @@ public class CreateLeure : AbstractMechanic
     
     [SerializeField] private ReloadingAbstract m_coolDownScript;
     
+    [SerializeField] private bool m_isTutorial = false;
+    
     private bool m_canSpawnLeure = true;
 
     private GameObject m_leure;
@@ -32,7 +34,7 @@ public class CreateLeure : AbstractMechanic
     // Update is called once per frame
     void Update()
     {
-        if(!SynchronizeInitialData.vrConnected) return;
+        if(!SynchronizeInitialData.vrConnected && !m_isTutorial) return;
         if (m_canSpawnLeure && Input.GetKeyDown(m_leureKey))
         {
             m_canSpawnLeure = false;
