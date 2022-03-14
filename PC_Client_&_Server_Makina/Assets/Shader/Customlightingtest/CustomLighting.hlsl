@@ -49,7 +49,7 @@ Outputs CustomLightHandling(CustomLightingData d, Light light)
 {
     float3 radiance = light.color * (light.distanceAttenuation * light.shadowAttenuation);
     
-    float lightLvl = light.distanceAttenuation * light.shadowAttenuation;
+    float lightLvl = light.distanceAttenuation * light.shadowAttenuation * max(max(light.color.r,light.color.g),light.color.b);
     
     float diffuse = saturate(dot(d.normalWS,light.direction));
     float specularDot = saturate(dot(d.normalWS, normalize(light.direction + d.viewDirectionWS)));
@@ -57,7 +57,7 @@ Outputs CustomLightHandling(CustomLightingData d, Light light)
     
     float3 color = d.albedo * radiance * (diffuse + specular);
 
-    lightLvl = lightLvl * (diffuse + specular);
+    lightLvl = lightLvl;
     
     Outputs outputs;
     outputs.color = color;
