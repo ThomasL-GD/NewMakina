@@ -16,6 +16,9 @@ namespace Synchronizers
 
         [SerializeField] private GameObject m_waitingForPlayerFeddback;
         [SerializeField] private GameObject[] m_unloadOnInitialData;
+
+        public static bool vrConnected;
+        
         /// <summary/> The PC Health data saved localy
         private int m_pcHealth;
         
@@ -32,7 +35,11 @@ namespace Synchronizers
             ClientManager.OnReceiveReadyToPlay += ReceiveReady;
         }
 
-        private void ReceiveReady(ReadyToPlay p_activateblind) => m_waitingForPlayerFeddback.SetActive(false);
+        private void ReceiveReady(ReadyToPlay p_activateblind)
+        {
+            m_waitingForPlayerFeddback.SetActive(false);
+            vrConnected = true;
+        } 
         
 
         private void Reset(GameEnd p_gameEnd = new GameEnd())

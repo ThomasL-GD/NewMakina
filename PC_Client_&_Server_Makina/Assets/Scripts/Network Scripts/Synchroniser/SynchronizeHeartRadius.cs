@@ -22,7 +22,7 @@ public class SynchronizeHeartRadius : Synchronizer<SynchronizeHeartRadius>
     private void ReceiveHeartConquerStop(HeartConquerStop p_heartconquerstop)
     {
         m_heartRadiusFeedback.enabled = false;
-        m_heartRadiusFeedback.text = "Breaking Heart : ";
+        m_heartRadiusFeedback.text = "";
     }
     
 

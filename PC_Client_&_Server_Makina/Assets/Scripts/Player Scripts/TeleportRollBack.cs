@@ -2,11 +2,11 @@ using CustomMessages;
 using Mirror;
 using Player_Scripts.Reloading;
 using Synchronizers;
-using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TeleportRollBack : MonoBehaviour
+public class TeleportRollBack : AbstractMechanic
 {
     [SerializeField] private KeyCode m_placeOrTeleportKey;
     [SerializeField] private GameObject m_teleportLocationPrefab;
@@ -19,6 +19,8 @@ public class TeleportRollBack : MonoBehaviour
     private bool m_canUse = true;
 
     [SerializeField] private ReloadingAbstract m_coolDownScript;
+
+    [SerializeField] private bool m_isTutorial = false;
     
     private void Awake()
     {
@@ -43,6 +45,7 @@ public class TeleportRollBack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!SynchronizeInitialData.vrConnected && !m_isTutorial) return;
         if (m_canUse && Input.GetKeyDown(m_placeOrTeleportKey))
         {
             if (m_placed)

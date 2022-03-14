@@ -1,7 +1,7 @@
 using UnityEngine;
 
-public class InflateToSize : MonoBehaviour
-{
+public class InflateToSize : MonoBehaviour {
+    
     [HideInInspector] public float m_inflationTime = .5f;
     private float m_inflationSpeed = 1f;
     [HideInInspector] public float m_targetScale = 1f;

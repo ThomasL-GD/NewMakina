@@ -48,6 +48,8 @@ public class ServerManager : MonoBehaviour
     [SerializeField, Range(1,120), Tooltip("the server's tick rate in Hz")] private int f_tickrate = 30;
     private int m_tickrate = 30;
     private float m_tickDelta = 1f;
+
+    [SerializeField] [Tooltip("Do not edit this value, it id for debug only.\nYou can remove this SerializeField if everything is working fine")] private bool m_isInTutorial = false;
     
     /// <summary/> The custom variables added onto the Network Manager
     [Header("Laser :")]
@@ -199,6 +201,7 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<DropTp>(OnDropTp);
         NetworkServer.RegisterHandler<RemoveTp>(OnRemoveTp);
         NetworkServer.RegisterHandler<Teleported>(OnTeleported);
+        NetworkServer.RegisterHandler<Tutorial>(OnReceiveTutorial);
     }
 
 
@@ -285,6 +288,9 @@ public class ServerManager : MonoBehaviour
         m_elevatorSpeed = f_elevatorSpeed;
         m_elevatorWaitTime = f_elevatorWaitTime;
         m_heartTransforms = f_heartTransforms;
+
+        foreach (var tr in m_heartTransforms) tr.localScale = Vector3.one;
+        
         m_vrPlayerHealth = f_vrPlayerHealth;
         m_pcPlayerHealth = f_pcPlayerHealth;
         m_initialBeacons = f_initialBeacons;
@@ -318,13 +324,13 @@ public class ServerManager : MonoBehaviour
         m_gameEnded = false;
         
         // Doing a small checkup
-        if (m_vrPlayerHealth > m_heartTransforms.Length) Debug.LogWarning("the Vr Player has more health than there are hearts... Big L?",this);
+        if (f_vrPlayerHealth > f_heartTransforms.Length) Debug.LogWarning("the Vr Player has more health than there are hearts... Big L?",this);
         
         //Unpacking the heart position values from the transforms to send through messages
         List<Vector3> heartPositions = new List<Vector3>();
         List<Quaternion> heartRotations = new List<Quaternion>();
 
-        foreach (Transform pos in m_heartTransforms)
+        foreach (Transform pos in f_heartTransforms)
         {
             heartPositions.Add(pos.position);
             heartRotations.Add(pos.rotation);
@@ -521,7 +527,7 @@ public class ServerManager : MonoBehaviour
         float playerHeight = m_pcTransformBuffer.position.y;
         for (int i = 0; i < m_heartTransforms.Length; i++)
         {
-            if(m_heartTransforms[i] == null) continue;
+            if(m_heartTransforms[i].localScale == Vector3.zero) continue;
             
             if(Mathf.Abs(playerHeight - m_heartTransforms[i].position.y) > 10f) continue;
             
@@ -533,8 +539,9 @@ public class ServerManager : MonoBehaviour
                 
                 if (m_heartTimer>m_heartDestroyTime)
                 {
-                    m_heartTransforms[i] = null;
+                    m_heartTransforms[i].localScale = Vector3.zero;
                     SendToBothClients(new HeartBreak() {index = i});
+                    m_vrPlayerHealth--;
                 }
                 return;
             }
@@ -606,7 +613,6 @@ public class ServerManager : MonoBehaviour
     
     private void OnRestartGame(NetworkConnection arg1, RestartGame p_restartGame)
     {
-        Debug.Log($"Received RestartGame message from client :{arg1.address}");
         if(m_vrNetworkConnection != null && m_pcNetworkConnection !=null) {
             EndGame();
             SendReady();
@@ -652,11 +658,11 @@ public class ServerManager : MonoBehaviour
     /// function called when the server receives a message of type ClientConnect
     /// </summary>
     /// <param name="p_conn"> The connection from which originated the message </param>
-    /// <param name="p_vrTransform"> The message sent by the Client to the Server  </param>
-    private void OnServerReceiveClientConnect(NetworkConnection p_conn, ClientConnect client)
+    /// <param name="p_client"> The message sent by the Client to the Server  </param>
+    private void OnServerReceiveClientConnect(NetworkConnection p_conn, ClientConnect p_client)
     {
-        if (client.client == ClientConnection.VrPlayer) m_vrNetworkConnection = p_conn;
-        else if (client.client == ClientConnection.PcPlayer) m_pcNetworkConnection = p_conn;
+        if (p_client.client == ClientConnection.VrPlayer) m_vrNetworkConnection = p_conn;
+        else if (p_client.client == ClientConnection.PcPlayer) m_pcNetworkConnection = p_conn;
 
         if (m_vrNetworkConnection != null && m_pcNetworkConnection != null)
         {
@@ -728,8 +734,11 @@ public class ServerManager : MonoBehaviour
     /// </summary>
     /// <param name="p_conn"> The connection from which originated the message </param>
     /// <param name="p_pcTransform"> The message sent by the Client to the Server  </param>
-    private void OnServerReceivePctransform(NetworkConnection p_conn,PcTransform p_pcTransform)
-    {
+    private void OnServerReceivePctransform(NetworkConnection p_conn,PcTransform p_pcTransform) {
+#if UNITY_EDITOR
+        //TODO : maybe cancel the receive ? Only if we really want this to be cheat-proof
+        if(p_conn == m_vrNetworkConnection && !m_isInTutorial)Debug.LogWarning("I just received PC position from the Vr side ﴾͡๏̯͡๏﴿");
+#endif
         m_pcTransformBuffer = p_pcTransform;
     }
 
@@ -740,8 +749,8 @@ public class ServerManager : MonoBehaviour
     /// </summary>
     /// <param name="p_conn"> The connection from which originated the message </param>
     /// <param name="p_vrlaser"> The message sent by the Client to the Server </param>
-    private void OnServerReceiveVrLaser(NetworkConnection p_conn, VrLaser p_vrlaser)
-    {
+    private void OnServerReceiveVrLaser(NetworkConnection p_conn, VrLaser p_vrlaser) {
+        
         m_laserBuffer = new Laser();
         m_laserBuffer.laserState = p_vrlaser.laserState;
         
@@ -758,7 +767,6 @@ public class ServerManager : MonoBehaviour
             Vector3 direction = m_vrTransformBuffer.rotationRightHand * Vector3.forward;
             Vector3 playerPos = m_pcTransformBuffer.position + Vector3.up * m_laserCheckOffset/2f;
             Vector3 laserCriticalPath = (playerPos + Vector3.up * m_laserCheckOffset / 2f) - startingPoint;
-            
             Debug.DrawLine(playerPos,playerPos + Vector3.up * m_laserCheckOffset/2f,Color.red,5f);
             
             // Hitboxes Verification (blame Blue)
@@ -804,7 +812,6 @@ public class ServerManager : MonoBehaviour
             bool hitLeure = false;
             if(!hit)
             {
-                Debug.Log("1");
                 Vector3 leurePosition = m_leureBuffer.position + Vector3.up * m_laserCheckOffset / 2f;
                 laserCriticalPath = (leurePosition + Vector3.up * m_laserCheckOffset / 2f) - startingPoint;
 
@@ -812,13 +819,11 @@ public class ServerManager : MonoBehaviour
                 hitLeure = distance <= m_laserRadius && Vector3.Angle(leurePosition - startingPoint, direction) < 90f;
 
                 
-                if (hitLeure && !Physics.Raycast(startingPoint, laserCriticalPath.normalized, out hited, laserCriticalPath.magnitude, m_playerLayers, QueryTriggerInteraction.Ignore))
+                if (hitLeure && !Physics.Raycast(startingPoint, laserCriticalPath.normalized, out hited, laserCriticalPath.magnitude, m_playerLayers, QueryTriggerInteraction.Ignore)) 
                 {
-                    Debug.Log("2");
                     if(m_flashCoroutine != null)StopCoroutine(m_flashCoroutine);
                     m_flashCoroutine = StartCoroutine(Flash(m_flashDuration));
-                    m_pcNetworkConnection.Send(new DestroyLeure());
-                    Debug.Log("3");
+                    SendToBothClients(new DestroyLeure());
                 }
             }
             
@@ -834,7 +839,7 @@ public class ServerManager : MonoBehaviour
     }
 
     /// <summary>
-    /// function called when the server receives a message of type Invisbility
+    /// function called when the server receives a message of type PcInvisibility
     /// </summary>
     /// <param name="p_conn"> The connection from which originated the message </param>
     /// <param name="p_pcInvisibility"> The message sent by the Client to the Server  </param>
@@ -931,6 +936,8 @@ public class ServerManager : MonoBehaviour
         OnServerTick -= SendElevatorActivation;
         OnServerTick += SendElevatorActivation;
     }
+
+    private void OnReceiveTutorial(NetworkConnection p_conn, Tutorial p_tutorial) => m_isInTutorial = p_tutorial.isInTutorial;
     
     #endregion
 

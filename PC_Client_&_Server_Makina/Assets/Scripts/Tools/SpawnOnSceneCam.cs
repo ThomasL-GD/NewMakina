@@ -18,7 +18,7 @@ public class SpawnOnSceneCam : MonoBehaviour
     
     private void GetSceneViewPosition(SceneView window)
     {
-        Undo.RecordObject(transform, "Teleport Player to Scene View");
+//        Undo.RecordObject(transform, "Teleport Player to Scene View");
         SceneView.duringSceneGui -= GetSceneViewPosition;
         transform.position = window.camera.transform.position;
     }
