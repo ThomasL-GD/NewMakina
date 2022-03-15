@@ -17,10 +17,6 @@ class FacadePlacer : EditorWindow
     /// <summary/> the corner prefab
     private static GameObject m_corner;
     
-    /// <summary/> the spacing between the elements
-    private static float m_spacing = 7.64f;
-    /// <summary/> the margin on the face
-    private static float m_margin = 3.382f;
     /// <summary/> the height at which the object will be placed
     private static float m_lineHeight = 65.769f;
     /// <summary/> the y offset of the corner
@@ -35,12 +31,12 @@ class FacadePlacer : EditorWindow
 
     private static bool m_useCorners = true;
     private static int m_lines = 3;
-    private static float m_lineStep = 6.5f;
     private static Vector3 m_previewRotationOffset = Vector3.zero;
     private static float m_assetWidth = 6.2f;
+    private static float m_assetHeight = 6.5f;
 
     /// <summary/> The function called when the MenuItem is called to create the window
-    [MenuItem("Tools/Window Placer 2")]
+    [MenuItem("Tools/Facade Placer")]
     static void Init()
     {
         // Instantiating or fetching the PrefabPicasso window 
@@ -97,6 +93,21 @@ class FacadePlacer : EditorWindow
         
         if(m_useCorners && m_corner != null) m_corners = new List<Point>();
         m_points = new List<Point>();
+
+        m_lineHeight = v[0].y * m_selection.transform.lossyScale.y;
+
+        float lineTop = m_lineHeight;
+        for (uint i =1; i < v.Length; i++)
+        {
+            float y = v[i].y * m_selection.transform.lossyScale.y;
+            m_lineHeight = Min(m_lineHeight, y);
+            lineTop = Max(lineTop,y);
+        }
+        
+        m_lineHeight += 0.005f;
+
+        m_lines = CeilToInt((lineTop - m_lineHeight) / m_assetHeight);
+
         for (int lineNumber = 0; lineNumber < m_lines; lineNumber++)
         {
             FacadeState facadeState = lineNumber == 0 ? FacadeState.bottom : lineNumber == m_lines - 1 ? FacadeState.top : FacadeState.normal;
@@ -108,7 +119,7 @@ class FacadePlacer : EditorWindow
             {
                 List<Intersections> localLine = new List<Intersections>();
                 // finding the triangles on the line
-                triangle.DrawHorizontalLineAlongMesh(selection.transform.position,m_lineHeight + (m_lineStep * lineNumber),selection.transform.rotation, selection.transform.localScale, out localLine);
+                triangle.DrawHorizontalLineAlongMesh(selection.transform.position,m_lineHeight + (m_assetHeight * lineNumber),selection.transform.rotation, selection.transform.localScale, out localLine);
                 foreach (var item in localLine)
                 {
                     bool canAdd = true;
@@ -158,7 +169,7 @@ class FacadePlacer : EditorWindow
                     
                     float dotAbs = Abs(Vector3.Dot((links[i].A - links[i].B).normalized, (links[j].A - links[j].B).normalized));
             
-                    if (connected && Approximately(dotAbs , 1f))
+                    if (connected && (1f - dotAbs) < 0.01f)
                     {
                         if (links[i].A == links[j].A)
                         {
@@ -179,7 +190,10 @@ class FacadePlacer : EditorWindow
                     }
                 }
             }
+
+            foreach (var link in links) link.DrawLink();
             
+
             MeshFilter meshFilter;
 
             // Getting the corners
@@ -270,29 +284,35 @@ class FacadePlacer : EditorWindow
 
             foreach (var link in links)
             {
-                float length = Vector3.Distance(link.A, link.B);
-                if (length < m_margin  * 2f + m_spacing)
-                {
-                    Vector3 position = (link.A + link.B)/2f;
-                    Quaternion prefabRotation;
-                    prefabRotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward, new Vector3(link.normal.x,0,link.normal.z), Vector3.up) + m_previewRotationOffset);
-                    Graphics.DrawMeshNow(windowMesh, position, prefabRotation);
-                    prefabRotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward, new Vector3(link.normal.x,0,link.normal.z), Vector3.up) + m_facade.transform.eulerAngles);
-                    float scaleLocal = Vector3.Distance(link.A, link.B) /m_assetWidth;
-                    m_points.Add(new Point(position,prefabRotation,facadeState,scaleLocal));
-                    continue;
-                }
                 
-                int amount = (int)Ceil((length - m_margin*2f) / m_spacing);
-                float step = (length - m_margin*2) / amount;
+                float length = Vector3.Distance(link.A, link.B);
+                int amount = RoundToInt(length / m_assetWidth);
+                amount = Max(1, amount);
+                float step = length / amount;
                 float scale = step/m_assetWidth;
                 
-                for (int i = 0; i <= amount; i++)
+                for (int i = 0; i < amount; i++)
                 {
-                    Vector3 position = link.A + (link.B - link.A).normalized * (step * i + m_margin);
+                    Vector3 position = link.A + (link.B - link.A).normalized * (step * i + m_assetWidth * scale / 2f);
                     Quaternion prefabRotation;
                     prefabRotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward, new Vector3(link.normal.x,0,link.normal.z), Vector3.up) + m_previewRotationOffset);
-                    Graphics.DrawMeshNow(windowMesh, position, prefabRotation);
+                    
+                    
+                    GameObject preview = new GameObject
+                    {
+                        transform =
+                        {
+                            position = position,
+                            rotation = prefabRotation,
+                            localScale = new Vector3(scale,1,1)
+                        }
+                    };
+                    
+                    Matrix4x4 matrix = preview.transform.localToWorldMatrix;
+                    
+                    DestroyImmediate(preview);
+                    
+                    Graphics.DrawMeshNow(windowMesh, matrix);
                     prefabRotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward, new Vector3(link.normal.x,0,link.normal.z), Vector3.up) + m_facade.transform.eulerAngles);
                     m_points.Add(new Point(position,prefabRotation,facadeState,scale));
                 }
@@ -396,8 +416,8 @@ class FacadePlacer : EditorWindow
             Vector3 v2 = p_rotation * Vector3.Scale(vertex2, p_scale);
             Vector3 v3 = p_rotation * Vector3.Scale(vertex3, p_scale);
             Vector3 n = p_rotation * normal;
-            bool tooHigh = v1.y >= p_lineHeight && v2.y >= p_lineHeight && v3.y >= p_lineHeight;
-            bool tooLow = v1.y <= p_lineHeight && v2.y <= p_lineHeight && v3.y <= p_lineHeight;
+            bool tooHigh = v1.y >= p_lineHeight+Epsilon && v2.y >= p_lineHeight+Epsilon && v3.y >= p_lineHeight+Epsilon;
+            bool tooLow = v1.y <= p_lineHeight-Epsilon && v2.y <= p_lineHeight-Epsilon && v3.y <= p_lineHeight-Epsilon;
             
             if (!tooHigh && !tooLow)
             {
@@ -463,14 +483,8 @@ class FacadePlacer : EditorWindow
         if(m_facade == null) return;
 
         m_assetWidth = FloatField("asset width", m_assetWidth);
+        m_assetHeight = FloatField("asset height", m_assetHeight);
         
-        m_spacing=FloatField("spacing", m_spacing);
-        m_margin=FloatField("margin", m_margin);
-        m_lineHeight=FloatField("lineHeight", m_lineHeight);
-
-        
-        m_lines = IntField("line amount", m_lines);
-        m_lineStep = FloatField("line step", m_lineStep);
 
         if(m_selection==null) return;
         if (Button("\nCenter!\n"))
@@ -480,20 +494,24 @@ class FacadePlacer : EditorWindow
 
         if (Button("\nPlace Windows!\n"))
         {
-            var gigaParent = new GameObject(){name =  "facades", tag = "HoudinAllRight Select Ignore"};
-            gigaParent.transform.parent = m_selection.transform;
-            Undo.RegisterCreatedObjectUndo(gigaParent, "created parent");
+            var facadesParent = new GameObject(){name =  "facades", tag = "HoudinAllRight Select Ignore"};
+            facadesParent.transform.SetParent(m_selection.transform);
+            //Undo.RegisterCreatedObjectUndo(facadesParent, "created parent");
 
             var middleParent = new GameObject(){name = "middle facades"};
             var topParent = new GameObject(){name = "top facades"};
             var bottomParent = new GameObject(){name = "bottom facades"};
 
-            middleParent.transform.parent = gigaParent.transform;
-            topParent.transform.parent = gigaParent.transform;
-            bottomParent.transform.parent = gigaParent.transform;
+            middleParent.transform.SetParent(facadesParent.transform);
+            topParent.transform.SetParent(facadesParent.transform);
+            bottomParent.transform.SetParent(facadesParent.transform);
             
-            foreach (Point point in m_points)
+            if(m_points == null) return;
+            
+            //foreach (Point point in m_points)
+            for(int i = 0; i < m_points.Count;i ++)
             {
+                Point point = m_points[i];
                 GameObject prefab = m_facade;
                 GameObject parent = middleParent;
                 switch (point.facadeState)
@@ -518,14 +536,14 @@ class FacadePlacer : EditorWindow
                 
                 Vector3 scale = windowTransform.localScale;
                 windowTransform.localScale = new Vector3(scale.x * point.width,scale.y,scale.z);
-                
-                windowTransform.parent = parent.transform;
+
+                if (parent != null) windowTransform.SetParent(parent.transform);
             }
 
             if (m_useCorners && m_corner != null)
             {
                 GameObject cornerParent = new GameObject(){name = "corners"};
-                cornerParent.transform.parent = gigaParent.transform;
+                cornerParent.transform.parent = facadesParent.transform;
 
                 foreach (Point corner in m_corners)
                 {
@@ -536,7 +554,7 @@ class FacadePlacer : EditorWindow
                     Transform cornerTransform = cornerPrefab.transform;
                     cornerTransform.position = corner.position + Vector3.up * m_cornerOffset;
                     cornerTransform.rotation = corner.rotation;
-                    cornerTransform.parent = cornerParent.transform;
+                    if(cornerParent!= null)cornerTransform.SetParent(cornerParent.transform);
                 }
             }
         }

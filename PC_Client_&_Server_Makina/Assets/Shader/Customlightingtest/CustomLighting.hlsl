@@ -48,9 +48,11 @@ Outputs CustomLightHandling(CustomLightingData d, Light light)
     // setting the level of light (radiance)
     float3 radiance = light.color * (light.distanceAttenuation * light.shadowAttenuation);
 
-    // Getting the level of light
-    float lightLvl = light.distanceAttenuation * light.shadowAttenuation * max(max(light.color.r,light.color.g),light.color.b);
-
+    // Getting the luminance level of light
+    float luminance =  0.3  * light.color.r + 0.59  * light.color.g + 0.11  * light.color.b;
+    float lightLvl = light.distanceAttenuation * light.shadowAttenuation * luminance;
+    
+    
     // Getting the diffuse lighting
     float diffuse = saturate(dot(d.normalWS,light.direction));
 
@@ -141,7 +143,6 @@ void CalculateCustomLighting_float(float3 Position, float3 Normal,float3 ViewDir
 
     d.fogFactor = ComputeFogFactor(positionCS.z);
     #endif
-    
     Outputs outputs = CalculateCustomLighting(d);
     Color = outputs.color;
     LightLevel = outputs.lightLevel;
