@@ -1,5 +1,5 @@
-#ifndef CUSTOM_LIGHTING_INCLUDED
-#define CUSTOM_LIGHTING_INCLUDED
+#ifndef CUSTOM_LIGHTING_CEL_INCLUDED
+#define CUSTOM_LIGHTING_CEL_INCLUDED
 
 // This is a neat trick to work around a bug in the shader graph when
 // enabling shadow keywords. Created by @cyanilux
@@ -11,8 +11,8 @@
     #endif
 #endif
 
-// Une struct qui contient le lighting data du vertex actuel
 struct CustomLightingData {
+
     // position and orientation
     float3 positionWS;
     float3 normalWS;
@@ -27,7 +27,6 @@ struct CustomLightingData {
     float fogFactor;
 };
 
-// Une struct qui contient les data's qui vont être renvoyés au shader
 struct Outputs
 {
     float3 color;
@@ -39,29 +38,27 @@ float GetSmoothnessPower(float rawSmoothness) {
     return exp2(10 * rawSmoothness + 1);
 }
 
-// Sorting through the shader graph preview to avoid errors
 #ifndef SHADERGRAPH_PREVIEW
+float3 CustomGlobalIllumination(CustomLightingData d) {
+    float3 indirectDiffuse = d.albedo * d.ambientOcclusion;
 
-// Handling the light
+    return indirectDiffuse;
+}
+
 Outputs CustomLightHandling(CustomLightingData d, Light light)
 {
-    // setting the level of light (radiance)
     float3 radiance = light.color * (light.distanceAttenuation * light.shadowAttenuation);
-
-    // Getting the level of light
+    
     float lightLvl = light.distanceAttenuation * light.shadowAttenuation * max(max(light.color.r,light.color.g),light.color.b);
-
-    // Getting the diffuse lighting
+    
     float diffuse = saturate(dot(d.normalWS,light.direction));
-
-    // Getting the specular lighting
     float specularDot = saturate(dot(d.normalWS, normalize(light.direction + d.viewDirectionWS)));
     float specular = pow(specularDot, GetSmoothnessPower(d.smoothness)) * diffuse;
-
-    // Setting the color to it's new value
+    
     float3 color = d.albedo * radiance * (diffuse + specular);
 
-    //returning the outputs
+    lightLvl = lightLvl;
+    
     Outputs outputs;
     outputs.color = color;
     outputs.lightLevel = lightLvl;
@@ -70,7 +67,6 @@ Outputs CustomLightHandling(CustomLightingData d, Light light)
 }
 #endif
 
-// The function to calculate the custom lighting
 Outputs CalculateCustomLighting(CustomLightingData d) {
     Outputs outputs;
 #ifdef SHADERGRAPH_PREVIEW
@@ -83,20 +79,18 @@ Outputs CalculateCustomLighting(CustomLightingData d) {
     outputs.lightLevel = 1;
     return outputs;
 #else
-    // Get the main light
+    // Get the main light. Located in URP/ShaderLibrary/Lighting.hlsl
     Light mainLight = GetMainLight(d.shadowCoord, d.positionWS, 1);
 
-    // setting initial values
-    outputs.color = d.albedo * d.ambientOcclusion;
+    outputs.color = CustomGlobalIllumination(d);
     outputs.lightLevel = 0;
-    
     // Shading the main light
     Outputs results = CustomLightHandling(d,mainLight);
     outputs.color += results.color; 
     outputs.lightLevel += results.lightLevel; 
     
     #ifdef _ADDITIONAL_LIGHTS
-    // Running the lighting for every light interacting wih the object
+    // Shade additional cone and point lights. Functions in URP/ShaderLibrary/Lighting.hlsl
     uint numAdditionalLights = GetAdditionalLightsCount();
     for (uint i = 0; i < numAdditionalLights; i++) {
         Light light = GetAdditionalLight(i, d.positionWS, 1);
@@ -106,13 +100,11 @@ Outputs CalculateCustomLighting(CustomLightingData d) {
         outputs.lightLevel += results.lightLevel; 
     }
     #endif
-    // mixing the color with the fog
     outputs.color = MixFog(outputs.color, d.fogFactor);
     return outputs;
 #endif
 }
 
-// the function called by the custom node
 void CalculateCustomLighting_float(float3 Position, float3 Normal,float3 ViewDirection,
     float3 Albedo, float Smoothness, float AmbientOcclusion,
     out float3 Color, out float LightLevel) {
@@ -126,12 +118,13 @@ void CalculateCustomLighting_float(float3 Position, float3 Normal,float3 ViewDir
     d.ambientOcclusion = AmbientOcclusion;
 
     #ifdef SHADERGRAPH_PREVIEW
-    // In preview, there's no shadows
+    // In preview, there's no shadows or bakedGI
     d.shadowCoord = 0;
 
     d.fogFactor = 0;
     #else
-    // Calculate the main light shadow coords depending on if cascades are enabled
+    // Calculate the main light shadow coord
+    // There are two types depending on if cascades are enabled
     float4 positionCS = TransformWorldToHClip(Position);
     #if SHADOWS_SCREEN
         d.shadowCoord = ComputeScreenPos(positionCS);
