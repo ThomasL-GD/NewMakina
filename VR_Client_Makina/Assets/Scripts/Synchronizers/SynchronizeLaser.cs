@@ -23,8 +23,12 @@ namespace Synchronizers {
         
         [Header("Input")]
         [SerializeField] [Range(0.01f,1f)]/**/ private float m_upTriggerValue;
-        [SerializeField] private OVRInput.Axis1D m_input;
+        [SerializeField] private OVRInput.Axis1D m_inputLeft;
+        [SerializeField] private OVRInput.Axis1D m_inputRight;
         private bool m_isTriggerPressed = false;
+        private bool m_isUsingRight = false;
+        private bool m_isUsingLeft = false;
+        private bool m_isNotUsingAnySideYet => !(m_isUsingLeft || m_isUsingRight);
         
         [Header("Timings")]
         [SerializeField] [Range(0.1f,5f)] private float m_laserLoadingTime; //TODO : move that to initial data
@@ -41,6 +45,7 @@ namespace Synchronizers {
         [SerializeField] [Tooltip("If true, nice shot :)\nIf false, crippling emptiness...")] private bool m_niceShotQuestionMark = true;
         [SerializeField] private AudioClip m_niceShotSound = null;
 
+        /// <summary>The player is currently loading the laser</summary>
         private bool m_isLoading = false;
 
         // Start is called before the first frame update
@@ -112,8 +117,16 @@ namespace Synchronizers {
         private void Update() {
 
             if (!MyNetworkManager.singleton.m_canSend) return;
-        
-            if (!m_isTriggerPressed && !m_isLoading && OVRInput.Get(m_input) >= m_upTriggerValue) { // If the laser is OFF and the player press the trigger hard enough
+
+            OVRInput.Axis1D input;
+            if (m_isUsingRight) {
+                input = m_inputRight;
+            }else if (m_isUsingLeft) {
+                input = m_inputLeft;
+            }
+            else return;
+
+            if (!m_isTriggerPressed && !m_isLoading && OVRInput.Get(input) >= m_upTriggerValue) { // If the laser is OFF and the player press the trigger hard enough
             
                 MyNetworkManager.singleton.SendVrData<VrLaser>(new VrLaser(){laserState = LaserState.Aiming});
                 m_isLoading = true;
@@ -121,7 +134,9 @@ namespace Synchronizers {
                 m_elapsedTime = 0f;
             }
 
-            if (OVRInput.Get(m_input) < m_upTriggerValue) {
+            if (OVRInput.Get(input) < m_upTriggerValue) {
+                
+                
                 
                 MyNetworkManager.singleton.SendVrData<VrLaser>(new VrLaser(){laserState = LaserState.CancelAiming});
                 m_isTriggerPressed = false;
