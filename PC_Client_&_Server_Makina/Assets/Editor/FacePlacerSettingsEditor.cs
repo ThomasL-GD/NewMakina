@@ -41,95 +41,99 @@ public class FacePlacerSettingsEditor : Editor
         
         serializedObject.ApplyModifiedProperties();
 
-        FacePlacerSettings prefab = target as FacePlacerSettings;
+        FacePlacerSettings facePlacerSettings = target as FacePlacerSettings;
         
         Space();
         m_showPrefabProbability = Foldout(m_showPrefabProbability, "Prefab Probability", true, EditorStyles.foldoutHeader);
         
-        prefab.houdinAllRight = prefab.facadePrefab.GetComponent<HoudinAllRight>();
-        prefab.houdinAllRight.Refresh();
+        facePlacerSettings.houdinAllRight = facePlacerSettings.facadePrefab.GetComponent<HoudinAllRight>();
+        facePlacerSettings.houdinAllRight.Refresh();
 
-        for (int i = 0; i < prefab.houdinAllRight.m_children.Length; i++)
+        
+        for (int i = 0; i < facePlacerSettings.houdinAllRight.m_children.Length; i++)
         {
-            string buttonName = prefab.houdinAllRight.m_children[i].name;
+            string buttonName = facePlacerSettings.houdinAllRight.m_children[i].name;
             buttonName = buttonName.Replace("M_", "");
             buttonName = buttonName.Replace("P_", "");
             buttonName = buttonName.Replace('_', ' ');
             buttonName = buttonName.Replace("V ", "");
             buttonName = buttonName.Replace("O ", "");
 
-            if (prefab.prefabPlacingProbability.Count <= i) prefab.prefabPlacingProbability.Add(.5f);
+            if (facePlacerSettings.prefabPlacingProbability.Count <= i) facePlacerSettings.prefabPlacingProbability.Add(.5f);
             
             if (m_showPrefabProbability) {
                 LabelField(buttonName + " probability");
-                prefab.prefabPlacingProbability[i] = Slider(prefab.prefabPlacingProbability[i], 0f, 1f);
+                facePlacerSettings.prefabPlacingProbability[i] = Slider(facePlacerSettings.prefabPlacingProbability[i], 0f, 1f);
                 Space(8);
             }
         }
 
-        if (prefab.prefabPlacingProbability.Count > prefab.houdinAllRight.m_children.Length)
-            for (int i = prefab.prefabPlacingProbability.Count; i < prefab.prefabPlacingProbability.Count; i++)
-                prefab.prefabPlacingProbability.RemoveAt(i);
+        if (facePlacerSettings.prefabPlacingProbability.Count > facePlacerSettings.houdinAllRight.m_children.Length)
+            for (int i = facePlacerSettings.houdinAllRight.m_children.Length; i < facePlacerSettings.prefabPlacingProbability.Count; i++)
+                facePlacerSettings.prefabPlacingProbability.RemoveAt(i);
         
-        
-        m_showPrefabProbabilityBottom = Foldout(m_showPrefabProbabilityBottom, "Prefab Probability bottom", true, EditorStyles.foldoutHeader);
-        
-        
-        prefab.houdinAllRightBottom = prefab.facadePrefabBottom.GetComponent<HoudinAllRight>();
-        prefab.houdinAllRightBottom.Refresh();
 
-        for (int i = 0; i < prefab.houdinAllRightBottom.m_children.Length; i++)
+
+        m_showPrefabProbabilityBottom = Foldout(m_showPrefabProbabilityBottom, "Prefab Probability bottom", true, EditorStyles.foldoutHeader);
+
+        facePlacerSettings.houdinAllRightBottom = facePlacerSettings.facadePrefabBottom.GetComponent<HoudinAllRight>();
+        facePlacerSettings.houdinAllRightBottom.Refresh();
+
+        for (int i = 0; i < facePlacerSettings.houdinAllRightBottom.m_children.Length; i++)
         {
-            string buttonName = prefab.houdinAllRightBottom.m_children[i].name;
+            string buttonName = facePlacerSettings.houdinAllRightBottom.m_children[i].name;
             buttonName = buttonName.Replace("M_", "");
             buttonName = buttonName.Replace("P_", "");
             buttonName = buttonName.Replace('_', ' ');
             buttonName = buttonName.Replace("V ", "");
             buttonName = buttonName.Replace("O ", "");
 
-            if (prefab.prefabPlacingProbabilityBottom.Count <= i) prefab.prefabPlacingProbabilityBottom.Add(.5f);
+            if (facePlacerSettings.prefabPlacingProbabilityBottom.Count <= i) facePlacerSettings.prefabPlacingProbabilityBottom.Add(.5f);
 
             if (m_showPrefabProbabilityBottom)
             {
                 LabelField(buttonName + " probability");
-                prefab.prefabPlacingProbabilityBottom[i] = Slider(prefab.prefabPlacingProbabilityBottom[i], 0f, 1f);
+                facePlacerSettings.prefabPlacingProbabilityBottom[i] = Slider(facePlacerSettings.prefabPlacingProbabilityBottom[i], 0f, 1f);
                 Space(8);
             }
         }
 
-        if (prefab.prefabPlacingProbabilityBottom.Count > prefab.houdinAllRightBottom.m_children.Length)
-            for (int i = prefab.prefabPlacingProbabilityBottom.Count; i < prefab.prefabPlacingProbabilityBottom.Count; i++)
-                prefab.prefabPlacingProbabilityBottom.RemoveAt(i);
+        if (facePlacerSettings.prefabPlacingProbabilityBottom.Count > facePlacerSettings.houdinAllRightBottom.m_children.Length)
+            for (int i = facePlacerSettings.houdinAllRightBottom.m_children.Length; i < facePlacerSettings.prefabPlacingProbabilityBottom.Count; i++)
+                facePlacerSettings.prefabPlacingProbabilityBottom.RemoveAt(i);
+        
+        
+        
         
         
         
         m_showPrefabProbabilityTop = Foldout(m_showPrefabProbabilityTop, "Prefab Probability top", true, EditorStyles.foldoutHeader);
 
-        prefab.houdinAllRightTop = prefab.facadePrefabTop.GetComponent<HoudinAllRight>();
-        prefab.houdinAllRightTop.Refresh();
+        facePlacerSettings.houdinAllRightTop = facePlacerSettings.facadePrefabTop.GetComponent<HoudinAllRight>();
+        facePlacerSettings.houdinAllRightTop.Refresh();
 
-        for (int i = 0; i < prefab.houdinAllRightTop.m_children.Length; i++)
+        for (int i = 0; i < facePlacerSettings.houdinAllRightTop.m_children.Length; i++)
         {
-            string buttonName = prefab.houdinAllRightTop.m_children[i].name;
+            string buttonName = facePlacerSettings.houdinAllRightTop.m_children[i].name;
             buttonName = buttonName.Replace("M_", "");
             buttonName = buttonName.Replace("P_", "");
             buttonName = buttonName.Replace('_', ' ');
             buttonName = buttonName.Replace("V ", "");
             buttonName = buttonName.Replace("O ", "");
 
-            if (prefab.prefabPlacingProbabilityTop.Count <= i) prefab.prefabPlacingProbabilityTop.Add(.5f);
+            if (facePlacerSettings.prefabPlacingProbabilityTop.Count <= i) facePlacerSettings.prefabPlacingProbabilityTop.Add(.5f);
 
             if (m_showPrefabProbabilityTop)
             {
                 LabelField(buttonName + " probability");
-                prefab.prefabPlacingProbabilityTop[i] = Slider(prefab.prefabPlacingProbabilityTop[i], 0f, 1f);
+                facePlacerSettings.prefabPlacingProbabilityTop[i] = Slider(facePlacerSettings.prefabPlacingProbabilityTop[i], 0f, 1f);
                 Space(8);
             }
         }
 
-        if (prefab.prefabPlacingProbabilityTop.Count > prefab.houdinAllRightTop.m_children.Length)
-            for (int i = prefab.prefabPlacingProbabilityTop.Count; i < prefab.prefabPlacingProbabilityTop.Count; i++)
-                prefab.prefabPlacingProbabilityTop.RemoveAt(i);
+        if (facePlacerSettings.prefabPlacingProbabilityTop.Count > facePlacerSettings.houdinAllRightTop.m_children.Length)
+            for (int i = facePlacerSettings.houdinAllRightTop.m_children.Length; i < facePlacerSettings.prefabPlacingProbabilityTop.Count; i++)
+                facePlacerSettings.prefabPlacingProbabilityTop.RemoveAt(i);
         
     }
 }

@@ -38,6 +38,8 @@ class FacadePlacer : EditorWindow
     private static float m_assetWidth = 6.2f;
     private static float m_assetHeight = 6.5f;
 
+    private static bool m_useRandom = false;
+    
     /// <summary/> The function called when the MenuItem is called to create the window
     [MenuItem("Tools/Facade Placer")]
     static void Init()
@@ -215,8 +217,6 @@ class FacadePlacer : EditorWindow
                 }
             }
 
-            foreach (var link in links) link.DrawLink();
-
             MeshFilter meshFilter;
 
             // Getting the corners
@@ -282,17 +282,20 @@ class FacadePlacer : EditorWindow
 
             // Getting the mesh filter for the preview
             GameObject prefab = m_facade;
+            List<float> floatList = m_scriptableObject.prefabPlacingProbability;
 
             switch (facadeState)
             {
                 case FacadeState.top:
                     prefab = m_facadeTop;
+                    floatList = m_scriptableObject.prefabPlacingProbabilityBottom;
                     break;
                 case FacadeState.bottom:
                     prefab = m_facadeBottom;
+                    floatList = m_scriptableObject.prefabPlacingProbabilityTop;
                     break;
             }
-
+            
 
 
             // Setting the material before drawing 
@@ -318,25 +321,13 @@ class FacadePlacer : EditorWindow
                                              new Vector3(link.normal.x, 0, link.normal.z), Vector3.up) +
                                          m_facade.transform.eulerAngles);
 
-                    bool useRandom = i <= 0 || i >= amount -1;
+                    bool useRandom = i > 0 && i < amount -1;
+                    useRandom = m_useRandom && useRandom;
                     m_points.Add(new Point(position, prefabRotation, facadeState, scale, useRandom));
 
-                    List<float> floatList = m_scriptableObject.prefabPlacingProbability;
-
-                    switch (facadeState)
-                    {
-                        case FacadeState.bottom:
-                            floatList = m_scriptableObject.prefabPlacingProbabilityBottom;
-                            break;
-                        case FacadeState.top:
-                            floatList = m_scriptableObject.prefabPlacingProbabilityTop;
-                            break;
-                    }
-                    
                     if (prefab.TryGetComponent(out HoudinAllRight hr))
                     {
-                        GameObject childHr = hr.m_children[RandomFacades(floatList, m_points.Count - 1)];
-                        
+                        hr.Refresh();
                         GameObject preview = new GameObject
                         {
                             transform =
@@ -346,27 +337,25 @@ class FacadePlacer : EditorWindow
                                 localScale = new Vector3(scale, 1, 1)
                             }
                         };
-
+                        GameObject childHr;
+                        if (!useRandom) childHr = hr.m_children[0];
+                        else childHr = hr.m_children[RandomFacades(floatList, m_points.Count - 1)];
+                        
+                        
                         Matrix4x4 matrix = new Matrix4x4();
-                        if (useRandom) childHr = hr.m_children[0];
-
                         if (childHr.TryGetComponent(out meshFilter))
                         {
                             preview.transform.rotation = Quaternion.Euler(childHr.transform.rotation.eulerAngles + preview.transform.rotation.eulerAngles);
                             matrix = preview.transform.localToWorldMatrix;
                             Graphics.DrawMeshNow(meshFilter.sharedMesh, matrix);
-                            DestroyImmediate(preview);
                         }else if (childHr.transform.GetChild(0).TryGetComponent(out meshFilter))
                         {
                             preview.transform.rotation = Quaternion.Euler(childHr.transform.GetChild(0).rotation.eulerAngles + preview.transform.rotation.eulerAngles);
                             preview.transform.position += preview.transform.rotation * childHr.transform.GetChild(0).position;
                             matrix = preview.transform.localToWorldMatrix;
                             Graphics.DrawMeshNow(meshFilter.sharedMesh, matrix);
-                            DestroyImmediate(preview);
                         }
-                        
-                        
-                        
+                        DestroyImmediate(preview);
                     }
                 }
 
@@ -542,6 +531,7 @@ class FacadePlacer : EditorWindow
         Random.InitState(m_seed + CeilToInt(Pow(p_modifier, 1.5f)));
         float choice = Random.Range(0, total);
         float additive = 0f;
+        
         for (int i = 0; i < p_probabilities.Count; i++)
         {
             additive += p_probabilities[i];
@@ -549,7 +539,7 @@ class FacadePlacer : EditorWindow
         }
 
         Debug.LogError("Oh no wtf??");
-        return 2;
+        return -1;
     }
     
     private void OnGUI()
@@ -560,13 +550,17 @@ class FacadePlacer : EditorWindow
         String[] names = new string[scriptableObjects.Length];
 
         for (int i = 0; i < scriptableObjects.Length; i++) names[i] = scriptableObjects[i].name;
-        LabelField("Select a facade style :");
+        
         if (scriptableObjects.Length > 0)
         {
+            LabelField("Select a facade style :");
             Popup(selectedIndex,names);
             m_scriptableObject = scriptableObjects[selectedIndex];
-        }
+        }else LabelField("No facade styles found");
+
+        m_useRandom = Toggle("Use Random", m_useRandom);
         
+        if(Selection.count == 0) return;
         GameObject selection = Selection.objects[0] as GameObject;
         if(selection==null || !((GameObject)Selection.objects[0]).TryGetComponent(out MeshFilter filter)) return;
         m_selection = selection;
@@ -632,7 +626,6 @@ class FacadePlacer : EditorWindow
                     placedFacade.GetComponent<HoudinAllRight>().HoudinoEnable(RandomFacades(intList, i));
                 else
                 {
-                    Debug.Log("hey" + point.position);
                     placedFacade.GetComponent<HoudinAllRight>().HoudinoEnable(0);
                 }
                 

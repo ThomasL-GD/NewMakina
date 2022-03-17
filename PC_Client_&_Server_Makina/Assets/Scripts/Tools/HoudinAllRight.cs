@@ -19,7 +19,7 @@ namespace Tools
             // Creating the list that will contain all the children gameobjects
             List<GameObject> children= new List<GameObject>();
 
-            // Fetching all the childran and adding them to the list
+            // Fetching all the children and adding them to the list
             for (int i = 0; i < transform.childCount; i++) children.Add( transform.GetChild(i).gameObject);
 
             // Converting the list to array and setting it as the m_children value
