@@ -3,8 +3,7 @@ using CustomMessages;
 using Mirror;
 using UnityEngine;
 
-public class ElevatorBehavior : MonoBehaviour
-{
+public class ElevatorBehavior : MonoBehaviour {
     private float m_bottomPosition;
     
     [SerializeField, Tooltip("The top position that the elevator will go to")] private float m_topPosition;
