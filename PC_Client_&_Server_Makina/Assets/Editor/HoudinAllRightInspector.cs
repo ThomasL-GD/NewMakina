@@ -18,7 +18,7 @@ namespace EditorTools
         /// <summary/> Called every frame the GUI is visible
         public override void OnInspectorGUI()
         {
-            // Cycling through all the istances of the first indexed gameObject of m_instances
+            // Cycling through all the instances of the first indexed gameObject of m_instances
             for (int i = 0; i < m_instances[0].m_children.Length; i++)
             {
                 // Removing the noise of the object name
@@ -33,12 +33,7 @@ namespace EditorTools
                     // For each instance of Houdinallright in the m_instances
                     foreach (HoudinAllRight instance in m_instances)
                     {
-                        // Disable all the "unwanted" children
-                        for (int j = 0; j < instance.m_children.Length; j++)
-                            if (j != i) SafeSetActive(false, instance, j);
-
-                        //Enable the wanted child
-                        SafeSetActive(true, instance, i);
+                        instance.HoudinoEnable(i);
                     }
                 }
             }
@@ -51,46 +46,8 @@ namespace EditorTools
             //Adding a refresh button
             GUILayout.Space(20);
             if (GUILayout.Button("Refresh")) ResetArray();
-        
-            //Adding a refresh button
-            GUILayout.Space(20);
-            if (GUILayout.Button("Reset Edtor Only Children"))
-            {
-                foreach (HoudinAllRight script in m_instances)
-                {
-                    script.ResetEditorOnly();
-                }
-            }
         }
-    
 
-        /// <summary/> Sets the children of a HoudinAllRight class to active or inactive while avoiding null index issues
-        /// <param name="p_active"> the vakue to which the gameObject will be set (active or inactive) </param>
-        /// <param name="instance"> the HoudinAllRight instance itself </param>
-        /// <param name="p_index"> the gameObject index in the HoudinAllRight class </param>
-        private void SafeSetActive(bool p_active, HoudinAllRight instance, int p_index)
-        {
-        
-            if (instance.m_children[p_index] != null)
-            {
-                // Adding the modification to the CTRL Z List
-                Undo.RecordObject(instance.m_children[p_index], "Change GameObject with HoudinAllRight");
-                instance.m_children[p_index].SetActive(p_active);
-                instance.m_children[p_index].tag = p_active?"Untagged":"EditorOnly";
-            }
-            else
-            {
-                instance.Refresh();
-                // Adding the modification to the CTRL Z List
-                Undo.RecordObject(instance.m_children[p_index], "Change GameObject with HoudinAllRight");
-                if (instance.m_children[p_index] != null)
-                {
-                    instance.m_children[p_index].SetActive(p_active);
-                    instance.m_children[p_index].tag = p_active?"Untagged":"EditorOnly";
-                }
-            }
-        }
-    
         /// <summary/> Resets the Array of HoudinAllRight Selected scripts
         private void ResetArray()
         {
