@@ -1,8 +1,6 @@
-
 using static UnityEditor.EditorGUILayout;
 using UnityEditor;
 using UnityEngine;
-using ObjectField = UnityEditor.UIElements.ObjectField;
 
 public class CustomLitSettings : EditorWindow
 {
@@ -11,7 +9,8 @@ public class CustomLitSettings : EditorWindow
     private static readonly int m_globalLightingShaderValue = Shader.PropertyToID("_Global_Lighting");
     private static readonly int m_hashTextureShaderValue = Shader.PropertyToID("_Hash");
     private static readonly int m_occlusionShadervalue = Shader.PropertyToID("_Occlusion");
-
+    private static CustomLitSettingsSO m_customLitSettings;
+    
     [MenuItem("Tools/Custom Lit Settings")]
     static void Init()
     {
@@ -29,30 +28,47 @@ public class CustomLitSettings : EditorWindow
         
         // Updating the GUI of the window
         window.Repaint();
-
     }
 
     private void OnGUI()
     {
-        float shadowTiling = FloatField("Shadow Tiling", EditorPrefs.GetFloat("Shadow Tiling Editor Pref"));
-        Shader.SetGlobalFloat(m_tilingShaderValue,shadowTiling);
-        EditorPrefs.SetFloat("Shadow Tiling Editor Pref", shadowTiling);
-
-        float lightIntensityMultiplier = FloatField("Light Intensity Multiplier", EditorPrefs.GetFloat("Light Intensity Multiplier"));
-        Shader.SetGlobalFloat(m_lightIntensityMultiplierShaderValue,lightIntensityMultiplier);
-        EditorPrefs.SetFloat("Light Intensity Multiplier", lightIntensityMultiplier);
-
-        float defaultOcclusionValue = Slider("Ambient Occlusion", EditorPrefs.GetFloat("Ambient Occlusion"),0f,1f);
-        Shader.SetGlobalFloat(m_occlusionShadervalue,defaultOcclusionValue);
-        EditorPrefs.SetFloat("Ambient Occlusion", defaultOcclusionValue);
+        if (m_customLitSettings == null)
+        {
+            m_customLitSettings = Resources.Load("Custom Lit Settings/customLitSettings", typeof(CustomLitSettingsSO)) as CustomLitSettingsSO;
+            if (m_customLitSettings == null)
+            {
+                AssetDatabase.CreateAsset(CreateInstance<CustomLitSettingsSO>(), "Assets/Resources/Custom Lit Settings/customLitSettings.asset");
+                m_customLitSettings = Resources.Load("Custom Lit Settings/customLitSettings", typeof(CustomLitSettingsSO)) as CustomLitSettingsSO;
+            }
+            else return;
+        }
         
-        float globalIllumination = Slider("Global Illumination", EditorPrefs.GetFloat("Global Illumination"), 0f, 1f);
-        Shader.SetGlobalFloat(m_globalLightingShaderValue,globalIllumination);
-        EditorPrefs.SetFloat("Global Illumination", globalIllumination);
+        m_customLitSettings.shadowTiling = FloatField("Shadow Tiling", Mathf.Max(m_customLitSettings.shadowTiling,0f));
+        Shader.SetGlobalFloat(m_tilingShaderValue,m_customLitSettings.shadowTiling);
 
-        if (Shader.GetGlobalTexture(m_hashTextureShaderValue) == null) 
-            Shader.SetGlobalTexture(m_hashTextureShaderValue,Resources.Load("Hash V3", typeof(Texture2D)) as Texture2D);
+        m_customLitSettings.lightIntensityMultiplier = FloatField("Light Intensity Multiplier", Mathf.Max(m_customLitSettings.lightIntensityMultiplier,0f));
+        Shader.SetGlobalFloat(m_lightIntensityMultiplierShaderValue,m_customLitSettings.lightIntensityMultiplier);
+
+        m_customLitSettings.defaultOcclusionValue = Slider("Ambient Occlusion", m_customLitSettings.defaultOcclusionValue,0f,1f);
+        Shader.SetGlobalFloat(m_occlusionShadervalue,m_customLitSettings.defaultOcclusionValue);
+
+        m_customLitSettings.globalIllumination = Slider("Minimum Illumination Value", m_customLitSettings.globalIllumination, 0f, 1f);
+        Shader.SetGlobalFloat(m_globalLightingShaderValue,m_customLitSettings.globalIllumination);
+
+        m_customLitSettings.triplanarBlendSharpness = FloatField("TriplanarBlendSharpness", Mathf.Max(m_customLitSettings.triplanarBlendSharpness, 0f));
+        Shader.SetGlobalFloat("_TriplanarBlendSharpness", m_customLitSettings.triplanarBlendSharpness);
         
-        Shader.SetGlobalTexture(m_hashTextureShaderValue, (Texture2D)ObjectField("Shadow Hash", Shader.GetGlobalTexture(m_hashTextureShaderValue),typeof(Texture2D)));
+        m_customLitSettings.smoothStepR = Vector2Field("Smoothstep R",m_customLitSettings.smoothStepR);
+        Shader.SetGlobalVector("_Smoothstep_R", m_customLitSettings.smoothStepR);
+
+        m_customLitSettings.smoothStepG = Vector2Field("Smoothstep G",m_customLitSettings.smoothStepG);
+        Shader.SetGlobalVector("_Smoothstep_G", m_customLitSettings.smoothStepG);
+
+        m_customLitSettings.smoothStepB = Vector2Field("Smoothstep B",m_customLitSettings.smoothStepB);
+        Shader.SetGlobalVector("_Smoothstep_B", new Vector4(m_customLitSettings.smoothStepB.x,m_customLitSettings.smoothStepB.y,0,0));
+        
+        m_customLitSettings.shadowHashTexture = (Texture2D) ObjectField("Shadow Hash",
+            Shader.GetGlobalTexture(m_hashTextureShaderValue), typeof(Texture2D));
+        Shader.SetGlobalTexture(m_hashTextureShaderValue, m_customLitSettings.shadowHashTexture);
     }
 }
