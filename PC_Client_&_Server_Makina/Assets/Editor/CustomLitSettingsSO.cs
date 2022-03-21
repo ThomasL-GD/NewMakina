@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class CustomLitSettingsSO :ScriptableObject
 {
-    [HideInInspector]public float shadowTiling;
-    [HideInInspector]public float lightIntensityMultiplier;
-    [HideInInspector]public float defaultOcclusionValue;
-    [HideInInspector]public float globalIllumination;
-    [HideInInspector]public float triplanarBlendSharpness;
-    [HideInInspector]public Vector2 smoothStepR;
-    [HideInInspector]public Vector2 smoothStepG;
-    [HideInInspector]public Vector2 smoothStepB;
-    [HideInInspector]public Texture shadowHashTexture;
+    public float shadowTiling;
+    public float lightIntensityMultiplier;
+    public float defaultOcclusionValue;
+    public float globalIllumination;
+    public float triplanarBlendSharpness;
+    public Vector2 smoothStepR;
+    public Vector2 smoothStepG;
+    public Vector2 smoothStepB;
+    public Texture shadowHashTexture;
 }
