@@ -39,6 +39,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -80,7 +81,7 @@ MonoBehaviour:
   m_endLaserSize: 0.001
   m_upTriggerValue: 0.66
   m_input: 2
-  m_laserLoadingTime: 3
+  m_laserLoadingTime: 1.5
   m_laserPrefab: {fileID: 5777138034286177843, guid: e2cb3604f1d3e5e46b7298c10065f9e7, type: 3}
   m_prefabParticlesWhenKill: {fileID: 6186801345535467989, guid: 119ea4ac7361edb49996679ff68e6819, type: 3}
   m_prefabParticlesWallHit: {fileID: 6027568845842637197, guid: 4a34f0e0f9120c7488999a80f7c6b0a8, type: 3}
@@ -205,7 +206,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5783733579950633034}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62a3b15c84600fe4db9289f7e84855b3, type: 3}
   m_Name: 
@@ -254,16 +255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dfde674e1bc2fd42b174f07ef865e61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_elevators:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  m_elevators: []
 --- !u!114 &1469819181140471706
 MonoBehaviour:
   m_ObjectHideFlags: 0
