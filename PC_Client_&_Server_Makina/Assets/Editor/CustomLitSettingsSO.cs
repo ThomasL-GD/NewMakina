@@ -12,5 +12,5 @@ public class CustomLitSettingsSO :ScriptableObject
     public Vector2 smoothStepR;
     public Vector2 smoothStepG;
     public Vector2 smoothStepB;
-    public Texture shadowHashTexture;
+    public Texture2D shadowHashTexture;
 }
