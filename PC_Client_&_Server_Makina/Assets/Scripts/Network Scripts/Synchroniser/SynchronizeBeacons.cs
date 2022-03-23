@@ -85,6 +85,7 @@ namespace Synchronizers {
                 return;
             }
 
+            Beacons oldBeacon = m_beacons[index ?? 0];
             int beaconBitMask = Shader.GetGlobalInt(m_beaconBitMaskShaderID);
             int bitMaskIndex = -2;
             
@@ -94,12 +95,15 @@ namespace Synchronizers {
                 {
                     beaconBitMask |= 1 << i;
                     Shader.SetGlobalInt(m_beaconBitMaskShaderID, beaconBitMask);
+
+                    Vector3 pos = oldBeacon.beaconPrefabInstance.transform.position;
+                    
+                    Shader.SetGlobalVector($"_beaconPosition_{i}", new Vector4(pos.x,pos.y,pos.z,0));
                     bitMaskIndex = i;
                     break;
                 }
             }
             
-            Beacons oldBeacon = m_beacons[index ?? 0];
             m_beacons[index ?? 0] = new Beacons(m_prefabBeaconActive,oldBeacon.ID,oldBeacon.beaconPrefabInstance.transform.position,oldBeacon.detected,bitMaskIndex);
             Destroy(oldBeacon.beaconPrefabInstance);
         }
