@@ -1,4 +1,6 @@
+using System;
 using static UnityEditor.EditorGUILayout;
+using static UnityEngine.GUILayout;
 using UnityEditor;
 using UnityEngine;
 
@@ -47,6 +49,13 @@ public class CustomLitSettings : EditorWindow
             }
             else return;
         }
+        
+        if(Event.current.type == EventType.MouseDown) Debug.Log(PrintCustomSettings(m_customLitSettings));
+        
+        if (CheckSoWithShderGlobalValues(m_customLitSettings))
+        {
+            Refresh();
+        }
 
         float newFloat = FloatField("Shadow Tiling", Mathf.Max(m_customLitSettings.shadowTiling,0f));
         UpdateNewValue(newFloat, m_tilingShaderID,ref m_customLitSettings.shadowTiling,ref hasChanged);
@@ -73,16 +82,20 @@ public class CustomLitSettings : EditorWindow
         newVector2 = Vector2Field("Smoothstep B",m_customLitSettings.smoothStepB);
         UpdateNewValue(newVector2,m_smoothstepBID,ref m_customLitSettings.smoothStepB,ref hasChanged);
         
-        Texture2D newTexture2D = ObjectField("Shadow Hash", m_customLitSettings.shadowHashTexture, typeof(Texture2D)) as Texture2D;
+        Texture2D newTexture2D = ObjectField("Shadow Hash", m_customLitSettings.shadowHashTexture,typeof(Texture2D), false) as Texture2D;
         UpdateNewValue(newTexture2D, m_hashTextureID,ref m_customLitSettings.shadowHashTexture, ref hasChanged);
 
+        
+        Undo.ClearSnapshotTarget();
+        
         if (hasChanged)
         {
             EditorUtility.SetDirty(m_customLitSettings);
             AssetDatabase.SaveAssets();
         }
     }
-    
+
+
     /// <param name="p_newValue"> the new value gotten from the serialization </param>
     /// <param name="p_shaderPropertyId"> the shader property ID of the shader to modify </param>
     /// <param name="p_soValue"> reference to the so value </param>
@@ -106,7 +119,7 @@ public class CustomLitSettings : EditorWindow
         if (p_newValue != p_soValue)
         {
             p_soValue = p_newValue;
-            Shader.SetGlobalVector(p_shaderPropertyId, new Vector4(p_newValue.x,p_newValue.y,0,0));
+            Shader.SetGlobalVector(p_shaderPropertyId, Vector2To4(p_newValue));
             p_hasChanged = true;
         }
     }
@@ -123,5 +136,58 @@ public class CustomLitSettings : EditorWindow
             Shader.SetGlobalTexture(p_shaderPropertyId, p_newValue);
             p_hasChanged = true;
         }
+    }
+
+    void Refresh()
+    {
+         Shader.SetGlobalFloat(m_tilingShaderID,m_customLitSettings.shadowTiling);
+         Shader.SetGlobalFloat(m_lightIntensityMultiplierShaderID,m_customLitSettings.lightIntensityMultiplier);
+         Shader.SetGlobalFloat(m_globalLightingShaderID,m_customLitSettings.globalIllumination);
+         Shader.SetGlobalFloat(m_occlusionShaderID,m_customLitSettings.defaultOcclusionValue);
+         Shader.SetGlobalFloat(m_triplanarBlendSharpnessID,m_customLitSettings.triplanarBlendSharpness);
+         Shader.SetGlobalVector(m_smoothstepRID,Vector2To4(m_customLitSettings.smoothStepR));
+         Shader.SetGlobalVector(m_smoothstepGID,Vector2To4(m_customLitSettings.smoothStepG));
+         Shader.SetGlobalVector(m_smoothstepBID,Vector2To4(m_customLitSettings.smoothStepB));
+         Shader.SetGlobalTexture(m_hashTextureID,m_customLitSettings.shadowHashTexture);
+    }
+
+    /// <summary/> Converts a vector 2 to a vector4 with z and w = 0
+    Vector4 Vector2To4(Vector2 p_vector2)
+    {
+        return new Vector4(p_vector2.x, p_vector2.y, 0f, 0f);
+    }
+
+    /// <returns>returns true if SO not compatible</returns>
+    bool CheckSoWithShderGlobalValues(CustomLitSettingsSO p_so)
+    {
+        if(p_so.shadowTiling != Shader.GetGlobalFloat(m_tilingShaderID)) return true;
+        if(p_so.lightIntensityMultiplier != Shader.GetGlobalFloat(m_lightIntensityMultiplierShaderID)) return true;
+        if(p_so.globalIllumination != Shader.GetGlobalFloat(m_globalLightingShaderID)) return true;
+        if(p_so.defaultOcclusionValue != Shader.GetGlobalFloat(m_occlusionShaderID)) return true;
+        if(p_so.triplanarBlendSharpness != Shader.GetGlobalFloat(m_triplanarBlendSharpnessID)) return true;
+        
+        if(Vector2To4(m_customLitSettings.smoothStepR) != Shader.GetGlobalVector(m_smoothstepRID)) return true;
+        if(Vector2To4(m_customLitSettings.smoothStepG) != Shader.GetGlobalVector(m_smoothstepGID)) return true;
+        if(Vector2To4(m_customLitSettings.smoothStepB) != Shader.GetGlobalVector(m_smoothstepBID)) return true;
+
+        if(m_customLitSettings.shadowHashTexture != Shader.GetGlobalTexture(m_hashTextureID)) return true;
+        
+        return false;
+    }
+    
+    private string PrintCustomSettings(CustomLitSettingsSO p_customLitSettings)
+    {
+        String message = "";
+        message += $" Shadow Tiling :{p_customLitSettings.shadowTiling}\n";
+        message += $" Light Intensity Multiplier :{p_customLitSettings.lightIntensityMultiplier}\n";
+        message += $" Default Occlusion Value :{p_customLitSettings.defaultOcclusionValue}\n";
+        message += $" Global Illumination :{p_customLitSettings.globalIllumination}\n";
+        message += $" Triplanar Blend Sharpness :{p_customLitSettings.triplanarBlendSharpness}\n";
+        message += $" Smooth Step R :{p_customLitSettings.smoothStepR}\n";
+        message += $" Smooth Step G :{p_customLitSettings.smoothStepG}\n";
+        message += $" Smooth Step B :{p_customLitSettings.smoothStepB}\n";
+        message += $" Shadow Hash Texture :{p_customLitSettings.shadowHashTexture}\n";
+
+        return message;
     }
 }
