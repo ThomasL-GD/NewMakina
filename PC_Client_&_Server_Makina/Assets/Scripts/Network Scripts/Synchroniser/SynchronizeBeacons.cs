@@ -26,8 +26,9 @@ namespace Synchronizers {
             public GameObject beaconPrefabInstance;
             public float ID;
             public bool detected;
+            public int bitMaskIndex;
 
-            public Beacons(GameObject p_beaconPrefabInstance, float p_id, Vector3? p_position = null, bool p_detected = false)
+            public Beacons(GameObject p_beaconPrefabInstance, float p_id, Vector3? p_position = null, bool p_detected = false, int p_BitMaskIndex = -1)
             {
                 p_beaconPrefabInstance.name += p_id.ToString();
                 beaconPrefabInstance = Instantiate(p_beaconPrefabInstance);
@@ -35,10 +36,13 @@ namespace Synchronizers {
                 
                 ID = p_id;
                 detected = p_detected;
+                bitMaskIndex = p_BitMaskIndex;
             }
         }
         private float m_beaconRange;
         private static readonly int m_beaconColorProperty = Shader.PropertyToID("_Beacon_Color");
+        private static readonly int m_beaconRangeShaderID = Shader.PropertyToID("_BeaconRange");
+        private static readonly int m_beaconBitMaskShaderID = Shader.PropertyToID("_BeaconBitMask");
 
 
         /// <summary/> Spawning a beacon and adding it to the array
@@ -80,9 +84,23 @@ namespace Synchronizers {
             {
                 return;
             }
+
+            int beaconBitMask = Shader.GetGlobalInt(m_beaconBitMaskShaderID);
+            int bitMaskIndex = -2;
+            
+            for (int i = 0; i < 10; i++)
+            {
+                if ((beaconBitMask & 1 << i) != 1 << i)
+                {
+                    beaconBitMask |= 1 << i;
+                    Shader.SetGlobalInt(m_beaconBitMaskShaderID, beaconBitMask);
+                    bitMaskIndex = i;
+                    break;
+                }
+            }
             
             Beacons oldBeacon = m_beacons[index ?? 0];
-            m_beacons[index ?? 0] = new Beacons(m_prefabBeaconActive,oldBeacon.ID,oldBeacon.beaconPrefabInstance.transform.position,oldBeacon.detected);
+            m_beacons[index ?? 0] = new Beacons(m_prefabBeaconActive,oldBeacon.ID,oldBeacon.beaconPrefabInstance.transform.position,oldBeacon.detected,bitMaskIndex);
             Destroy(oldBeacon.beaconPrefabInstance);
         }
 
@@ -91,8 +109,8 @@ namespace Synchronizers {
         /// <summary/> Receiving initial data
         /// <param name="p_initialData"></param>
         private void ReceiveInitialData(InitialData p_initialData) {
-            
             m_prefabBeaconActive.transform.localScale = Vector3.one * (p_initialData.beaconRange * 2f);
+            Shader.SetGlobalFloat(m_beaconRangeShaderID,p_initialData.beaconRange);
         }
 
         /// <summary/> Updating the beacon positions
@@ -146,9 +164,15 @@ namespace Synchronizers {
 
             if (index == null) return;
 
+            
+            int bitmask = Shader.GetGlobalInt(m_beaconBitMaskShaderID);
+            bitmask &= ~(1 << m_beacons[index??0].bitMaskIndex);
+            Shader.SetGlobalInt(m_beaconBitMaskShaderID,bitmask);
+            
             Destroy(m_beacons[index??0].beaconPrefabInstance);
             m_beacons.RemoveAt(index??0);
 
+            
             foreach (var beacon in m_beacons)
             {
                 if (beacon.detected) return;
