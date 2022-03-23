@@ -8,14 +8,12 @@ public class BitmaskExperimentation : MonoBehaviour
     [ContextMenu("test")]
     void FunctionToDoStuffWith()
     {
-        m_bitmask = 0b00000000000;
+        m_bitmask = 0b1111111111;
 
-        m_bitmask |= 1 << 5;
-        m_bitmask |= 1 << 9;
-        m_bitmask |= 1 << 8;
-        m_bitmask &= ~(1 << 8);
-        
-        Debug.Log(Convert.ToString (m_bitmask, 2));
+        for (int i = 0; i < 7; i++)
+        {
+            Debug.Log(m_bitmask);
+        }
         
     }
 }
