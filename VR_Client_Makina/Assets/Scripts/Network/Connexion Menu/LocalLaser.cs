@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Animation.AnimationDelegates;
 using CustomMessages;
 using Synchronizers;
 using UnityEngine;
@@ -52,8 +53,16 @@ namespace Network.Connexion_Menu {
         public static NewTargetDelegator SetNewTargetForAll;
         public static NewSensitiveTargetDelegator SetNewSensitiveTargetForAll;
 
+        public AnimationTrigger OnLaserCharge;
+        public AnimationTrigger OnLaserShot;
+        public AnimationTrigger OnLaserCancel;
+
+        private static readonly int Load = Animator.StringToHash("Load");
+        private static readonly int Unload = Animator.StringToHash("Unload");
+        private static readonly int Shoot = Animator.StringToHash("Shoot");
+
         // Start is called before the first frame update
-        void Start() {
+        private void Start() {
             m_line = GetComponent<LineRenderer>();
             m_line.enabled = false;
             MyNetworkManager.OnReceiveInitialData += DestroyMyself;
@@ -63,12 +72,13 @@ namespace Network.Connexion_Menu {
         }
 
         // Update is called once per frame
-        void Update() {
+        private void Update() {
 
             if (!m_isActive) return;
             if (m_shutDown) return;
 
             if (OVRInput.Get(m_input) < m_upTriggerValue) { //Let go
+                OnLaserCancel?.Invoke(Unload);
                 m_isShooting = false;
                 m_line.enabled = false;
                 m_elapsedHoldingTime = 0f;
@@ -76,6 +86,8 @@ namespace Network.Connexion_Menu {
 
             
             if (m_elapsedHoldingTime > m_laserLoadingTime) { //shot
+                
+                OnLaserShot?.Invoke(Shoot);
                 
                 
                 Vector3 handForward = transform.forward;
@@ -172,6 +184,7 @@ namespace Network.Connexion_Menu {
                 m_line.SetPosition(0, position);
             }
             else if (OVRInput.Get (m_input) >= m_upTriggerValue) { // If the player press the trigger hard enough
+                OnLaserCharge?.Invoke(Load);
                 m_isShooting = true;
                 m_elapsedHoldingTime = 0f;
             }

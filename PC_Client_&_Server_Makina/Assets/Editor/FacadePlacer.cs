@@ -664,9 +664,7 @@ class FacadePlacer : EditorWindow
         Transform t = m_selection.transform.Find("facades");
         GameObject parentObjectToDelete = t != null ? t.gameObject : null;
 
-        System.Random random = new System.Random();
-        
-        
+
         if(parentObjectToDelete != null) if(Button("\nDestroy Facades!\n")) DestroyImmediate(parentObjectToDelete);
         
         if (Button("Shuffle")) m_seed = Random.Range(0,9999);
