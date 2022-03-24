@@ -33,7 +33,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Ambien_Occlusion:
-        m_Texture: {fileID: 2800000, guid: a1c8d14126b53b543be6af704e6614d4, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Hash:
@@ -86,16 +86,20 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AO_Intensity: 1
     - _AmbientOcclusion: 1
+    - _Blend_Intensity: 0
     - _GlobalIllumination: 1
     - _Light_Intensity_multiplier: 8.8
     - _NormalStrength: 0
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _SSAO_Intensity: 1
     - _Smoothness: 0
     - _Tiling: 1.5
     - _TriplanarBlendSharpness: 3.33
     m_Colors:
+    - _BlendColor: {r: 0.053194255, g: 1, b: 0, a: 0}
     - _Smoothstep_B: {r: 0, g: 0.8, b: 0, a: 0}
     - _Smoothstep_G: {r: 0, g: 0.6, b: 0, a: 0}
     - _Smoothstep_R: {r: -0.2, g: 0.28, b: 0, a: 0}
