@@ -225,7 +225,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3606631557653752214}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1054226223754654571
 GameObject:
@@ -354,7 +354,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3608204710111596078}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2789157346181822423
 GameObject:
@@ -826,7 +826,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3606631557653752214}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5236190690724587026
 GameObject:
@@ -857,7 +857,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3606631557653752214}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5898412813913457086
 GameObject:
@@ -1387,7 +1387,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3608204710111596078}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7490258613432914398
 GameObject:
@@ -1418,7 +1418,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3608204710111596078}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &857677995367189993
 PrefabInstance:
@@ -2228,6 +2228,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_leure: {fileID: 3611048692110909748}
+--- !u!114 &7088374079911476082 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5783733579950633033, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
+  m_PrefabInstance: {fileID: 3611048692519340859}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7088374079911476081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf22ad0a9ffc0744896bece452a80f7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7088374079911476092 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5783733579950633031, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
@@ -2322,6 +2333,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8907849920664484147}
     m_Modifications:
+    - target: {fileID: 3925877575601267194, guid: dce19f08d91541c489495dd83b7da24c, type: 3}
+      propertyPath: m_synchronizeLaser
+      value: 
+      objectReference: {fileID: 7088374079911476082}
     - target: {fileID: 7413916036428686884, guid: dce19f08d91541c489495dd83b7da24c, type: 3}
       propertyPath: m_RootOrder
       value: 2
