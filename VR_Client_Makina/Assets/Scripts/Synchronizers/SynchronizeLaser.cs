@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Animation.AnimationDelegates;
 using CustomMessages;
 using Network;
 using Network.Connexion_Menu;
@@ -43,6 +44,14 @@ namespace Synchronizers {
 
         private bool m_isLoading = false;
 
+        public AnimationTrigger OnLaserCharge;
+        public AnimationTrigger OnLaserShot;
+        public AnimationTrigger OnLaserCancel;
+
+        private static readonly int Load = Animator.StringToHash("Load");
+        private static readonly int Unload = Animator.StringToHash("Unload");
+        private static readonly int Shoot = Animator.StringToHash("Shoot");
+
         // Start is called before the first frame update
         private void Awake() {
 
@@ -67,7 +76,10 @@ namespace Synchronizers {
         /// Called when the server tell us that we're aiming or shooting, displays or not the aiming line
         /// </summary>
         /// <param name="p_laser">The message sent by the server</param>
-        private void SynchroniseLaserAiming(Laser p_laser) => m_laserAiming.enabled = p_laser.laserState == LaserState.Aiming;
+        private void SynchroniseLaserAiming(Laser p_laser) {
+            m_laserAiming.enabled = p_laser.laserState == LaserState.Aiming;
+            OnLaserCharge?.Invoke(p_laser.laserState == LaserState.Aiming ? Load : Shoot);
+        }
 
 
         /// <summary>
@@ -124,6 +136,7 @@ namespace Synchronizers {
             if (OVRInput.Get(m_input) < m_upTriggerValue) {
                 
                 MyNetworkManager.singleton.SendVrData<VrLaser>(new VrLaser(){laserState = LaserState.CancelAiming});
+                OnLaserCancel?.Invoke(Unload);
                 m_isTriggerPressed = false;
                 m_isLoading = false;
                 m_laserAiming.enabled = false;
