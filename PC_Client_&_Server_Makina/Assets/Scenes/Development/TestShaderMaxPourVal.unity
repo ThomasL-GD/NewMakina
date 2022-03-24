@@ -7946,8 +7946,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_playerTr: {fileID: 460098152544668653}
-  m_minDotProduct: 0.75
-  m_shakeSpeed: 1000
+  m_minDotProduct: 1
+  m_shakeSpeed: 0
 --- !u!135 &1605048824
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -10658,6 +10658,7 @@ GameObject:
   - component: {fileID: 460098152544668653}
   - component: {fileID: 460098152544668654}
   - component: {fileID: 460098152544668655}
+  - component: {fileID: 460098152544668657}
   m_Layer: 12
   m_Name: Player
   m_TagString: Untagged
@@ -10665,6 +10666,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &460098152544668657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 460098152544668656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccca9cedac5e87f49a765c9f7585901f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_customLitSettings: {fileID: 11400000, guid: 58555d8da53fdb64094cd5e50fd41663, type: 2}
 --- !u!4 &460098152782434963
 Transform:
   m_ObjectHideFlags: 0

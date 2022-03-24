@@ -39,10 +39,13 @@ namespace Synchronizers {
                 bitMaskIndex = p_BitMaskIndex;
             }
         }
+        
+        
         private float m_beaconRange;
         private static readonly int m_beaconColorProperty = Shader.PropertyToID("_Beacon_Color");
         private static readonly int m_beaconRangeShaderID = Shader.PropertyToID("_BeaconRange");
         private static readonly int m_beaconBitMaskShaderID = Shader.PropertyToID("_BeaconBitMask");
+        private static readonly int m_beaconDetectionBitMask = Shader.PropertyToID("_BeaconDetectionBitMask");
 
 
         /// <summary/> Spawning a beacon and adding it to the array
@@ -147,12 +150,19 @@ namespace Synchronizers {
             Material mat = beacon.beaconPrefabInstance.GetComponent<MeshRenderer>().material;
             mat.SetColor(m_beaconColorProperty, detected?m_detectedColor:m_undetectedColor);
             beacon.detected = detected;
-            
+            int beaconBitMaskDetected = Shader.GetGlobalInt(m_beaconDetectionBitMask);
             if(detected)
             {
                 m_detectionFeedaback.enabled = true;
+                
+                beaconBitMaskDetected |= 1 << beacon.bitMaskIndex;
+                Shader.SetGlobalInteger(m_beaconDetectionBitMask,beaconBitMaskDetected);
                 return;
             }
+            
+            beaconBitMaskDetected &= ~(1 << beacon.bitMaskIndex);
+            Shader.SetGlobalInteger(m_beaconDetectionBitMask,beaconBitMaskDetected);
+            
             
             foreach (var beaconData in m_beacons) if (beaconData.detected) return;
             m_detectionFeedaback.enabled = false;
