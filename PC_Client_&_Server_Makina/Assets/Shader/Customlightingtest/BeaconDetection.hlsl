@@ -11,10 +11,10 @@
     #endif
 #endif
 
-void CalculateBeaconDetectionDistance_float(float3 Position,int ActiveBitMask,
+void CalculateBeaconDetectionDistance_float(float3 Position,int ActiveBitMask,int p_detectedBeaconBitMask,
 float3 p_beaconPos0,float3 p_beaconPos1,float3 p_beaconPos2,float3 p_beaconPos3,
 float3 p_beaconPos4,float3 p_beaconPos5,float3 p_beaconPos6,float3 p_beaconPos7,
-float3 p_beaconPos8,float3 p_beaconPos9,out float distanceFromBeacon) {
+float3 p_beaconPos8,float3 p_beaconPos9,out float distanceFromBeacon, out float distanceFromDetectedBeacon) {
 
     float3 beaconPositions[10] = {p_beaconPos0, p_beaconPos1, p_beaconPos2, p_beaconPos3, p_beaconPos4,
         p_beaconPos5, p_beaconPos6, p_beaconPos7, p_beaconPos8, p_beaconPos9};
@@ -27,7 +27,15 @@ float3 p_beaconPos8,float3 p_beaconPos9,out float distanceFromBeacon) {
         beaconDistance = min(distance(beaconPositions[i],Position), beaconDistance);
     }
 
+    float beaconDistanceDetected = 999999;
+
+    for (uint i = 0; i < 10; i++)
+    {
+        if((p_detectedBeaconBitMask & 1<<i) != 1<<i && (ActiveBitMask & 1<<i) != 1<<i) continue;
+        beaconDistanceDetected = min(distance(beaconPositions[p_detectedBeaconBitMask],Position),beaconDistanceDetected);
+    }
+    
+    distanceFromDetectedBeacon = beaconDistanceDetected;
     distanceFromBeacon = beaconDistance;
 }
-
 #endif

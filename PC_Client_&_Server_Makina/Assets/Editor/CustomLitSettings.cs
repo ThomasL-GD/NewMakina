@@ -16,6 +16,9 @@ public class CustomLitSettings : EditorWindow
     private static readonly int m_smoothstepRID = Shader.PropertyToID("_Smoothstep_R");
     private static readonly int m_smoothstepGID = Shader.PropertyToID("_Smoothstep_G");
     private static readonly int m_smoothstepBID = Shader.PropertyToID("_Smoothstep_B");
+    private static readonly int m_beaconDefaultColor = Shader.PropertyToID("_BeaconDefaultColor");
+    private static readonly int m_beaconDetectionColor = Shader.PropertyToID("_BeaconDetectionColor");
+    private readonly int m_beaconBitMaskShaderID = Shader.PropertyToID("_BeaconBitMask");
 
     [MenuItem("Tools/Custom Lit Settings")]
     static void Init()
@@ -52,7 +55,7 @@ public class CustomLitSettings : EditorWindow
         
         if(Event.current.type == EventType.MouseDown) Debug.Log(PrintCustomSettings(m_customLitSettings));
         
-        if (CheckSoWithShderGlobalValues(m_customLitSettings))
+        if (CheckSoWithShaderGlobalValues(m_customLitSettings))
         {
             Refresh();
         }
@@ -85,6 +88,12 @@ public class CustomLitSettings : EditorWindow
         Texture2D newTexture2D = ObjectField("Shadow Hash", m_customLitSettings.shadowHashTexture,typeof(Texture2D), false) as Texture2D;
         UpdateNewValue(newTexture2D, m_hashTextureID,ref m_customLitSettings.shadowHashTexture, ref hasChanged);
 
+        Color newColor = ColorField("Beacon Color", m_customLitSettings.beaconColor);
+        UpdateNewValue(newColor, m_beaconDefaultColor, ref m_customLitSettings.beaconColor, ref hasChanged);
+
+        newColor = ColorField("Beacon Color Deteced", m_customLitSettings.beaconDetectionColor);
+        UpdateNewValue(newColor, m_beaconDetectionColor, ref m_customLitSettings.beaconDetectionColor, ref hasChanged);
+        
         
         Undo.ClearSnapshotTarget();
         
@@ -92,6 +101,11 @@ public class CustomLitSettings : EditorWindow
         {
             EditorUtility.SetDirty(m_customLitSettings);
             AssetDatabase.SaveAssets();
+        }
+
+        if (Button("ResetBeacons"))
+        {
+            Shader.SetGlobalInt(m_beaconBitMaskShaderID,0);
         }
     }
 
@@ -137,28 +151,53 @@ public class CustomLitSettings : EditorWindow
             p_hasChanged = true;
         }
     }
-
-    void Refresh()
+    
+    /// <param name="p_newValue"> the new value gotten from the serialization </param>
+    /// <param name="p_shaderPropertyId"> the shader property ID of the shader to modify </param>
+    /// <param name="p_soValue"> reference to the so value </param>
+    /// <param name="p_hasChanged"> reference to the has changed bool </param>
+    void UpdateNewValue(Color p_newValue, int p_shaderPropertyId,ref Color p_soValue,ref bool p_hasChanged)
     {
-         Shader.SetGlobalFloat(m_tilingShaderID,m_customLitSettings.shadowTiling);
-         Shader.SetGlobalFloat(m_lightIntensityMultiplierShaderID,m_customLitSettings.lightIntensityMultiplier);
-         Shader.SetGlobalFloat(m_globalLightingShaderID,m_customLitSettings.globalIllumination);
-         Shader.SetGlobalFloat(m_occlusionShaderID,m_customLitSettings.defaultOcclusionValue);
-         Shader.SetGlobalFloat(m_triplanarBlendSharpnessID,m_customLitSettings.triplanarBlendSharpness);
-         Shader.SetGlobalVector(m_smoothstepRID,Vector2To4(m_customLitSettings.smoothStepR));
-         Shader.SetGlobalVector(m_smoothstepGID,Vector2To4(m_customLitSettings.smoothStepG));
-         Shader.SetGlobalVector(m_smoothstepBID,Vector2To4(m_customLitSettings.smoothStepB));
-         Shader.SetGlobalTexture(m_hashTextureID,m_customLitSettings.shadowHashTexture);
+        if (p_newValue != p_soValue)
+        {
+            p_soValue = p_newValue;
+            Shader.SetGlobalColor(p_shaderPropertyId, p_newValue);
+            p_hasChanged = true;
+        }
+    }
+
+    public static void Refresh()
+    {
+        if (m_customLitSettings == null)
+        {
+            m_customLitSettings = Resources.Load("Custom Lit Settings/customLitSettings", typeof(CustomLitSettingsSO)) as CustomLitSettingsSO;
+            if (m_customLitSettings == null)
+            {
+                AssetDatabase.CreateAsset(CreateInstance<CustomLitSettingsSO>(), "Assets/Resources/Custom Lit Settings/customLitSettings.asset");
+                m_customLitSettings = Resources.Load("Custom Lit Settings/customLitSettings", typeof(CustomLitSettingsSO)) as CustomLitSettingsSO;
+            }
+            else return;
+        }
+        
+        Shader.SetGlobalFloat(m_tilingShaderID,m_customLitSettings.shadowTiling);
+        Shader.SetGlobalFloat(m_lightIntensityMultiplierShaderID,m_customLitSettings.lightIntensityMultiplier);
+        Shader.SetGlobalFloat(m_globalLightingShaderID,m_customLitSettings.globalIllumination);
+        Shader.SetGlobalFloat(m_occlusionShaderID,m_customLitSettings.defaultOcclusionValue);
+        Shader.SetGlobalFloat(m_triplanarBlendSharpnessID,m_customLitSettings.triplanarBlendSharpness);
+        Shader.SetGlobalVector(m_smoothstepRID,Vector2To4(m_customLitSettings.smoothStepR));
+        Shader.SetGlobalVector(m_smoothstepGID,Vector2To4(m_customLitSettings.smoothStepG));
+        Shader.SetGlobalVector(m_smoothstepBID,Vector2To4(m_customLitSettings.smoothStepB));
+        Shader.SetGlobalTexture(m_hashTextureID,m_customLitSettings.shadowHashTexture);
     }
 
     /// <summary/> Converts a vector 2 to a vector4 with z and w = 0
-    Vector4 Vector2To4(Vector2 p_vector2)
+    private static Vector4 Vector2To4(Vector2 p_vector2)
     {
         return new Vector4(p_vector2.x, p_vector2.y, 0f, 0f);
     }
 
     /// <returns>returns true if SO not compatible</returns>
-    bool CheckSoWithShderGlobalValues(CustomLitSettingsSO p_so)
+    bool CheckSoWithShaderGlobalValues(CustomLitSettingsSO p_so)
     {
         if(p_so.shadowTiling != Shader.GetGlobalFloat(m_tilingShaderID)) return true;
         if(p_so.lightIntensityMultiplier != Shader.GetGlobalFloat(m_lightIntensityMultiplierShaderID)) return true;
@@ -171,6 +210,9 @@ public class CustomLitSettings : EditorWindow
         if(Vector2To4(m_customLitSettings.smoothStepB) != Shader.GetGlobalVector(m_smoothstepBID)) return true;
 
         if(m_customLitSettings.shadowHashTexture != Shader.GetGlobalTexture(m_hashTextureID)) return true;
+        
+        if(m_customLitSettings.beaconColor != Shader.GetGlobalColor(m_beaconDefaultColor))return true;
+        if(m_customLitSettings.beaconDetectionColor != Shader.GetGlobalColor(m_beaconDetectionColor))return true;
         
         return false;
     }

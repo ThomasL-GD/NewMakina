@@ -13,4 +13,6 @@ public class CustomLitSettingsSO :ScriptableObject
     public Vector2 smoothStepG;
     public Vector2 smoothStepB;
     public Texture2D shadowHashTexture;
+    public Color beaconColor;
+    public Color beaconDetectionColor;
 }
