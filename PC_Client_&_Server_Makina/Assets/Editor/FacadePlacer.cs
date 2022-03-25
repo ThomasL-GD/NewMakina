@@ -226,11 +226,8 @@ class FacadePlacer : EditorWindow
                 // Getting the corners
                 foreach (var link in links)
                 {
-                    Quaternion rotation = m_corner.transform.GetChild(0) != null
-                        ? m_corner.transform.GetChild(0).rotation
-                        : m_corner.transform.rotation;
-                    rotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward,
-                        new Vector3(link.normal.x, 0, link.normal.z), Vector3.up) + rotation.eulerAngles);
+                    Quaternion rotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward,
+                        new Vector3(link.normal.x, 0, link.normal.z), Vector3.up));
 
                     m_corners.Add(new Point(link.A, rotation, facadeState, 1f,false));
                     m_corners.Add(new Point(link.B, rotation, facadeState, 1f,false));
@@ -257,7 +254,10 @@ class FacadePlacer : EditorWindow
                 {
                     for (int i = 0; i < cornerPrefab.transform.childCount; i++)
                     {
-                        if (cornerPrefab.transform.GetChild(i).TryGetComponent(out meshFilter)) break;
+                        if (cornerPrefab.transform.GetChild(i).TryGetComponent(out meshFilter))
+                        {
+                            break;
+                        }
 
                         for (int j = 0; j < cornerPrefab.transform.GetChild(i).childCount; j++)
 
@@ -275,7 +275,7 @@ class FacadePlacer : EditorWindow
 
                 foreach (var corner in m_corners)
                 {
-                    Graphics.DrawMeshNow(cornerMesh, corner.position, Quaternion.Euler(corner.rotation.eulerAngles + m_previewRotationOffset));
+                    Graphics.DrawMeshNow(cornerMesh, corner.position, Quaternion.Euler(corner.rotation.eulerAngles));
                 }
             }
 
@@ -313,13 +313,11 @@ class FacadePlacer : EditorWindow
 
                 for (int i = 0; i < amount; i++)
                 {
-                    Vector3 position =
-                        link.A + (link.B - link.A).normalized * (step * i + m_assetWidth * scale / 2f);
+                    Vector3 position = link.A + (link.B - link.A).normalized * (step * i + m_assetWidth * scale / 2f);
                     Quaternion prefabRotation;
-                    prefabRotation = 
-                        Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward,
-                                             new Vector3(link.normal.x, 0, link.normal.z), Vector3.up) +
-                                         m_facade.transform.eulerAngles);
+                    prefabRotation = Quaternion.Euler(
+                        Vector3.up * Vector3.SignedAngle(Vector3.forward,
+                        new Vector3(link.normal.x, 0, link.normal.z), Vector3.up));
 
                     bool useRandom = i > 0 && i < amount -1;
                     useRandom = m_useRandom && useRandom;
@@ -333,29 +331,29 @@ class FacadePlacer : EditorWindow
                             transform =
                             {
                                 position = position,
-                                rotation = prefabRotation,
+                                rotation = Quaternion.Euler(prefabRotation.eulerAngles + m_scriptableObject.previewRotationOffset),
                                 localScale = new Vector3(scale, 1, 1)
                             }
                         };
                         GameObject childHr;
                         if (!useRandom) childHr = hr.m_children[0];
                         else childHr = hr.m_children[RandomFacades(floatList, m_points.Count - 1)];
-                        
-                        
                         Matrix4x4 matrix = new Matrix4x4();
+                        
                         if (childHr.TryGetComponent(out meshFilter))
                         {
-                            preview.transform.rotation = Quaternion.Euler(childHr.transform.rotation.eulerAngles + preview.transform.rotation.eulerAngles);
+                            preview.transform.rotation = Quaternion.Euler(childHr.transform.rotation.eulerAngles + preview.transform.rotation.eulerAngles );
                             matrix = preview.transform.localToWorldMatrix;
+                            DestroyImmediate(preview);
                             Graphics.DrawMeshNow(meshFilter.sharedMesh, matrix);
                         }else if (childHr.transform.GetChild(0).TryGetComponent(out meshFilter))
                         {
                             preview.transform.rotation = Quaternion.Euler(childHr.transform.GetChild(0).rotation.eulerAngles + preview.transform.rotation.eulerAngles);
-                            preview.transform.position += preview.transform.rotation * childHr.transform.GetChild(0).position;
+                            // preview.transform.position += preview.transform.rotation * childHr.transform.GetChild(0).position;
                             matrix = preview.transform.localToWorldMatrix;
+                            DestroyImmediate(preview);
                             Graphics.DrawMeshNow(meshFilter.sharedMesh, matrix);
                         }
-                        DestroyImmediate(preview);
                     }
                 }
 
