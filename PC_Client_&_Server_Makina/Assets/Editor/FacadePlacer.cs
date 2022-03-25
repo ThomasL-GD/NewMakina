@@ -554,7 +554,7 @@ class FacadePlacer : EditorWindow
         if (scriptableObjects.Length > 0)
         {
             LabelField("Select a facade style :");
-            Popup(selectedIndex,names);
+            selectedIndex = Popup(selectedIndex,names);
             m_scriptableObject = scriptableObjects[selectedIndex];
         }else LabelField("No facade styles found");
 
