@@ -1595,10 +1595,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -334.0,
-            "y": 141.0,
-            "width": 247.99996948242188,
-            "height": 349.99993896484377
+            "x": -419.9999694824219,
+            "y": 141.00001525878907,
+            "width": 284.0,
+            "height": 734.0000610351563
         }
     },
     "m_Slots": [
@@ -1616,6 +1616,9 @@
         },
         {
             "m_Id": "b49178df78c540d3ad34314d96fe6d21"
+        },
+        {
+            "m_Id": "cf2b0d940df04cf6a4e03b32c75fa2a5"
         },
         {
             "m_Id": "52eaf676387c406f821844a6ce1fccff"
@@ -1654,6 +1657,12 @@
             "m_Id": "fcc19158c5c2457293c46f6ff3b560ab"
         },
         {
+            "m_Id": "721080c1db6c43b4990520cfc57be965"
+        },
+        {
+            "m_Id": "f9d42802484543c89d9051f100fe65e4"
+        },
+        {
             "m_Id": "6f67444477374e6c82f2fa44a51fd824"
         },
         {
@@ -1685,7 +1694,10 @@
         "a87d078b-24ec-49e9-a6eb-9eadc6cf691f",
         "bd2ce9f5-2f97-469e-9872-90426dcbdbf4",
         "790cb27c-2c2d-4f81-b87f-f419f8e56ab9",
-        "d6dab8bc-45a1-4cb4-8879-8d3e7704389c"
+        "d6dab8bc-45a1-4cb4-8879-8d3e7704389c",
+        "7dcfaaff-228d-40e6-a801-642c576f4ea6",
+        "61043ce2-36d5-4311-8e83-6d6d4639b708",
+        "9cb795a0-9d8b-471d-9d14-584fd4033fea"
     ],
     "m_PropertyIds": [
         -177452388,
@@ -1704,7 +1716,10 @@
         1398998791,
         1308196759,
         -1777138671,
-        953909474
+        953909474,
+        -1224481139,
+        1204793599,
+        2127372130
     ],
     "m_Dropdowns": [],
     "m_DropdownSelectedEntries": []
@@ -1852,10 +1867,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -474.0000305175781,
-            "y": 236.0,
-            "width": 140.00003051757813,
-            "height": 33.999969482421878
+            "x": -699.9999389648438,
+            "y": 192.0,
+            "width": 139.99993896484376,
+            "height": 34.0
         }
     },
     "m_Slots": [
@@ -4136,6 +4151,31 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
+    "m_ObjectId": "721080c1db6c43b4990520cfc57be965",
+    "m_Id": 1204793599,
+    "m_DisplayName": "BeaconColor",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "_BeaconColor",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    },
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "72317876cbe74655a7de46492b14c6f8",
     "m_Id": 1,
@@ -5962,9 +6002,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -334.0,
-            "y": 639.0000610351563,
-            "width": 202.00003051757813,
+            "x": -338.0,
+            "y": 889.0,
+            "width": 201.99998474121095,
             "height": 94.0
         }
     },
@@ -6521,6 +6561,21 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "cf2b0d940df04cf6a4e03b32c75fa2a5",
+    "m_Id": -1224481139,
+    "m_DisplayName": "BeaconDetectionBitMask",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "_BeaconDetectionBitMask",
+    "m_StageCapability": 3,
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector3MaterialSlot",
     "m_ObjectId": "d34989e860a14c0099fe608a19a575c7",
     "m_Id": -1457964697,
@@ -6895,9 +6950,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -461.0000305175781,
-            "y": 269.9999694824219,
-            "width": 117.00003051757813,
+            "x": -676.9999389648438,
+            "y": 226.0,
+            "width": 116.99993896484375,
             "height": 34.0
         }
     },
@@ -7378,9 +7433,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -447.0,
-            "y": 679.0,
-            "width": 104.0,
+            "x": -510.0,
+            "y": 921.0,
+            "width": 104.00003051757813,
             "height": 34.00006103515625
         }
     },
@@ -7696,6 +7751,31 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
+    "m_ObjectId": "f9d42802484543c89d9051f100fe65e4",
+    "m_Id": 2127372130,
+    "m_DisplayName": "BeaconDetectedColor",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "_BeaconDetectedColor",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0,
+        "w": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    },
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.SampleTexture2DNode",
     "m_ObjectId": "f9fd9e86acab41cea578a9e74afec2f7",
     "m_Group": {
@@ -7814,10 +7894,10 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
     "m_ObjectId": "fcc19158c5c2457293c46f6ff3b560ab",
     "m_Id": 953909474,
-    "m_DisplayName": "Vector2",
+    "m_DisplayName": "Beacon Smoothstep",
     "m_SlotType": 0,
     "m_Hidden": false,
-    "m_ShaderOutputName": "_Vector2",
+    "m_ShaderOutputName": "_Beacon_Smoothstep",
     "m_StageCapability": 3,
     "m_Value": {
         "x": 0.0010000000474974514,
