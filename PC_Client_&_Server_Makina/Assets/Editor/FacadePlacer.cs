@@ -110,8 +110,6 @@ class FacadePlacer : EditorWindow
             lineTop = Max(lineTop, y);
         }
 
-        lineTop -= .1f;
-        
         m_lines = CeilToInt((lineTop - m_lineHeight) / m_assetHeight);
         
         m_lineHeight = m_selection.transform.localPosition.y;
