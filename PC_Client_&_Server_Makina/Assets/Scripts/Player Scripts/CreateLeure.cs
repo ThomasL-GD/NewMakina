@@ -16,7 +16,7 @@ public class CreateLeure : AbstractMechanic
     [SerializeField] private RawImage m_uiElement;
     [SerializeField] private float m_speed = 10f;
     
-    [SerializeField] private ReloadingAbstract m_coolDownScript;
+    [SerializeField] private ReloadingAbstract[] m_coolDownScripts;
     
     [SerializeField] private bool m_isTutorial = false;
     
@@ -27,7 +27,9 @@ public class CreateLeure : AbstractMechanic
 
     private void Awake()
     {
-        m_coolDownScript.OnReloading += ResetCooldown;
+        foreach (var cd in m_coolDownScripts)cd.OnReloading += ResetCooldown;
+        
+
         ClientManager.OnReceiveDestroyLeure += DestroyLeure;
     }
 
@@ -66,8 +68,8 @@ public class CreateLeure : AbstractMechanic
         Destroy(m_leure);
         NetworkClient.Send(new DestroyLeure());
         NetworkClient.Send(new PcInvisibility{isInvisible = false});
-        
-        m_coolDownScript.StartReloading();
+
+        foreach (var cd in m_coolDownScripts)cd.StartReloading();
     }
     void ResetCooldown()
     {
