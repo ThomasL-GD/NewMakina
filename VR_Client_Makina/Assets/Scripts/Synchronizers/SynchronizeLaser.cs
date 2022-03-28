@@ -44,12 +44,10 @@ namespace Synchronizers {
 
         private bool m_isLoading = false;
 
-        public AnimationTrigger OnLaserCharge;
+        public AnimationBoolChange OnLaserLoad;
         public AnimationTrigger OnLaserShot;
-        public AnimationTrigger OnLaserCancel;
 
-        private static readonly int Load = Animator.StringToHash("Load");
-        private static readonly int Unload = Animator.StringToHash("Unload");
+        private static readonly int IsLoading = Animator.StringToHash("IsLoading");
         private static readonly int Shoot = Animator.StringToHash("Shoot");
 
         // Start is called before the first frame update
@@ -78,7 +76,19 @@ namespace Synchronizers {
         /// <param name="p_laser">The message sent by the server</param>
         private void SynchroniseLaserAiming(Laser p_laser) {
             m_laserAiming.enabled = p_laser.laserState == LaserState.Aiming;
-            OnLaserCharge?.Invoke(p_laser.laserState == LaserState.Aiming ? Load : Shoot);
+            switch (p_laser.laserState) {
+                case LaserState.Aiming:
+                    OnLaserLoad?.Invoke(IsLoading, false);
+                    break;
+                case LaserState.Shooting:
+                    OnLaserLoad?.Invoke(IsLoading, false);
+                    OnLaserShot?.Invoke(Shoot);
+                    break;
+                case LaserState.CancelAiming:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
 
@@ -136,7 +146,7 @@ namespace Synchronizers {
             if (OVRInput.Get(m_input) < m_upTriggerValue) {
                 
                 MyNetworkManager.singleton.SendVrData<VrLaser>(new VrLaser(){laserState = LaserState.CancelAiming});
-                OnLaserCancel?.Invoke(Unload);
+                OnLaserLoad?.Invoke(IsLoading, false);
                 m_isTriggerPressed = false;
                 m_isLoading = false;
                 m_laserAiming.enabled = false;

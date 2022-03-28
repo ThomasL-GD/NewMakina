@@ -36,14 +36,12 @@ namespace Animation {
             }
             
             if(m_localLaser != null) {
-                m_localLaser.OnLaserCancel += AnimateAll;
-                m_localLaser.OnLaserCharge += AnimateAll;
+                m_localLaser.OnLaserLoad += AnimateAll;
                 m_localLaser.OnLaserShot += AnimateAll;
             }
 
             if(m_synchronizeLaser != null) {
-                m_synchronizeLaser.OnLaserCancel += AnimateAll;
-                m_synchronizeLaser.OnLaserCharge += AnimateAll;
+                m_synchronizeLaser.OnLaserLoad += AnimateAll;
                 m_synchronizeLaser.OnLaserShot += AnimateAll;
             }
 

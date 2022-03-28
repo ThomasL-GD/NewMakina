@@ -53,13 +53,11 @@ namespace Network.Connexion_Menu {
         public static NewTargetDelegator SetNewTargetForAll;
         public static NewSensitiveTargetDelegator SetNewSensitiveTargetForAll;
 
-        public AnimationTrigger OnLaserCharge;
+        public AnimationBoolChange OnLaserLoad;
         public AnimationTrigger OnLaserShot;
-        public AnimationTrigger OnLaserCancel;
 
-        private static readonly int Load = Animator.StringToHash("Load");
-        private static readonly int Unload = Animator.StringToHash("Unload");
-        private static readonly int Shoot = Animator.StringToHash("Shoot");
+        private static readonly int IsLoading = Animator.StringToHash("IsLoading");
+        private static readonly int IsShooting = Animator.StringToHash("IsShooting");
 
         // Start is called before the first frame update
         private void Start() {
@@ -78,7 +76,7 @@ namespace Network.Connexion_Menu {
             if (m_shutDown) return;
 
             if (OVRInput.Get(m_input) < m_upTriggerValue) { //Let go
-                OnLaserCancel?.Invoke(Unload);
+                OnLaserLoad?.Invoke(IsLoading, false);
                 m_isShooting = false;
                 m_line.enabled = false;
                 m_elapsedHoldingTime = 0f;
@@ -87,7 +85,8 @@ namespace Network.Connexion_Menu {
             
             if (m_elapsedHoldingTime > m_laserLoadingTime) { //shot
                 
-                OnLaserShot?.Invoke(Shoot);
+                OnLaserShot?.Invoke(IsShooting);
+                OnLaserLoad?.Invoke(IsLoading, false);
                 
                 
                 Vector3 handForward = transform.forward;
@@ -127,10 +126,6 @@ namespace Network.Connexion_Menu {
                     }
                     
                     StartCoroutine(ShotDownLaser(handPosition, direction, hitTheTarget));
-
-
-                    m_shutDown = true;
-                    m_line.enabled = false;
                     
                     if (!hitTheTarget) return;
                         if (m_targetThatIsSensitive != null) m_targetThatIsSensitive.OnBeingActivated();
@@ -166,9 +161,14 @@ namespace Network.Connexion_Menu {
 
                     StartCoroutine(ShotDownLaser(handPosition, hitInfo.point - handPosition, hit));
                 }
+
+
+                m_shutDown = true;
+                m_line.enabled = false;
             }
             
             else if (m_isShooting) { //Holding
+                OnLaserLoad?.Invoke(IsLoading, true);
                 m_line.enabled = true;
                 m_elapsedHoldingTime += Time.deltaTime;
                 float ratio = m_elapsedHoldingTime / m_laserLoadingTime;
@@ -184,7 +184,7 @@ namespace Network.Connexion_Menu {
                 m_line.SetPosition(0, position);
             }
             else if (OVRInput.Get (m_input) >= m_upTriggerValue) { // If the player press the trigger hard enough
-                OnLaserCharge?.Invoke(Load);
+                OnLaserLoad?.Invoke(IsLoading, true);
                 m_isShooting = true;
                 m_elapsedHoldingTime = 0f;
             }

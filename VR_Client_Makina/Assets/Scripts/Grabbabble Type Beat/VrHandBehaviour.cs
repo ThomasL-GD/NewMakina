@@ -16,7 +16,7 @@ public class VrHandBehaviour : MonoBehaviour {
         private set {
             if (value == _objectHeld) return;
 
-            OnGrabItemChange?.Invoke(IsClosed, value != null);
+            OnGrabItemChange?.Invoke(IsGrabbing, value != null);
             _objectHeld = value;
         }
     }
