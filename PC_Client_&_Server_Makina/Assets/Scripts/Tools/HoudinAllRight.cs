@@ -53,16 +53,20 @@ namespace Tools
         
             if (m_children[p_index] != null)
             {
+            #if UNITY_EDITOR
                 // Adding the modification to the CTRL Z List
                 Undo.RecordObject(m_children[p_index], "Change GameObject with HoudinAllRight");
+            #endif
                 m_children[p_index].SetActive(p_active);
                 m_children[p_index].tag = p_active?"Untagged":"EditorOnly";
             }
             else
             {
                 Refresh();
+                #if UNITY_EDITOR
                 // Adding the modification to the CTRL Z List
                 Undo.RecordObject(m_children[p_index], "Change GameObject with HoudinAllRight");
+                #endif
                 if (m_children[p_index] != null)
                 {
                     m_children[p_index].SetActive(p_active);

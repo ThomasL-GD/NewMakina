@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6766729481684740877}
   - component: {fileID: 6766729481684740876}
   - component: {fileID: 430008472501993966}
+  - component: {fileID: 5340847528873073854}
   m_Layer: 12
   m_Name: Player
   m_TagString: Untagged
@@ -29,6 +30,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.08, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6766729482139498321}
   m_RootOrder: 1
@@ -45,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f91b4fcd0cde26a458d0ebfe5cec3bf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_isDead: 0
   m_edgeAutoStopCheckDistance: 0.25
   m_minSpeedFactor: 0.5
   m_edgeSafety: 1
@@ -220,6 +223,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_camera: {fileID: 6766729482695574459}
+  m_mapCamera: {fileID: 0}
+  m_elevatorButtonFeedback: {fileID: 0}
+--- !u!114 &5340847528873073854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6766729481684740883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccca9cedac5e87f49a765c9f7585901f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_customLitSettings: {fileID: 11400000, guid: 58555d8da53fdb64094cd5e50fd41663, type: 2}
 --- !u!1 &6766729481713316471
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,6 +264,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6766729482695574457}
   m_Father: {fileID: 6766729482139498321}
@@ -277,6 +296,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6766729481713316464}
   - {fileID: 6766729481684740878}
@@ -312,6 +332,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6766729481713316464}
   m_RootOrder: 0
@@ -389,6 +410,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 0
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
