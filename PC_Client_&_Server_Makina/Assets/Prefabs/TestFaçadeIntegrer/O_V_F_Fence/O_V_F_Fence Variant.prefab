@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8558419417668241563}
   - component: {fileID: 4713657513867003710}
   - component: {fileID: 7390039481064371188}
+  - component: {fileID: 8089615367533511834}
   m_Layer: 0
   m_Name: O_V_F_Fence Variant
   m_TagString: Untagged
@@ -83,6 +84,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8089615367533511834
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9047254124950426145}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.37600002, y: 3.0231915, z: 2.5707083}
+  m_Center: {x: -0.000015272788, y: -0.011587873, z: 1.2853541}
 --- !u!1001 &3392995955661544305
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -93,6 +107,10 @@ PrefabInstance:
     - target: {fileID: 8518831239647300535, guid: f896b6e5179ca3c4aa7c8189d70b48ba, type: 3}
       propertyPath: m_Name
       value: O_V_F_Fence2 Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8518831239647300535, guid: f896b6e5179ca3c4aa7c8189d70b48ba, type: 3}
+      propertyPath: m_Layer
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 8518831239647300535, guid: f896b6e5179ca3c4aa7c8189d70b48ba, type: 3}
       propertyPath: m_IsActive
@@ -154,6 +172,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8518831239647300535, guid: f896b6e5179ca3c4aa7c8189d70b48ba, type: 3}
   m_PrefabInstance: {fileID: 3392995955661544305}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &7993375775060286792
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6426249884728725702}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.18984632, y: 3.0231915, z: 2.2978823}
+  m_Center: {x: -0.000015271293, y: -0.011587931, z: 1.14894}
 --- !u!1001 &5349759395150627327
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -222,19 +253,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b9da0b3734740094e9b89876bda412a6, type: 3}
   m_PrefabInstance: {fileID: 5349759395150627327}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &1306531207412575185
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5115878082167585966}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.37599996, y: 3.0231917, z: 2.5707083}
-  m_Center: {x: 0, y: -0.01159549, z: 1.2853541}
 --- !u!114 &8439720206370606170
 MonoBehaviour:
   m_ObjectHideFlags: 0
