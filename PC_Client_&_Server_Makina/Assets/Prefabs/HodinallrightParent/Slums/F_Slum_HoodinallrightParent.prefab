@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8755208371172305617}
   - component: {fileID: 5901582180302544978}
+  - component: {fileID: 7492932783643672503}
   m_Layer: 0
   m_Name: F_Slum_HoodinallrightParent
   m_TagString: Untagged
@@ -65,6 +66,19 @@ MonoBehaviour:
   - {fileID: 3786087302900611034}
   - {fileID: 8507938523697094901}
   - {fileID: 2350159750477463978}
+--- !u!65 &7492932783643672503
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 398219412336495747}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3, y: 3, z: 0.5}
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1001 &595548653396682913
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -877,7 +891,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -90
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8416657835246639107, guid: cadc7583ee60aa24385b7988148348d8, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: cadc7583ee60aa24385b7988148348d8, type: 3}
 --- !u!4 &2446567785901607210 stripped
 Transform:
@@ -984,7 +999,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -90
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4591953482597106323, guid: 0401c671f33c7074abead549f9fc17d2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 0401c671f33c7074abead549f9fc17d2, type: 3}
 --- !u!1 &7336999991536530798 stripped
 GameObject:
@@ -1091,7 +1107,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -90
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1145044249269461079, guid: 45afa6b4c96adc14fa27ec7e510e32e4, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 45afa6b4c96adc14fa27ec7e510e32e4, type: 3}
 --- !u!1 &8300338559755115126 stripped
 GameObject:
