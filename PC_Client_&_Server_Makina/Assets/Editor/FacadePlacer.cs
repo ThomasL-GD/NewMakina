@@ -110,7 +110,7 @@ class FacadePlacer : EditorWindow
             lineTop = Max(lineTop, y);
         }
 
-        m_lineHeight += 0.005f;
+        m_lineHeight = m_selection.transform.position.y *  0.005f;
 
         m_lines = CeilToInt((lineTop - m_lineHeight) / m_assetHeight);
 
@@ -576,9 +576,11 @@ class FacadePlacer : EditorWindow
 
         if (Button("\nPlace Facades!\n") && m_selection!=null && m_facade != null)
         {
-            var facadesParent = new GameObject(){name =  "facades", tag = "HoudinAllRight Select Ignore"};
+            var facadesParent = new GameObject(){name =  "facades"};
             facadesParent.transform.SetParent(m_selection.transform);
 
+            m_selection.tag = "HoudinAllRight Select Ignore";
+            
             var middleParent = new GameObject(){name = "middle facades"};
             var topParent = new GameObject(){name = "top facades"};
             var bottomParent = new GameObject(){name = "bottom facades"};
