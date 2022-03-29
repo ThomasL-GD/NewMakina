@@ -1,3 +1,4 @@
+using Animation.AnimationDelegates;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -9,12 +10,32 @@ public class VrHandBehaviour : MonoBehaviour {
     [SerializeField] [Range(0.01f,1f)]/**/ private float m_triggerGrabSensitivity = 0.2f;
     //[SerializeField] [Range(0.01f,1f)]/**/ private float m_triggerLetGoSensitivity = 0.9f;
 
-    [CanBeNull] private GrabbableObject m_objectHeld = null;
+    public AnimationBoolChange OnGrabItemChange;
+    [CanBeNull] public GrabbableObject m_objectHeld {
+        get => _objectHeld;
+        private set {
+            if (value == _objectHeld) return;
+
+            OnGrabItemChange?.Invoke(IsGrabbing, value != null);
+            _objectHeld = value;
+        }
+    }
+    [CanBeNull] private GrabbableObject _objectHeld = null;
     public bool isFree => m_objectHeld == null && m_isPressingTrigger;
 
-    public bool m_isPressingTrigger { get; private set; } = false;
+    public AnimationBoolChange OnClosedHandChange;
+    public bool m_isPressingTrigger {
+        get => _isPressingTrigger;
+        private set {
+            if (value == _isPressingTrigger) return;
 
-    private Animator m_animator = null;
+            OnClosedHandChange?.Invoke(IsClosed, value);
+            _isPressingTrigger = value;
+        }
+    }
+    private bool _isPressingTrigger = false;
+
+    private static readonly int IsClosed = Animator.StringToHash("IsClosed");
     private static readonly int IsGrabbing = Animator.StringToHash("IsGrabbing");
     public static int s_layer = -1;
 
@@ -26,22 +47,17 @@ public class VrHandBehaviour : MonoBehaviour {
 #endif
         
         s_layer = gameObject.layer;
-
-        if (TryGetComponent(out Animator animator)) {
-            m_animator = animator;
-        }
     }
 
     private void Update() {
         m_isPressingTrigger = OVRInput.Get(m_grabInput) >= m_triggerGrabSensitivity; //if the trigger is pressed enough, the boolean becomes true
-        m_animator.SetBool(IsGrabbing, m_isPressingTrigger);
 
         if (m_objectHeld == null) return; //We keep going if an item is held
+
+        if (m_isPressingTrigger) return; //We keep going if the trigger is NOT PRESSED anymore
         
-        if(!m_isPressingTrigger) {
-            m_objectHeld.BeLetGo(m_grabInput);
-            m_objectHeld = null;
-        }
+        m_objectHeld.BeLetGo(m_grabInput);
+        m_objectHeld = null;
     }
 
     /// <summary>Will attach an object to this hand</summary>

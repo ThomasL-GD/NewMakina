@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Animation.AnimationDelegates;
 using CustomMessages;
 using Synchronizers;
 using UnityEngine;
@@ -52,8 +53,14 @@ namespace Network.Connexion_Menu {
         public static NewTargetDelegator SetNewTargetForAll;
         public static NewSensitiveTargetDelegator SetNewSensitiveTargetForAll;
 
+        public AnimationBoolChange OnLaserLoad;
+        public AnimationTrigger OnLaserShot;
+
+        private static readonly int IsLoading = Animator.StringToHash("IsLoading");
+        private static readonly int IsShooting = Animator.StringToHash("IsShooting");
+
         // Start is called before the first frame update
-        void Start() {
+        private void Start() {
             m_line = GetComponent<LineRenderer>();
             m_line.enabled = false;
             MyNetworkManager.OnReceiveInitialData += DestroyMyself;
@@ -63,12 +70,13 @@ namespace Network.Connexion_Menu {
         }
 
         // Update is called once per frame
-        void Update() {
+        private void Update() {
 
             if (!m_isActive) return;
             if (m_shutDown) return;
 
             if (OVRInput.Get(m_input) < m_upTriggerValue) { //Let go
+                OnLaserLoad?.Invoke(IsLoading, false);
                 m_isShooting = false;
                 m_line.enabled = false;
                 m_elapsedHoldingTime = 0f;
@@ -76,6 +84,9 @@ namespace Network.Connexion_Menu {
 
             
             if (m_elapsedHoldingTime > m_laserLoadingTime) { //shot
+                
+                OnLaserShot?.Invoke(IsShooting);
+                OnLaserLoad?.Invoke(IsLoading, false);
                 
                 
                 Vector3 handForward = transform.forward;
@@ -115,10 +126,6 @@ namespace Network.Connexion_Menu {
                     }
                     
                     StartCoroutine(ShotDownLaser(handPosition, direction, hitTheTarget));
-
-
-                    m_shutDown = true;
-                    m_line.enabled = false;
                     
                     if (!hitTheTarget) return;
                         if (m_targetThatIsSensitive != null) m_targetThatIsSensitive.OnBeingActivated();
@@ -154,9 +161,14 @@ namespace Network.Connexion_Menu {
 
                     StartCoroutine(ShotDownLaser(handPosition, hitInfo.point - handPosition, hit));
                 }
+
+
+                m_shutDown = true;
+                m_line.enabled = false;
             }
             
             else if (m_isShooting) { //Holding
+                OnLaserLoad?.Invoke(IsLoading, true);
                 m_line.enabled = true;
                 m_elapsedHoldingTime += Time.deltaTime;
                 float ratio = m_elapsedHoldingTime / m_laserLoadingTime;
@@ -172,6 +184,7 @@ namespace Network.Connexion_Menu {
                 m_line.SetPosition(0, position);
             }
             else if (OVRInput.Get (m_input) >= m_upTriggerValue) { // If the player press the trigger hard enough
+                OnLaserLoad?.Invoke(IsLoading, true);
                 m_isShooting = true;
                 m_elapsedHoldingTime = 0f;
             }
