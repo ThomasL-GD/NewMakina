@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Animation.AnimationDelegates;
 using CustomMessages;
 using Network;
 using Network.Connexion_Menu;
@@ -43,6 +44,12 @@ namespace Synchronizers {
 
         private bool m_isLoading = false;
 
+        public AnimationBoolChange OnLaserLoad;
+        public AnimationTrigger OnLaserShot;
+
+        private static readonly int IsLoading = Animator.StringToHash("IsLoading");
+        private static readonly int Shoot = Animator.StringToHash("Shoot");
+
         // Start is called before the first frame update
         private void Awake() {
 
@@ -67,7 +74,22 @@ namespace Synchronizers {
         /// Called when the server tell us that we're aiming or shooting, displays or not the aiming line
         /// </summary>
         /// <param name="p_laser">The message sent by the server</param>
-        private void SynchroniseLaserAiming(Laser p_laser) => m_laserAiming.enabled = p_laser.laserState == LaserState.Aiming;
+        private void SynchroniseLaserAiming(Laser p_laser) {
+            m_laserAiming.enabled = p_laser.laserState == LaserState.Aiming;
+            switch (p_laser.laserState) {
+                case LaserState.Aiming:
+                    OnLaserLoad?.Invoke(IsLoading, false);
+                    break;
+                case LaserState.Shooting:
+                    OnLaserLoad?.Invoke(IsLoading, false);
+                    OnLaserShot?.Invoke(Shoot);
+                    break;
+                case LaserState.CancelAiming:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
 
 
         /// <summary>
@@ -124,6 +146,7 @@ namespace Synchronizers {
             if (OVRInput.Get(m_input) < m_upTriggerValue) {
                 
                 MyNetworkManager.singleton.SendVrData<VrLaser>(new VrLaser(){laserState = LaserState.CancelAiming});
+                OnLaserLoad?.Invoke(IsLoading, false);
                 m_isTriggerPressed = false;
                 m_isLoading = false;
                 m_laserAiming.enabled = false;
