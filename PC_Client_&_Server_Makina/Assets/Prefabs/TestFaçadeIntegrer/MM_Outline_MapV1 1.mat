@@ -24,7 +24,7 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: 447e81b15db719042a8bd3dafa903d21, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -94,17 +94,21 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AO_Intensity: 1
     - _AmbientOcclusion: 1
+    - _Blend_Intensity: 0
     - _GlobalIllumination: 1
     - _GlobalLighting: 1
     - _Light_Intensity_multiplier: 8.8
     - _NormalStrength: 0
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _SSAO_Intensity: 1
     - _Smoothness: 0
     - _Tiling: -0.05
     - _TriplanarBlendSharpness: 3.33
     m_Colors:
+    - _BlendColor: {r: 0.053194255, g: 1, b: 0, a: 0}
     - _Smoothstep_B: {r: 0, g: 0.8, b: 0, a: 0}
     - _Smoothstep_G: {r: 0, g: 0.6, b: 0, a: 0}
     - _Smoothstep_R: {r: -0.2, g: 0.28, b: 0, a: 0}
