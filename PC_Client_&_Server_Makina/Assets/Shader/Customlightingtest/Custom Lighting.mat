@@ -33,14 +33,62 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Albedo:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: b109254a7e388304581a16d43ee43aa3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Albedo_1:
+        m_Texture: {fileID: 2800000, guid: 987853499e2da6c4fada4c4e8451d454, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Albedo_2:
+        m_Texture: {fileID: 2800000, guid: 8a672cfcd753d8146b60cefdf75decc1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Hash:
-        m_Texture: {fileID: 2800000, guid: 9f0edd96b0d907b49bf223076ba6c4a0, type: 3}
+        m_Texture: {fileID: 2800000, guid: 71236b1a21354a94686661745950be03, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: 044943f3e1e93bf409e3154f1fa176cb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal_B:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal_G:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal_R:
+        m_Texture: {fileID: 2800000, guid: 6b4b9a6b9b9f89a409b49adf756c617c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OutlineMap:
+        m_Texture: {fileID: 2800000, guid: e9e1429631fb6a8478b2e6ceb0222268, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RGB_MAsk:
+        m_Texture: {fileID: 2800000, guid: dd1b332c2c3735d4e887ff8a4a739850, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RGB_Mask:
+        m_Texture: {fileID: 2800000, guid: dd1b332c2c3735d4e887ff8a4a739850, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture_B:
+        m_Texture: {fileID: 2800000, guid: 8a672cfcd753d8146b60cefdf75decc1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture_G:
+        m_Texture: {fileID: 2800000, guid: 987853499e2da6c4fada4c4e8451d454, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture_R:
+        m_Texture: {fileID: 2800000, guid: 116c2a3e4b076b6479085cec3a8288bd, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _UV3Outline_649258778ee446778b53c69e4c00b55c_OutlineMap_3947728241:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -58,20 +106,25 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AmbientOcclusion: 0.002
+    - _AmbientOcclusion: 1
     - _FallOffAmount: 0.05
     - _Float: 7.43
-    - _Light_Intensity_multiplier: 6.3
+    - _Light_Intensity_multiplier: 5.37
     - _LightingCutoff: 0
-    - _NormalStrength: 0.62
+    - _NormalStrength: 0
+    - _Offset_B: 1
+    - _Offset_G: 1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Smoothness: 0.103
-    - _Tiling: 0.05
-    - _TriplanarBlendSharpness: 5
+    - _Smoothness: 0.05
+    - _Tiling: 0.14
+    - _TriplanarBlendSharpness: 3.8
     - _f: 158.42
     m_Colors:
     - _First_Smoothstep_Cel: {r: 0, g: 0.2, b: 0, a: 0}
-    - _Second_Smoothstep_Cel: {r: 0.4, g: 0.55, b: 0, a: 0}
-    - _Third_Smoothstep_Cel: {r: 0.8, g: 0.95, b: 0, a: 0}
+    - _Second_Smoothstep_Cel: {r: 0.5, g: 0.6, b: 0, a: 0}
+    - _Smoothstep_B: {r: 0.35, g: 0.7, b: 0, a: 0}
+    - _Smoothstep_G: {r: 0.28, g: 0.5, b: 0, a: 0}
+    - _Smoothstep_R: {r: 0, g: 0.28, b: 0, a: 0}
+    - _Third_Smoothstep_Cel: {r: 0.9, g: 0.95, b: 0, a: 0}
   m_BuildTextureStacks: []
