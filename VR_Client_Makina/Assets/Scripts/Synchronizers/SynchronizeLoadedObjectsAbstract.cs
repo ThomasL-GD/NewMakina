@@ -38,6 +38,24 @@ namespace Synchronizers {
             m_availblePositions[p_index] = true;
         }
         
+        /// <summary/> A function to find the index of the beacon that matches the given ID
+        /// <param name="p_index"> the estimated index of the wanted beacon </param>
+        /// <param name="p_beaconID"> the ID of the wanted beacon </param>
+        /// <returns> returns the index of the beacon with the right ID if none are found, returns null </returns>
+        private int? FindObjectFromID(int p_index, float p_beaconID) {
+            int index = p_index;
+            float ID = p_beaconID;
+            List<BeaconInfo> data = m_beacons;
+            if ( index < data.Count && data[index].serverID == ID) return index;
+
+            for (int i = 0; i < data.Count; i++) if (data[i].serverID == ID) return i;
+
+#if UNITY_EDITOR
+            Debug.LogWarning("I couldn't find the index matching this ID brother",this);
+#endif
+            return null;
+        }
+        
         //TODO : improve this coz there is a lot of copy/paste in bombs & beacons
         
     }
