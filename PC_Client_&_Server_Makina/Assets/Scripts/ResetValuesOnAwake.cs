@@ -37,7 +37,5 @@ public class ResetValuesOnAwake : MonoBehaviour
 
     /// <summary/> Converts a vector 2 to a vector4 with z and w = 0
     private Vector4 Vector2To4(Vector2 p_vector2)
-    {
-        return new Vector4(p_vector2.x, p_vector2.y, 0f, 0f);
-    }
+    {return new Vector4(p_vector2.x, p_vector2.y, 0f, 0f);}
 }

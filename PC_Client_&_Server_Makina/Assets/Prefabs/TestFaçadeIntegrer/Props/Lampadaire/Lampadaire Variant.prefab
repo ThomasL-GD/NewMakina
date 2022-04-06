@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 25
   m_IsActive: 0
 --- !u!4 &6311415806431947117
 Transform:
@@ -99,7 +99,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 25
   m_IsActive: 1
 --- !u!4 &2167857462239348798
 Transform:
@@ -128,8 +128,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0.8141095, b: 0.18396229, a: 1}
-  m_Intensity: 0.87
-  m_Range: 3
+  m_Intensity: 4.99
+  m_Range: 9.96
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -261,6 +261,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lampadaire Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 309c8137ad535fa4cb4867064ff050a8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 25
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -7511558181221131132, guid: 309c8137ad535fa4cb4867064ff050a8, type: 3}
     - {fileID: -5754084199372789682, guid: 309c8137ad535fa4cb4867064ff050a8, type: 3}
@@ -337,6 +341,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 19
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 309c8137ad535fa4cb4867064ff050a8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 25
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 309c8137ad535fa4cb4867064ff050a8, type: 3}
 --- !u!1 &4735296557092153501 stripped
@@ -344,8 +352,8 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 309c8137ad535fa4cb4867064ff050a8, type: 3}
   m_PrefabInstance: {fileID: 5581735583615981004}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &2239843462808827511
-BoxCollider:
+--- !u!136 &8053280493934992374
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -354,6 +362,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.212627, y: 0.20183097, z: 4.0084925}
-  m_Center: {x: 0.009105697, y: -0.0017856099, z: 2.0042462}
+  m_Radius: 0.12
+  m_Height: 4.22
+  m_Direction: 2
+  m_Center: {x: -0.00008509308, y: 0.0000076293945, z: 2.0042462}
