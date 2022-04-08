@@ -22,7 +22,7 @@ public class ElevatorButton : MonoBehaviour
                 m_elevator.ButtonActivateElevator();
             }
         }
-        else CameraAndUISingleton.elevatorButtonFeedback.SetActive(false);
+        else if(CameraAndUISingleton.elevatorButtonFeedback.activeSelf) CameraAndUISingleton.elevatorButtonFeedback.SetActive(false);
     }
 
     private void LateUpdate()
