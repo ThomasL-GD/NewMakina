@@ -9,13 +9,16 @@ public class BitmaskExperimentation : MonoBehaviour
     void FunctionToDoStuffWith()
     {
         m_bitmask = 0b00000000000;
+        int m_bitmask2 = 0b00000000010;
 
+        Debug.Log(Convert.ToString (m_bitmask, 2));
         m_bitmask |= 1 << 5;
-        m_bitmask |= 1 << 9;
-        m_bitmask |= 1 << 8;
-        m_bitmask &= ~(1 << 8);
-        
+        Debug.Log(Convert.ToString (m_bitmask, 2));
+        m_bitmask |= 1 << 6;
+        Debug.Log(Convert.ToString (m_bitmask, 2));
+        m_bitmask &= ~(1 << 5);
         Debug.Log(Convert.ToString (m_bitmask, 2));
         
+        Debug.Log((m_bitmask & 1<<5) == 0 && (m_bitmask & 1<<2) == 0);
     }
 }

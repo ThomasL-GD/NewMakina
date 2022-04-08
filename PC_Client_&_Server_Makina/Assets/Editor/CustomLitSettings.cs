@@ -103,9 +103,10 @@ public class CustomLitSettings : EditorWindow
             AssetDatabase.SaveAssets();
         }
 
-        if (Button("ResetBeacons"))
+        if (Button("Reset Beacons"))
         {
             Shader.SetGlobalInt(m_beaconBitMaskShaderID,0);
+            Shader.SetGlobalInt("_BeaconDetectionBitMask",0);
         }
     }
 

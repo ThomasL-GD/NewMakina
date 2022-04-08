@@ -29,10 +29,10 @@ float3 p_beaconPos8,float3 p_beaconPos9,out float distanceFromBeacon, out float 
 
     float beaconDistanceDetected = 999999;
 
-    for (uint i = 0; i < 10; i++)
+    for (uint j = 0; j < 10; j++)
     {
-        if((p_detectedBeaconBitMask & 1<<i) != 1<<i && (ActiveBitMask & 1<<i) != 1<<i) continue;
-        beaconDistanceDetected = min(distance(beaconPositions[p_detectedBeaconBitMask],Position),beaconDistanceDetected);
+        if((ActiveBitMask & 1<<j) == 0 || (p_detectedBeaconBitMask & 1<<j)== 0) continue;
+        beaconDistanceDetected = min(distance(beaconPositions[j],Position),beaconDistanceDetected);
     }
     
     distanceFromDetectedBeacon = beaconDistanceDetected;
