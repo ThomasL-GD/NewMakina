@@ -109,6 +109,7 @@ namespace Synchronizers {
                     Vector3 pos = oldBeacon.beaconPrefabInstance.transform.position;
                     
                     Shader.SetGlobalVector($"_beaconPosition_{i}", new Vector4(pos.x,pos.y,pos.z,0));
+                    Shader.SetGlobalFloat($"_beaconTimer_{i}", Time.time);
                     bitMaskIndex = i;
                     m_beacons[index ?? 0] = new Beacons(m_prefabBeaconActive,oldBeacon.ID,oldBeacon.beaconPrefabInstance.transform.position,oldBeacon.detected,bitMaskIndex);
                     Destroy(oldBeacon.beaconPrefabInstance);
