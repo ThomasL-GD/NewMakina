@@ -3715,6 +3715,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1d0f69dad19b50469b9df1f1e46bf20, type: 3}
+--- !u!82 &4024415477583325356 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6507767982970152900, guid: c1d0f69dad19b50469b9df1f1e46bf20, type: 3}
+  m_PrefabInstance: {fileID: 7893020200913112936}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7326766765447975169 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 586668069150170729, guid: c1d0f69dad19b50469b9df1f1e46bf20, type: 3}
@@ -3773,6 +3778,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_heartRadiusFeedback: {fileID: 3120131609268415001}
+  m_heartBreakingAudioSource: {fileID: 4024415477583325356}
 --- !u!4 &7326766765447975175 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 586668069150170735, guid: c1d0f69dad19b50469b9df1f1e46bf20, type: 3}
@@ -4049,7 +4055,7 @@ MonoBehaviour:
   m_leureLifeTime: 10
   m_uiElement: {fileID: 7308678917336243422}
   m_speed: 10
-  m_coolDownScript: {fileID: 1076979331201310526}
+  m_coolDownScripts: []
   m_isTutorial: 0
 --- !u!1001 &8347030434593105796
 PrefabInstance:
@@ -4236,31 +4242,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 123bf4a11a3e9fd4b952c1ce155cf540, type: 3}
---- !u!1 &2967100357103322169 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6812184744210899986, guid: 123bf4a11a3e9fd4b952c1ce155cf540, type: 3}
-  m_PrefabInstance: {fileID: 8621296938208370731}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8256575489670575079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2967100357103322169}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Version: 1
-  m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
-  m_LightLayerMask: 1
-  m_CustomShadowLayers: 0
-  m_ShadowLayerMask: 1
-  m_LightCookieSize: {x: 1, y: 1}
-  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!4 &7744719660609994559 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2080164520633229076, guid: 123bf4a11a3e9fd4b952c1ce155cf540, type: 3}

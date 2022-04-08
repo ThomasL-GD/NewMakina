@@ -23,7 +23,8 @@ namespace Synchronizers
         [SerializeField] [Tooltip("The time for which the player will be invisible on respawn")]
         private float m_invisibilityTime = 5f;
         
-        [SerializeField]private AudioSource m_deathSound;
+        [SerializeField] private AudioSource m_deathSound;
+        [SerializeField] [Tooltip("The sound played when the respawn invisibility ends")] private AudioSource m_invisibilityEndSound;
 
         public delegate void OnPlayerDeathDelegator();
 
@@ -94,6 +95,8 @@ namespace Synchronizers
 
             //Making the player visible
             NetworkClient.Send(new PcInvisibility() {isInvisible = false});
+            m_invisibilityEndSound.Stop();
+            m_invisibilityEndSound.Play();
         }
 
     }

@@ -6,11 +6,13 @@ using UnityEngine;
 public class SynchronizeHeartRadius : Synchronizer<SynchronizeHeartRadius>
 {
     [SerializeField] private TextMeshProUGUI m_heartRadiusFeedback;
+    [SerializeField] private AudioSource m_heartBreakingAudioSource;
 
     private float m_maxHeartTime;
     // Start is called before the first frame update
     void Awake()
     {
+        m_heartRadiusFeedback.enabled = false;
         ClientManager.OnReceiveHeartConquerStop += ReceiveHeartConquerStop;
         ClientManager.OnReceiveHeartConquerStart += ReceiveHeartConquerStart;
         ClientManager.OnReceiveInitialData += ReceiveInitialData;
@@ -23,11 +25,14 @@ public class SynchronizeHeartRadius : Synchronizer<SynchronizeHeartRadius>
     {
         m_heartRadiusFeedback.enabled = false;
         m_heartRadiusFeedback.text = "";
+        m_heartBreakingAudioSource.Stop();
     }
     
 
     private void ReceiveHeartConquerStart(HeartConquerStart p_heartconquerstart)
     {
+        if(m_heartRadiusFeedback.enabled == false) m_heartBreakingAudioSource.Play();
+        
         m_heartRadiusFeedback.enabled = true;
         string timer = p_heartconquerstart.time.ToString();
         string text = "x,y";

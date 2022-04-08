@@ -19,6 +19,8 @@ public class TeleportRollBack : AbstractMechanic
     private bool m_canUse = true;
 
     [SerializeField] private ReloadingAbstract m_coolDownScript;
+    
+    [SerializeField] [Tooltip("The sound played when the rollback is used")] private AudioSource m_rollbackSound;
 
     [SerializeField] private bool m_isTutorial = false;
     
@@ -74,6 +76,9 @@ public class TeleportRollBack : AbstractMechanic
         m_podIcon.enabled = false;
         if(m_placed) NetworkClient.Send(new RemoveTp());
         m_placed = false;
+        
+        m_rollbackSound.Play();
+        
         Destroy(m_teleportLocation);
     }
 }

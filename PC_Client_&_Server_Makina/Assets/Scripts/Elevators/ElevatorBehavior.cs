@@ -14,6 +14,8 @@ public class ElevatorBehavior : MonoBehaviour
     [SerializeField] private Color m_lightColorOn = Color.red;
     [HideInInspector]public bool m_activated;
     private bool m_goingUp = true;
+    
+    [SerializeField] private AudioSource m_elevatorAudioSource;
 
     private int m_index;
     
@@ -23,8 +25,17 @@ public class ElevatorBehavior : MonoBehaviour
     private bool m_doneWaiting;
 
 
-    private void Start()
-    {
+    private void Start() {
+#if UNITY_EDITOR
+        if (m_elevatorAudioSource == null) {
+            if (TryGetComponent(out AudioSource audioSource)) {
+                Debug.LogWarning("No AudioSource serialized For the elevators, but i found one in this gameobject so I took that (personally)", this);
+                m_elevatorAudioSource = audioSource;
+            }else {
+                Debug.LogWarning("No AudioSource Serialized here, this elevator will thus make no sound at all", this);
+            }
+        }
+#endif
         float posY = transform.position.y;
         m_bottomPosition = posY;
         m_topPosition = posY + m_topPosition;
@@ -57,6 +68,8 @@ public class ElevatorBehavior : MonoBehaviour
     }
     
     public void ButtonActivateElevator(){
+        m_elevatorAudioSource.Stop();
+        m_elevatorAudioSource.Play();
         NetworkClient.Send(new ElevatorActivation(){index = m_index});
     }
     
