@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using CustomMessages;
 using Network;
+using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -19,6 +21,9 @@ namespace Synchronizers {
         [SerializeField] private Color m_undetectedColor = Color.red;
         [SerializeField] private Color m_detectedColor = Color.green;
         //[SerializeField] private Color m_unactiveColor = Color.blue;
+        
+        [Header("Sounds")]
+        [SerializeField, Tooltip("Must contain an AudioSource component")] private AudioClip m_beaconDetectSoundPrefab;
 
         
         private int m_beaconBitMaskDetected = 0;
@@ -207,7 +212,7 @@ namespace Synchronizers {
         }
         
         /// <summary>
-        /// Is called when we receive a DestroyedBeacon message from server
+        /// Is called when we receive a BeaconDetectionUpdate message from server
         /// Will update the state and the color of a beacon depending on if they are in range or not according to the server
         /// </summary>
         /// <param name="p_beaconDetectionUpdate">The message from the server</param>
@@ -217,7 +222,16 @@ namespace Synchronizers {
             if (index == null) {
                 return;
             }
-            
+
+            if (!m_beacons[index ?? 0].isDetecting && p_beaconDetectionUpdate.playerDetected) {
+                if (m_beacons[index ?? 0].beaconScript.gameObject.TryGetComponent(out AudioSource audioSource)) {
+                    audioSource.clip = m_beaconDetectSoundPrefab;
+                    audioSource.Play();
+                }else {
+                    AudioSource createdAudioSource = m_beacons[index ?? 0].beaconScript.gameObject.AddComponent<AudioSource>();
+                    createdAudioSource.Play();
+                }
+            }
             m_beacons[index??0].isDetecting = p_beaconDetectionUpdate.playerDetected;
             //Debug.Log($"Is player detected ? actually the {p_beaconDetectionUpdate.index} is {(p_beaconDetectionUpdate.playerDetected? "REALLY" : "NOT" )} detecting", this);
             
