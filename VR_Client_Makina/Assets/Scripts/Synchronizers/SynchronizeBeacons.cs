@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using CustomMessages;
 using Network;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Synchronizers {
     public class SynchronizeBeacons : SynchronizeLoadedObjectsAbstract {
@@ -18,6 +20,14 @@ namespace Synchronizers {
         [SerializeField] private Color m_detectedColor = Color.green;
         //[SerializeField] private Color m_unactiveColor = Color.blue;
 
+        
+        private int m_beaconBitMaskDetected = 0;
+        
+        private static readonly int m_beaconColorProperty = Shader.PropertyToID("_Beacon_Color");
+        private static readonly int m_beaconRangeShaderID = Shader.PropertyToID("_BeaconRange");
+        private static readonly int m_beaconBitMaskShaderID = Shader.PropertyToID("_BeaconBitMask");
+        private static readonly int m_beaconDetectionBitMaskShaderID = Shader.PropertyToID("_BeaconDetectionBitMask");
+        
         /// <summary> Contains a gameobject of a beacon and its server ID, additionally contains booleans that explain the beacon state </summary>
         private class BeaconInfo {
             /// <summary>The gameobject of the beacon to grab</summary>
@@ -34,17 +44,19 @@ namespace Synchronizers {
 
             /// <summary> The ID the server uses for verifications, basically don't touch this </summary>
             public float serverID;
+            public int bitMaskIndex;
 
             /// <summary> The constructor of a beaconInfo class </summary>
             /// <param name="p_grabScript">The GameObject of the beacon to grab</param>
             /// <param name="p_serverID">The server id of the beacon</param>
             /// <param name="p_deployedBeaconScript">The gameobject of the deployed beacon</param>
-            public BeaconInfo(BeaconBehavior p_grabScript, InflateToSize p_deployedBeaconScript, float p_serverID) {
+            public BeaconInfo(BeaconBehavior p_grabScript, InflateToSize p_deployedBeaconScript, float p_serverID, int p_BitMaskIndex) {
                 isDetecting = false;
                 isOnTheGroundAndSetUp = false;
                 beaconScript = p_grabScript;
                 serverID = p_serverID;
                 deployedBeaconScript = p_deployedBeaconScript;
+                bitMaskIndex = p_BitMaskIndex;
             }
         }
         
@@ -88,7 +100,11 @@ namespace Synchronizers {
                 
                 Destroy(m_beacons[FindBeaconFromID(i, m_beacons[i].serverID)??0].deployedBeaconScript.gameObject);
             }
+
+            m_beaconBitMaskDetected = 0;
             
+            Shader.SetGlobalInt(m_beaconBitMaskShaderID,0b00000000000);
+            Shader.SetGlobalInt(m_beaconDetectionBitMaskShaderID,0b00000000000);
             m_beacons.Clear();
         }
 
@@ -97,6 +113,11 @@ namespace Synchronizers {
         protected override void ReceiveInitialData(InitialData p_initialData) {
             base.ReceiveInitialData(p_initialData);
             m_maxSlotsLoading = p_initialData.maximumBeaconCount;
+            
+            m_beaconBitMaskDetected = 0;
+            
+            Shader.SetGlobalInt(m_beaconBitMaskShaderID,0b00000000000);
+            Shader.SetGlobalInt(m_beaconDetectionBitMaskShaderID,0b00000000000);
         }
 
         private void Update() {
@@ -133,8 +154,9 @@ namespace Synchronizers {
             GameObject daChild = Instantiate(m_prefabDeployedBeacon, go.transform);
             InflateToSize deployScript = daChild.GetComponent<InflateToSize>();
             
-            m_beacons.Add(new BeaconInfo(beaconScript, deployScript, p_spawnBeacon.beaconID));
-            
+            m_beacons.Add(new BeaconInfo(beaconScript, deployScript, p_spawnBeacon.beaconID,0));
+
+            m_beacons[m_beacons.Count - 1].bitMaskIndex = m_beacons.Count - 1;
             
             beaconScript.m_index = m_beacons.Count - 1;
             beaconScript.m_serverID = p_spawnBeacon.beaconID;
@@ -170,6 +192,15 @@ namespace Synchronizers {
                 return;
             }
             
+            
+            int bitmask = Shader.GetGlobalInt(m_beaconBitMaskShaderID);
+            bitmask &= ~(1 << m_beacons[index??0].bitMaskIndex);
+            Shader.SetGlobalInt(m_beaconBitMaskShaderID,bitmask);
+            
+            m_beaconBitMaskDetected &= ~(1 << m_beacons[index??0].bitMaskIndex);
+            Shader.SetGlobalInt(m_beaconDetectionBitMaskShaderID,m_beaconBitMaskDetected);
+            
+            
             GameObject go = m_beacons[index ?? 0].deployedBeaconScript.gameObject;
             m_beacons.RemoveAt(index??0);
             Destroy(go);
@@ -188,12 +219,11 @@ namespace Synchronizers {
             }
             
             m_beacons[index??0].isDetecting = p_beaconDetectionUpdate.playerDetected;
-            
             //Debug.Log($"Is player detected ? actually the {p_beaconDetectionUpdate.index} is {(p_beaconDetectionUpdate.playerDetected? "REALLY" : "NOT" )} detecting", this);
             
             ActualiseColorOfBeacon(index??0);
         }
-        
+
         /// <summary> Will actualise the color of a beacon according to what it should display according to the beacon state </summary>
         /// <param name="p_index">The index of the beacon</param>
         private void ActualiseColorOfBeacon(int p_index) {
@@ -204,9 +234,14 @@ namespace Synchronizers {
             else */switch (m_beacons[p_index].isDetecting) {
                 case true:
                     newColor = m_detectedColor;
+                    
+                    m_beaconBitMaskDetected &= ~(1 << m_beacons[p_index].bitMaskIndex);
+                    Shader.SetGlobalInt(m_beaconDetectionBitMaskShaderID,m_beaconBitMaskDetected);
                     break;
                 case false:
                     newColor = m_undetectedColor;
+                    m_beaconBitMaskDetected |= 1 << m_beacons[p_index].bitMaskIndex;
+                    Shader.SetGlobalInt(m_beaconDetectionBitMaskShaderID,m_beaconBitMaskDetected);
                     break;
             }
             
@@ -222,10 +257,14 @@ namespace Synchronizers {
         /// <param name="p_initialData">The message from the server</param>
         private void SetRangeOfBeacons(InitialData p_initialData) {
             m_range = p_initialData.beaconRange;
+            
+            Shader.SetGlobalFloat(m_beaconRangeShaderID, m_range);
 
             InflateToSize script = m_prefabDeployedBeacon.GetComponent<InflateToSize>();
             script.m_targetScale = (m_range * 2f) /* / m_prefabBeaconAmmo.transform.localScale.x*/;
             script.m_inflationTime = m_inflateTime;
+            
+            m_beaconBitMaskDetected = 0;
         }
 
         /// <summary> Send to the network manager the ActivateBeacon message </summary>
@@ -235,7 +274,9 @@ namespace Synchronizers {
             
             int? index = FindBeaconFromID(p_index, p_serverID);
             if (index == null) {
+#if UNITY_EDITOR
                 Debug.LogError($"What the fuck is that, horrible {p_index} c'est und des selling point la du jeu {p_serverID}");
+#endif
                 return;
             }
             
@@ -243,9 +284,26 @@ namespace Synchronizers {
             m_beacons[index??0].deployedBeaconScript.StartInflating();
             m_beacons[index??0].beaconScript.DestroyMaSoul();
             
+            int beaconBitMask = Shader.GetGlobalInt(m_beaconBitMaskShaderID);
+            int bitMaskIndex = -2;
+            
+            for (int i = 0; i < 10; i++)
+            {
+                if ((beaconBitMask & 1 << i) != 1 << i)
+                {
+                    m_beacons[index??0].bitMaskIndex = i;
+                    beaconBitMask |= 1 << m_beacons[index??0].bitMaskIndex;
+                    Shader.SetGlobalInt(m_beaconBitMaskShaderID, beaconBitMask);
+
+                    Vector3 pos = m_beacons[index??0].deployedBeaconScript.gameObject.transform.position;
+                    
+                    Shader.SetGlobalVector($"_beaconPosition_{i}", new Vector4(pos.x,pos.y,pos.z,0));
+                    break;
+                }
+            }
+            
             SetActivationOfABeacon(index??0, true);
             OnBeaconSetUp?.Invoke(m_beacons[index??0].beaconScript);
-            //Debug.LogWarning($"I'm sending a beacon activation, its index is : {index??0} and server id : {m_beacons[index??0].serverID}");
             MyNetworkManager.singleton.SendVrData(new ActivateBeacon(){index = index??0, beaconID = m_beacons[index??0].serverID});
         }
 

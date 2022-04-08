@@ -40,6 +40,7 @@ namespace Synchronizers {
             }
         }
         
+        private int m_beaconBitMaskDetected = 0;
         
         private float m_beaconRange;
         private static readonly int m_beaconColorProperty = Shader.PropertyToID("_Beacon_Color");
@@ -74,6 +75,8 @@ namespace Synchronizers {
             foreach (Beacons beacon in m_beacons) {
                 Destroy(beacon.beaconPrefabInstance);
             }
+
+            m_beaconBitMaskDetected = 0b00000000000;
             
             Shader.SetGlobalFloat(m_beaconBitMaskShaderID,0b00000000000);
             Shader.SetGlobalFloat(m_beaconDetectionBitMaskShaderID,0b00000000000);
@@ -124,6 +127,9 @@ namespace Synchronizers {
         private void ReceiveInitialData(InitialData p_initialData) {
             m_prefabBeaconActive.transform.localScale = Vector3.one * (p_initialData.beaconRange * 2f);
             Shader.SetGlobalFloat(m_beaconRangeShaderID,p_initialData.beaconRange);
+
+            m_beaconBitMaskDetected = 0b00000000000;
+            
             Shader.SetGlobalFloat(m_beaconBitMaskShaderID,0b00000000000);
             Shader.SetGlobalFloat(m_beaconDetectionBitMaskShaderID,0b00000000000);
         }
@@ -143,8 +149,6 @@ namespace Synchronizers {
                 m_beacons[index ?? 0].beaconPrefabInstance.transform.position = data.position;
             }
         }
-
-        private int m_beaconBitMaskDetected = 0;
         
         /// <summary/> Updating the beacon's detections statuses
         /// <param name="p_beaconDetectionUpdate"></param>
@@ -160,7 +164,7 @@ namespace Synchronizers {
             Material mat = beacon.beaconPrefabInstance.GetComponent<MeshRenderer>().material;
             mat.SetColor(m_beaconColorProperty, detected?m_detectedColor:m_undetectedColor);
             beacon.detected = detected;
-            Shader.GetGlobalInt(m_beaconDetectionBitMaskShaderID);
+            
             if(detected)
             {
                 // Debug.Log(Convert.ToString (m_beaconBitMaskDetected, 2));
