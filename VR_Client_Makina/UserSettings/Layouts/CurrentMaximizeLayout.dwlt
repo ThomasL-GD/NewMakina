@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 2235
+  controlID: 468
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -132,11 +132,6 @@ MonoBehaviour:
     \"157e485d736c4d248eeddcda0e6c5847\"\n                },\n                \"m_SlotId\":
     2\n            },\n            \"m_InputSlot\": {\n                \"m_Node\":
     {\n                    \"m_Id\": \"4a84bb37a537479aac3d82a87db8834f\"\n               
-    },\n                \"m_SlotId\": 2\n            }\n        },\n        {\n           
-    \"m_OutputSlot\": {\n                \"m_Node\": {\n                    \"m_Id\":
-    \"157e485d736c4d248eeddcda0e6c5847\"\n                },\n                \"m_SlotId\":
-    2\n            },\n            \"m_InputSlot\": {\n                \"m_Node\":
-    {\n                    \"m_Id\": \"9d9288d131c0496497a0d238d976c7a1\"\n               
     },\n                \"m_SlotId\": 2\n            }\n        },\n        {\n           
     \"m_OutputSlot\": {\n                \"m_Node\": {\n                    \"m_Id\":
     \"2056b40346ae41c29e672cc72c7c64fb\"\n                },\n                \"m_SlotId\":
@@ -342,7 +337,12 @@ MonoBehaviour:
     \"f7b3bd44d92448f9a66f4e72eb4fce1e\"\n                },\n                \"m_SlotId\":
     1\n            },\n            \"m_InputSlot\": {\n                \"m_Node\":
     {\n                    \"m_Id\": \"157e485d736c4d248eeddcda0e6c5847\"\n               
-    },\n                \"m_SlotId\": 1\n            }\n        }\n    ],\n    \"m_VertexContext\":
+    },\n                \"m_SlotId\": 1\n            }\n        },\n        {\n           
+    \"m_OutputSlot\": {\n                \"m_Node\": {\n                    \"m_Id\":
+    \"f7b3bd44d92448f9a66f4e72eb4fce1e\"\n                },\n                \"m_SlotId\":
+    1\n            },\n            \"m_InputSlot\": {\n                \"m_Node\":
+    {\n                    \"m_Id\": \"9d9288d131c0496497a0d238d976c7a1\"\n               
+    },\n                \"m_SlotId\": 2\n            }\n        }\n    ],\n    \"m_VertexContext\":
     {\n        \"m_Position\": {\n            \"x\": 0.0,\n            \"y\": 0.0\n       
     },\n        \"m_Blocks\": []\n    },\n    \"m_FragmentContext\": {\n        \"m_Position\":
     {\n            \"x\": 0.0,\n            \"y\": 0.0\n        },\n        \"m_Blocks\":
@@ -989,17 +989,17 @@ MonoBehaviour:
     \"m_Type\": \"UnityEditor.ShaderGraph.LerpNode\",\n    \"m_ObjectId\": \"85e52b72fb98413a99d14a30e6c49e6e\",\n   
     \"m_Group\": {\n        \"m_Id\": \"\"\n    },\n    \"m_Name\": \"Lerp\",\n   
     \"m_DrawState\": {\n        \"m_Expanded\": true,\n        \"m_Position\": {\n           
-    \"serializedVersion\": \"2\",\n            \"x\": 1421.0001220703125,\n           
-    \"y\": -122.99998474121094,\n            \"width\": 207.9998779296875,\n           
-    \"height\": 326.0\n        }\n    },\n    \"m_Slots\": [\n        {\n           
-    \"m_Id\": \"1aa8c6b925f944b6a02154692dd15784\"\n        },\n        {\n           
-    \"m_Id\": \"634663a75e3249648edad5cb41ef460c\"\n        },\n        {\n           
-    \"m_Id\": \"39172fc585e5407c82cc41f06d7099a7\"\n        },\n        {\n           
-    \"m_Id\": \"85222548c9fa49e3986e16ad9db83a0a\"\n        }\n    ],\n    \"synonyms\":
-    [\n        \"mix\",\n        \"blend\",\n        \"linear interpolate\"\n   
-    ],\n    \"m_Precision\": 0,\n    \"m_PreviewExpanded\": true,\n    \"m_PreviewMode\":
-    0,\n    \"m_CustomColors\": {\n        \"m_SerializableColors\": []\n    }\n}\n\n{\n   
-    \"m_SGVersion\": 0,\n    \"m_Type\": \"UnityEditor.ShaderGraph.DynamicVectorMaterialSlot\",\n   
+    \"serializedVersion\": \"2\",\n            \"x\": 1391.0,\n            \"y\":
+    -122.99999237060547,\n            \"width\": 208.0,\n            \"height\":
+    326.0\n        }\n    },\n    \"m_Slots\": [\n        {\n            \"m_Id\":
+    \"1aa8c6b925f944b6a02154692dd15784\"\n        },\n        {\n            \"m_Id\":
+    \"634663a75e3249648edad5cb41ef460c\"\n        },\n        {\n            \"m_Id\":
+    \"39172fc585e5407c82cc41f06d7099a7\"\n        },\n        {\n            \"m_Id\":
+    \"85222548c9fa49e3986e16ad9db83a0a\"\n        }\n    ],\n    \"synonyms\": [\n       
+    \"mix\",\n        \"blend\",\n        \"linear interpolate\"\n    ],\n    \"m_Precision\":
+    0,\n    \"m_PreviewExpanded\": true,\n    \"m_PreviewMode\": 0,\n    \"m_CustomColors\":
+    {\n        \"m_SerializableColors\": []\n    }\n}\n\n{\n    \"m_SGVersion\":
+    0,\n    \"m_Type\": \"UnityEditor.ShaderGraph.DynamicVectorMaterialSlot\",\n   
     \"m_ObjectId\": \"85f39f54838d468c83d82e51b7bba011\",\n    \"m_Id\": 2,\n   
     \"m_DisplayName\": \"In\",\n    \"m_SlotType\": 0,\n    \"m_Hidden\": false,\n   
     \"m_ShaderOutputName\": \"In\",\n    \"m_StageCapability\": 3,\n    \"m_Value\":
@@ -1671,7 +1671,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 2236
+  controlID: 469
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1696,7 +1696,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 2237
+  controlID: 470
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1753,10 +1753,10 @@ MonoBehaviour:
     m_SaveData: []
   m_SceneHierarchy:
     m_TreeViewState:
-      scrollPos: {x: 0, y: 3844}
+      scrollPos: {x: 0, y: 3732}
       m_SelectedIDs: 32190000
       m_LastClickedID: 0
-      m_ExpandedIDs: 0a99ffff30fbffff
+      m_ExpandedIDs: 30fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -2067,9 +2067,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 22.655535, y: 52.484932, z: 52.99581}
+    m_Target: {x: 10.541504, y: -17.814415, z: -40.351433}
     speed: 2
-    m_Value: {x: 22.655535, y: 52.484932, z: 52.99581}
+    m_Value: {x: 10.541504, y: -17.814415, z: -40.351433}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -2118,11 +2118,11 @@ MonoBehaviour:
   m_Rotation:
     m_Target: {x: -0.44420096, y: -0.10150952, z: 0.0507897, w: -0.88874054}
     speed: 2
-    m_Value: {x: -0.4441881, y: -0.101506576, z: 0.050788227, w: -0.8887148}
+    m_Value: {x: -0.44420096, y: -0.10150952, z: 0.050789695, w: -0.8887405}
   m_Size:
-    m_Target: 66.37616
+    m_Target: 92.615395
     speed: 2
-    m_Value: 66.37616
+    m_Value: 92.615395
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -2198,8 +2198,8 @@ MonoBehaviour:
     vZoomLockedByDefault: 0
     m_HBaseRangeMin: -459
     m_HBaseRangeMax: 459
-    m_VBaseRangeMin: -206
-    m_VBaseRangeMax: 206
+    m_VBaseRangeMin: -216.5
+    m_VBaseRangeMax: 216.5
     m_HAllowExceedBaseRangeMin: 1
     m_HAllowExceedBaseRangeMax: 1
     m_VAllowExceedBaseRangeMin: 1
@@ -2216,11 +2216,11 @@ MonoBehaviour:
     m_DrawArea:
       serializedVersion: 2
       x: 0
-      y: 21
+      y: 0
       width: 918
-      height: 412
+      height: 433
     m_Scale: {x: 1, y: 1}
-    m_Translation: {x: 459, y: 206}
+    m_Translation: {x: 459, y: 216.5}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
@@ -2228,9 +2228,9 @@ MonoBehaviour:
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
       x: -459
-      y: -206
+      y: -216.5
       width: 918
-      height: 412
+      height: 433
     m_MinimalGUI: 1
   m_defaultScale: 1
   m_LastWindowPixelSize: {x: 918, y: 433}
@@ -6886,9 +6886,9 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 208}
-    m_SelectedIDs: 88940000
-    m_LastClickedID: 38024
-    m_ExpandedIDs: 000000007c9400007e940000809400008294000084940000869400008894000000ca9a3b
+    m_SelectedIDs: 8c940000
+    m_LastClickedID: 38028
+    m_ExpandedIDs: 0000000080940000829400008494000086940000889400008a9400008c94000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -6916,7 +6916,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000007c9400007e940000809400008294000084940000869400008894000000ca9a3b
+    m_ExpandedIDs: 0000000080940000829400008494000086940000889400008a9400008c94000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -6943,7 +6943,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 32190000
     m_LastClickedInstanceID: 6450
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -7010,7 +7010,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: InspectorWindow
+  m_Name: CustomLitSettings
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -7019,14 +7019,14 @@ MonoBehaviour:
     y: 0
     width: 379
     height: 767
-  m_MinSize: {x: 276, y: 71}
+  m_MinSize: {x: 101, y: 121}
   m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 15}
+  m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 15}
   - {fileID: 16}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &15
 MonoBehaviour:
   m_ObjectHideFlags: 52

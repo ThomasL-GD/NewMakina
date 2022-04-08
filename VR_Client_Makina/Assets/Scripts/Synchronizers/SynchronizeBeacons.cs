@@ -229,18 +229,17 @@ namespace Synchronizers {
         private void ActualiseColorOfBeacon(int p_index) {
 
             Color newColor;
-
-            /*if (!m_beacons[p_index].isOnTheGroundAndSetUp) newColor = m_unactiveColor;
-            else */switch (m_beacons[p_index].isDetecting) {
+        
+            switch (m_beacons[p_index].isDetecting) {
                 case true:
                     newColor = m_detectedColor;
                     
-                    m_beaconBitMaskDetected &= ~(1 << m_beacons[p_index].bitMaskIndex);
+                    m_beaconBitMaskDetected |= 1 << m_beacons[p_index].bitMaskIndex;
                     Shader.SetGlobalInt(m_beaconDetectionBitMaskShaderID,m_beaconBitMaskDetected);
                     break;
                 case false:
                     newColor = m_undetectedColor;
-                    m_beaconBitMaskDetected |= 1 << m_beacons[p_index].bitMaskIndex;
+                    m_beaconBitMaskDetected &= ~(1 << m_beacons[p_index].bitMaskIndex);
                     Shader.SetGlobalInt(m_beaconDetectionBitMaskShaderID,m_beaconBitMaskDetected);
                     break;
             }
@@ -248,9 +247,6 @@ namespace Synchronizers {
             GameObject go = m_beacons[p_index].deployedBeaconScript.gameObject;
             Material mat = go.GetComponent<MeshRenderer>().material;
             mat.SetColor(CodeBeaconColor, newColor);
-
-            //m_beacons[p_index].beaconScript.gameObject.GetComponent<MeshRenderer>().material.color = newColor;
-            
         }
 
         /// <summary> Changes the range of the beacon feedback in the prefab itself </summary>
