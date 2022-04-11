@@ -308,6 +308,7 @@ namespace Synchronizers {
                     Vector3 pos = m_beacons[index??0].deployedBeaconScript.gameObject.transform.position;
                     
                     Shader.SetGlobalVector($"_beaconPosition_{i}", new Vector4(pos.x,pos.y,pos.z,0));
+                    Shader.SetGlobalFloat($"_beaconTimer_{i}", Time.time);
                     break;
                 }
             }
