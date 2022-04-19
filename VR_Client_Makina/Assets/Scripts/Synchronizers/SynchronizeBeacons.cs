@@ -220,6 +220,7 @@ namespace Synchronizers {
             
             int? index = FindBeaconFromID(p_beaconDetectionUpdate.index, p_beaconDetectionUpdate.beaconID);
             if (index == null) {
+                Debug.LogError($"Index null for a beacon {p_beaconDetectionUpdate.index} : {p_beaconDetectionUpdate.beaconID}");
                 return;
             }
 
