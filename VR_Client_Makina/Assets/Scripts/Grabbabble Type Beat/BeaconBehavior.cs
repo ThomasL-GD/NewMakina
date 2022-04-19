@@ -36,13 +36,13 @@ public class BeaconBehavior : GrabbablePhysickedObject {
         BeaconBehavior.OnDestroyBeacon += ActualiseIndex;
     }
     
-    public override void BeGrabbed(Transform p_parent) {
+    public override void BeGrabbed(Transform p_parent, Vector3 p_offsetPositionInHand) {
 
         if (!m_hasBeenCaughtInLifetime) {
             m_beaconLoading.Unloading();
         }
         
-        base.BeGrabbed(p_parent);
+        base.BeGrabbed(p_parent, p_offsetPositionInHand);
     }
     
     // private void OnDrawGizmos() {

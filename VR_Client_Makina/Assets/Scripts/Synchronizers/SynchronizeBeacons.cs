@@ -296,7 +296,6 @@ namespace Synchronizers {
             m_beacons[index??0].beaconScript.DestroyMaSoul();
             
             int beaconBitMask = Shader.GetGlobalInt(m_beaconBitMaskShaderID);
-            int bitMaskIndex = -2;
             
             for (int i = 0; i < 10; i++)
             {

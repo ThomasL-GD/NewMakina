@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Grabbabble_Type_Beat;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -46,9 +47,10 @@ public abstract class GrabbableObject : MonoBehaviour {
 
     /// <summary>Will set a new parent to this object</summary>
     /// <param name="p_newParent">The new parent you want for thi object</param>
-    public virtual void BeGrabbed(Transform p_newParent) {
+    /// <param name="p_offsetPositionInHand">The offset this item will move to when going towards the hand</param>
+    public virtual void BeGrabbed(Transform p_newParent, Vector3 p_offsetPositionInHand) {
         transform.SetParent(p_newParent);
-        m_getGrabbedCoroutine = StartCoroutine(GoToHandCenter(m_timeToGoInHand, Vector3.zero));
+        m_getGrabbedCoroutine = StartCoroutine(GoToHandCenter(m_timeToGoInHand, p_offsetPositionInHand));
         
         m_isCaught = true;
         m_hasBeenCaughtInLifetime = true;

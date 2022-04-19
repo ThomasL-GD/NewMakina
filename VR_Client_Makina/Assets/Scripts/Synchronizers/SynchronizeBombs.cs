@@ -13,7 +13,7 @@ namespace Synchronizers {
         private float m_bombRange = 0f;
         [SerializeField] private Color m_colorWhenAlmostExploding = Color.red;
 
-        [SerializeField] private float m_bombScale = 1f;
+        //[SerializeField] private float m_bombScale = 1f;
         
         [SerializeField] private GameObject m_prefabFxBoomHit = null;
         [SerializeField] private GameObject m_prefabFxBoomMiss = null;

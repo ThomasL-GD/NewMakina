@@ -28,8 +28,8 @@ public abstract class GrabbablePhysickedObject : GrabbableObject {
         m_rb = GetComponent<Rigidbody>();
     }
     
-    public override void BeGrabbed(Transform p_parent) {
-        base.BeGrabbed(p_parent);
+    public override void BeGrabbed(Transform p_parent, Vector3 p_offsetPositionInHand) {
+        base.BeGrabbed(p_parent,p_offsetPositionInHand);
 
         if (m_mustDropDown && m_isCaught) {
             if (m_lineFeedback != null) {
