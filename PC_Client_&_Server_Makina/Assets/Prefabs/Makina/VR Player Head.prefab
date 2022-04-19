@@ -176,7 +176,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4091672825626678824}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 28.499996, y: 51.40199, z: 69.8}
+  m_LocalPosition: {x: 24.3, y: 70.2, z: 72.7}
   m_LocalScale: {x: 26.828999, y: 26.828999, z: 26.828999}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -243,6 +243,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2080164520633229076}
+  - component: {fileID: 7417983654040590508}
   m_Layer: 0
   m_Name: VR Player Head
   m_TagString: Untagged
@@ -259,13 +260,28 @@ Transform:
   m_GameObject: {fileID: 5985447621629064213}
   m_LocalRotation: {x: 0.26370403, y: -0, z: -0, w: 0.96460366}
   m_LocalPosition: {x: 0, y: 36, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2821364635906641753}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 30.58, y: 0, z: 0}
+--- !u!114 &7417983654040590508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5985447621629064213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b3fec5d63a3ec74293536de4fbb321d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_playerTr: {fileID: 2080164520633229076}
+  m_minDotProduct: 0.75
+  m_panikSound: {fileID: 0}
 --- !u!1 &7889203796220375595
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,7 +308,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7889203796220375595}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -28.5, y: 51.40199, z: 69.8}
+  m_LocalPosition: {x: -21.1, y: 68.6, z: 71.4}
   m_LocalScale: {x: 26.828999, y: 26.828999, z: 26.828999}
   m_ConstrainProportionsScale: 0
   m_Children:

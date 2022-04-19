@@ -35,6 +35,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 413.86996, y: 74.77228, z: 114.19812}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -70,6 +71,8 @@ MonoBehaviour:
   m_playerHead: {fileID: 0}
   m_invisbilityFeedbacks:
   - {fileID: 0}
+  m_invisibiltySound: {fileID: 0}
+  m_mainMusic: {fileID: 0}
 --- !u!114 &586668069150170733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,6 +87,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_lazerPreshot: {fileID: 0}
   m_laserPrefab: {fileID: 4955901843613917572, guid: d7229fd039aad9b40b6b6ed6a2a2c8fc, type: 3}
+  m_volume: {fileID: 0}
+  m_rightHand: {fileID: 0}
+  m_pcPlayer: {fileID: 0}
+  m_shotSensibleRange: 20
+  m_smoothTransitionSpeed: 0
 --- !u!114 &586668069150170732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,6 +105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_heartPrefabs: {fileID: 1306276628376282344, guid: effe859a863a5ad4d9c58d861ff4786b, type: 3}
+  m_heartRangePrefab: {fileID: 0}
 --- !u!114 &586668069150170723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,10 +158,15 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   m_respawnTime: 3
   m_deathFeedback: {fileID: 0}
   m_invisibilityTime: 5
-  m_script: {fileID: 0}
+  m_deathSound: {fileID: 0}
+  m_invisibilityEndSound: {fileID: 0}
 --- !u!114 &6328612753638025571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,8 +179,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e6b72bb33577cf469123ffcd9469100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_pcPlayerHealthText: {fileID: 0}
-  m_vrPlayerHealthText: {fileID: 0}
+  m_pcHealthPrefab: {fileID: 0}
+  m_vrHealthPrefab: {fileID: 0}
+  m_pcHealthTextureEmpty: {fileID: 0}
+  m_vrHealthTextureEmpty: {fileID: 0}
+  m_spacingPcHealth: 0
+  m_spacingVrHealth: 0
+  m_pcHealthTransform: {fileID: 0}
+  m_vrHealthTransform: {fileID: 0}
+  m_waitingForPlayerFeddback: {fileID: 0}
+  m_unloadOnInitialData: []
 --- !u!114 &8417031006943273845
 MonoBehaviour:
   m_ObjectHideFlags: 0

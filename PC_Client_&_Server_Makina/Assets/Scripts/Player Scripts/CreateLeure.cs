@@ -20,10 +20,15 @@ public class CreateLeure : AbstractMechanic
     
     [SerializeField] private bool m_isTutorial = false;
     
+    [SerializeField] [Tooltip("The sound played when the invisibility starts")] private AudioSource m_invisibilityBeginSound;
+    [SerializeField] [Tooltip("The sound played when the invisibility is active")] private AudioSource m_invisibilityLastsSound;
+    [SerializeField] [Tooltip("The sound played when the invisibility ends")] private AudioSource m_invisibilityEndSound;
+    
     private bool m_canSpawnLeure = true;
 
     private GameObject m_leure;
     private Coroutine m_killLeureCoroutine;
+    private Coroutine m_soundCoroutine;
 
     private void Awake()
     {
@@ -44,6 +49,8 @@ public class CreateLeure : AbstractMechanic
             
             m_leure.GetComponent<LeurreMovement>().SetSpeedAndGravity(m_speed,m_leureGravity);
             m_killLeureCoroutine = StartCoroutine(KillLeure());
+            
+            m_soundCoroutine = StartCoroutine(PlaySoundThatLastsWhenBeginIsOver());
         }
     }
     
@@ -64,6 +71,10 @@ public class CreateLeure : AbstractMechanic
     private void DestroyLeure()
     {
         StopCoroutine(m_killLeureCoroutine);
+        StopCoroutine(m_soundCoroutine); // We stop the sound in case the decoy was destroyed before the first sound is done playing
+        
+        m_invisibilityLastsSound.Stop();
+        m_invisibilityEndSound.Play();
         
         Destroy(m_leure);
         NetworkClient.Send(new DestroyLeure());
@@ -75,5 +86,16 @@ public class CreateLeure : AbstractMechanic
     {
         m_canSpawnLeure = true;
         m_uiElement.enabled = true;
+    }
+
+    /// <summary>Will play the m_invisibilityLastsSound once m_invisibilityBeginSound is done playing (plays both in the function)</summary>
+    /// <remarks>I know it is anti-modular but there's no similar uses of this type of things in the script</remarks>
+    IEnumerator PlaySoundThatLastsWhenBeginIsOver() {
+        m_invisibilityBeginSound.Play();
+
+        yield return new WaitForSeconds(m_invisibilityBeginSound.clip.length);
+
+        m_invisibilityLastsSound.loop = true;
+        m_invisibilityLastsSound.Play();
     }
 }

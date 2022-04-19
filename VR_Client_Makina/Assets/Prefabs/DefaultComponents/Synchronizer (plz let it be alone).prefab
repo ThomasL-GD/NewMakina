@@ -18,7 +18,6 @@ GameObject:
   - component: {fileID: 5783733579950633025}
   - component: {fileID: 5783733579950633030}
   - component: {fileID: 2047781738407387244}
-  - component: {fileID: 6688492148997597000}
   - component: {fileID: 434578376286307432}
   - component: {fileID: 1469819181140471706}
   - component: {fileID: 1661527278798300204}
@@ -39,6 +38,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_laserAiming: {fileID: 0}
   m_layersThatCollidesWithLaser:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_firstColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   m_lastColor: {r: 1, g: 1, b: 1, a: 1}
   m_initialLaserSize: 8.8
@@ -164,6 +164,7 @@ MonoBehaviour:
   m_inflateTime: 0.2
   m_undetectedColor: {r: 1, g: 0, b: 0, a: 1}
   m_detectedColor: {r: 0, g: 1, b: 0, a: 1}
+  m_beaconDetectSoundPrefab: {fileID: 8300000, guid: e2f9393d409fc1147a96c3e9a3a606e2, type: 3}
   m_prefabDropDownFeedback: {fileID: 0}
 --- !u!114 &5783733579950633025
 MonoBehaviour:
@@ -198,6 +199,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_pcPlayerHealthText: {fileID: 0}
   m_vrPlayerHealthText: {fileID: 0}
+  m_showHealthTime: 3
 --- !u!114 &2047781738407387244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,20 +230,6 @@ MonoBehaviour:
   m_niceShotQuestionMark: 1
   m_niceShotSound: {fileID: 0}
   m_prefabDropDownFeedback: {fileID: 0}
---- !u!114 &6688492148997597000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5783733579950633034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6ce0a67c8913164d98d940d2861f47c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_flair: {fileID: 0}
-  m_blindObject: {fileID: 0}
 --- !u!114 &434578376286307432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -292,3 +280,4 @@ MonoBehaviour:
   m_prefabTpPoint: {fileID: 5780574956763540240, guid: a6f8cd8a9d1197d459bf8799a02af2cf, type: 3}
   m_particlesSpeed: 15.9
   m_prefabParticles: {fileID: 7130397999828551174, guid: fd9bcf479ebec7d4db0faaecd1844c47, type: 3}
+  m_soundWhenRollback: {fileID: 0}

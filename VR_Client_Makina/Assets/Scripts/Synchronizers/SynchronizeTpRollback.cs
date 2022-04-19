@@ -15,6 +15,9 @@ public class SynchronizeTpRollback : Synchronizer<SynchronizeTpRollback> {
     [SerializeField] [Range(0.1f, 50f)] public float m_particlesSpeed = 1f;
     [SerializeField] private GameObject m_prefabParticles = null;
     
+    [Header("Sound")]
+    [SerializeField] private AudioSource m_soundWhenRollback;
+    
     private void Start() {
 #if UNITY_EDITOR
         if(m_prefabTpPoint == null)Debug.LogError("No tp point prefab serialized here !", this);
@@ -28,6 +31,7 @@ public class SynchronizeTpRollback : Synchronizer<SynchronizeTpRollback> {
     private void Teleport(Teleported p_teleported) {
         GameObject go = Instantiate(m_prefabParticles, p_teleported.teleportOrigin, Quaternion.LookRotation(p_teleported.teleportDestination - p_teleported.teleportOrigin));
         ParticleSystem.MainModule bob = go.GetComponent<ParticleSystem>().main;
+        m_soundWhenRollback.Play();
         StartCoroutine(DestroyParticles(bob.duration + bob.startLifetime.constantMax, go));
     }
 
