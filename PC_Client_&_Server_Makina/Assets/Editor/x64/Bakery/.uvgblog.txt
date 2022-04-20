@@ -1,0 +1,1555 @@
+2022-4-20
+Failed to render UV GBuffer
+Loaded vertex shader: quad.vso
+Loaded pixel shader: skyOutput.pso
+Loaded pixel shader: cookieOutput.pso
+initShaders done
+initScene done
+Done
+Rendering UV GBuffer for Bake Test Scene_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA2 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA3 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA4 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LM0.lz4" 2 0 0 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA2.lz4" 2 0 2 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA3.lz4" 2 0 3 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA4.lz4" 2 0 4 0
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_0_0_0" 4 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_2_0_0" 4 0 2 batchpointlight_2_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2" 4 0 2 comp_2.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_1_0_0" 4 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_3_0_0" 4 0 3 batchpointlight_3_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3" 4 0 3 comp_3.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_4_0_0" 4 0 4 batchpointlight_4_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4" 4 0 4 comp_4.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM00.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA20.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA10.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA30.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA40.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM01.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA21.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA11.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA31.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA41.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM02.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA22.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA12.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA32.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA42.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM03.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA23.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA13.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA33.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA43.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_final" 4 16 0 "gi_Bake Test Scene_LM04.bin" "Bake Test Scene_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_final" 4 16 2 "gi_Bake Test Scene_LMA24.bin" "Bake Test Scene_LMA2_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_final" 4 16 1 "gi_Bake Test Scene_LMA14.bin" "Bake Test Scene_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_final" 4 16 3 "gi_Bake Test Scene_LMA34.bin" "Bake Test Scene_LMA3_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_final" 4 16 4 "gi_Bake Test Scene_LMA44.bin" "Bake Test Scene_LMA4_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" 32 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "0" "Bake Test Scene_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "2" "Bake Test Scene_LMA2_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "1" "Bake Test Scene_LMA1_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "3" "Bake Test Scene_LMA3_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" 64 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "4" "Bake Test Scene_LMA4_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA2_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA1_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA3_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA4_final.hdr" 1024
+Loaded vertex shader: quad.vso
+Loaded pixel shader: skyOutput.pso
+Loaded pixel shader: cookieOutput.pso
+initShaders done
+initScene done
+Done
+Rendering UV GBuffer for Bake Test Scene_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA2 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA3 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA4 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LM0.lz4" 2 0 0 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA2.lz4" 2 0 2 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA3.lz4" 2 0 3 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA4.lz4" 2 0 4 0
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_0_0_0" 4 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_1_0_0" 4 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_2_0_0" 4 0 2 batchpointlight_2_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2" 4 0 2 comp_2.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_3_0_0" 4 0 3 batchpointlight_3_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3" 4 0 3 comp_3.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_4_0_0" 4 0 4 batchpointlight_4_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4" 4 0 4 comp_4.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM00.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA10.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA20.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA30.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA40.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM01.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA11.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA21.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA31.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA41.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM02.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA12.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA22.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA32.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA42.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM03.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA13.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA23.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA33.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA43.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_final" 4 16 0 "gi_Bake Test Scene_LM04.bin" "Bake Test Scene_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_final" 4 16 1 "gi_Bake Test Scene_LMA14.bin" "Bake Test Scene_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_final" 4 16 2 "gi_Bake Test Scene_LMA24.bin" "Bake Test Scene_LMA2_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_final" 4 16 3 "gi_Bake Test Scene_LMA34.bin" "Bake Test Scene_LMA3_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_final" 4 16 4 "gi_Bake Test Scene_LMA44.bin" "Bake Test Scene_LMA4_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" 32 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "0" "Bake Test Scene_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "1" "Bake Test Scene_LMA1_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "2" "Bake Test Scene_LMA2_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "3" "Bake Test Scene_LMA3_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" 64 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "4" "Bake Test Scene_LMA4_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA1_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA2_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA3_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA4_final.hdr" 1024
+Loaded vertex shader: quad.vso
+Loaded pixel shader: skyOutput.pso
+Loaded pixel shader: cookieOutput.pso
+initShaders done
+initScene done
+Done
+Rendering UV GBuffer for Bake Test Scene_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA2 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA3 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA4 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LM0.lz4" 2 0 0 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA2.lz4" 2 0 2 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA3.lz4" 2 0 3 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA4.lz4" 2 0 4 0
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_0_0_0" 4 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_1_0_0" 4 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_2_0_0" 4 0 2 batchpointlight_2_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2" 4 0 2 comp_2.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_3_0_0" 4 0 3 batchpointlight_3_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3" 4 0 3 comp_3.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_4_0_0" 4 0 4 batchpointlight_4_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4" 4 0 4 comp_4.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM00.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA10.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA20.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA30.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA40.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM01.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA11.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA21.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA31.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA41.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM02.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA12.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA22.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA32.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA42.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM03.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA13.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA23.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA33.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA43.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_final" 4 16 0 "gi_Bake Test Scene_LM04.bin" "Bake Test Scene_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_final" 4 16 1 "gi_Bake Test Scene_LMA14.bin" "Bake Test Scene_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_final" 4 16 2 "gi_Bake Test Scene_LMA24.bin" "Bake Test Scene_LMA2_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_final" 4 16 3 "gi_Bake Test Scene_LMA34.bin" "Bake Test Scene_LMA3_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_final" 4 16 4 "gi_Bake Test Scene_LMA44.bin" "Bake Test Scene_LMA4_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" 32 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "0" "Bake Test Scene_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "1" "Bake Test Scene_LMA1_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "2" "Bake Test Scene_LMA2_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "3" "Bake Test Scene_LMA3_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" 64 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "4" "Bake Test Scene_LMA4_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA1_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA2_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA3_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA4_final.hdr" 1024
+Loaded vertex shader: quad.vso
+Loaded pixel shader: skyOutput.pso
+Loaded pixel shader: cookieOutput.pso
+initShaders done
+initScene done
+Done
+Rendering UV GBuffer for Bake Test Scene_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA2 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA3 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA4 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LM0.lz4" 2 0 0 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA2.lz4" 2 0 2 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA3.lz4" 2 0 3 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA4.lz4" 2 0 4 0
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_0_0_0" 4 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_1_0_0" 4 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_2_0_0" 4 0 2 batchpointlight_2_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2" 4 0 2 comp_2.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_3_0_0" 4 0 3 batchpointlight_3_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3" 4 0 3 comp_3.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_4_0_0" 4 0 4 batchpointlight_4_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4" 4 0 4 comp_4.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM00.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA10.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA20.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA30.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA40.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM01.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA11.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA21.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA31.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA41.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM02.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA12.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA22.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA32.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA42.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM03.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA13.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA23.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA33.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA43.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_final" 4 16 0 "gi_Bake Test Scene_LM04.bin" "Bake Test Scene_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_final" 4 16 1 "gi_Bake Test Scene_LMA14.bin" "Bake Test Scene_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_final" 4 16 2 "gi_Bake Test Scene_LMA24.bin" "Bake Test Scene_LMA2_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_final" 4 16 3 "gi_Bake Test Scene_LMA34.bin" "Bake Test Scene_LMA3_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_final" 4 16 4 "gi_Bake Test Scene_LMA44.bin" "Bake Test Scene_LMA4_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" 32 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "0" "Bake Test Scene_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "1" "Bake Test Scene_LMA1_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "2" "Bake Test Scene_LMA2_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "3" "Bake Test Scene_LMA3_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" 64 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "4" "Bake Test Scene_LMA4_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA1_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA2_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA3_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA4_final.hdr" 1024
+Loaded vertex shader: quad.vso
+Loaded pixel shader: skyOutput.pso
+Loaded pixel shader: cookieOutput.pso
+initShaders done
+initScene done
+Done
+Rendering UV GBuffer for Bake Test Scene_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA2 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA3 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA4 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LM0.lz4" 2 0 0 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA2.lz4" 2 0 2 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA3.lz4" 2 0 3 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA4.lz4" 2 0 4 0
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_0_0_0" 4 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_1_0_0" 4 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_2_0_0" 4 0 2 batchpointlight_2_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2" 4 0 2 comp_2.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_3_0_0" 4 0 3 batchpointlight_3_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3" 4 0 3 comp_3.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_4_0_0" 4 0 4 batchpointlight_4_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4" 4 0 4 comp_4.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM00.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA10.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA20.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA30.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA40.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM01.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA11.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA21.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA31.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA41.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM02.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA12.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA22.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA32.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA42.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM03.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA13.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA23.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA33.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA43.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_final" 4 16 0 "gi_Bake Test Scene_LM04.bin" "Bake Test Scene_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_final" 4 16 1 "gi_Bake Test Scene_LMA14.bin" "Bake Test Scene_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_final" 4 16 2 "gi_Bake Test Scene_LMA24.bin" "Bake Test Scene_LMA2_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_final" 4 16 3 "gi_Bake Test Scene_LMA34.bin" "Bake Test Scene_LMA3_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_final" 4 16 4 "gi_Bake Test Scene_LMA44.bin" "Bake Test Scene_LMA4_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "0" "Bake Test Scene_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" 512 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "1" "Bake Test Scene_LMA1_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "2" "Bake Test Scene_LMA2_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "3" "Bake Test Scene_LMA3_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "4" "Bake Test Scene_LMA4_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA1_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA2_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA3_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA4_final.hdr" 1024
+Loaded vertex shader: quad.vso
+Loaded pixel shader: skyOutput.pso
+Loaded pixel shader: cookieOutput.pso
+initShaders done
+initScene done
+Done
+Rendering UV GBuffer for Bake Test Scene_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA2 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA3 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA4 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LM0.lz4" 2 0 0 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA2.lz4" 2 0 2 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA3.lz4" 2 0 3 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA4.lz4" 2 0 4 0
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_0_0_0" 4 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_2_0_0" 4 0 2 batchpointlight_2_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2" 4 0 2 comp_2.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_1_0_0" 4 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_3_0_0" 4 0 3 batchpointlight_3_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3" 4 0 3 comp_3.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_4_0_0" 4 0 4 batchpointlight_4_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4" 4 0 4 comp_4.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM00.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA20.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA10.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA30.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA40.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM01.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA21.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA11.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA31.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA41.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM02.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA22.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA12.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA32.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA42.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM03.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA23.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA13.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA33.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA43.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_final" 4 16 0 "gi_Bake Test Scene_LM04.bin" "Bake Test Scene_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_final" 4 16 2 "gi_Bake Test Scene_LMA24.bin" "Bake Test Scene_LMA2_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_final" 4 16 1 "gi_Bake Test Scene_LMA14.bin" "Bake Test Scene_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_final" 4 16 3 "gi_Bake Test Scene_LMA34.bin" "Bake Test Scene_LMA3_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_final" 4 16 4 "gi_Bake Test Scene_LMA44.bin" "Bake Test Scene_LMA4_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "0" "Bake Test Scene_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "2" "Bake Test Scene_LMA2_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" 512 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "1" "Bake Test Scene_LMA1_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "3" "Bake Test Scene_LMA3_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "4" "Bake Test Scene_LMA4_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA2_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA1_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA3_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA4_final.hdr" 1024
+Loaded vertex shader: quad.vso
+Loaded pixel shader: skyOutput.pso
+Loaded pixel shader: cookieOutput.pso
+initShaders done
+initScene done
+Done
+Rendering UV GBuffer for Bake Test Scene_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA2 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA3 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA4 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LM0.lz4" 2 0 0 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA2.lz4" 2 0 2 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA3.lz4" 2 0 3 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA4.lz4" 2 0 4 0
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_0_0_0" 4 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_2_0_0" 4 0 2 batchpointlight_2_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2" 4 0 2 comp_2.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_1_0_0" 4 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_3_0_0" 4 0 3 batchpointlight_3_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3" 4 0 3 comp_3.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_4_0_0" 4 0 4 batchpointlight_4_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4" 4 0 4 comp_4.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM00.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA20.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA10.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA30.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA40.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM01.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA21.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA11.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA31.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA41.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM02.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA22.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA12.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA32.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA42.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM03.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA23.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA13.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA33.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA43.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_final" 4 16 0 "gi_Bake Test Scene_LM04.bin" "Bake Test Scene_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_final" 4 16 2 "gi_Bake Test Scene_LMA24.bin" "Bake Test Scene_LMA2_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_final" 4 16 1 "gi_Bake Test Scene_LMA14.bin" "Bake Test Scene_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_final" 4 16 3 "gi_Bake Test Scene_LMA34.bin" "Bake Test Scene_LMA3_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_final" 4 16 4 "gi_Bake Test Scene_LMA44.bin" "Bake Test Scene_LMA4_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "0" "Bake Test Scene_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "2" "Bake Test Scene_LMA2_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" 512 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "1" "Bake Test Scene_LMA1_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "3" "Bake Test Scene_LMA3_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "4" "Bake Test Scene_LMA4_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA2_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA1_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA3_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA4_final.hdr" 1024
+Loaded vertex shader: quad.vso
+Loaded pixel shader: skyOutput.pso
+Loaded pixel shader: cookieOutput.pso
+initShaders done
+initScene done
+Done
+Loaded vertex shader: quad.vso
+Loaded pixel shader: skyOutput.pso
+Loaded pixel shader: cookieOutput.pso
+initShaders done
+Rendering UV GBuffer for example_directional_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for example_directional_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for LMGroup_Sphere_VertexDir 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_example_directional_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_example_directional_LM0.lz4" 2 0 0 0
+Running ftraceRTX skycubemapdir "C:\Users\game3\AppData\Local\Temp\frender" "light_-2135902434_2" 68 0 2 sky0.bin
+Running ftraceRTX sun "C:\Users\game3\AppData\Local\Temp\frender" "light_904775215_2" 68 0 2 direct0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "LMGroup_Sphere_VertexDir" 4 0 2 comp_2.bin
+Running ftraceRTX diradd "C:\Users\game3\AppData\Local\Temp\frender" "LMGroup_Sphere_VertexDir_lights_Dir.lz4" 64 0 2 dircomp_2.bin
+Running ftraceRTX skycubemapdir "C:\Users\game3\AppData\Local\Temp\frender" "light_-2135902434_1" 68 0 1 sky0.bin
+Running ftraceRTX sun "C:\Users\game3\AppData\Local\Temp\frender" "light_904775215_1" 68 0 1 direct0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "example_directional_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX diradd "C:\Users\game3\AppData\Local\Temp\frender" "example_directional_LMA1_lights_Dir.lz4" 64 0 1 dircomp_1.bin
+Running ftraceRTX skycubemapdir "C:\Users\game3\AppData\Local\Temp\frender" "light_-2135902434_0" 68 0 0 sky0.bin
+Running ftraceRTX sun "C:\Users\game3\AppData\Local\Temp\frender" "light_904775215_0" 68 0 0 direct0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "example_directional_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX diradd "C:\Users\game3\AppData\Local\Temp\frender" "example_directional_LM0_lights_Dir.lz4" 64 0 0 dircomp_0.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "LMGroup_Sphere_VertexDir_diffuse" 4 16 2 "gi_LMGroup_Sphere_VertexDir0.bin" "LMGroup_Sphere_VertexDir_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "example_directional_LMA1_diffuse" 4 16 1 "gi_example_directional_LMA10.bin" "example_directional_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "example_directional_LM0_diffuse" 4 16 0 "gi_example_directional_LM00.bin" "example_directional_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "LMGroup_Sphere_VertexDir_diffuse" 4 16 2 "gi_LMGroup_Sphere_VertexDir1.bin" "LMGroup_Sphere_VertexDir_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "example_directional_LMA1_diffuse" 4 16 1 "gi_example_directional_LMA11.bin" "example_directional_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "example_directional_LM0_diffuse" 4 16 0 "gi_example_directional_LM01.bin" "example_directional_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "LMGroup_Sphere_VertexDir_diffuse" 4 16 2 "gi_LMGroup_Sphere_VertexDir2.bin" "LMGroup_Sphere_VertexDir_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "example_directional_LMA1_diffuse" 4 16 1 "gi_example_directional_LMA12.bin" "example_directional_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "example_directional_LM0_diffuse" 4 16 0 "gi_example_directional_LM02.bin" "example_directional_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "LMGroup_Sphere_VertexDir_diffuse" 4 16 2 "gi_LMGroup_Sphere_VertexDir3.bin" "LMGroup_Sphere_VertexDir_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "example_directional_LMA1_diffuse" 4 16 1 "gi_example_directional_LMA13.bin" "example_directional_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "example_directional_LM0_diffuse" 4 16 0 "gi_example_directional_LM03.bin" "example_directional_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgidir "C:\Users\game3\AppData\Local\Temp\frender" "LMGroup_Sphere_VertexDir_final" 68 16 2 "gi_LMGroup_Sphere_VertexDir4.bin" "LMGroup_Sphere_VertexDir_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgidir "C:\Users\game3\AppData\Local\Temp\frender" "example_directional_LMA1_final" 68 16 1 "gi_example_directional_LMA14.bin" "example_directional_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgidir "C:\Users\game3\AppData\Local\Temp\frender" "example_directional_LM0_final" 68 16 0 "gi_example_directional_LM04.bin" "example_directional_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN D "C:\Users\game3\AppData\Local\Temp\frender/example_directional_LMA1_final_Dir.lz4" "C:\Users\game3\AppData\Local\Temp\frender/example_directional_LMA1_final_Dir.lz4" 512 0
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/example_directional_LMA1_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/example_directional_LMA1_final_HDR.lz4" 512 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "1" "example_directional_LMA1_final_HDR.lz4" "example_directional_LMA1_final_Dir.lz4
+Running denoiserOIDN D "C:\Users\game3\AppData\Local\Temp\frender/example_directional_LM0_final_Dir.lz4" "C:\Users\game3\AppData\Local\Temp\frender/example_directional_LM0_final_Dir.lz4" 512 0
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/example_directional_LM0_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/example_directional_LM0_final_HDR.lz4" 512 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "0" "example_directional_LM0_final_HDR.lz4" "example_directional_LM0_final_Dir.lz4
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/example_directional_LMA1_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/Bakery/examples/lightmaps/example_directional_LMA1_final.hdr" 1024
+Running rgba2tga "C:\Users\game3\AppData\Local\Temp\frender/example_directional_LMA1_final_Dir.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/Bakery/examples/lightmaps/example_directional_LMA1_dir.tga" 
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/example_directional_LM0_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/Bakery/examples/lightmaps/example_directional_LM0_final.hdr" 1024
+Running rgba2tga "C:\Users\game3\AppData\Local\Temp\frender/example_directional_LM0_final_Dir.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/Bakery/examples/lightmaps/example_directional_LM0_dir.tga" 
+Done
+Done
+Loaded vertex shader: quad.vso
+Loaded pixel shader: skyOutput.pso
+Loaded pixel shader: cookieOutput.pso
+initShaders done
+initScene done
+Done
+Rendering UV GBuffer for Bake Test Scene_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA2 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA3 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA4 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LM0.lz4" 2 0 0 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA2.lz4" 2 0 2 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA3.lz4" 2 0 3 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA4.lz4" 2 0 4 0
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_0_0_0" 4 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_1_0_0" 4 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_2_0_0" 4 0 2 batchpointlight_2_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2" 4 0 2 comp_2.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_3_0_0" 4 0 3 batchpointlight_3_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3" 4 0 3 comp_3.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_4_0_0" 4 0 4 batchpointlight_4_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4" 4 0 4 comp_4.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM00.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA10.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA20.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA30.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA40.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM01.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA11.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA21.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA31.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA41.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM02.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA12.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA22.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA32.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA42.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM03.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA13.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA23.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA33.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA43.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_final" 4 16 0 "gi_Bake Test Scene_LM04.bin" "Bake Test Scene_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_final" 4 16 1 "gi_Bake Test Scene_LMA14.bin" "Bake Test Scene_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_final" 4 16 2 "gi_Bake Test Scene_LMA24.bin" "Bake Test Scene_LMA2_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_final" 4 16 3 "gi_Bake Test Scene_LMA34.bin" "Bake Test Scene_LMA3_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_final" 4 16 4 "gi_Bake Test Scene_LMA44.bin" "Bake Test Scene_LMA4_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "0" "Bake Test Scene_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" 512 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "1" "Bake Test Scene_LMA1_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "2" "Bake Test Scene_LMA2_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "3" "Bake Test Scene_LMA3_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "4" "Bake Test Scene_LMA4_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA1_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA2_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA3_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA4_final.hdr" 1024
+Loaded vertex shader: quad.vso
+Loaded pixel shader: skyOutput.pso
+Loaded pixel shader: cookieOutput.pso
+initShaders done
+initScene done
+Done
+Rendering UV GBuffer for Bake Test Scene_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA2 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA3 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA4 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LM0.lz4" 2 0 0 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA2.lz4" 2 0 2 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA3.lz4" 2 0 3 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA4.lz4" 2 0 4 0
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_0_0_0" 4 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_2_0_0" 4 0 2 batchpointlight_2_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2" 4 0 2 comp_2.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_1_0_0" 4 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_3_0_0" 4 0 3 batchpointlight_3_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3" 4 0 3 comp_3.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_4_0_0" 4 0 4 batchpointlight_4_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4" 4 0 4 comp_4.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM00.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA20.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA10.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA30.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA40.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM01.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA21.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA11.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA31.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA41.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM02.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA22.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA12.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA32.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA42.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM03.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA23.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA13.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA33.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA43.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_final" 4 16 0 "gi_Bake Test Scene_LM04.bin" "Bake Test Scene_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_final" 4 16 2 "gi_Bake Test Scene_LMA24.bin" "Bake Test Scene_LMA2_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_final" 4 16 1 "gi_Bake Test Scene_LMA14.bin" "Bake Test Scene_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_final" 4 16 3 "gi_Bake Test Scene_LMA34.bin" "Bake Test Scene_LMA3_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_final" 4 16 4 "gi_Bake Test Scene_LMA44.bin" "Bake Test Scene_LMA4_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "0" "Bake Test Scene_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "2" "Bake Test Scene_LMA2_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" 512 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "1" "Bake Test Scene_LMA1_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "3" "Bake Test Scene_LMA3_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "4" "Bake Test Scene_LMA4_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA2_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA1_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA3_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA4_final.hdr" 1024
+Loaded vertex shader: quad.vso
+Loaded pixel shader: skyOutput.pso
+Loaded pixel shader: cookieOutput.pso
+initShaders done
+initScene done
+Done
+Rendering UV GBuffer for Bake Test Scene_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA2 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA3 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA4 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LM0.lz4" 2 0 0 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA2.lz4" 2 0 2 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA3.lz4" 2 0 3 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA4.lz4" 2 0 4 0
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_0_0_0" 4 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_2_0_0" 4 0 2 batchpointlight_2_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2" 4 0 2 comp_2.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_1_0_0" 4 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_3_0_0" 4 0 3 batchpointlight_3_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3" 4 0 3 comp_3.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_4_0_0" 4 0 4 batchpointlight_4_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4" 4 0 4 comp_4.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM00.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA20.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA10.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA30.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA40.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM01.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA21.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA11.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA31.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA41.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM02.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA22.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA12.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA32.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA42.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM03.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA23.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA13.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA33.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA43.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_final" 4 16 0 "gi_Bake Test Scene_LM04.bin" "Bake Test Scene_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_final" 4 16 2 "gi_Bake Test Scene_LMA24.bin" "Bake Test Scene_LMA2_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_final" 4 16 1 "gi_Bake Test Scene_LMA14.bin" "Bake Test Scene_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_final" 4 16 3 "gi_Bake Test Scene_LMA34.bin" "Bake Test Scene_LMA3_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_final" 4 16 4 "gi_Bake Test Scene_LMA44.bin" "Bake Test Scene_LMA4_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "0" "Bake Test Scene_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "2" "Bake Test Scene_LMA2_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" 512 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "1" "Bake Test Scene_LMA1_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "3" "Bake Test Scene_LMA3_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "4" "Bake Test Scene_LMA4_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA2_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA1_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA3_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA4_final.hdr" 1024
+Loaded vertex shader: quad.vso
+Loaded pixel shader: skyOutput.pso
+Loaded pixel shader: cookieOutput.pso
+initShaders done
+initScene done
+Done
+Rendering UV GBuffer for Bake Test Scene_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA2 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA3 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA4 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LM0.lz4" 2 0 0 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA2.lz4" 2 0 2 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA3.lz4" 2 0 3 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA4.lz4" 2 0 4 0
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_0_0_0" 4 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_2_0_0" 4 0 2 batchpointlight_2_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2" 4 0 2 comp_2.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_1_0_0" 4 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_3_0_0" 4 0 3 batchpointlight_3_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3" 4 0 3 comp_3.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_4_0_0" 4 0 4 batchpointlight_4_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4" 4 0 4 comp_4.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM00.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA20.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA10.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA30.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA40.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM01.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA21.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA11.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA31.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA41.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM02.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA22.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA12.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA32.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA42.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM03.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA23.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA13.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA33.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA43.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_final" 4 16 0 "gi_Bake Test Scene_LM04.bin" "Bake Test Scene_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_final" 4 16 2 "gi_Bake Test Scene_LMA24.bin" "Bake Test Scene_LMA2_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_final" 4 16 1 "gi_Bake Test Scene_LMA14.bin" "Bake Test Scene_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_final" 4 16 3 "gi_Bake Test Scene_LMA34.bin" "Bake Test Scene_LMA3_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_final" 4 16 4 "gi_Bake Test Scene_LMA44.bin" "Bake Test Scene_LMA4_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "0" "Bake Test Scene_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "2" "Bake Test Scene_LMA2_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" 512 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "1" "Bake Test Scene_LMA1_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "3" "Bake Test Scene_LMA3_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "4" "Bake Test Scene_LMA4_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA2_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA1_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA3_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA4_final.hdr" 1024
+Loaded vertex shader: quad.vso
+Loaded pixel shader: skyOutput.pso
+Loaded pixel shader: cookieOutput.pso
+initShaders done
+initScene done
+Done
+Rendering UV GBuffer for Bake Test Scene_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA2 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA3 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA4 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LM0.lz4" 2 0 0 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA2.lz4" 2 0 2 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA3.lz4" 2 0 3 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA4.lz4" 2 0 4 0
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_0_0_0" 4 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_2_0_0" 4 0 2 batchpointlight_2_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2" 4 0 2 comp_2.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_1_0_0" 4 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_3_0_0" 4 0 3 batchpointlight_3_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3" 4 0 3 comp_3.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_4_0_0" 4 0 4 batchpointlight_4_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4" 4 0 4 comp_4.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM00.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA20.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA10.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA30.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA40.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM01.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA21.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA11.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA31.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA41.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM02.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA22.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA12.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA32.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA42.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM03.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA23.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA13.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA33.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA43.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_final" 4 16 0 "gi_Bake Test Scene_LM04.bin" "Bake Test Scene_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_final" 4 16 2 "gi_Bake Test Scene_LMA24.bin" "Bake Test Scene_LMA2_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_final" 4 16 1 "gi_Bake Test Scene_LMA14.bin" "Bake Test Scene_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_final" 4 16 3 "gi_Bake Test Scene_LMA34.bin" "Bake Test Scene_LMA3_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_final" 4 16 4 "gi_Bake Test Scene_LMA44.bin" "Bake Test Scene_LMA4_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "0" "Bake Test Scene_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "2" "Bake Test Scene_LMA2_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" 512 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "1" "Bake Test Scene_LMA1_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "3" "Bake Test Scene_LMA3_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "4" "Bake Test Scene_LMA4_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA2_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA1_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA3_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA4_final.hdr" 1024
+Loaded vertex shader: quad.vso
+Loaded pixel shader: skyOutput.pso
+Loaded pixel shader: cookieOutput.pso
+initShaders done
+initScene done
+Done
+Rendering UV GBuffer for Bake Test Scene_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA2 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA3 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA4 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LM0.lz4" 2 0 0 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA2.lz4" 2 0 2 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA3.lz4" 2 0 3 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA4.lz4" 2 0 4 0
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_0_0_0" 4 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_2_0_0" 4 0 2 batchpointlight_2_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2" 4 0 2 comp_2.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_1_0_0" 4 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_3_0_0" 4 0 3 batchpointlight_3_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3" 4 0 3 comp_3.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_4_0_0" 4 0 4 batchpointlight_4_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4" 4 0 4 comp_4.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM00.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA20.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA10.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA30.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA40.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM01.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA21.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA11.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA31.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA41.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM02.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA22.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA12.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA32.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA42.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM03.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA23.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA13.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA33.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA43.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_final" 4 16 0 "gi_Bake Test Scene_LM04.bin" "Bake Test Scene_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_final" 4 16 2 "gi_Bake Test Scene_LMA24.bin" "Bake Test Scene_LMA2_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_final" 4 16 1 "gi_Bake Test Scene_LMA14.bin" "Bake Test Scene_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_final" 4 16 3 "gi_Bake Test Scene_LMA34.bin" "Bake Test Scene_LMA3_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_final" 4 16 4 "gi_Bake Test Scene_LMA44.bin" "Bake Test Scene_LMA4_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "0" "Bake Test Scene_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "2" "Bake Test Scene_LMA2_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" 512 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "1" "Bake Test Scene_LMA1_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "3" "Bake Test Scene_LMA3_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "4" "Bake Test Scene_LMA4_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA2_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA1_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA3_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA4_final.hdr" 1024
+Loaded vertex shader: quad.vso
+Loaded pixel shader: skyOutput.pso
+Loaded pixel shader: cookieOutput.pso
+initShaders done
+initScene done
+Done
+Rendering UV GBuffer for Bake Test Scene_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA2 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA3 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA4 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LM0.lz4" 2 0 0 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA2.lz4" 2 0 2 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA3.lz4" 2 0 3 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA4.lz4" 2 0 4 0
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_0_0_0" 4 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_2_0_0" 4 0 2 batchpointlight_2_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2" 4 0 2 comp_2.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_1_0_0" 4 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_3_0_0" 4 0 3 batchpointlight_3_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3" 4 0 3 comp_3.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_4_0_0" 4 0 4 batchpointlight_4_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4" 4 0 4 comp_4.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM00.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA20.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA10.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA30.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA40.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM01.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA21.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA11.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA31.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA41.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM02.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA22.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA12.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA32.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA42.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM03.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA23.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA13.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA33.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA43.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_final" 4 16 0 "gi_Bake Test Scene_LM04.bin" "Bake Test Scene_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_final" 4 16 2 "gi_Bake Test Scene_LMA24.bin" "Bake Test Scene_LMA2_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_final" 4 16 1 "gi_Bake Test Scene_LMA14.bin" "Bake Test Scene_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_final" 4 16 3 "gi_Bake Test Scene_LMA34.bin" "Bake Test Scene_LMA3_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_final" 4 16 4 "gi_Bake Test Scene_LMA44.bin" "Bake Test Scene_LMA4_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "0" "Bake Test Scene_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "2" "Bake Test Scene_LMA2_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" 512 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "1" "Bake Test Scene_LMA1_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "3" "Bake Test Scene_LMA3_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "4" "Bake Test Scene_LMA4_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA2_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA1_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA3_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA4_final.hdr" 1024
+Loaded vertex shader: quad.vso
+Loaded pixel shader: skyOutput.pso
+Loaded pixel shader: cookieOutput.pso
+initShaders done
+initScene done
+Done
+Rendering UV GBuffer for Bake Test Scene_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA2 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA3 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA4 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LM0.lz4" 2 0 0 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA2.lz4" 2 0 2 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA3.lz4" 2 0 3 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA4.lz4" 2 0 4 0
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_0_0_0" 4 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_2_0_0" 4 0 2 batchpointlight_2_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2" 4 0 2 comp_2.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_1_0_0" 4 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_3_0_0" 4 0 3 batchpointlight_3_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3" 4 0 3 comp_3.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_4_0_0" 4 0 4 batchpointlight_4_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4" 4 0 4 comp_4.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM00.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA20.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA10.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA30.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA40.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM01.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA21.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA11.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA31.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA41.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM02.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA22.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA12.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA32.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA42.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM03.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA23.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA13.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA33.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA43.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_final" 4 16 0 "gi_Bake Test Scene_LM04.bin" "Bake Test Scene_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_final" 4 16 2 "gi_Bake Test Scene_LMA24.bin" "Bake Test Scene_LMA2_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_final" 4 16 1 "gi_Bake Test Scene_LMA14.bin" "Bake Test Scene_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_final" 4 16 3 "gi_Bake Test Scene_LMA34.bin" "Bake Test Scene_LMA3_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_final" 4 16 4 "gi_Bake Test Scene_LMA44.bin" "Bake Test Scene_LMA4_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "0" "Bake Test Scene_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "2" "Bake Test Scene_LMA2_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" 512 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "1" "Bake Test Scene_LMA1_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "3" "Bake Test Scene_LMA3_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "4" "Bake Test Scene_LMA4_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA2_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA1_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA3_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA4_final.hdr" 1024
+2022-4-20
+Rendering UV GBuffer for Bake Test Scene_LM0 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA1 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA2 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA3 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for Bake Test Scene_LMA4 51
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering UV normal...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LM0.lz4" 2 0 0 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA1.lz4" 2 0 1 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA2.lz4" 2 0 2 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA3.lz4" 2 0 3 0
+Running ftraceRTX fixpos12 "C:\Users\game3\AppData\Local\Temp\frender" "uvpos_Bake Test Scene_LMA4.lz4" 2 0 4 0
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_0_0_0" 4 0 0 batchpointlight_0_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0" 4 0 0 comp_0.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_1_0_0" 4 0 1 batchpointlight_1_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1" 4 0 1 comp_1.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_2_0_0" 4 0 2 batchpointlight_2_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2" 4 0 2 comp_2.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_3_0_0" 4 0 3 batchpointlight_3_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3" 4 0 3 comp_3.bin
+Running ftraceRTX batchpointlight "C:\Users\game3\AppData\Local\Temp\frender" "PointBatch_4_0_0" 4 0 4 batchpointlight_4_0_0.bin
+Running ftraceRTX addmul "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4" 4 0 4 comp_4.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM00.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA10.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA20.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA30.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA40.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM01.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA11.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA21.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA31.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA41.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM02.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA12.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA22.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA32.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA42.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_diffuse" 4 16 0 "gi_Bake Test Scene_LM03.bin" "Bake Test Scene_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_diffuse" 4 16 1 "gi_Bake Test Scene_LMA13.bin" "Bake Test Scene_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_diffuse" 4 16 2 "gi_Bake Test Scene_LMA23.bin" "Bake Test Scene_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_diffuse" 4 16 3 "gi_Bake Test Scene_LMA33.bin" "Bake Test Scene_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_diffuse" 4 16 4 "gi_Bake Test Scene_LMA43.bin" "Bake Test Scene_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LM0_final" 4 16 0 "gi_Bake Test Scene_LM04.bin" "Bake Test Scene_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA1_final" 4 16 1 "gi_Bake Test Scene_LMA14.bin" "Bake Test Scene_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA2_final" 4 16 2 "gi_Bake Test Scene_LMA24.bin" "Bake Test Scene_LMA2_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA3_final" 4 16 3 "gi_Bake Test Scene_LMA34.bin" "Bake Test Scene_LMA3_lights_HDR.lz4" vbTraceTex.bin
+Running ftraceRTX texgi "C:\Users\game3\AppData\Local\Temp\frender" "Bake Test Scene_LMA4_final" 4 16 4 "gi_Bake Test Scene_LMA44.bin" "Bake Test Scene_LMA4_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" 128 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "0" "Bake Test Scene_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" 512 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "1" "Bake Test Scene_LMA1_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "2" "Bake Test Scene_LMA2_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "3" "Bake Test Scene_LMA3_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\game3\AppData\Local\Temp\frender" "4" "Bake Test Scene_LMA4_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LM0_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA1_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA1_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA2_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA2_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA3_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA3_final.hdr" 1024
+Running halffloat2hdr "C:\Users\game3\AppData\Local\Temp\frender/Bake Test Scene_LMA4_final_HDR.lz4" "C:/Users/game3/Documents/GitHub/NewMakina/PC_Client_&_Server_Makina/Assets/BakeryLightmaps/Bake Test Scene_LMA4_final.hdr" 1024
