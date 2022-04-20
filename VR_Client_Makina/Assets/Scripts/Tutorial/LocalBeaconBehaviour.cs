@@ -1,3 +1,4 @@
+using Grabbabble_Type_Beat;
 using UnityEngine;
 
 namespace Tutorial {

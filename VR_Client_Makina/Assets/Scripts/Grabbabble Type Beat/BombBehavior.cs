@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using CustomMessages;
+using Grabbabble_Type_Beat;
 using Network;
 using Synchronizers;
 using UnityEngine;

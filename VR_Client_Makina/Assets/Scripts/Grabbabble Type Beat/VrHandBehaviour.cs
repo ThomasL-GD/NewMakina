@@ -1,6 +1,7 @@
 using System.Collections;
 using Animation.AnimationDelegates;
 using JetBrains.Annotations;
+using UnityEditor.TextCore.Text;
 using UnityEngine;
 
 namespace Grabbabble_Type_Beat {
@@ -19,6 +20,7 @@ namespace Grabbabble_Type_Beat {
         [SerializeField] [Range(10f,100000f)] private float m_pullMaxDistance;
         [SerializeField] [Range(0.1f,100f)] private float m_pullSpeed;
         [SerializeField] private LayerMask m_layersThatPulls;
+        [SerializeField] [Tooltip("This object will be set active and put to the same position as the object that is pullable when there is one")] private ParticleSystem m_feedbackPullAvailable;
         private bool m_isThereAnObjectPulled = false;
         private Coroutine m_pullCoroutine; 
         private Vector3 m_pulledObjectOriginalPos; 
@@ -66,8 +68,9 @@ namespace Grabbabble_Type_Beat {
 
         private void Update() {
             m_isPressingTrigger = OVRInput.Get(m_grabInput) >= m_triggerGrabSensitivity; //if the trigger is pressed enough, the boolean becomes true
+            bool shouldPullFeedbackBeOn = false;
 
-            if (m_objectHeld == null && !m_isThereAnObjectPulled && m_isPressingTrigger) { // If no item is held nor pulled and the trigger is pressed
+            if (m_objectHeld == null && !m_isThereAnObjectPulled) { // If no item is held nor pulled
 
                 Transform transform1 = transform;
                 Vector3 position = transform1.position;
@@ -79,10 +82,20 @@ namespace Grabbabble_Type_Beat {
                 if (hitSmth) {
                     // ReSharper disable once CommentTypo
                     if (hitData.transform.TryGetComponent(out GrabbableObject script)) { //If a grabbable object is in the aimline of this hand
-                        m_pullCoroutine = StartCoroutine(Pull(script));
+                        //Feedback yey
+                        shouldPullFeedbackBeOn = true;
+                        Transform grabbableTransform = script.transform; 
+                        Transform feedbackTransform = m_feedbackPullAvailable.transform;
+                        feedbackTransform.position = grabbableTransform.position;
+                        feedbackTransform.rotation = grabbableTransform.rotation;
+ 
+                        
+                        ParticleSystem.ShapeModule shapeModule = m_feedbackPullAvailable.shape;
+                        shapeModule.meshRenderer = script.transform.GetComponent<MeshRenderer>();
+
+                        if(m_isPressingTrigger) m_pullCoroutine = StartCoroutine(Pull(script)); //If the trigger is pressed, we start the pulling
                     }
                 }
-
             }
             else if (m_objectHeld != null) { //We keep going if an item is held
 
@@ -91,6 +104,9 @@ namespace Grabbabble_Type_Beat {
                 m_objectHeld.BeLetGo(m_grabInput);
                 m_objectHeld = null;
             }
+            
+            //Feedback ney
+            m_feedbackPullAvailable.gameObject.SetActive(shouldPullFeedbackBeOn);
         }
 
         /// <summary>Will progressively attract a Grabbable object towards the hand while the appropriate trigger is pressed </summary>
@@ -111,9 +127,9 @@ namespace Grabbabble_Type_Beat {
                 yield return null;
                 elapsedTime += Time.deltaTime;
                 
-                p_objectPulled.transform.Translate((transform.position - p_objectPulled.transform.position).normalized * m_pullSpeed / Time.deltaTime);
+                p_objectPulled.transform.Translate((transform.position - p_objectPulled.transform.position).normalized * m_pullSpeed * Time.deltaTime);
 
-                if (elapsedTime > estimatedTime || m_objectHeld == p_objectPulled) {
+                if (m_objectHeld == p_objectPulled) {
                     isPulling = false;
                 }
 
@@ -122,12 +138,14 @@ namespace Grabbabble_Type_Beat {
                     isPushing = true;
             }
 
+            m_isThereAnObjectPulled = false;
+
             while (isPushing) {
 
                 yield return null;
                 elapsedTime -= Time.deltaTime; //Here we go reverse in elapsed time
                 
-                p_objectPulled.transform.Translate((originalPos - p_objectPulled.transform.position).normalized * m_pullSpeed / Time.deltaTime);
+                p_objectPulled.transform.Translate((originalPos - p_objectPulled.transform.position).normalized * m_pullSpeed * Time.deltaTime);
 
                 if (!(elapsedTime < 0f)) continue;
                     p_objectPulled.transform.position = originalPos;
