@@ -55,7 +55,7 @@ namespace Grabbabble_Type_Beat {
         private static readonly int IsClosed = Animator.StringToHash("IsClosed");
         private static readonly int IsGrabbing = Animator.StringToHash("IsGrabbing");
         public static int s_layer = -1;
-        private static readonly int ActivatableFeedback = Shader.PropertyToID("_Activatable_Feedback");
+        private static readonly int ActivatableFeedback = Shader.PropertyToID("_ActivatableFeedback");
 
         private void Start() {
         
@@ -95,7 +95,7 @@ namespace Grabbabble_Type_Beat {
                     // ReSharper disable once CommentTypo
                     if (!bestPick.transform.TryGetComponent(out GrabbableObject script)) return; //If a grabbable object is in the aimline of this hand
                         m_lastRendererChanged = script.GetComponent<Renderer>();
-                        m_lastRendererChanged.sharedMaterial.SetFloat(ActivatableFeedback, 1);
+                        m_lastRendererChanged.sharedMaterial.SetVector(ActivatableFeedback, m_lastRendererChanged.transform.position);
                         
                         if(m_isPressingTrigger) StartCoroutine(Pull(script)); //If the trigger is pressed, we start the pulling
                 }
@@ -130,12 +130,13 @@ namespace Grabbabble_Type_Beat {
 
             float elapsedTime = 0f;
             
-            //bool isPushing = false;
+            bool isPushing = false;
             bool isPulling = true;
             while (isPulling) {
                 
                 yield return null;
                 elapsedTime += Time.deltaTime;
+                p_objectPulled.GetComponent<Renderer>().sharedMaterial.SetVector(ActivatableFeedback, p_objectPulled.transform.position);
                 
                 p_objectPulled.transform.Translate((transform.position - p_objectPulled.transform.position).normalized * m_pullSpeed * Time.deltaTime);
 
@@ -145,11 +146,11 @@ namespace Grabbabble_Type_Beat {
 
                 if (m_isPressingTrigger && (!(m_objectHeld != null & m_objectHeld != p_objectPulled))) continue;
                     isPulling = false;
-                    //isPushing = true;
+                    isPushing = true;
             }
 
             m_isThereAnObjectPulled = false;
-            p_objectPulled.GetComponent<Renderer>().sharedMaterial.SetFloat(ActivatableFeedback, 0);
+            p_objectPulled.GetComponent<Renderer>().sharedMaterial.SetVector(ActivatableFeedback, Vector4.zero);
             
             p_objectPulled.BeGrabbed(p_objectPulled.transform.parent, Vector3.zero);
             p_objectPulled.BeLetGo(m_grabInput);
