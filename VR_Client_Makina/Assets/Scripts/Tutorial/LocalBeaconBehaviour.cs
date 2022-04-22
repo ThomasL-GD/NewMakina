@@ -1,3 +1,4 @@
+using Grabbabble_Type_Beat;
 using UnityEngine;
 
 namespace Tutorial {
@@ -22,14 +23,14 @@ namespace Tutorial {
             Destroy(gameObject);
         }
         
-        public override void BeGrabbed(Transform p_parent) {
-
-            // if (!m_hasBeenCaughtInLifetime) {
-            //     m_rb.isKinematic = false;
-            // }
-        
-            base.BeGrabbed(p_parent);
-        }
+        // public override void BeGrabbed(Transform p_parent) {
+        //
+        //     // if (!m_hasBeenCaughtInLifetime) {
+        //     //     m_rb.isKinematic = false;
+        //     // }
+        //
+        //     base.BeGrabbed(p_parent);
+        // }
     }
 
 }

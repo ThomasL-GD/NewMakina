@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using CustomMessages;
+using Grabbabble_Type_Beat;
 using Network;
 using Synchronizers;
 using UnityEngine;
@@ -36,13 +37,13 @@ public class BombBehavior : GrabbablePhysickedObject {
         OnDestroyBomb += ActualiseIndex;
     }
 
-    public override void BeGrabbed(Transform p_parent) {
+    public override void BeGrabbed(Transform p_parent, Vector3 p_offsetPositionInHand) {
 
         if (!m_hasBeenCaughtInLifetime) {
             m_bombLoading.Unloading();
         }
         
-        base.BeGrabbed(p_parent);
+        base.BeGrabbed(p_parent, p_offsetPositionInHand);
     }
 
     protected override void OnFirstTimeTouchingGround(Collision p_other) {

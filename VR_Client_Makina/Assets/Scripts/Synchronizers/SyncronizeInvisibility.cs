@@ -8,9 +8,9 @@ public class SyncronizeInvisibility : Synchronizer<SyncronizeInvisibility>
 {
     [SerializeField] private MeshRenderer[] m_playerMeshRenderers;
 
-    [SerializeField] private AudioSource m_audioSource;
-    [SerializeField] private AudioClip m_soundOn = null;
-    [SerializeField] private AudioClip m_soundOff = null;
+    //[SerializeField] private AudioSource m_audioSource;
+    //[SerializeField] private AudioClip m_soundOn = null;
+    //[SerializeField] private AudioClip m_soundOff = null;
 
     private void Awake()
     {

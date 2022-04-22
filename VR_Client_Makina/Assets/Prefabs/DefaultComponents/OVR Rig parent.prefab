@@ -307,6 +307,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_grabInput: 8
   m_triggerGrabSensitivity: 0.93
+  m_grabbedItemsPositionInHand: {x: 0, y: 0, z: 0}
+  m_pullMaxDistance: 0
+  m_pullSpeed: 0
+  m_layersThatPulls:
+    serializedVersion: 2
+    m_Bits: 0
+  m_feedbackPullAvailable: {fileID: 0}
 --- !u!114 &3864633115530252891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,6 +472,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_grabInput: 4
   m_triggerGrabSensitivity: 0.857
+  m_grabbedItemsPositionInHand: {x: 0, y: 0, z: 0}
+  m_pullMaxDistance: 0
+  m_pullSpeed: 0
+  m_layersThatPulls:
+    serializedVersion: 2
+    m_Bits: 0
+  m_feedbackPullAvailable: {fileID: 0}
 --- !u!54 &715721582
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -809,6 +823,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_grabInput: 8
   m_triggerGrabSensitivity: 0.236
+  m_grabbedItemsPositionInHand: {x: 0, y: 0, z: 0}
+  m_pullMaxDistance: 0
+  m_pullSpeed: 0
+  m_layersThatPulls:
+    serializedVersion: 2
+    m_Bits: 0
+  m_feedbackPullAvailable: {fileID: 0}
 --- !u!114 &6168868484694024885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1020,6 +1041,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_grabInput: 4
   m_triggerGrabSensitivity: 0.295
+  m_grabbedItemsPositionInHand: {x: 0, y: 0, z: 0}
+  m_pullMaxDistance: 0
+  m_pullSpeed: 0
+  m_layersThatPulls:
+    serializedVersion: 2
+    m_Bits: 0
+  m_feedbackPullAvailable: {fileID: 0}
 --- !u!1001 &2442783932079807503
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1055,10 +1083,6 @@ PrefabInstance:
       propertyPath: m_localLaser
       value: 
       objectReference: {fileID: 2960914434938501362}
-    - target: {fileID: 1701524832266796535, guid: 5300e1fb00c98f0439f0cbf7210f56ff, type: 3}
-      propertyPath: m_Center.y
-      value: 0.3
-      objectReference: {fileID: 0}
     - target: {fileID: 1701524832266796536, guid: 5300e1fb00c98f0439f0cbf7210f56ff, type: 3}
       propertyPath: m_Name
       value: Makimain R
@@ -1692,6 +1716,26 @@ PrefabInstance:
     - target: {fileID: 1701524832266796532, guid: 5300e1fb00c98f0439f0cbf7210f56ff, type: 3}
       propertyPath: m_grabInput
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1701524832266796535, guid: 5300e1fb00c98f0439f0cbf7210f56ff, type: 3}
+      propertyPath: m_Height
+      value: 0.94
+      objectReference: {fileID: 0}
+    - target: {fileID: 1701524832266796535, guid: 5300e1fb00c98f0439f0cbf7210f56ff, type: 3}
+      propertyPath: m_Radius
+      value: 0.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 1701524832266796535, guid: 5300e1fb00c98f0439f0cbf7210f56ff, type: 3}
+      propertyPath: m_Center.y
+      value: -0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 1701524832266796535, guid: 5300e1fb00c98f0439f0cbf7210f56ff, type: 3}
+      propertyPath: m_Center.z
+      value: -0.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 1701524832266796535, guid: 5300e1fb00c98f0439f0cbf7210f56ff, type: 3}
+      propertyPath: m_Direction
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1701524832266796536, guid: 5300e1fb00c98f0439f0cbf7210f56ff, type: 3}
       propertyPath: m_Name

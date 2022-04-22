@@ -69,6 +69,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_grabInput: 8
   m_triggerGrabSensitivity: 0.236
+  m_grabbedItemsPositionInHand: {x: 0, y: 0, z: 0}
+  m_pullMaxDistance: 10698
+  m_pullSpeed: 1.9
+  m_layersThatPulls:
+    serializedVersion: 2
+    m_Bits: 64
+  m_feedbackPullAvailable: {fileID: 0}
 --- !u!136 &1701524832266796535
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -79,10 +86,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.35
-  m_Height: 1.22
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.46, z: -0.08}
+  m_Radius: 0.31
+  m_Height: 0.94
+  m_Direction: 2
+  m_Center: {x: 0, y: 0.06, z: 0.25}
 --- !u!54 &1701524832266796534
 Rigidbody:
   m_ObjectHideFlags: 0
