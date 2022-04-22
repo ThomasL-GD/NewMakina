@@ -73,10 +73,9 @@ namespace Grabbabble_Type_Beat {
         }
 
         private void OnCollisionEnter(Collision p_other) {
-            if (((1 << p_other.gameObject.layer) & m_layersThatCollides) != 0) { //If this object collides with any layer specified with m_layersThatCollides
+            if (((1 << p_other.gameObject.layer) & m_layersThatCollides) == 0) return; //If this object collides with any layer specified with m_layersThatCollides
                 transform.rotation = Quaternion.Euler(0,0,0);
                 if(!m_hasTouchedGround)OnFirstTimeTouchingGround(p_other);
-            }
         }
 
         /// <summary> Is called the first time this object touches the ground </summary>

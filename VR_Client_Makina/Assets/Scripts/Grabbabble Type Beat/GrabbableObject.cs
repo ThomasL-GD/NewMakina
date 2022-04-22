@@ -80,7 +80,7 @@ namespace Grabbabble_Type_Beat {
             }
         }
 
-        IEnumerator GoToHandCenter(float p_time, Vector3 p_localPosToGo) {
+        private IEnumerator GoToHandCenter(float p_time, Vector3 p_localPosToGo) {
             float elapsedTime = 0f;
             Vector3 originalLocalPos = transform.localPosition;
             Vector3 pathToGo = p_localPosToGo - originalLocalPos;
