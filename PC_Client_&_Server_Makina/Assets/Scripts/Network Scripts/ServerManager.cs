@@ -540,7 +540,9 @@ public class ServerManager : MonoBehaviour
                 if (m_heartTimer>m_heartDestroyTime)
                 {
                     m_heartTransforms[i].localScale = Vector3.zero;
-                    SendToBothClients(new HeartBreak() {index = i});
+                    var msg = new HeartBreak();
+                    msg.index = i;
+                    SendToBothClients(msg);
                     m_vrPlayerHealth--;
                 }
                 return;

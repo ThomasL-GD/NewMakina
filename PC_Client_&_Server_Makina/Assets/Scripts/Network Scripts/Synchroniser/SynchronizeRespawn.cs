@@ -1,13 +1,16 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using CustomMessages;
 using Mirror;
 using Player_Scripts;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Synchronizers
 {
-    public class SynchronizeRespawn : Synchronizer<SynchronizeRespawn>
-    {
+    public class SynchronizeRespawn : Synchronizer<SynchronizeRespawn> {
+        
         [SerializeField] [Tooltip("The PC player")]
         private GameObject m_player;
 
@@ -26,15 +29,27 @@ namespace Synchronizers
         [SerializeField] private AudioSource m_deathSound;
         [SerializeField] [Tooltip("The sound played when the respawn invisibility ends")] private AudioSource m_invisibilityEndSound;
 
-        public delegate void OnPlayerDeathDelegator();
+        [Header("Respawn Panel")]
+        [SerializeField] [Tooltip("The GameObjects that will appear on death to chose a point where to spawn")] private GameObject[] m_gosToActivateOnRespawn = null;
+        [SerializeField] [Tooltip("The prefab of a spawnPoint, works faster if it has the UISpawnPoint script on it")] private GameObject m_spawnPointPrefab = null;
+        
+        [SerializeField] [Range(0, 10)] [Tooltip("The number of spawnpoints to choose from when respawning")] private byte m_spawnpointsChoiceNumber = 3;
 
-        public static OnPlayerDeathDelegator OnPlayerDeath;
+        public delegate void PlayerDeathDelegator();
 
-        public static OnPlayerDeathDelegator OnPlayerRespawn;
+        public static PlayerDeathDelegator OnPlayerDeath;
+
+        public static PlayerDeathDelegator OnPlayerRespawn;
 
         void Awake() {
             OnPlayerDeath += ReceiveLaser;
             ClientManager.OnReceiveInitialData += InitialSpawn;
+            
+            foreach (GameObject go in m_gosToActivateOnRespawn) go.SetActive(false);
+            
+#if UNITY_EDITOR
+            if(m_spawnpointsChoiceNumber > m_spawnPoints.Length)Debug.LogError("");
+#endif
         }
 
         /// <summary>Teleports the player to a random spawn point on start
@@ -55,8 +70,8 @@ namespace Synchronizers
         /// The coroutine called that will handle the player's death
         /// </summary>
         /// <returns> null </returns>
-        IEnumerator DeathLoop()
-        {
+        IEnumerator DeathLoop() {
+            
             //Enabling the feedback and finding the next spawn point
             InputMovement3.instance.m_isDead = true;
             int respawnIndex = Random.Range(0, m_spawnPoints.Length);
@@ -75,17 +90,40 @@ namespace Synchronizers
             //Waiting for the respawn time
             yield return new WaitForSeconds(m_respawnTime);
             
-            //Disabling the feedback and teleporting the player to his new position
-            InputMovement3.instance.m_isDead = false;
+            //Disabling the feedback
             m_deathFeedback.SetActive(false);
 
-            //TODO this might be causing isue, w are 10h before a jury and i am alone
             //If the game is ont running anymore, we don't make it respawn
-            if (!ClientManager.singleton.m_isInGame) yield break;
+            //if (!ClientManager.singleton.m_isInGame) yield break;
+
+            //A wild Spawnpoint choice appears
+            foreach (GameObject go in m_gosToActivateOnRespawn) go.SetActive(true);
+
+            //Creating a pool to pull random indexes from
+            List<ushort> availableSpawnPoints = new List<ushort>();
+            for (ushort j = 0; j < m_spawnPoints.Length; j++) availableSpawnPoints.Add(j);
+
+            List<Transform> selectedSpawnPoints = new List<Transform>();
+            for (byte i = 0; i < m_spawnpointsChoiceNumber; i++) {
+                int rand = Random.Range(0, availableSpawnPoints.Count);
+                selectedSpawnPoints.Add(m_spawnPoints[availableSpawnPoints[rand]]);
+                availableSpawnPoints.RemoveAt(rand);
+                
+                //TODO spawn lil dots here
+            }
+        }
+
+        public void ChooseSpawnPoint(byte p_index) {
+
+            InputMovement3.instance.m_isDead = false;
             
-            m_player.transform.position = m_spawnPoints[respawnIndex].position;
+            m_player.transform.position = m_spawnPoints[p_index].position;
 
             OnPlayerRespawn?.Invoke();
+            
+        }
+
+        IEnumerator RespawnInvisibility() {
 
             //Making the player invisible
             NetworkClient.Send(new PcInvisibility() {isInvisible = true});
