@@ -30,10 +30,13 @@ namespace Synchronizers
         [SerializeField] [Tooltip("The sound played when the respawn invisibility ends")] private AudioSource m_invisibilityEndSound;
 
         [Header("Respawn Panel")]
-        [SerializeField] [Tooltip("The GameObjects that will appear on death to chose a point where to spawn")] private GameObject[] m_gosToActivateOnRespawn = null;
+        [SerializeField] [Tooltip("The map that will appear on respawn\nIt needs to be a UI object and have a correct size because math is being done with it")] private RectTransform m_respawnMap = null;
         [SerializeField] [Tooltip("The prefab of a spawnPoint, works faster if it has the UISpawnPoint script on it")] private GameObject m_spawnPointPrefab = null;
         
         [SerializeField] [Range(0, 10)] [Tooltip("The number of spawnpoints to choose from when respawning")] private byte m_spawnpointsChoiceNumber = 3;
+        [SerializeField] [Tooltip("The real size of the map (in meters)")] private float m_bowlRealSize = 500;
+        
+        
 
         public delegate void PlayerDeathDelegator();
 
@@ -45,7 +48,7 @@ namespace Synchronizers
             OnPlayerDeath += ReceiveLaser;
             ClientManager.OnReceiveInitialData += InitialSpawn;
             
-            foreach (GameObject go in m_gosToActivateOnRespawn) go.SetActive(false);
+            m_respawnMap.gameObject.SetActive(false);
             
 #if UNITY_EDITOR
             if(m_spawnpointsChoiceNumber > m_spawnPoints.Length)Debug.LogError("");
@@ -97,19 +100,39 @@ namespace Synchronizers
             //if (!ClientManager.singleton.m_isInGame) yield break;
 
             //A wild Spawnpoint choice appears
-            foreach (GameObject go in m_gosToActivateOnRespawn) go.SetActive(true);
+            m_respawnMap.gameObject.SetActive(true);
 
             //Creating a pool to pull random indexes from
             List<ushort> availableSpawnPoints = new List<ushort>();
             for (ushort j = 0; j < m_spawnPoints.Length; j++) availableSpawnPoints.Add(j);
 
             List<Transform> selectedSpawnPoints = new List<Transform>();
+            RectTransform mapRect = m_respawnMap.GetComponent<RectTransform>();
+            Vector2 mapSize = mapRect.anchorMax - mapRect.anchorMin;
             for (byte i = 0; i < m_spawnpointsChoiceNumber; i++) {
                 int rand = Random.Range(0, availableSpawnPoints.Count);
                 selectedSpawnPoints.Add(m_spawnPoints[availableSpawnPoints[rand]]);
                 availableSpawnPoints.RemoveAt(rand);
                 
                 //TODO spawn lil dots here
+                GameObject go = Instantiate(m_spawnPointPrefab, m_respawnMap);
+                    
+                //TODO                                                                                                                                    use map size here ↓   (remember that you're struggling with position vs anchorsMinMax)
+                //GetComponentOrAddIt<RectTransform>(go).localPosition = new Vector3((m_spawnPoints[availableSpawnPoints[rand]].transform.position.x / (m_bowlRealSize/2)) * , , 0f);
+            }
+        }
+
+        /// <summary>Will return the component of the chosen type, and if there is none, will add one</summary>
+        /// <param name="p_go">The GameObject you want to get component out of</param>
+        /// <typeparam name="T">The type of the component you want</typeparam>
+        /// <returns>The component found or created</returns>
+        private T GetComponentOrAddIt<T>(GameObject p_go) where T : Component {
+            if (p_go.TryGetComponent(out T component)) {
+                return component;
+            }
+            else {
+                T newComponent = p_go.AddComponent<T>();
+                return newComponent;
             }
         }
 
