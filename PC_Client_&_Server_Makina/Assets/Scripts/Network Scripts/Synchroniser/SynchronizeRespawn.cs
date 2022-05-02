@@ -7,8 +7,7 @@ using Player_Scripts;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Synchronizers
-{
+namespace Synchronizers {
     public class SynchronizeRespawn : Synchronizer<SynchronizeRespawn> {
         
         [SerializeField] [Tooltip("The PC player")]
@@ -107,18 +106,23 @@ namespace Synchronizers
             for (ushort j = 0; j < m_spawnPoints.Length; j++) availableSpawnPoints.Add(j);
 
             List<Transform> selectedSpawnPoints = new List<Transform>();
-            RectTransform mapRect = m_respawnMap.GetComponent<RectTransform>();
-            Vector2 mapSize = mapRect.anchorMax - mapRect.anchorMin;
+            //RectTransform mapRect = m_respawnMap.GetComponent<RectTransform>();
+            //Vector2 mapAnchorSize = mapRect.anchorMax - mapRect.anchorMin;
+            RectTransform prefabRect = GetComponentOrAddIt<RectTransform>(m_spawnPointPrefab);
+            Vector2 uiSpawnPointAnchorSize = prefabRect.anchorMax - prefabRect.anchorMin;
             for (byte i = 0; i < m_spawnpointsChoiceNumber; i++) {
                 int rand = Random.Range(0, availableSpawnPoints.Count);
                 selectedSpawnPoints.Add(m_spawnPoints[availableSpawnPoints[rand]]);
                 availableSpawnPoints.RemoveAt(rand);
                 
-                //TODO spawn lil dots here
                 GameObject go = Instantiate(m_spawnPointPrefab, m_respawnMap);
+                
+                GetComponentOrAddIt<UISpawnPoint>(go).InsertValues(availableSpawnPoints[rand], this);
                     
-                //TODO                                                                                                                                    use map size here ↓   (remember that you're struggling with position vs anchorsMinMax)
-                //GetComponentOrAddIt<RectTransform>(go).localPosition = new Vector3((m_spawnPoints[availableSpawnPoints[rand]].transform.position.x / (m_bowlRealSize/2)) * , , 0f);
+                Vector2 centerAnchorOfNewSpawnPoint = new Vector2(m_spawnPoints[availableSpawnPoints[rand]].transform.position.x, m_spawnPoints[availableSpawnPoints[rand]].transform.position.y) / (m_bowlRealSize/2f);
+                RectTransform newPointRect = GetComponentOrAddIt<RectTransform>(go);
+                newPointRect.anchorMin = new Vector2(centerAnchorOfNewSpawnPoint.x - (uiSpawnPointAnchorSize.x/2f), centerAnchorOfNewSpawnPoint.y - (uiSpawnPointAnchorSize.y/2f));
+                newPointRect.anchorMax = new Vector2(centerAnchorOfNewSpawnPoint.x + (uiSpawnPointAnchorSize.x/2f), centerAnchorOfNewSpawnPoint.y + (uiSpawnPointAnchorSize.y/2f));
             }
         }
 
@@ -130,20 +134,21 @@ namespace Synchronizers
             if (p_go.TryGetComponent(out T component)) {
                 return component;
             }
-            else {
+            //else
                 T newComponent = p_go.AddComponent<T>();
                 return newComponent;
-            }
         }
 
-        public void ChooseSpawnPoint(byte p_index) {
+        public void ChooseSpawnPoint(ushort p_index) {
 
             InputMovement3.instance.m_isDead = false;
             
             m_player.transform.position = m_spawnPoints[p_index].position;
 
             OnPlayerRespawn?.Invoke();
-            
+
+            StartCoroutine(RespawnInvisibility());
+
         }
 
         IEnumerator RespawnInvisibility() {
