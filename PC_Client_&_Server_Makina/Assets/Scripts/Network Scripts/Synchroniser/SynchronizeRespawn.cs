@@ -1,13 +1,13 @@
 using System.Collections;
+using System.Collections.Generic;
 using CustomMessages;
 using Mirror;
 using Player_Scripts;
 using UnityEngine;
 
-namespace Synchronizers
-{
-    public class SynchronizeRespawn : Synchronizer<SynchronizeRespawn>
-    {
+namespace Synchronizers {
+    public class SynchronizeRespawn : Synchronizer<SynchronizeRespawn> {
+        
         [SerializeField] [Tooltip("The PC player")]
         private GameObject m_player;
 
@@ -26,21 +26,27 @@ namespace Synchronizers
         [SerializeField] private AudioSource m_deathSound;
         [SerializeField] [Tooltip("The sound played when the respawn invisibility ends")] private AudioSource m_invisibilityEndSound;
 
-        public delegate void OnPlayerDeathDelegator();
+        private ushort m_numberOfSpawnPointsToSend;
 
-        public static OnPlayerDeathDelegator OnPlayerDeath;
+        public delegate void PlayerDeathDelegator();
 
-        public static OnPlayerDeathDelegator OnPlayerRespawn;
+        public static PlayerDeathDelegator OnPlayerDeath;
+
+        public static PlayerDeathDelegator OnPlayerRespawn;
 
         void Awake() {
             OnPlayerDeath += ReceiveLaser;
-            ClientManager.OnReceiveInitialData += InitialSpawn;
+            ClientManager.OnReceiveInitialData += ReceiveInitialData;
         }
 
-        /// <summary>Teleports the player to a random spawn point on start
+        /// <summary>Teleports the player to a random spawn point on start.
+        /// Also fetch any data needed in InitialData
         /// I should add that this documentation is very well made (ღゝ◡╹)ノ♡</summary>
         /// <param name="p_initialdata">The message sent by the server, NO SHiT !</param>
-        private void InitialSpawn(InitialData p_initialdata) => m_player.transform.position = m_spawnPoints[Random.Range(0, m_spawnPoints.Length)].position;
+        private void ReceiveInitialData(InitialData p_initialdata) {
+            m_player.transform.position = m_spawnPoints[Random.Range(0, m_spawnPoints.Length)].position;
+            m_numberOfSpawnPointsToSend = p_initialdata.numberOfSpawnPointsToDisplay;
+        }
 
 
         /// <summary>
@@ -55,11 +61,10 @@ namespace Synchronizers
         /// The coroutine called that will handle the player's death
         /// </summary>
         /// <returns> null </returns>
-        IEnumerator DeathLoop()
-        {
+        IEnumerator DeathLoop() {
+            
             //Enabling the feedback and finding the next spawn point
             InputMovement3.instance.m_isDead = true;
-            int respawnIndex = Random.Range(0, m_spawnPoints.Length);
             m_deathFeedback.SetActive(true);
 
             m_deathSound.Play();
@@ -83,7 +88,20 @@ namespace Synchronizers
             //If the game is ont running anymore, we don't make it respawn
             if (!ClientManager.singleton.m_isInGame) yield break;
             
-            m_player.transform.position = m_spawnPoints[respawnIndex].position;
+            //Creating a pool to pull random indexes from
+            List<ushort> availableSpawnPoints = new List<ushort>();
+            for (ushort j = 0; j < m_spawnPoints.Length; j++) availableSpawnPoints.Add(j);
+
+            //Create a list of spawnpoints with no duplicates
+            List<Vector3> spawnPointsShownToVR = new List<Vector3>();
+            for (int j = 0; j < m_numberOfSpawnPointsToSend; j++) {
+                ushort rand = (ushort)Random.Range(0, availableSpawnPoints.Count);
+                spawnPointsShownToVR.Add(m_spawnPoints[availableSpawnPoints[rand]].position);
+                availableSpawnPoints.RemoveAt(rand);
+            }
+            
+            m_player.transform.position = spawnPointsShownToVR[0]; //We spawn the player on the first
+            NetworkClient.Send(new PotentialSpawnPoints(){position = spawnPointsShownToVR.ToArray()});
 
             OnPlayerRespawn?.Invoke();
 
