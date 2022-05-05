@@ -5,7 +5,7 @@ namespace Player_Scripts.Reloading {
 
     public class TimedReload : ReloadingAbstract {
         
-        [SerializeField] [Range(0.1f, 120f)] [Tooltip("The time taken to reload\nUnit : seconds")] private float m_cooldownTime;
+        [SerializeField] [Range(0.1f, 120f)] [Tooltip("The time taken to reload\nUnit : seconds")] public float m_cooldownTime;
         private Coroutine m_cooldownCoroutine;
 
         public override void StartReloading() {

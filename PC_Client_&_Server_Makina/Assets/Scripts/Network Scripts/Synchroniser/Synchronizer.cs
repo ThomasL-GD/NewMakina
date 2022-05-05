@@ -17,9 +17,10 @@ namespace Synchronizers {
                 if (m_instance != null) return m_instance;
                 
                 m_instance = FindObjectOfType<T>();
-                
+#if UNITY_EDITOR
                 int amountOfInstances = FindObjectsOfType<T>().Length;
                 if (amountOfInstances > 1) Debug.LogWarning(amountOfInstances + $" Synchronizer Class Detected. Only {m_instance.name} will taken into account.");
+#endif
                 
                 if (m_instance != null) return m_instance;
                 

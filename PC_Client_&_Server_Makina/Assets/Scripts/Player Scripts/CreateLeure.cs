@@ -13,7 +13,6 @@ public class CreateLeure : AbstractMechanic
     [SerializeField] private float m_leureGravity;
     [SerializeField] private float m_leureForwardOffset = .5f;
     [SerializeField] private float m_leureLifeTime = 5f;
-    [SerializeField] private RawImage m_uiElement;
     [SerializeField] private float m_speed = 10f;
     
     [SerializeField] private ReloadingAbstract[] m_coolDownScripts;
@@ -46,7 +45,6 @@ public class CreateLeure : AbstractMechanic
         {
             m_canSpawnLeure = false;
             m_leure = Instantiate(m_leurePrefab, transform.position + (transform.forward * m_leureForwardOffset),transform.rotation);
-            
             m_leure.GetComponent<LeurreMovement>().SetSpeedAndGravity(m_speed,m_leureGravity);
             m_killLeureCoroutine = StartCoroutine(KillLeure());
             
@@ -58,7 +56,7 @@ public class CreateLeure : AbstractMechanic
     {
         NetworkClient.Send(new SpawnLeure());
         NetworkClient.Send(new PcInvisibility{isInvisible = true});
-        m_uiElement.enabled = false;
+        UIManager.Instance.StartLeureCooldown();
         yield return new WaitForSeconds(m_leureLifeTime);
 
         DestroyLeure();
@@ -85,7 +83,7 @@ public class CreateLeure : AbstractMechanic
     void ResetCooldown()
     {
         m_canSpawnLeure = true;
-        m_uiElement.enabled = true;
+        UIManager.Instance.ResetLeureCooldown();
     }
 
     /// <summary>Will play the m_invisibilityLastsSound once m_invisibilityBeginSound is done playing (plays both in the function)</summary>

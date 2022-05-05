@@ -11,9 +11,6 @@ public class TeleportRollBack : AbstractMechanic
     [SerializeField] private KeyCode m_placeOrTeleportKey;
     [SerializeField] private GameObject m_teleportLocationPrefab;
 
-    [SerializeField] private RawImage m_podIcon;
-    [SerializeField] private RawImage m_teleportIcon;
-    
     private GameObject m_teleportLocation;
     private bool m_placed;
     private bool m_canUse = true;
@@ -36,11 +33,10 @@ public class TeleportRollBack : AbstractMechanic
     private void Reset(ReadyToPlay p_activateblind) => Reset();
     private void Reset()
     {
+        UIManager.Instance.ResetTeleportRollbackCooldown();
         if(m_placed) NetworkClient.Send(new RemoveTp());
         m_placed = false;
         m_canUse = true;
-        m_teleportIcon.enabled = false;
-        m_podIcon.enabled = true;
         if(m_teleportLocation != null) Destroy(m_teleportLocation);
     }
 
@@ -60,8 +56,7 @@ public class TeleportRollBack : AbstractMechanic
 
             m_teleportLocation = Instantiate(m_teleportLocationPrefab, position, transform.rotation);
             NetworkClient.Send(new DropTp() {tpPosition = position});
-            m_teleportIcon.enabled = true;
-            m_podIcon.enabled = false;
+            UIManager.Instance.PlacedTeleporter();
             m_placed = true;
         }
     }
@@ -69,11 +64,10 @@ public class TeleportRollBack : AbstractMechanic
     private void Teleport(Vector3 p_destination)
     {
         NetworkClient.Send(new Teleported(){teleportDestination = p_destination, teleportOrigin = transform.position});
+        UIManager.Instance.TeleportRollback();
         transform.position = p_destination;
         m_canUse = false;
         m_coolDownScript.StartReloading();
-        m_teleportIcon.enabled = false;
-        m_podIcon.enabled = false;
         if(m_placed) NetworkClient.Send(new RemoveTp());
         m_placed = false;
         
