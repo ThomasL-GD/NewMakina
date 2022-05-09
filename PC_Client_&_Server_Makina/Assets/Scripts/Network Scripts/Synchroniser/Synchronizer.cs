@@ -24,7 +24,7 @@ namespace Synchronizers {
                 
                 if (m_instance != null) return m_instance;
                 
-                Debug.LogError("trying to call a synchronizer that isn't instantiated in the project");
+                Debug.LogError("trying to call a synchronizer that isn't instantiated in the project (" + typeof(T) + ")");
                 return null;
             }
         }

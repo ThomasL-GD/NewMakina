@@ -14,9 +14,7 @@ namespace Synchronizers {
 
         [SerializeField][Tooltip("The color of the beacon when the player is undetected")] private Color m_undetectedColor = Color.red;
         [SerializeField][Tooltip("The color of the beacon when the player is detected")] private Color m_detectedColor = Color.green;
-        
-        [SerializeField][Tooltip("The UI feedback of detection")] private TextMeshProUGUI m_detectionFeedaback;
-        
+
         /// <summary/> The beacons of the player that are stored away
         private List<Beacons> m_beacons = new List<Beacons>();
 
@@ -66,7 +64,6 @@ namespace Synchronizers {
             ClientManager.OnReceiveInitialData += ReceiveInitialData;
             ClientManager.OnReceiveActivateBeacon += UpdateBeaconActivation;
             ClientManager.OnReceiveGameEnd += Reset;
-            m_detectionFeedaback.enabled = false;
         }
 
         /// <summary>Will destroy all the beacons to be ready to launch another game </summary>
@@ -169,7 +166,6 @@ namespace Synchronizers {
             if(detected)
             {
                 // Debug.Log(Convert.ToString (m_beaconBitMaskDetected, 2));
-                m_detectionFeedaback.enabled = true;
                 m_beaconBitMaskDetected |= 1 << beacon.bitMaskIndex;
                 Shader.SetGlobalInteger(m_beaconDetectionBitMaskShaderID,m_beaconBitMaskDetected);
                 //Debug.Log(Convert.ToString (beaconBitMaskDetected, 2));
@@ -181,7 +177,6 @@ namespace Synchronizers {
             //Debug.Log(Convert.ToString (beaconBitMaskDetected, 2));
 
             foreach (var beaconData in m_beacons) if (beaconData.detected) return;
-            m_detectionFeedaback.enabled = false;
         }
 
         /// <summary/> Destroying the beacon based in the server info
@@ -209,8 +204,6 @@ namespace Synchronizers {
             {
                 if (beacon.detected) return;
             }
-
-            m_detectionFeedaback.enabled = false;
         }
 
         /// <summary/> A function to find the index of the beacon that matches the given ID
