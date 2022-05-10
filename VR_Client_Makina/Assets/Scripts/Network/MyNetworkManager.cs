@@ -244,8 +244,6 @@ namespace Network {
         /// <summary/> Is called when we receive data of type Laser from the server
         /// <param name="p_laser">The actual data we received</param>
         private void ReceiveLaser(Laser p_laser) {
-            
-            Debug.LogWarning("fhgf jhytfrvikjybfn,uybrfuj dc tfjhtgfvhkhflutdolygejyiytfoytlhgfhgjgv");
 
             switch (p_laser.laserState) { //We do different things if the server is telling us that the laser is aiming or shooting
             

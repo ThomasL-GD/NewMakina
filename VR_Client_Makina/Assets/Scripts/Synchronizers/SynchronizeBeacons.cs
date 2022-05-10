@@ -225,6 +225,10 @@ namespace Synchronizers {
             }
 
             if (!m_beacons[index ?? 0].isDetecting && p_beaconDetectionUpdate.playerDetected) {
+                if (m_beacons[index ?? 0].beaconScript == null) {
+                    Debug.LogError("Beacon not found, potential crash, aborting", this);
+                    return;
+                }
                 if (m_beacons[index ?? 0].beaconScript.gameObject.TryGetComponent(out AudioSource audioSource)) {
                     audioSource.clip = m_beaconDetectSoundPrefab;
                     audioSource.Play();
@@ -236,7 +240,7 @@ namespace Synchronizers {
             m_beacons[index??0].isDetecting = p_beaconDetectionUpdate.playerDetected;
             //Debug.Log($"Is player detected ? actually the {p_beaconDetectionUpdate.index} is {(p_beaconDetectionUpdate.playerDetected? "REALLY" : "NOT" )} detecting", this);
             
-            ActualiseColorOfBeacon(index??0);
+            //ActualiseColorOfBeacon(index??0);
         }
 
         /// <summary> Will actualise the color of a beacon according to what it should display according to the beacon state </summary>
