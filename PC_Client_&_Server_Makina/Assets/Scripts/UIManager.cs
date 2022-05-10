@@ -52,9 +52,12 @@ public class UIManager : Synchronizer<UIManager>
                 m_tpElement.animator.SetFloat(reloadTimePropertyId, 1 / reload.m_cooldownTime);
             }
 
-        // ClientManager.OnReceiveInitialData += ReceiveInitialData;
+        ClientManager.OnReceiveInitialData += ReceiveInitialData;
+        
+        ClientManager.OnReceiveLaser += SynchroniseHealthPC;
+        ClientManager.OnReceiveHeartBreak += SynchroniseHealthVR;
     }
-
+    
     #region Abilities
 
     // LEURE ___________________________________________________________________________________________________________
@@ -132,6 +135,12 @@ public class UIManager : Synchronizer<UIManager>
     #region Health
     private void ReceiveInitialData(InitialData p_message)
     {
+        foreach (RectTransform t in m_vrHealth.healthElements) Destroy(t);
+        foreach (RectTransform t in m_pcHealth.healthElements) Destroy(t);
+
+        m_vrHealthIncrementor = 1;
+        m_pcHealthIncrementor = 1;
+        
         int healthAmount = p_message.healthVrPlayer;
         
         m_vrHealth.healthElements = new RectTransform[healthAmount];
@@ -177,9 +186,24 @@ public class UIManager : Synchronizer<UIManager>
         }
     }
 
-    private void Update()
+    private static readonly int m_shatterAnimatorTrigger = Animator.StringToHash("Shatter");
+    private int m_vrHealthIncrementor = 1;
+    private void SynchroniseHealthVR(HeartBreak p_heartbreak)
     {
-        Debug.Log((Screen.width * 9)/ (Screen.height * 16));
+        int index = m_vrHealth.healthElements.Length - m_vrHealthIncrementor++;
+        m_vrHealth.healthElements[index].GetComponent<Animator>().SetTrigger(m_shatterAnimatorTrigger);
+    }
+    
+    private int m_pcHealthIncrementor = 1;
+    private static readonly int m_heartAnimatorTrigger = Animator.StringToHash("Consume Heart");
+
+    private void SynchroniseHealthPC(Laser p_laser)
+    {
+        if(!p_laser.hit) return;
+
+        int index = m_pcHealth.healthElements.Length - m_pcHealthIncrementor++;
+        m_pcHealth.healthElements[index].GetComponent<Animator>().SetTrigger(m_heartAnimatorTrigger);
+        
     }
 
     #endregion
