@@ -123,6 +123,7 @@ namespace Synchronizers {
             
             Shader.SetGlobalInt(m_beaconBitMaskShaderID,0b00000000000);
             Shader.SetGlobalInt(m_beaconDetectionBitMaskShaderID,0b00000000000);
+
         }
 
         private void Update() {
@@ -218,7 +219,7 @@ namespace Synchronizers {
         /// <param name="p_beaconDetectionUpdate">The message from the server</param>
         private void UpdateDetection(BeaconDetectionUpdate p_beaconDetectionUpdate) {
               
-            Debug.Log($"Is player detected ? actually the {p_beaconDetectionUpdate.index} is {(p_beaconDetectionUpdate.playerDetected? "REALLY" : "NOT" )} detecting", this);
+            //Debug.Log($"Is player detected ? actually the {p_beaconDetectionUpdate.index} is {(p_beaconDetectionUpdate.playerDetected? "REALLY" : "NOT" )} detecting", this);
             
             int? index = FindBeaconFromID(p_beaconDetectionUpdate.index, p_beaconDetectionUpdate.beaconID);
             if (index == null) {
@@ -249,10 +250,13 @@ namespace Synchronizers {
             switch (m_beacons[p_index].isDetecting) {
                 case true:
                     newColor = m_detectedColor;
+                    Debug.Log($"Before bitmask : {m_beaconBitMaskDetected}");
                     
                     m_beaconBitMaskDetected |= 1 << m_beacons[p_index].bitMaskIndex;
                     Shader.SetGlobalInt(m_beaconDetectionBitMaskShaderID,m_beaconBitMaskDetected);
+                    Debug.Log($"After bitmask : {m_beaconBitMaskDetected}");
                     break;
+                
                 case false:
                     newColor = m_undetectedColor;
                     m_beaconBitMaskDetected &= ~(1 << m_beacons[p_index].bitMaskIndex);

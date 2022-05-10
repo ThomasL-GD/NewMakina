@@ -48,7 +48,7 @@ namespace Synchronizers {
         public AnimationTrigger OnLaserShot;
 
         private static readonly int IsLoading = Animator.StringToHash("IsLoading");
-        private static readonly int Shoot = Animator.StringToHash("Shoot");
+        private static readonly int IsShooting = Animator.StringToHash("IsShooting");
 
         // Start is called before the first frame update
         private void Awake() {
@@ -82,7 +82,7 @@ namespace Synchronizers {
                     break;
                 case LaserState.Shooting:
                     OnLaserLoad?.Invoke(IsLoading, false);
-                    OnLaserShot?.Invoke(Shoot);
+                    OnLaserShot?.Invoke(IsShooting);
                     break;
                 case LaserState.CancelAiming:
                     break;

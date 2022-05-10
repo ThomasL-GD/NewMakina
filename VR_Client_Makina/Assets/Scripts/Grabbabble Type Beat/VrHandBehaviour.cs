@@ -140,12 +140,18 @@ namespace Grabbabble_Type_Beat {
                 
                 yield return null;
                 elapsedTime += Time.deltaTime;
-                p_objectPulled.GetComponent<Renderer>().sharedMaterial.SetVector(ActivatableFeedback, p_objectPulled.transform.position);
+                Vector3 position1 = p_objectPulled.transform.position;
+                p_objectPulled.GetComponent<Renderer>().sharedMaterial.SetVector(ActivatableFeedback, position1);
                 
-                p_objectPulled.transform.Translate((transform.position - p_objectPulled.transform.position).normalized * m_pullSpeed * Time.deltaTime);
+                p_objectPulled.transform.Translate((transform.position - position1).normalized * m_pullSpeed * Time.deltaTime);
 
-                if (m_objectHeld == p_objectPulled) {
+                if (m_objectHeld != null) {
                     isPulling = false;
+                }
+
+                if (p_objectPulled == null) {
+                    Debug.LogWarning($"The object targeted does not exist anymore, I quit", this);
+                    yield break;
                 }
 
                 if (m_isPressingTrigger && (!(m_objectHeld != null & m_objectHeld != p_objectPulled))) continue;
@@ -156,20 +162,20 @@ namespace Grabbabble_Type_Beat {
             m_isThereAnObjectPulled = false;
             p_objectPulled.GetComponent<Renderer>().sharedMaterial.SetVector(ActivatableFeedback, Vector4.zero);
             
-            p_objectPulled.BeGrabbed(p_objectPulled.transform.parent, Vector3.zero);
-            p_objectPulled.BeLetGo(m_grabInput);
+            // p_objectPulled.BeGrabbed(p_objectPulled.transform.parent, Vector3.zero);
+            // p_objectPulled.BeLetGo(m_grabInput);
 
-            // while (isPushing) {
-            //
-            //     yield return null;
-            //     elapsedTime -= Time.deltaTime; //Here we go reverse in elapsed time
-            //     
-            //     p_objectPulled.transform.Translate((originalPos - p_objectPulled.transform.position).normalized * m_pullSpeed * Time.deltaTime);
-            //
-            //     if (!(elapsedTime < 0f)) continue;
-            //         p_objectPulled.transform.position = originalPos;
-            //         isPushing = false;
-            // }
+            while (isPushing) {
+            
+                yield return null;
+                elapsedTime -= Time.deltaTime; //Here we go reverse in elapsed time
+                
+                p_objectPulled.transform.Translate((originalPos - p_objectPulled.transform.position).normalized * m_pullSpeed * Time.deltaTime);
+            
+                if (!(elapsedTime < 0f)) continue;
+                    p_objectPulled.transform.position = originalPos;
+                    isPushing = false;
+            }
         }
 
         /// <summary>Will attach an object to this hand</summary>
