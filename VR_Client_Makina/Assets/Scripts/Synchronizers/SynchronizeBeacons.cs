@@ -23,7 +23,7 @@ namespace Synchronizers {
         //[SerializeField] private Color m_unactiveColor = Color.blue;
         
         [Header("Sounds")]
-        [SerializeField, Tooltip("Must contain an AudioSource component")] private AudioClip m_beaconDetectSoundPrefab;
+        [SerializeField, Tooltip("The audioclip that will play when the beacon turns active")] private AudioClip m_beaconDetectSound;
 
         
         private int m_beaconBitMaskDetected = 0;
@@ -34,12 +34,12 @@ namespace Synchronizers {
         private static readonly int m_beaconDetectionBitMaskShaderID = Shader.PropertyToID("_BeaconDetectionBitMask");
         
         /// <summary> Contains a gameobject of a beacon and its server ID, additionally contains booleans that explain the beacon state </summary>
-        private class BeaconInfo {
+        [Serializable] /**/private class BeaconInfo {
             /// <summary>The gameobject of the beacon to grab</summary>
-            public readonly BeaconBehavior beaconScript;
+            public readonly/**/ BeaconBehavior beaconScript;
             
             /// <summary>The gameobject of the deployed beacon</summary>
-            public readonly InflateToSize deployedBeaconScript;
+            public readonly/**/ InflateToSize deployedBeaconScript;
             
             /// <summary> If true, the PC player is in the range of this beacon </summary>
             public bool isDetecting;
@@ -217,6 +217,8 @@ namespace Synchronizers {
         /// </summary>
         /// <param name="p_beaconDetectionUpdate">The message from the server</param>
         private void UpdateDetection(BeaconDetectionUpdate p_beaconDetectionUpdate) {
+              
+            Debug.Log($"Is player detected ? actually the {p_beaconDetectionUpdate.index} is {(p_beaconDetectionUpdate.playerDetected? "REALLY" : "NOT" )} detecting", this);
             
             int? index = FindBeaconFromID(p_beaconDetectionUpdate.index, p_beaconDetectionUpdate.beaconID);
             if (index == null) {
@@ -225,20 +227,15 @@ namespace Synchronizers {
             }
 
             if (!m_beacons[index ?? 0].isDetecting && p_beaconDetectionUpdate.playerDetected) {
-                if (m_beacons[index ?? 0].beaconScript == null) {
-                    Debug.LogError("Beacon not found, potential crash, aborting", this);
-                    return;
-                }
-                if (m_beacons[index ?? 0].beaconScript.gameObject.TryGetComponent(out AudioSource audioSource)) {
-                    audioSource.clip = m_beaconDetectSoundPrefab;
-                    audioSource.Play();
-                }else {
-                    AudioSource createdAudioSource = m_beacons[index ?? 0].beaconScript.gameObject.AddComponent<AudioSource>();
-                    createdAudioSource.Play();
-                }
+                AudioSource audioSource;
+                
+                //Get the audiosource component or add one
+                audioSource = m_beacons[index ?? 0].deployedBeaconScript.gameObject.TryGetComponent(out AudioSource ad) ? ad : m_beacons[index ?? 0].deployedBeaconScript.gameObject.AddComponent<AudioSource>();
+                
+                audioSource.clip = m_beaconDetectSound;
+                audioSource.Play();
             }
             m_beacons[index??0].isDetecting = p_beaconDetectionUpdate.playerDetected;
-            //Debug.Log($"Is player detected ? actually the {p_beaconDetectionUpdate.index} is {(p_beaconDetectionUpdate.playerDetected? "REALLY" : "NOT" )} detecting", this);
             
             ActualiseColorOfBeacon(index??0);
         }
