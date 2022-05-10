@@ -3,20 +3,18 @@ using UnityEngine;
 
 /// <summary/>The structs derived from the NetworkMessage interface of Mirror that wil be sent between clients and servers as messages.
 
-namespace CustomMessages
-{
+namespace CustomMessages {
+    
     #region Transforms
     
     /// <summary/> The position and rotation of the pc player
-    public struct PcTransform : NetworkMessage
-    {
+    public struct PcTransform : NetworkMessage {
         public Vector3 position;
         public Quaternion rotation;
     }
 
     /// <summary/> The position and rotations of all three of the Vr player's limbs
-    public struct VrTransform : NetworkMessage
-    {
+    public struct VrTransform : NetworkMessage {
         public Vector3 positionHead;
         public Quaternion rotationHead;
 
@@ -28,13 +26,16 @@ namespace CustomMessages
         public Quaternion rotationRightHand;
         public bool isRightHandClenched;
     }
+
+    public struct PotentialSpawnPoints : NetworkMessage {
+        public Vector3[] position;
+    }
     
     #endregion
     
     #region Tp_Rollback
 
-    public struct Teleported : NetworkMessage
-    {
+    public struct Teleported : NetworkMessage {
         public Vector3 teleportOrigin;
         public Vector3 teleportDestination;
     }
@@ -43,45 +44,37 @@ namespace CustomMessages
         public Vector3 tpPosition;
     }
 
-    public struct RemoveTp : NetworkMessage {
-        
-    }
+    public struct RemoveTp : NetworkMessage { }
 
     #endregion
 
     #region Misc Data
 
-    public struct ActivateFlair : NetworkMessage
-    {
+    public struct ActivateFlair : NetworkMessage {
         public Vector3 startPosition;
     }
 
-    public struct ActivateBlind : NetworkMessage
-    {
+    public struct ActivateBlind : NetworkMessage {
         public float blindIntensity;
     }
     public struct DeActivateBlind : NetworkMessage {}
 
-    public enum ClientConnection
-    {
+    public enum ClientConnection {
         PcPlayer,
         VrPlayer
     }
     
     /// <summary/> The ping sent to the server telling it the a client has connected
-    public struct ClientConnect : NetworkMessage
-    {
+    public struct ClientConnect : NetworkMessage {
         public ClientConnection client;
     }
 
-    public struct GameEnd : NetworkMessage
-    {
+    public struct GameEnd : NetworkMessage {
         public ClientConnection winningClient;
     }
     
     /// <summary/> The initial data that will went to the clients as they connect
-    public struct InitialData : NetworkMessage
-    {
+    public struct InitialData : NetworkMessage {
         public int healthPcPlayer;
         public int healthVrPlayer;
         public float beaconRange;
@@ -97,6 +90,7 @@ namespace CustomMessages
         public float bombExplosionRange;
         public float heartRange;
         public float heartConquerTime;
+        public ushort numberOfSpawnPointsToDisplay;
     }
     
     public struct RestartGame : NetworkMessage
@@ -130,7 +124,7 @@ namespace CustomMessages
     }
     
     /// <summary/> The index of a destroyed heart
-        public struct HeartConquerStop : NetworkMessage {}
+    public struct HeartConquerStop : NetworkMessage {}
     
     /// <summary/> The ping sent to the server telling it if the players is visible or invisible
     public struct PcInvisibility : NetworkMessage

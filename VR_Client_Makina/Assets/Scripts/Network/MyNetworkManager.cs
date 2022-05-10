@@ -103,29 +103,33 @@ namespace Network {
         public delegate void ElevatorActivationDelegator(ElevatorActivation p_bombActivation);
         public static ElevatorActivationDelegator OnReceiveElevatorActivation;
         
-        /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+        /// <summary/> The delegate that will be called each time the client receives a DeActivateBlind message
         public delegate void DeActivateBlindDelegator(DeActivateBlind p_deActivateBlind);
         public static DeActivateBlindDelegator OnReceiveDeActivateBlind;
         
-        /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+        /// <summary/> The delegate that will be called each time the client receives a ActivateBlind message
         public delegate void ActivateBlindDelegator(ActivateBlind p_activateBlind);
         public static ActivateBlindDelegator OnReceiveActivateBlind;
         
-        /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+        /// <summary/> The delegate that will be called each time the client receives a ActivateFlair message
         public delegate void ActivateFlairDelegator(ActivateFlair p_activateFlair);
         public static ActivateFlairDelegator OnReceiveActivateFlair;
         
-        /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+        /// <summary/> The delegate that will be called each time the client receives a SpawnLeure message
         public delegate void SpawnLeureDelegator(SpawnLeure p_spawnLeure);
         public static SpawnLeureDelegator OnReceiveSpawnLeure;
         
-        /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+        /// <summary/> The delegate that will be called each time the client receives a DestroyLeure message
         public delegate void DestroyLeureDelegator(DestroyLeure p_destroyLeure);
         public static DestroyLeureDelegator OnReceiveDestroyLeure;
         
-        /// <summary/> The delegate that will be called each time the client receives a ElevatorActivation message
+        /// <summary/> The delegate that will be called each time the client receives a LeureTransform message
         public delegate void LeureTransformDelegator(LeureTransform p_leureTransform);
         public static LeureTransformDelegator OnReceiveLeureTransform;
+        
+        /// <summary/> The delegate that will be called each time the client receives a PotentialSpawnPoints message
+        public delegate void PotentialSpawnPointsDelegator(PotentialSpawnPoints p_potentialSpawnPoints);
+        public static PotentialSpawnPointsDelegator OnReceivePotentialSpawnPoints;
         #endregion
         
         /// <summary>
@@ -193,6 +197,7 @@ namespace Network {
             NetworkClient.RegisterHandler<Teleported>(ReceiveTeleported);
             NetworkClient.RegisterHandler<HeartConquerStart>(ReceiveHeartConquerStart);
             NetworkClient.RegisterHandler<HeartConquerStop>(ReceiveHeartConquerStop);
+            NetworkClient.RegisterHandler<PotentialSpawnPoints>(ReceivePotentialSpawnPoints);
         
             OnConnection?.Invoke();
         }
@@ -295,6 +300,10 @@ namespace Network {
         /// <summary/> The function called when the client receives a message of type BombExplosion
         /// <param name="p_bombExplosion"> The message sent by the Server to the Client </param>
         private void ReceiveBombExplosion(BombExplosion p_bombExplosion) => OnReceiveBombExplosion?.Invoke(p_bombExplosion); 
+        
+        private void ReceivePotentialSpawnPoints(PotentialSpawnPoints p_potentialSpawnPoints) => OnReceivePotentialSpawnPoints?.Invoke(p_potentialSpawnPoints); 
+        
+        
 
         /// <summary>
         /// Connects to the default serialized ip
