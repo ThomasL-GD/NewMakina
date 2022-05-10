@@ -159,8 +159,8 @@ namespace Synchronizers {
             bool detected = p_beaconDetectionUpdate.playerDetected;
             Beacons beacon = m_beacons[index ?? 0];
             
-            Material mat = beacon.beaconPrefabInstance.GetComponent<MeshRenderer>().material;
-            mat.SetColor(m_beaconColorProperty, detected?m_detectedColor:m_undetectedColor);
+            //Material mat = beacon.beaconPrefabInstance.GetComponent<MeshRenderer>().material;
+            //mat.SetColor(m_beaconColorProperty, detected?m_detectedColor:m_undetectedColor);
             beacon.detected = detected;
             
             if(detected)
