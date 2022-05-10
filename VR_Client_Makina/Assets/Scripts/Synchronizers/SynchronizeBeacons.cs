@@ -240,7 +240,7 @@ namespace Synchronizers {
             m_beacons[index??0].isDetecting = p_beaconDetectionUpdate.playerDetected;
             //Debug.Log($"Is player detected ? actually the {p_beaconDetectionUpdate.index} is {(p_beaconDetectionUpdate.playerDetected? "REALLY" : "NOT" )} detecting", this);
             
-            //ActualiseColorOfBeacon(index??0);
+            ActualiseColorOfBeacon(index??0);
         }
 
         /// <summary> Will actualise the color of a beacon according to what it should display according to the beacon state </summary>
