@@ -79,7 +79,7 @@ namespace Animation {
         /// <remarks>This function is overloaded with several animator variable types</remarks>
         /// <param name="p_id">The id of the trigger you want triggered</param>
         private void AnimateAll(int p_id) {
-            Debug.LogWarning($"Trigger Animation {p_id}");
+            //Debug.LogWarning($"Trigger Animation {p_id}");
             foreach (Animator animator in m_animators) {
                 animator.SetTrigger(p_id);
             }

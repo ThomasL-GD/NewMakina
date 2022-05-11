@@ -15,8 +15,9 @@ namespace Grabbabble_Type_Beat {
         //[SerializeField] [Range(0.01f,1f)]/**/ private float m_triggerLetGoSensitivity = 0.9f;
     
         [SerializeField] private Vector3 m_grabbedItemsPositionInHand;
-    
+
         [Header("Pull")]
+        [SerializeField] private bool m_pull = true;
         [SerializeField] [Range(10f,100000f)] private float m_pullMaxDistance;
         [SerializeField] [Range(0.1f,100f)] private float m_pullSpeed;
         [SerializeField] [Range(0.1f,100f)] private float m_pullRadius;
@@ -72,32 +73,35 @@ namespace Grabbabble_Type_Beat {
 
             if (m_objectHeld == null && !m_isThereAnObjectPulled) { // If no item is held nor pulled
 
-                Transform transform1 = transform;
-                Vector3 position = transform1.position;
-                RaycastHit[] hitResult = Physics.SphereCastAll(position, m_pullRadius, transform1.forward, m_pullMaxDistance, m_layersThatPulls);
+                if (m_pull) {
+                    Transform transform1 = transform;
+                    Vector3 position = transform1.position;
+                    RaycastHit[] hitResult = Physics.SphereCastAll(position, m_pullRadius, transform1.forward, m_pullMaxDistance, m_layersThatPulls);
 #if UNITY_EDITOR
-                Debug.DrawRay(position, transform.forward * m_pullMaxDistance, Color.cyan);
+                    Debug.DrawRay(position, transform.forward * m_pullMaxDistance, Color.cyan);
 #endif
 
-                if (hitResult.Length > 0) {
+                    if (hitResult.Length > 0) {
 
-                    RaycastHit bestPick = default; 
-                    float bestDotSoFar = -1;
-                    foreach (RaycastHit raycastHit in hitResult) { //We check which target hit is the most centered one
+                        RaycastHit bestPick = default; 
+                        float bestDotSoFar = -1;
+                        foreach (RaycastHit raycastHit in hitResult) { //We check which target hit is the most centered one
                         
-                        if (!(Vector3.Dot(transform.forward, (raycastHit.transform.position - transform.position).normalized) > bestDotSoFar)) continue;
+                            if (!(Vector3.Dot(transform.forward, (raycastHit.transform.position - transform.position).normalized) > bestDotSoFar)) continue;
                             var transform2 = transform;
                             bestDotSoFar = Vector3.Dot(transform2.forward, (raycastHit.transform.position - transform2.position).normalized);
                             bestPick = raycastHit;
+                        }
+                    
+                    
+                        // ReSharper disable once CommentTypo
+                        if (!bestPick.transform.TryGetComponent(out GrabbableObject script)) return; //If a grabbable object is in the aimline of this hand
+                            m_lastRendererChanged = script.GetComponent<Renderer>();
+                            m_lastRendererChanged.sharedMaterial.SetVector(ActivatableFeedback, m_lastRendererChanged.transform.position);
+                            
+                            if(m_isPressingTrigger) StartCoroutine(Pull(script)); //If the trigger is pressed, we start the pulling
+                    
                     }
-                    
-                    
-                    // ReSharper disable once CommentTypo
-                    if (!bestPick.transform.TryGetComponent(out GrabbableObject script)) return; //If a grabbable object is in the aimline of this hand
-                        m_lastRendererChanged = script.GetComponent<Renderer>();
-                        m_lastRendererChanged.sharedMaterial.SetVector(ActivatableFeedback, m_lastRendererChanged.transform.position);
-                        
-                        if(m_isPressingTrigger) StartCoroutine(Pull(script)); //If the trigger is pressed, we start the pulling
                 }
                 else if (m_lastRendererChanged != null) {
                     m_lastRendererChanged.sharedMaterial.SetFloat(ActivatableFeedback, 0);
@@ -136,12 +140,18 @@ namespace Grabbabble_Type_Beat {
                 
                 yield return null;
                 elapsedTime += Time.deltaTime;
-                p_objectPulled.GetComponent<Renderer>().sharedMaterial.SetVector(ActivatableFeedback, p_objectPulled.transform.position);
+                Vector3 position1 = p_objectPulled.transform.position;
+                p_objectPulled.GetComponent<Renderer>().sharedMaterial.SetVector(ActivatableFeedback, position1);
                 
-                p_objectPulled.transform.Translate((transform.position - p_objectPulled.transform.position).normalized * m_pullSpeed * Time.deltaTime);
+                p_objectPulled.transform.Translate((transform.position - position1).normalized * m_pullSpeed * Time.deltaTime);
 
-                if (m_objectHeld == p_objectPulled) {
+                if (m_objectHeld != null) {
                     isPulling = false;
+                }
+
+                if (p_objectPulled == null) {
+                    Debug.LogWarning($"The object targeted does not exist anymore, I quit", this);
+                    yield break;
                 }
 
                 if (m_isPressingTrigger && (!(m_objectHeld != null & m_objectHeld != p_objectPulled))) continue;
@@ -152,20 +162,20 @@ namespace Grabbabble_Type_Beat {
             m_isThereAnObjectPulled = false;
             p_objectPulled.GetComponent<Renderer>().sharedMaterial.SetVector(ActivatableFeedback, Vector4.zero);
             
-            p_objectPulled.BeGrabbed(p_objectPulled.transform.parent, Vector3.zero);
-            p_objectPulled.BeLetGo(m_grabInput);
+            // p_objectPulled.BeGrabbed(p_objectPulled.transform.parent, Vector3.zero);
+            // p_objectPulled.BeLetGo(m_grabInput);
 
-            // while (isPushing) {
-            //
-            //     yield return null;
-            //     elapsedTime -= Time.deltaTime; //Here we go reverse in elapsed time
-            //     
-            //     p_objectPulled.transform.Translate((originalPos - p_objectPulled.transform.position).normalized * m_pullSpeed * Time.deltaTime);
-            //
-            //     if (!(elapsedTime < 0f)) continue;
-            //         p_objectPulled.transform.position = originalPos;
-            //         isPushing = false;
-            // }
+            while (isPushing) {
+            
+                yield return null;
+                elapsedTime -= Time.deltaTime; //Here we go reverse in elapsed time
+                
+                p_objectPulled.transform.Translate((originalPos - p_objectPulled.transform.position).normalized * m_pullSpeed * Time.deltaTime);
+            
+                if (!(elapsedTime < 0f)) continue;
+                    p_objectPulled.transform.position = originalPos;
+                    isPushing = false;
+            }
         }
 
         /// <summary>Will attach an object to this hand</summary>

@@ -35,6 +35,7 @@ public class ServerManager : MonoBehaviour
     private ActivateBlind m_activateBlindBuffer;
     private DropTp m_dropTpBuffer;
     private Teleported m_teleporttedBuffer;
+    private PotentialSpawnPoints m_potentialSpawnPointsBuffer;
     
     private bool m_vrReadyBuffer;
     private bool m_pcReadyBuffer;
@@ -128,6 +129,10 @@ public class ServerManager : MonoBehaviour
     
     [SerializeField, Range(0f,100f)] private float f_heartDestroyTime = 5f;
     private float m_heartDestroyTime = 0f;
+    
+    [Header("Respawn")]
+    [SerializeField, Range(0f,100f)] private ushort f_numberOfSpawnPointsToDisplay = 3;
+    private ushort m_numberOfSpawnPointsToDisplay = 3;
 
     
 
@@ -202,6 +207,7 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<RemoveTp>(OnRemoveTp);
         NetworkServer.RegisterHandler<Teleported>(OnTeleported);
         NetworkServer.RegisterHandler<Tutorial>(OnReceiveTutorial);
+        NetworkServer.RegisterHandler<PotentialSpawnPoints>(OnReceivePotentialSpawnpoints);
     }
 
 
@@ -312,6 +318,8 @@ public class ServerManager : MonoBehaviour
 
         m_heartZoneRadius = f_heartZoneRadius;
         m_heartDestroyTime = f_heartDestroyTime;
+
+        m_numberOfSpawnPointsToDisplay = f_numberOfSpawnPointsToDisplay;
         
         //Resetting the beacon values
         m_currentBeaconAmount = 0;
@@ -371,7 +379,8 @@ public class ServerManager : MonoBehaviour
             bombDetonationTime = m_bomDetonationTime,
             bombExplosionRange = m_bombExplosionRange,
             heartRange = m_heartZoneRadius,
-            heartConquerTime = m_heartDestroyTime
+            heartConquerTime = m_heartDestroyTime,
+            numberOfSpawnPointsToDisplay = m_numberOfSpawnPointsToDisplay
         };
         
         SendToBothClients(initialData);
@@ -938,6 +947,14 @@ public class ServerManager : MonoBehaviour
     }
 
     private void OnReceiveTutorial(NetworkConnection p_conn, Tutorial p_tutorial) => m_isInTutorial = p_tutorial.isInTutorial;
+
+    /// <summary/> function called when the server receives a message of type PotentialSpawnPoints
+    /// <param name="p_conn">The connection from which originated the message</param>
+    /// <param name="p_potentialSpawnPoints">The message sent by the Client to the Server</param>
+    private void OnReceivePotentialSpawnpoints(NetworkConnection p_conn, PotentialSpawnPoints p_potentialSpawnPoints) {
+        m_potentialSpawnPointsBuffer = p_potentialSpawnPoints;
+        OnServerTick += SendPotentialSpawnPoints;
+    }
     
     #endregion
 
@@ -1060,6 +1077,11 @@ public class ServerManager : MonoBehaviour
     private void SendSpawnLeure()
     {
         m_vrNetworkConnection?.Send(new SpawnLeure());
+    }
+
+    private void SendPotentialSpawnPoints() {
+        OnServerTick -= SendPotentialSpawnPoints;
+        m_vrNetworkConnection?.Send(m_potentialSpawnPointsBuffer);
     }
     
     #endregion
