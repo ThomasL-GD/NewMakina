@@ -7,8 +7,8 @@ using Synchronizers;
 using TMPro;
 using UnityEngine;
 
-public class UIManager : Synchronizer<UIManager>
-{
+public class UIManager : Synchronizer<UIManager> {
+    
     [SerializeField] private UIElementWithReload m_leureElement;
     [SerializeField] private UIElementWithReload m_tpElement;
 
@@ -179,7 +179,7 @@ public class UIManager : Synchronizer<UIManager>
 
     private void Update()
     {
-        Debug.Log((Screen.width * 9)/ (Screen.height * 16));
+        //Debug.Log((Screen.width * 9)/ (Screen.height * 16));
     }
 
     #endregion
