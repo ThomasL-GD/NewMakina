@@ -37,8 +37,8 @@ public class UIMinimapManager : MonoBehaviour {
         Vector3 playerPosition = SynchronizePlayerPosition.Instance.m_player.position;
         Vector2 playerPositionRatio = new Vector2(((playerPosition.x / (m_mapRealSize/2f)) + 1f) / 2f, ((playerPosition.z / (m_mapRealSize/2f)) + 1f) / 2f); //This line gives a vector2 with both x and y being between 0 and 1 and corresponds to how far the player is from the center (0.5 is the center, 0 is the farthest on one side and 1 is the farthest on the opposite side)
 
-        m_mapElement.anchorMin = new Vector2((playerPositionRatio.x * m_mapZoom) - (m_mapZoom / 2f), (playerPositionRatio.y * m_mapZoom) - (m_mapZoom / 2f));
-        m_mapElement.anchorMax = new Vector2((playerPositionRatio.x * m_mapZoom) + (m_mapZoom / 2f), (playerPositionRatio.y * m_mapZoom) + (m_mapZoom / 2f));
+        m_mapElement.anchorMin = new Vector2(((playerPositionRatio.x * m_mapZoom) - (0.5f * (m_mapZoom - 1))) - (m_mapZoom / 2f), ((playerPositionRatio.y * m_mapZoom) - (0.5f * (m_mapZoom - 1))) - (m_mapZoom / 2f));
+        m_mapElement.anchorMax = new Vector2(((playerPositionRatio.x * m_mapZoom) - (0.5f * (m_mapZoom - 1))) + (m_mapZoom / 2f), ((playerPositionRatio.y * m_mapZoom) - (0.5f * (m_mapZoom - 1))) + (m_mapZoom / 2f));
         
         //m_mapElement.rect.center = new Vector2(playerPositionRatio)
 
