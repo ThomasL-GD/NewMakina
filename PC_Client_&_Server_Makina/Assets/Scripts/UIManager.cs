@@ -108,7 +108,7 @@ public class UIManager : Synchronizer<UIManager>
         m_tpElement.animator.ResetTrigger(placedTeleporterPropertyId);
         m_tpElement.animator.SetTrigger(teleportedPropertyId);
         
-        if(m_tpTimerCo!=null) StopCoroutine(m_leureTimerCo);
+        //if(m_tpTimerCo!=null) StopCoroutine(m_leureTimerCo);
         m_tpTimerCo = StartCoroutine(TpCooldownCounter());
     }
 
