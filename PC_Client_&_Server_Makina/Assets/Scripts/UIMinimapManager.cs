@@ -7,7 +7,7 @@ using UnityEngine;
 public class UIMinimapManager : MonoBehaviour {
 
     /// <summary>The serialized value of the  </summary>
-    [SerializeField] [Range(1f, 50f)] [Tooltip("How many times the map should be zoomed in\nWarning, if this value is changed in play mode, it will NOT be taken into account")] private float m_mapZoom = 4f;
+    [SerializeField] [Range(1f, 50f)] [Tooltip("How many times the map should be zoomed in\nWARNING : if this value is changed in play mode, it will NOT be taken into account for all elements")] private float m_mapZoom = 4f;
     
     [SerializeField] [Tooltip("The real size of the bowl, in meters")] private float m_mapRealSize = 500;
     
@@ -28,18 +28,26 @@ public class UIMinimapManager : MonoBehaviour {
     [Header("VR Hearts")]
     [SerializeField] [Tooltip("The prefab of a Vr Heart\nMust have a Rect Transform")] private GameObject m_uiVrHeartPrefab = null;
     [SerializeField] [Tooltip("The proportion taken by this element\n0 means nothing and 1 means all the size of the map canvas")] private Vector2 m_vrHeartAnchorRatio = new Vector2(0.1f, 0.2f);
+    private List<UIHeartData> m_heartDatas = new List<UIHeartData>();
     
     [Header("Beacons")]
     [SerializeField] [Tooltip("The prefab of a deployed beacon that is NOT detecting any player inside\nMust have a Rect Transform")] private GameObject m_prefabBeaconEmpty = null;
     [SerializeField] [Tooltip("The prefab of a deployed beacon that IS detecting a player inside\nMust have a Rect Transform")] private GameObject m_prefabBeaconDetecting = null;
     /// <summary>Reminder : this anchor ratio does not work like the others</summary>
     private float m_beaconAnchorRatio;
-    private List<BeaconData> m_beaconDatas;
+    private List<UIBeaconData> m_beaconDatas = new List<UIBeaconData>();
+
+    private bool m_isInGame = false;
     
-    private struct BeaconData {
+    private struct UIBeaconData {
         public float ID;
         public RectTransform undetectingBeacon;
         public RectTransform detectingBeacon;
+    }
+
+    private struct UIHeartData {
+        public RectTransform rectTransform;
+        public Vector2 originalRatioOnMap;
     }
 
     private void Start() {
@@ -60,25 +68,39 @@ public class UIMinimapManager : MonoBehaviour {
             PlaceAnchors(Instantiate(m_uiElevatorPrefab, m_mapElement).GetComponent<RectTransform>(), RatioOnMap(elevatorPos), m_elevatorsAnchorRatio);
         }
         
+        
         //Instantiate and place every heart
         foreach (Vector3 heartPos in p_initialData.heartPositions) {
-            PlaceAnchors(Instantiate(m_uiVrHeartPrefab, m_mapElement).GetComponent<RectTransform>(), RatioOnMap(heartPos), m_vrHeartAnchorRatio);
+            RectTransform heartRect = Instantiate(m_uiVrHeartPrefab, m_mapElement).GetComponent<RectTransform>();
+            Vector2 heartRatioOnMap = RatioOnMap(heartPos);
+            
+            m_heartDatas.Add(new UIHeartData(){rectTransform = heartRect, originalRatioOnMap = heartRatioOnMap});
+            PlaceAnchors(heartRect, heartRatioOnMap, m_vrHeartAnchorRatio);
         }
-    }
 
+        m_isInGame = true;
+    }
+    
+    #region Beacons
     /// <summary>Will create a Beacon and add it to m_beaconDatas</summary>
     private void PlaceABeacon(ActivateBeacon p_activateBeacon) {
 
         RectTransform detectingBeacon = Instantiate(m_prefabBeaconDetecting, m_mapElement).GetComponent<RectTransform>();
-        detectingBeacon.gameObject.SetActive(false);
         RectTransform undetectingBeacon = Instantiate(m_prefabBeaconEmpty, m_mapElement).GetComponent<RectTransform>();
 
         Vector3 beaconWorldPos = SynchronizeBeacons.Instance.GetBeaconPosition(p_activateBeacon.index, p_activateBeacon.beaconID);
         
-        //TODO : place anchors of both of them
-        Vector2 anchorMin = RatioOnMap(beaconWorldPos);
+        //place anchors of both of them
+        Vector2 anchorMin = RatioOnMap(beaconWorldPos) - new Vector2(m_beaconAnchorRatio, m_beaconAnchorRatio);
+        Vector2 anchorMax = RatioOnMap(beaconWorldPos) + new Vector2(m_beaconAnchorRatio, m_beaconAnchorRatio);
+        detectingBeacon.anchorMin = anchorMin;
+        undetectingBeacon.anchorMin = anchorMin;
+        detectingBeacon.anchorMax = anchorMax;
+        undetectingBeacon.anchorMax = anchorMax;
         
-        m_beaconDatas.Add(new BeaconData(){detectingBeacon = detectingBeacon, undetectingBeacon = undetectingBeacon, ID = p_activateBeacon.beaconID});
+        detectingBeacon.gameObject.SetActive(false);//We set the beacon not detecting by default
+        
+        m_beaconDatas.Add(new UIBeaconData(){detectingBeacon = detectingBeacon, undetectingBeacon = undetectingBeacon, ID = p_activateBeacon.beaconID});
     }
 
     /// <summary>Update the color of a beacon element</summary>
@@ -101,19 +123,66 @@ public class UIMinimapManager : MonoBehaviour {
         Destroy(m_beaconDatas[index??0].undetectingBeacon.gameObject);
         m_beaconDatas.RemoveAt(index??0);
     }
+    #endregion
 
     // Update is called once per frame
     void Update() {
         
         #region Map position thus player position
-        //TODO : Can optimize it if I remove the playerPositionRatio calculation step but it'd be less clear
         Vector3 playerPosition = SynchronizePlayerPosition.Instance.m_player.position;
-        Vector2 playerPositionRatio = RatioOnMap(playerPosition);
+        Vector2 playerPositionRatio = Vector2.one - RatioOnMap(playerPosition);
             
+        //Operation order can be changed to be shorter but it basically does calculate the anchors depending on the zoom value
         m_mapElement.anchorMin = new Vector2(((playerPositionRatio.x * m_mapZoom) - (0.5f * (m_mapZoom - 1f))) - (m_mapZoom / 2f), ((playerPositionRatio.y * m_mapZoom) - (0.5f * (m_mapZoom - 1f))) - (m_mapZoom / 2f)); //TODO : ask Schreiner if I can optimize this by making the math of (0.5f * (m_mapZoom - 1)) only once at the cost of one variable
         m_mapElement.anchorMax = new Vector2(((playerPositionRatio.x * m_mapZoom) - (0.5f * (m_mapZoom - 1f))) + (m_mapZoom / 2f), ((playerPositionRatio.y * m_mapZoom) - (0.5f * (m_mapZoom - 1f))) + (m_mapZoom / 2f));
 
-        m_playerElement.localRotation = Quaternion.Euler(0, 0, -SynchronizePlayerPosition.Instance.m_player.rotation.eulerAngles.y + 180f);
+        m_playerElement.localRotation = Quaternion.Euler(0, 0, -SynchronizePlayerPosition.Instance.m_player.rotation.eulerAngles.y);
+        #endregion
+
+        if (!m_isInGame) return;
+
+        #region Hearts
+        foreach (UIHeartData heartData in m_heartDatas) {
+            bool positiveOutOfBoundsX = heartData.originalRatioOnMap.x > playerPositionRatio.x + (1f / m_mapZoom);
+            bool negativeOutOfBoundsX = heartData.originalRatioOnMap.x < playerPositionRatio.x - (1f / m_mapZoom);
+            bool positiveOutOfBoundsY = heartData.originalRatioOnMap.y > playerPositionRatio.y + (1f / m_mapZoom);
+            bool negativeOutOfBoundsY = heartData.originalRatioOnMap.y < playerPositionRatio.y - (1f / m_mapZoom);
+            bool inRatioX = !positiveOutOfBoundsX && !negativeOutOfBoundsX;
+            bool inRatioY = !positiveOutOfBoundsY && !negativeOutOfBoundsY;
+
+            if (inRatioX && inRatioY) { //If the heart is visible, we simply place it correctly
+                PlaceAnchors(heartData.rectTransform, heartData.originalRatioOnMap, m_vrHeartAnchorRatio);
+            }
+            else if ((inRatioX && !inRatioY) || (!inRatioX && inRatioY)) { //If it is out of bounds only one one axis
+                Vector2 direction;
+                if (positiveOutOfBoundsY) direction = Vector2.up;
+                else if (negativeOutOfBoundsY) direction = Vector2.down;
+                else if (positiveOutOfBoundsX) direction = Vector2.right;
+                else direction = Vector2.left; //negativeOutOfBoundsX
+                
+                float dot = Vector2.Dot(direction, (heartData.originalRatioOnMap - playerPositionRatio).normalized); // gives 1 if the vector is straight up and 0.5 if it's almost 45°
+                float sqrt2 = Mathf.Sqrt(2);
+                float length = (-2f * sqrt2 + 2) * dot + 2 * sqrt2 - 1; //Uuuuuuuuuh
+                
+                PlaceAnchors(heartData.rectTransform, playerPositionRatio + (heartData.originalRatioOnMap - playerPositionRatio)*length, m_vrHeartAnchorRatio);
+            }
+            else { //If it is out of bounds on both axis
+                switch (positiveOutOfBoundsX) { // We place it in the appropriate corner
+                    case true when positiveOutOfBoundsY: //both positive
+                        PlaceAnchors(heartData.rectTransform, playerPositionRatio + new Vector2(1f / m_mapZoom, 1f / m_mapZoom), m_vrHeartAnchorRatio);
+                        break;
+                    case false when positiveOutOfBoundsY: //X negative and Y positive
+                        PlaceAnchors(heartData.rectTransform, playerPositionRatio + new Vector2(-1f / m_mapZoom, 1f / m_mapZoom), m_vrHeartAnchorRatio);
+                        break;
+                    case true when !positiveOutOfBoundsY: //X positive and Y negative
+                        PlaceAnchors(heartData.rectTransform, playerPositionRatio + new Vector2(1f / m_mapZoom, -1f / m_mapZoom), m_vrHeartAnchorRatio);
+                        break;
+                    case false when !positiveOutOfBoundsY: //Both negative
+                        PlaceAnchors(heartData.rectTransform, playerPositionRatio + new Vector2(-1f / m_mapZoom, -1f / m_mapZoom), m_vrHeartAnchorRatio);
+                        break;
+                }
+            }
+        }
         #endregion
 
         #region Vr Head
@@ -131,10 +200,8 @@ public class UIMinimapManager : MonoBehaviour {
     /// <summary>Gives a vector2 with both x and y being between 0 and 1 and corresponds to how far this object is from the center (0.5 is the center, 0 is the farthest on one side and 1 is the farthest on the opposite side) given its world position</summary>
     /// <param name="p_worldPosition">Its 3D coordinates</param>
     /// <returns>The ratio on the map</returns>
-    private Vector2 RatioOnMap(Vector3 p_worldPosition) {
-        return RatioOnMap(new Vector2(p_worldPosition.x, p_worldPosition.z));
-    }
-    
+    private Vector2 RatioOnMap(Vector3 p_worldPosition) => RatioOnMap(new Vector2(p_worldPosition.x, p_worldPosition.z));
+
     /// <summary>Gives a vector2 with both x and y being between 0 and 1 and corresponds to how far this object is from the center (0.5 is the center, 0 is the farthest on one side and 1 is the farthest on the opposite side) given its world position</summary>
     /// <param name="p_worldPositionVector2ified">Its 2D top view coordinates</param>
     /// <returns>The ratio on the map</returns>
