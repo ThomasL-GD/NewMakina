@@ -15,7 +15,7 @@ namespace Synchronizers
         [SerializeField] private Volume m_volume;
         [SerializeField] private Transform m_rightHand;
         [SerializeField] private Transform m_pcPlayer;
-        [SerializeField] private float m_shotSensibleRange = 20f;
+        [SerializeField] private float m_shotSensibleRange = 5f;
         [SerializeField, Tooltip("transition speed in weight per second")] private float m_smoothTransitionSpeed;
 
         private float m_targetIntensity;
@@ -48,19 +48,20 @@ namespace Synchronizers
             m_volume.weight = intensity;
             if (!m_lazerPreshot.enabled)
             {
-                m_volume.weight = 0;
+                m_volume.weight = 0f;
+                m_targetIntensity = 0f;
                 return;
             }
             Vector3 startingPoint = m_rightHand.position;
-            Vector3 direction = m_rightHand.rotation * Vector3.forward;
+            Vector3 direction = (m_rightHand.rotation * Vector3.forward).normalized;
             Vector3 playerPos = m_pcPlayer.position + Vector3.up ;
             
-            if(Vector3.Dot(playerPos - startingPoint, direction) < 0) return;
+            if(Vector3.Dot((playerPos - startingPoint).normalized, direction) < 0f) return;
             
             float distance = Vector3.Cross(direction, playerPos - startingPoint).magnitude;
-            distance = Mathf.Clamp(distance,0, m_shotSensibleRange) / m_shotSensibleRange;
+            distance = Mathf.Clamp(distance, 0f,m_shotSensibleRange) / m_shotSensibleRange;
 
-            m_targetIntensity = Mathf.Abs(distance - 1f);
+            m_targetIntensity = Mathf.Max(1f - distance,0f);
         }
         
         /// <summary/> This function is called when the laser is shooting and instantiates the shot
