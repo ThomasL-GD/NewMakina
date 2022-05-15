@@ -544,7 +544,7 @@ public class ServerManager : MonoBehaviour
             if (Vector2.Distance(horizontalPlayerPosition, horizontalheartPosition) < m_heartZoneRadius)
             {
                 m_heartTimer += m_tickDelta;
-                SendToBothClients(new HeartConquerStart() {time = m_heartTimer});
+                SendToBothClients(new HeartConquerStart() {time = m_heartTimer, index =  i});
                 
                 if (m_heartTimer>m_heartDestroyTime)
                 {
