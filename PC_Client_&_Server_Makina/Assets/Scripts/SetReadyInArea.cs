@@ -31,7 +31,7 @@ public class SetReadyInArea : MonoBehaviour
             text = text.Replace('y',car);
         
 
-            m_heartRadiusFeedback.text = $"Breaking Heart : {text}/{m_maxHeartTime}";
+            m_heartRadiusFeedback.text = $"Setting Ready : {text}/{m_maxHeartTime}";
             m_vfxHandler.StartAnticipation(m_maxHeartTime);
             if (m_timer > m_maxHeartTime)
             {
