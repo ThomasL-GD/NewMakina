@@ -1,10 +1,16 @@
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 namespace Grabbabble_Type_Beat {
 
     [RequireComponent(typeof(Collider))]
     public abstract class GrabbableObject : MonoBehaviour {
+
+        [Header("Pull Material Change (optional)")]
+        [SerializeField] private Material m_materialWhenAimedAt;
+        private Material m_defaultMaterial;
+        private Renderer m_renderer;
     
         protected bool m_isCaught = false;
         protected bool m_hasBeenCaughtInLifetime = false;
@@ -29,6 +35,9 @@ namespace Grabbabble_Type_Beat {
             }
 
             gameObject.layer = 6; //The sixth layer is the one for Catchable Objects
+
+            m_renderer = GetComponent<Renderer>();
+            m_defaultMaterial = m_renderer.material;
         }
 
         /// <summary>
@@ -93,6 +102,12 @@ namespace Grabbabble_Type_Beat {
             }
 
             transform.localPosition = p_localPosToGo;
+        }
+
+        /// <summary>Will Change the material of a GrabbableObject to give feedback</summary>
+        /// <param name="p_isActivated">If true, will set the "feedback" material, if false will change back to the original material.<br/>Is true by default</param>
+        public void ChangeMaterial(bool p_isActivated = true) {
+            m_renderer.material = p_isActivated ? m_materialWhenAimedAt : m_defaultMaterial;
         }
     }
 
