@@ -1,7 +1,11 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using CustomMessages;
 using Synchronizers;
 using UnityEngine;
+using UnityEngine.Rendering;
+
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
 public class UIMinimapManager : MonoBehaviour {
@@ -24,11 +28,14 @@ public class UIMinimapManager : MonoBehaviour {
     [Header("Elevators")]
     [SerializeField] [Tooltip("The prefab of an UI elevator\nMust have a Rect Transform")] private GameObject m_uiElevatorPrefab = null;
     [SerializeField] [Tooltip("The proportion taken by this element\n0 means nothing and 1 means all the size of the map canvas")] private Vector2 m_elevatorsAnchorRatio = new Vector2(0.1f, 0.2f);
+    private Transform m_elevatorParent = null;
     
     [Header("VR Hearts")]
     [SerializeField] [Tooltip("The prefab of a Vr Heart\nMust have a Rect Transform")] private GameObject m_uiVrHeartPrefab = null;
     [SerializeField] [Tooltip("The proportion taken by this element\n0 means nothing and 1 means all the size of the map canvas")] private Vector2 m_vrHeartAnchorRatio = new Vector2(0.1f, 0.2f);
-    private List<UIHeartData> m_heartDatas = new List<UIHeartData>();
+    [SerializeField] [Range(0.1f, 10f)] [Tooltip("The time the minimap heart will blink before disappearing when destroyed")] private float m_heartDestroyBlinkTotalTime = 1f;
+    [SerializeField] [Range(0.05f, 2f)] [Tooltip("The time the minimap heart will blink before disappearing when destroyed")] private float m_heartDestroyBlinkTiming = 1f;
+    private UIHeartData[] m_heartDatas = Array.Empty<UIHeartData>();
     
     [Header("Beacons")]
     [SerializeField] [Tooltip("The prefab of a deployed beacon that is NOT detecting any player inside\nMust have a Rect Transform")] private GameObject m_prefabBeaconEmpty = null;
@@ -56,25 +63,40 @@ public class UIMinimapManager : MonoBehaviour {
         ClientManager.OnReceiveActivateBeacon += PlaceABeacon;
         ClientManager.OnReceiveBeaconDetectionUpdate += DetectionUpdate;
         ClientManager.OnReceiveDestroyedBeacon += DestroyBeacon;
+        ClientManager.OnReceiveHeartBreak += DestroyUIHeart;
     }
 
     /// <summary>Will place every object once the game starts, is called when we receive InitialData</summary>
     private void PlaceIcons(InitialData p_initialData) {
+        
+        #region Annihilation
+        Destroy(m_elevatorParent);
+        foreach (UIBeaconData beaconData in m_beaconDatas) {
+            Destroy(beaconData.detectingBeacon.gameObject);
+            Destroy(beaconData.undetectingBeacon.gameObject);
+        }
+        foreach (UIHeartData heartData in m_heartDatas) Destroy(heartData.rectTransform.gameObject); 
+        
+        m_beaconDatas = new List<UIBeaconData>();
+        m_heartDatas = new UIHeartData[p_initialData.heartPositions.Length];
+        #endregion
 
         m_beaconAnchorRatio = 1 / (m_mapRealSize / p_initialData.beaconRange);
 
         //Instantiate and place every elevator
+        m_elevatorParent = Instantiate(new GameObject(), m_mapElement).transform;
+        m_elevatorParent.gameObject.name = "UI Elevators";
         foreach (Vector3 elevatorPos in SynchroniseElevators.Instance.elevatorPositions) {
-            PlaceAnchors(Instantiate(m_uiElevatorPrefab, m_mapElement).GetComponent<RectTransform>(), RatioOnMap(elevatorPos), m_elevatorsAnchorRatio);
+            PlaceAnchors(Instantiate(m_uiElevatorPrefab, m_elevatorParent).GetComponent<RectTransform>(), RatioOnMap(elevatorPos), m_elevatorsAnchorRatio);
         }
         
         
         //Instantiate and place every heart
-        foreach (Vector3 heartPos in p_initialData.heartPositions) {
+        for (int i = 0; i < p_initialData.heartPositions.Length; i++) {
             RectTransform heartRect = Instantiate(m_uiVrHeartPrefab, m_mapElement).GetComponent<RectTransform>();
-            Vector2 heartRatioOnMap = RatioOnMap(heartPos);
-            
-            m_heartDatas.Add(new UIHeartData(){rectTransform = heartRect, originalRatioOnMap = heartRatioOnMap});
+            Vector2 heartRatioOnMap = RatioOnMap(p_initialData.heartPositions[i]);
+
+            m_heartDatas[i] = new UIHeartData(){rectTransform = heartRect, originalRatioOnMap = heartRatioOnMap};
             PlaceAnchors(heartRect, heartRatioOnMap, m_vrHeartAnchorRatio);
         }
 
@@ -125,6 +147,26 @@ public class UIMinimapManager : MonoBehaviour {
     }
     #endregion
 
+    #region Destroy Heart
+    /// <summary>Destroys a UI heart </summary>
+    private void DestroyUIHeart(HeartBreak p_heartBreak) {
+        StartCoroutine(BlinkHeart(p_heartBreak.index));
+    }
+
+    /// <summary>Makes a UI heart blink then destroys it</summary>
+    /// <param name="p_index">The index of the heart</param>
+    private IEnumerator BlinkHeart(int p_index) {
+        float elapsedTime = 0f;
+        while (elapsedTime < m_heartDestroyBlinkTotalTime) {
+            m_heartDatas[p_index].rectTransform.gameObject.SetActive(!m_heartDatas[p_index].rectTransform.gameObject.activeInHierarchy);
+            elapsedTime += m_heartDestroyBlinkTiming;
+            yield return new WaitForSeconds(m_heartDestroyBlinkTiming);
+        }
+
+        Destroy(m_heartDatas[p_index].rectTransform.gameObject);
+    }
+    #endregion
+
     // Update is called once per frame
     void Update() {
         
@@ -138,49 +180,54 @@ public class UIMinimapManager : MonoBehaviour {
 
         m_playerElement.localRotation = Quaternion.Euler(0, 0, -SynchronizePlayerPosition.Instance.m_player.rotation.eulerAngles.y);
         #endregion
+        
+        playerPositionRatio = Vector2.one - playerPositionRatio; // We get a more correct player ratio for other elements that will read it
 
         if (!m_isInGame) return;
-
+        
         #region Hearts
         foreach (UIHeartData heartData in m_heartDatas) {
-            bool positiveOutOfBoundsX = heartData.originalRatioOnMap.x > playerPositionRatio.x + (1f / m_mapZoom);
-            bool negativeOutOfBoundsX = heartData.originalRatioOnMap.x < playerPositionRatio.x - (1f / m_mapZoom);
-            bool positiveOutOfBoundsY = heartData.originalRatioOnMap.y > playerPositionRatio.y + (1f / m_mapZoom);
-            bool negativeOutOfBoundsY = heartData.originalRatioOnMap.y < playerPositionRatio.y - (1f / m_mapZoom);
+
+            if (heartData.rectTransform == null) continue; //If the heart is already destroyed
+            
+            bool positiveOutOfBoundsX = heartData.originalRatioOnMap.x > playerPositionRatio.x + ((1f / m_mapZoom) / 2f);
+            bool negativeOutOfBoundsX = heartData.originalRatioOnMap.x < playerPositionRatio.x - ((1f / m_mapZoom) / 2f);
+            bool positiveOutOfBoundsY = heartData.originalRatioOnMap.y > playerPositionRatio.y + ((1f / m_mapZoom) / 2f);
+            bool negativeOutOfBoundsY = heartData.originalRatioOnMap.y < playerPositionRatio.y - ((1f / m_mapZoom) / 2f);
             bool inRatioX = !positiveOutOfBoundsX && !negativeOutOfBoundsX;
             bool inRatioY = !positiveOutOfBoundsY && !negativeOutOfBoundsY;
 
             if (inRatioX && inRatioY) { //If the heart is visible, we simply place it correctly
                 PlaceAnchors(heartData.rectTransform, heartData.originalRatioOnMap, m_vrHeartAnchorRatio);
             }
-            else if ((inRatioX && !inRatioY) || (!inRatioX && inRatioY)) { //If it is out of bounds only one one axis
-                Vector2 direction;
-                if (positiveOutOfBoundsY) direction = Vector2.up;
-                else if (negativeOutOfBoundsY) direction = Vector2.down;
-                else if (positiveOutOfBoundsX) direction = Vector2.right;
-                else direction = Vector2.left; //negativeOutOfBoundsX
+            else {
+                float horizontalShift = heartData.originalRatioOnMap.x - playerPositionRatio.x;
+                float verticalShift = heartData.originalRatioOnMap.y - playerPositionRatio.y;
                 
-                float dot = Vector2.Dot(direction, (heartData.originalRatioOnMap - playerPositionRatio).normalized); // gives 1 if the vector is straight up and 0.5 if it's almost 45°
-                float sqrt2 = Mathf.Sqrt(2);
-                float length = (-2f * sqrt2 + 2) * dot + 2 * sqrt2 - 1; //Uuuuuuuuuh
-                
-                PlaceAnchors(heartData.rectTransform, playerPositionRatio + (heartData.originalRatioOnMap - playerPositionRatio)*length, m_vrHeartAnchorRatio);
-            }
-            else { //If it is out of bounds on both axis
-                switch (positiveOutOfBoundsX) { // We place it in the appropriate corner
-                    case true when positiveOutOfBoundsY: //both positive
-                        PlaceAnchors(heartData.rectTransform, playerPositionRatio + new Vector2(1f / m_mapZoom, 1f / m_mapZoom), m_vrHeartAnchorRatio);
-                        break;
-                    case false when positiveOutOfBoundsY: //X negative and Y positive
-                        PlaceAnchors(heartData.rectTransform, playerPositionRatio + new Vector2(-1f / m_mapZoom, 1f / m_mapZoom), m_vrHeartAnchorRatio);
-                        break;
-                    case true when !positiveOutOfBoundsY: //X positive and Y negative
-                        PlaceAnchors(heartData.rectTransform, playerPositionRatio + new Vector2(1f / m_mapZoom, -1f / m_mapZoom), m_vrHeartAnchorRatio);
-                        break;
-                    case false when !positiveOutOfBoundsY: //Both negative
-                        PlaceAnchors(heartData.rectTransform, playerPositionRatio + new Vector2(-1f / m_mapZoom, -1f / m_mapZoom), m_vrHeartAnchorRatio);
-                        break;
+                Vector2 directionMajorShift;
+                Vector2 directionMinorShift;
+                float majorShift;
+                float minorShift;
+                if (Mathf.Abs(horizontalShift) >= Mathf.Abs(verticalShift)) { //Horizontal is Major
+                    majorShift = horizontalShift;
+                    minorShift = verticalShift;
+
+                    directionMinorShift = Vector2.up;
+                    directionMajorShift = majorShift > 0 ? Vector2.right : Vector2.left;
                 }
+                else { //Vertical is Major
+                    majorShift = verticalShift;
+                    minorShift = horizontalShift;
+
+                    directionMinorShift = Vector2.right;
+                    directionMajorShift = majorShift > 0 ? Vector2.up : Vector2.down;
+                }
+
+                // the shift between the player and the heart on X or Y depending which one is bigger
+                
+                float neededDisplacement = minorShift / (Mathf.Abs(majorShift) / (0.5f / m_mapZoom));
+                
+                PlaceAnchors(heartData.rectTransform, playerPositionRatio + (directionMajorShift * (0.5f / m_mapZoom)) + directionMinorShift * neededDisplacement, m_vrHeartAnchorRatio);
             }
         }
         #endregion
@@ -191,7 +238,7 @@ public class UIMinimapManager : MonoBehaviour {
 
         PlaceAnchors(m_vrPlayerElement, RatioOnMap(headVRPosition), m_vrAnchorRatio);
         
-        m_vrPlayerElement.localRotation = Quaternion.Euler(0, 0, -vrTransform.rotation.eulerAngles.y + 180f);
+        m_vrPlayerElement.localRotation = Quaternion.Euler(0, 0, -vrTransform.rotation.eulerAngles.y + 90f);
         #endregion
 
     }
