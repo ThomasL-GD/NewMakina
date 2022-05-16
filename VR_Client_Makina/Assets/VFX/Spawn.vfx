@@ -18,9 +18,9 @@ MonoBehaviour:
   uiBounds:
     serializedVersion: 2
     x: -1798
-    y: -503
-    width: 3519
-    height: 2148
+    y: -437
+    width: 3222
+    height: 2082
 --- !u!114 &114350483966674976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -60,7 +60,6 @@ MonoBehaviour:
   - {fileID: 8926484042661614873}
   - {fileID: 8926484042661614889}
   - {fileID: 8926484042661614936}
-  - {fileID: 8926484042661614993}
   - {fileID: 8926484042661614995}
   m_UIPosition: {x: 0, y: 0}
   m_UICollapsed: 1
@@ -200,9 +199,7 @@ MonoBehaviour:
   m_Label: Spawn system
   m_Data: {fileID: 8926484042661614997}
   m_InputFlowSlot:
-  - link:
-    - context: {fileID: 8926484042661614993}
-      slotIndex: 0
+  - link: []
   - link:
     - context: {fileID: 8926484042661614995}
       slotIndex: 0
@@ -895,7 +892,7 @@ MonoBehaviour:
   m_InputSlots: []
   m_OutputSlots: []
   m_Disabled: 0
-  mode: 0
+  mode: 6
   axes: 4
 --- !u!114 &8926484042661614590
 MonoBehaviour:
@@ -6311,56 +6308,6 @@ MonoBehaviour:
         PublicKeyToken=b77a5c561934e089
   m_Direction: 0
   m_LinkedSlots: []
---- !u!114 &8926484042661614993
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2461f61b3c026d54db1951a4e17ab20e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UIIgnoredErrors: []
-  m_Parent: {fileID: 114350483966674976}
-  m_Children: []
-  m_UIPosition: {x: 821, y: -503}
-  m_UICollapsed: 0
-  m_UISuperCollapsed: 0
-  m_InputSlots: []
-  m_OutputSlots: []
-  m_Label: 
-  m_Data: {fileID: 8926484042661614994}
-  m_InputFlowSlot:
-  - link: []
-  m_OutputFlowSlot:
-  - link:
-    - context: {fileID: 8926484042661614555}
-      slotIndex: 0
-  eventName: Start
---- !u!114 &8926484042661614994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f68759077adc0b143b6e1c101e82065e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UIIgnoredErrors: []
-  m_Parent: {fileID: 0}
-  m_Children: []
-  m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
-  m_UISuperCollapsed: 0
-  title: 
-  m_Owners:
-  - {fileID: 8926484042661614993}
 --- !u!114 &8926484042661614995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6376,7 +6323,7 @@ MonoBehaviour:
   m_UIIgnoredErrors: []
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
-  m_UIPosition: {x: 1297, y: -486}
+  m_UIPosition: {x: 1000, y: -437}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
