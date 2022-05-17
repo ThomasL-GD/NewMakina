@@ -65,7 +65,7 @@ namespace Synchronizers {
             
             //Enabling the feedback and finding the next spawn point
             InputMovement3.instance.m_isDead = true;
-            m_deathFeedback.SetActive(true);
+            if (ClientManager.singleton.m_isInGame) m_deathFeedback.SetActive(true);
 
             m_deathSound.Play();
             
