@@ -105,7 +105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_heartPrefabs: {fileID: 1306276628376282344, guid: effe859a863a5ad4d9c58d861ff4786b, type: 3}
-  m_heartRangePrefab: {fileID: 0}
+  m_hearts: []
 --- !u!114 &586668069150170723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,7 +122,6 @@ MonoBehaviour:
   m_prefabBeaconInactive: {fileID: 0}
   m_undetectedColor: {r: 1, g: 0, b: 0, a: 1}
   m_detectedColor: {r: 0, g: 1, b: 0, a: 1}
-  m_detectionFeedaback: {fileID: 0}
 --- !u!114 &586668069150170722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,6 +135,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_text: {fileID: 0}
+  m_winMessage: You win !
+  m_loseText: You loose...
 --- !u!114 &586668069150170730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,8 +186,6 @@ MonoBehaviour:
   m_vrHealthTextureEmpty: {fileID: 0}
   m_spacingPcHealth: 0
   m_spacingVrHealth: 0
-  m_pcHealthTransform: {fileID: 0}
-  m_vrHealthTransform: {fileID: 0}
   m_waitingForPlayerFeddback: {fileID: 0}
   m_unloadOnInitialData: []
 --- !u!114 &8417031006943273845
