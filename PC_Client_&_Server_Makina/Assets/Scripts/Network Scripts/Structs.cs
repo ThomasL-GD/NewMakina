@@ -124,6 +124,7 @@ namespace CustomMessages {
         public struct HeartConquerStart : NetworkMessage
     {
         public float time;
+        public int index;
     }
     
     /// <summary/> The index of a destroyed heart

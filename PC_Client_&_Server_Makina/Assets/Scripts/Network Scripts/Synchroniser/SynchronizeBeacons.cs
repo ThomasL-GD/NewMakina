@@ -206,6 +206,16 @@ namespace Synchronizers {
             }
         }
 
+        /// <summary>Returns the position of a beacon given its server ID</summary>
+        /// <param name="p_index">the supposed index (for optimization reasons)</param>
+        /// <param name="p_serverID">The server ID of the beacon you want position from</param>
+        public Vector3 GetBeaconPosition(int p_index, float p_serverID) {
+            int? index = FindBeaconFromID(p_index, p_serverID, "exterior demand");
+            if (index == null) return Vector3.zero;
+
+            return m_beacons[index ?? 0].beaconPrefabInstance.transform.position;
+        }
+
         /// <summary/> A function to find the index of the beacon that matches the given ID
         /// <param name="p_index"> the estimated index of the wanted beacon </param>
         /// <param name="p_beaconID"> the ID of the wanted beacon </param>

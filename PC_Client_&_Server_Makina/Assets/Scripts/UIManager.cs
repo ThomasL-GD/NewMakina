@@ -7,8 +7,8 @@ using Synchronizers;
 using TMPro;
 using UnityEngine;
 
-public class UIManager : Synchronizer<UIManager>
-{
+public class UIManager : Synchronizer<UIManager> {
+    
     [SerializeField] private UIElementWithReload m_leureElement;
     [SerializeField] private UIElementWithReload m_tpElement;
 
@@ -108,7 +108,7 @@ public class UIManager : Synchronizer<UIManager>
         m_tpElement.animator.ResetTrigger(placedTeleporterPropertyId);
         m_tpElement.animator.SetTrigger(teleportedPropertyId);
         
-        if(m_tpTimerCo!=null) StopCoroutine(m_leureTimerCo);
+        //if(m_tpTimerCo!=null) StopCoroutine(m_leureTimerCo);
         m_tpTimerCo = StartCoroutine(TpCooldownCounter());
     }
 
@@ -203,7 +203,6 @@ public class UIManager : Synchronizer<UIManager>
 
         int index = m_pcHealth.healthElements.Length - m_pcHealthIncrementor++;
         m_pcHealth.healthElements[index].GetComponent<Animator>().SetTrigger(m_heartAnimatorTrigger);
-        
     }
 
     #endregion

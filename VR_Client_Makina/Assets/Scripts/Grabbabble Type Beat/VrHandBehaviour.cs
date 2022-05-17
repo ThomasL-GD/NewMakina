@@ -23,8 +23,8 @@ namespace Grabbabble_Type_Beat {
         [SerializeField] [Range(0.1f,100f)] private float m_pullRadius;
         [SerializeField] private LayerMask m_layersThatPulls;
         private bool m_isThereAnObjectPulled = false;
-        private Renderer m_lastRendererChanged = null;
-        private Vector3 m_pulledObjectOriginalPos; 
+        private Vector3 m_pulledObjectOriginalPos;
+        private GrabbableObject m_lastScriptAimedAt = null;
 
         public AnimationBoolChange OnGrabItemChange;
         [CanBeNull] public GrabbableObject m_objectHeld {
@@ -56,7 +56,6 @@ namespace Grabbabble_Type_Beat {
         private static readonly int IsClosed = Animator.StringToHash("IsClosed");
         private static readonly int IsGrabbing = Animator.StringToHash("IsGrabbing");
         public static int s_layer = -1;
-        private static readonly int ActivatableFeedback = Shader.PropertyToID("_ActivatableFeedback");
 
         private void Start() {
         
@@ -73,59 +72,65 @@ namespace Grabbabble_Type_Beat {
 
             if (m_objectHeld == null && !m_isThereAnObjectPulled) { // If no item is held nor pulled
 
-                if (m_pull) {
-                    Transform transform1 = transform;
-                    Vector3 position = transform1.position;
-                    RaycastHit[] hitResult = Physics.SphereCastAll(position, m_pullRadius, transform1.forward, m_pullMaxDistance, m_layersThatPulls);
+                if (!m_pull) return; //We can disable the entire feature if we want to
+                
+                Transform transform1 = transform;
+                Vector3 position = transform1.position;
+                RaycastHit[] hitResult = Physics.SphereCastAll(position, m_pullRadius, transform1.forward, m_pullMaxDistance, m_layersThatPulls);
 #if UNITY_EDITOR
-                    Debug.DrawRay(position, transform.forward * m_pullMaxDistance, Color.cyan);
+                Debug.DrawRay(position, transform.forward * m_pullMaxDistance, Color.cyan);
 #endif
 
-                    if (hitResult.Length > 0) {
+                if (hitResult.Length > 0) {
 
-                        RaycastHit bestPick = default; 
-                        float bestDotSoFar = -1;
-                        foreach (RaycastHit raycastHit in hitResult) { //We check which target hit is the most centered one
+                    RaycastHit bestPick = default; 
+                    float bestDotSoFar = -1;
+                    foreach (RaycastHit raycastHit in hitResult) { //We check which target hit is the most centered one
                         
-                            if (!(Vector3.Dot(transform.forward, (raycastHit.transform.position - transform.position).normalized) > bestDotSoFar)) continue;
-                            var transform2 = transform;
-                            bestDotSoFar = Vector3.Dot(transform2.forward, (raycastHit.transform.position - transform2.position).normalized);
-                            bestPick = raycastHit;
-                        }
-                    
-                    
-                        // ReSharper disable once CommentTypo
-                        if (!bestPick.transform.TryGetComponent(out GrabbableObject script)) return; //If a grabbable object is in the aimline of this hand
-                            m_lastRendererChanged = script.GetComponent<Renderer>();
-                            m_lastRendererChanged.sharedMaterial.SetVector(ActivatableFeedback, m_lastRendererChanged.transform.position);
-                            
-                            if(m_isPressingTrigger) StartCoroutine(Pull(script)); //If the trigger is pressed, we start the pulling
-                    
+                        if (!(Vector3.Dot(transform.forward, (raycastHit.transform.position - transform.position).normalized) > bestDotSoFar)) continue;
+                        var transform2 = transform;
+                        bestDotSoFar = Vector3.Dot(transform2.forward, (raycastHit.transform.position - transform2.position).normalized);
+                        bestPick = raycastHit;
                     }
+                    
+                    
+                    // ReSharper disable once CommentTypo
+                    if (!bestPick.transform.TryGetComponent(out GrabbableObject script)) return; //If a grabbable object is in the aimline of this hand
+                    if(m_lastScriptAimedAt != script) {
+                        script.ChangeMaterial(true);
+                        m_lastScriptAimedAt = script;
+                    }
+                            
+                    if(m_isPressingTrigger) StartCoroutine(Pull(script)); //If the trigger is pressed, we start the pulling
+                    
                 }
-                else if (m_lastRendererChanged != null) {
-                    m_lastRendererChanged.sharedMaterial.SetFloat(ActivatableFeedback, 0);
-                    m_lastRendererChanged = null;
+                else {
+                    if(m_lastScriptAimedAt != null) {
+                        m_lastScriptAimedAt.ChangeMaterial(false);
+                        m_lastScriptAimedAt = null;
+                    }
                 }
             }
             else if (m_objectHeld != null) { //We keep going if an item is held
+                
+                if(m_lastScriptAimedAt != null) {
+                    m_lastScriptAimedAt.ChangeMaterial(false);
+                    m_lastScriptAimedAt = null;
+                }
 
                 if (m_isPressingTrigger) return; //We keep going if the trigger is NOT PRESSED anymore
             
                 m_objectHeld.BeLetGo(m_grabInput);
                 m_objectHeld = null;
-                
-
-                if (m_lastRendererChanged != null) {
-                    m_lastRendererChanged.sharedMaterial.SetFloat(ActivatableFeedback, 0);
-                    m_lastRendererChanged = null;
-                }
             }
         }
 
         /// <summary>Will progressively attract a Grabbable object towards the hand while the appropriate trigger is pressed </summary>
         /// <param name="p_objectPulled">The object that is pulled</param>
         IEnumerator Pull(GrabbableObject p_objectPulled) {
+            
+            p_objectPulled.ChangeMaterial(true);
+            m_lastScriptAimedAt = null;
 
             m_isThereAnObjectPulled = true;
             Vector3 position = p_objectPulled.transform.position;
@@ -139,19 +144,20 @@ namespace Grabbabble_Type_Beat {
             while (isPulling) {
                 
                 yield return null;
-                elapsedTime += Time.deltaTime;
-                Vector3 position1 = p_objectPulled.transform.position;
-                p_objectPulled.GetComponent<Renderer>().sharedMaterial.SetVector(ActivatableFeedback, position1);
-                
-                p_objectPulled.transform.Translate((transform.position - position1).normalized * m_pullSpeed * Time.deltaTime);
-
-                if (m_objectHeld != null) {
-                    isPulling = false;
-                }
 
                 if (p_objectPulled == null) {
                     Debug.LogWarning($"The object targeted does not exist anymore, I quit", this);
                     yield break;
+                }
+                
+                elapsedTime += Time.deltaTime;
+                Vector3 position1 = p_objectPulled.transform.position;
+
+                p_objectPulled.transform.Translate((transform.position - position1).normalized * m_pullSpeed * Time.deltaTime);
+                
+
+                if (m_objectHeld != null) {
+                    isPulling = false;
                 }
 
                 if (m_isPressingTrigger && (!(m_objectHeld != null & m_objectHeld != p_objectPulled))) continue;
@@ -160,8 +166,9 @@ namespace Grabbabble_Type_Beat {
             }
 
             m_isThereAnObjectPulled = false;
-            p_objectPulled.GetComponent<Renderer>().sharedMaterial.SetVector(ActivatableFeedback, Vector4.zero);
+            p_objectPulled.ChangeMaterial(false);
             
+            //Throw that midair
             // p_objectPulled.BeGrabbed(p_objectPulled.transform.parent, Vector3.zero);
             // p_objectPulled.BeLetGo(m_grabInput);
 

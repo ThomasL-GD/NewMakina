@@ -55,10 +55,8 @@ public class CustomLitSettings : EditorWindow
         
         if(Event.current.type == EventType.MouseDown) Debug.Log(PrintCustomSettings(m_customLitSettings));
         
-        if (CheckSoWithShaderGlobalValues(m_customLitSettings))
-        {
-            Refresh();
-        }
+        // 360
+        if (CheckSoWithShaderGlobalValues(m_customLitSettings)) Refresh();
 
         float newFloat = FloatField("Shadow Tiling", Mathf.Max(m_customLitSettings.shadowTiling,0f));
         UpdateNewValue(newFloat, m_tilingShaderID,ref m_customLitSettings.shadowTiling,ref hasChanged);
@@ -91,8 +89,8 @@ public class CustomLitSettings : EditorWindow
         Color newColor = ColorField("Beacon Color", m_customLitSettings.beaconColor);
         UpdateNewValue(newColor, m_beaconDefaultColor, ref m_customLitSettings.beaconColor, ref hasChanged);
 
-        newColor = ColorField("Beacon Color Deteced", m_customLitSettings.beaconDetectionColor);
-        UpdateNewValue(newColor, m_beaconDetectionColor, ref m_customLitSettings.beaconDetectionColor, ref hasChanged);
+        Color newColorDetection = ColorField("Beacon Color Detected", m_customLitSettings.beaconDetectionColor);
+        UpdateNewValue(newColorDetection, m_beaconDetectionColor, ref m_customLitSettings.beaconDetectionColor, ref hasChanged);
         
         
         Undo.ClearSnapshotTarget();

@@ -15,7 +15,7 @@ namespace Synchronizers
         /// <summary>
         /// The Transforms of Pc Representations of the VR player
         /// </summary>
-        [SerializeField] private Transform m_headVR;
+        [SerializeField] public Transform m_headVR;
 
         [SerializeField] private Transform m_leftHandVR;
         [SerializeField] private Transform m_rightHandVR;

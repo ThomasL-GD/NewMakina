@@ -6,6 +6,7 @@ using UnityEditor;
 using static UnityEngine.Mathf;
 using static UnityEditor.EditorGUILayout;
 using static UnityEngine.GUILayout;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 class FacadePlacer : EditorWindow
@@ -37,6 +38,8 @@ class FacadePlacer : EditorWindow
     private static Vector3 m_previewRotationOffset = Vector3.zero;
     private static float m_assetWidth = 6.2f;
     private static float m_assetHeight = 6.5f;
+    private static float m_yOffSet = 0.005f;
+    private static float m_bottomLineOffset = 0.005f;
 
     private static bool m_useRandom = false;
     
@@ -44,6 +47,7 @@ class FacadePlacer : EditorWindow
     [MenuItem("Tools/Facade Placer")]
     static void Init()
     {
+        // Instantiating or fetching the PrefabPicasso window 
         // Instantiating or fetching the PrefabPicasso window 
         FacadePlacer window = (FacadePlacer)GetWindow(typeof(FacadePlacer));
         
@@ -72,7 +76,6 @@ class FacadePlacer : EditorWindow
     private void OnDisable() => SceneView.duringSceneGui -= SceneViewUpdate;
     
     public void SceneViewUpdate(EditorWindow window) {
-        
         // checking if the selected object is a GameObject
         if (m_facade == null) return;
         if (Selection.count == 0) return;
@@ -84,6 +87,64 @@ class FacadePlacer : EditorWindow
         // Getting the mesh of the elected object
         Mesh mesh = filter.sharedMesh;
         m_selection = selection;
+        
+        Transform t = m_selection.transform.Find("facades");
+        GameObject parentObjectToDelete = t != null ? t.gameObject : null;
+
+        if(parentObjectToDelete != null)
+        {
+            
+            
+            Handles.color = Color.red;
+            
+            Transform topFacades = t.Find("top facades");
+            Transform bottomFacades = t.Find("bottom facades");
+            Transform middleFacades = t.Find("middle facades");
+            Transform pillars = t.Find("corners");
+            
+            int childCount = topFacades.childCount;
+            
+            Transform[] cappers = new Transform[childCount];
+
+            for (int i = 0; i < childCount; i++)
+            {
+                Transform child = topFacades.GetChild(i);
+                cappers[i] = child;
+                if (Handles.Button(child.position + Vector3.up * 4f, Quaternion.identity, 1f, 1f, Handles.SphereHandleCap))
+                {
+                    Undo.RegisterFullObjectHierarchyUndo(child.parent.parent.gameObject, "deleted row :: HoudinAllRight");
+                    List<GameObject> trashCan = new List<GameObject>();
+                    for (int j = 0; j < middleFacades.childCount; j++)
+                    {
+                        Vector3 childPos = middleFacades.GetChild(j).position;
+                        if(Math.Abs(childPos.x - child.position.x) + Math.Abs(childPos.z - child.position.z) < 1f) 
+                            trashCan.Add(middleFacades.GetChild(j).gameObject);
+                    }
+                    
+                    foreach (GameObject go in trashCan) DestroyImmediate(go);
+                    
+                    DestroyImmediate(topFacades.GetChild(i).gameObject);
+                    DestroyImmediate(bottomFacades.GetChild(i).gameObject);
+                    
+                    i--;
+                    childCount--;
+                };
+            }
+
+            Handles.color = Color.yellow;
+            
+            for (int i = 0; i < pillars.childCount; i++)
+            {
+                Vector3 position = pillars.GetChild(i).GetChild(pillars.GetChild(i).childCount - 1).position;
+                if (Handles.Button(position + Vector3.up * 3.7f, Quaternion.identity, .5f, .5f, Handles.SphereHandleCap))
+                {
+                    Undo.RegisterFullObjectHierarchyUndo(pillars.GetChild(i).gameObject);
+                    DestroyImmediate(pillars.GetChild(i).gameObject);
+                }
+            }
+
+            return;
+        }
 
         // making a list of all the triangles of the mesh
         List<Triangle> triangles = new List<Triangle>();
@@ -100,19 +161,23 @@ class FacadePlacer : EditorWindow
         if (m_useCorners && m_corner != null) m_corners = new List<Point>();
         m_points = new List<Point>();
 
-        m_lineHeight = v[0].y * m_selection.transform.lossyScale.y;
+        m_lineHeight = (m_selection.transform.rotation * Vector3.Scale(v[0], m_selection.transform.lossyScale)).y;
 
         float lineTop = m_lineHeight;
         for (uint i = 1; i < v.Length; i++)
         {
-            float y = v[i].y * m_selection.transform.lossyScale.y;
+            float y =(m_selection.transform.rotation * Vector3.Scale(v[i], m_selection.transform.lossyScale)).y;
             m_lineHeight = Min(m_lineHeight, y);
             lineTop = Max(lineTop, y);
         }
 
-        m_lines = CeilToInt((lineTop - m_lineHeight) / m_assetHeight);
+        m_lineHeight += m_bottomLineOffset;
+        lineTop += m_bottomLineOffset;
         
-        m_lineHeight = m_selection.transform.localPosition.y;
+        m_lines = CeilToInt(((lineTop-m_assetHeight) - m_lineHeight) / m_assetHeight);
+        //Debug.Log(m_lines);
+        //m_lineHeight = m_selection.transform.localPosition.y;
+        //m_lineHeight = m_selection.transform.localPosition.y;
 
         for (int lineNumber = 0; lineNumber < m_lines; lineNumber++)
         {
@@ -126,9 +191,7 @@ class FacadePlacer : EditorWindow
             {
                 List<Intersections> localLine = new List<Intersections>();
                 // finding the triangles on the line
-                triangle.DrawHorizontalLineAlongMesh(selection.transform.position,
-                    m_lineHeight + (m_assetHeight * lineNumber), selection.transform.rotation,
-                    selection.transform.localScale, out localLine);
+                triangle.DrawHorizontalLineAlongMesh(selection.transform.position, m_lineHeight + (m_assetHeight * lineNumber), selection.transform.rotation, selection.transform.localScale, out localLine);
                 foreach (var item in localLine)
                 {
                     bool canAdd = true;
@@ -147,9 +210,11 @@ class FacadePlacer : EditorWindow
                 }
             }
 
+            
             // Getting all the links
             List<Link> links = new List<Link>();
             Handles.color = Color.red;
+            
             for (int i = 0; i < intersections.Count; i++)
             {
                 for (int j = i; j < intersections.Count; j++)
@@ -217,6 +282,10 @@ class FacadePlacer : EditorWindow
                 }
             }
 
+            foreach (var link in links) {
+                link.DrawLink();
+            }
+
             MeshFilter meshFilter;
 
             // Getting the corners
@@ -229,8 +298,8 @@ class FacadePlacer : EditorWindow
                     Quaternion rotation = Quaternion.Euler(Vector3.up * Vector3.SignedAngle(Vector3.forward,
                         new Vector3(link.normal.x, 0, link.normal.z), Vector3.up));
 
-                    m_corners.Add(new Point(link.A, rotation, facadeState, 1f,false));
-                    m_corners.Add(new Point(link.B, rotation, facadeState, 1f,false));
+                    m_corners.Add(new Point(link.A - m_yOffSet * Vector3.up, rotation, facadeState, 1f,false));
+                    m_corners.Add(new Point(link.B - m_yOffSet * Vector3.up, rotation, facadeState, 1f,false));
                 }
 
                 // Removing corner dupes
@@ -241,6 +310,7 @@ class FacadePlacer : EditorWindow
                         if (m_corners[i].position == m_corners[j].position)
                         {
                             m_corners.RemoveAt(j);
+                            j--;
                         }
                     }
                 }
@@ -314,6 +384,7 @@ class FacadePlacer : EditorWindow
                 for (int i = 0; i < amount; i++)
                 {
                     Vector3 position = link.A + (link.B - link.A).normalized * (step * i + m_assetWidth * scale / 2f);
+                    position -= m_yOffSet * Vector3.up;
                     Quaternion prefabRotation;
                     prefabRotation = Quaternion.Euler(
                         Vector3.up * Vector3.SignedAngle(Vector3.forward,
@@ -359,6 +430,10 @@ class FacadePlacer : EditorWindow
 
             }
         }
+        
+        Vector3 center = m_selection.GetComponent<Renderer>().bounds.center;
+        Handles.color = Color.cyan;
+        if(Handles.Button(center , Quaternion.identity, 2f, 1f, Handles.SphereHandleCap)) PlaceFacade();
     }
     
 
@@ -464,14 +539,16 @@ class FacadePlacer : EditorWindow
             Vector3 v2 = p_rotation * Vector3.Scale(vertex2, p_scale);
             Vector3 v3 = p_rotation * Vector3.Scale(vertex3, p_scale);
             Vector3 n = p_rotation * normal;
-            bool tooHigh = v1.y >= p_lineHeight+Epsilon && v2.y >= p_lineHeight+Epsilon && v3.y >= p_lineHeight+Epsilon;
-            bool tooLow = v1.y <= p_lineHeight-Epsilon && v2.y <= p_lineHeight-Epsilon && v3.y <= p_lineHeight-Epsilon;
+            
+            bool tooHigh = v1.y >= p_lineHeight-Epsilon && v2.y >= p_lineHeight-Epsilon && v3.y >= p_lineHeight-Epsilon;
+            bool tooLow = v1.y <= p_lineHeight+Epsilon && v2.y <= p_lineHeight+Epsilon && v3.y <= p_lineHeight+Epsilon;
+
             
             if (!tooHigh && !tooLow)
             {
-                //DrawFace(p_position,Camera.current,p_rotation,p_scale);
+                DrawFace(p_position,Camera.current,p_rotation,p_scale);
 
-                Vector3 intersection;
+                Vector3 intersection = Vector3.zero;
                 if (GetSegmentPlaneIntersection(v1, v2, out intersection, p_lineHeight))
                 {
                     intersection += p_position;
@@ -554,6 +631,11 @@ class FacadePlacer : EditorWindow
             LabelField("Select a facade style :");
             selectedIndex = Popup(selectedIndex,names);
             m_scriptableObject = scriptableObjects[selectedIndex];
+            if (Button("Select"))
+            {
+                Object[] newSelection = {m_scriptableObject};
+                Selection.objects = newSelection;
+            } 
         }else LabelField("No facade styles found");
 
         m_useRandom = Toggle("Use Random", m_useRandom);
@@ -573,21 +655,52 @@ class FacadePlacer : EditorWindow
 
         m_assetWidth = m_scriptableObject.assetWidth;
         m_assetHeight = m_scriptableObject.assetHeight;
+        
+        m_yOffSet = FloatField("Y Offset", m_yOffSet);
+        m_bottomLineOffset = FloatField("Bottom Line Offset", m_bottomLineOffset);
 
-        if (Button("\nPlace Facades!\n") && m_selection!=null && m_facade != null)
-        {
+        if (Button("\nPlace Facades!\n") && m_selection != null && m_facade != null) PlaceFacade();
+
+        m_useCorners = m_scriptableObject.placeCorners;
+        
+        m_previewRotationOffset = m_scriptableObject.previewRotationOffset;
+        
+        if(!m_useCorners) return;
+        
+        m_corner = m_scriptableObject.cornerPrefab;
+        m_cornerOffset = m_scriptableObject.cornerOffsetY;
+
+        Transform t = m_selection.transform.Find("facades");
+        GameObject parentObjectToDelete = t != null ? t.gameObject : null;
+
+        if(parentObjectToDelete != null) if(Button("\nDestroy Facades!\n")) DestroyImmediate(parentObjectToDelete);
+        
+        
+        if (Button("Shuffle")) m_seed = Random.Range(0,9999);
+    }
+
+    void PlaceFacade()
+    {
+        
             var facadesParent = new GameObject(){name =  "facades"};
             facadesParent.transform.SetParent(m_selection.transform);
-
+            
+            facadesParent.transform.localPosition = Vector3.zero;
+            
             m_selection.tag = "HoudinAllRight Select Ignore";
             
             var middleParent = new GameObject(){name = "middle facades"};
             var topParent = new GameObject(){name = "top facades"};
             var bottomParent = new GameObject(){name = "bottom facades"};
-
+            
             middleParent.transform.SetParent(facadesParent.transform);
             topParent.transform.SetParent(facadesParent.transform);
             bottomParent.transform.SetParent(facadesParent.transform);
+            
+            middleParent.transform.localPosition = Vector3.zero;
+            topParent.transform.localPosition = Vector3.zero;
+            bottomParent.transform.localPosition = Vector3.zero;
+            
             
             if(m_points == null) return;
             
@@ -636,7 +749,9 @@ class FacadePlacer : EditorWindow
             if (m_useCorners && m_corner != null)
             {
                 GameObject cornerParent = new GameObject(){name = "corners"};
+                
                 cornerParent.transform.parent = facadesParent.transform;
+                cornerParent.transform.transform.localPosition = Vector3.zero;
 
                 foreach (Point corner in m_corners)
                 {
@@ -649,26 +764,45 @@ class FacadePlacer : EditorWindow
                     cornerTransform.rotation = corner.rotation;
                     if(cornerParent!= null)cornerTransform.SetParent(cornerParent.transform);
                 }
+
+                List<Transform> pillarGroups = new List<Transform>();
+                
+                for (int i = 0; i < cornerParent.transform.childCount;)
+                {
+                    Transform child = cornerParent.transform.GetChild(i);
+                    if(child.tag == "Ignore this")
+                    {
+                        i++;
+                        continue;
+                    }
+                    Vector3 childPos = child.position;
+                    
+                    bool skip = false;
+                    
+                    foreach (var pillarGroup in pillarGroups)
+                    {
+                        if(Math.Abs(childPos.x - pillarGroup.position.x) + Math.Abs(childPos.z - pillarGroup.position.z) < .5f)
+                        {
+                            child.parent = pillarGroup;
+                            skip = true;
+                            i = Max(0, i-1);
+                            break;
+                        }
+                    }
+                    
+                    if(skip) continue;
+                    i++;
+                    GameObject parent = new GameObject() {name = "Corner Group", tag = "Ignore this"};
+                    pillarGroups.Add(parent.transform);
+                    
+                    parent.transform.position = child.transform.position;
+                    child.parent = parent.transform;
+                }
+
+                foreach (Transform pillarGroup in pillarGroups) pillarGroup.parent = cornerParent.transform;
             }
-        }
-
-        m_useCorners = m_scriptableObject.placeCorners;
-        
-        m_previewRotationOffset = m_scriptableObject.previewRotationOffset;
-        
-        if(!m_useCorners) return;
-        
-        m_corner = m_scriptableObject.cornerPrefab;
-        m_cornerOffset = m_scriptableObject.cornerOffsetY;
-
-        Transform t = m_selection.transform.Find("facades");
-        GameObject parentObjectToDelete = t != null ? t.gameObject : null;
-
-
-        if(parentObjectToDelete != null) if(Button("\nDestroy Facades!\n")) DestroyImmediate(parentObjectToDelete);
-        
-        if (Button("Shuffle")) m_seed = Random.Range(0,9999);
+            
     }
-
+    
     private int m_seed = 0;
 }
