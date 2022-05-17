@@ -1,3 +1,4 @@
+using System.Collections;
 using CustomMessages;
 using Mirror;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace Network {
         [Header("AutoConnexion type beat")]
         [SerializeField] private bool m_localHost = false;
         [SerializeField] private string m_IPadress = "10.31.240.210";
+        [SerializeField] [Range(0.01f, 60f)] private float m_autoconnexionTimeInterval = 10f;
 
         #region delegates
 
@@ -151,6 +153,8 @@ namespace Network {
             singleton = this;
         
             networkAddress = "";
+
+            StartCoroutine(ForceConnect());
         }
 
         /// <summary/> Is called by other scripts to send data to the server
@@ -301,9 +305,15 @@ namespace Network {
         /// <param name="p_bombExplosion"> The message sent by the Server to the Client </param>
         private void ReceiveBombExplosion(BombExplosion p_bombExplosion) => OnReceiveBombExplosion?.Invoke(p_bombExplosion); 
         
-        private void ReceivePotentialSpawnPoints(PotentialSpawnPoints p_potentialSpawnPoints) => OnReceivePotentialSpawnPoints?.Invoke(p_potentialSpawnPoints); 
-        
-        
+        private void ReceivePotentialSpawnPoints(PotentialSpawnPoints p_potentialSpawnPoints) => OnReceivePotentialSpawnPoints?.Invoke(p_potentialSpawnPoints);
+
+
+        private IEnumerator ForceConnect() {
+            while (!m_canSend) {
+                CustomConnect();
+                yield return new WaitForSeconds(m_autoconnexionTimeInterval);
+            }
+        }
 
         /// <summary>
         /// Connects to the default serialized ip
