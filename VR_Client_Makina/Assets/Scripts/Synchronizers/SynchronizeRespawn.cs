@@ -2,6 +2,7 @@ using CustomMessages;
 using Network;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Synchronizers {
 

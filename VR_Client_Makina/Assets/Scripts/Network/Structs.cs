@@ -65,16 +65,19 @@ namespace CustomMessages {
     }
     
     /// <summary/> The ping sent to the server telling it the a client has connected
-    public struct ClientConnect : NetworkMessage {
+    public struct ClientConnect : NetworkMessage
+    {
         public ClientConnection client;
     }
 
-    public struct GameEnd : NetworkMessage {
+    public struct GameEnd : NetworkMessage
+    {
         public ClientConnection winningClient;
     }
     
     /// <summary/> The initial data that will went to the clients as they connect
-    public struct InitialData : NetworkMessage {
+    public struct InitialData : NetworkMessage
+    {
         public int healthPcPlayer;
         public int healthVrPlayer;
         public float beaconRange;
@@ -121,6 +124,7 @@ namespace CustomMessages {
         public struct HeartConquerStart : NetworkMessage
     {
         public float time;
+        public int index;
     }
     
     /// <summary/> The index of a destroyed heart
