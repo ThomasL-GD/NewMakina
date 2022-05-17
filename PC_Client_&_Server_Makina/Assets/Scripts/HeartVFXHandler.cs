@@ -1,13 +1,15 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
+using Synchronizers;
 
-public class HeartIdentifier : MonoBehaviour
+public class HeartVFXHandler : MonoBehaviour
 {
-    [HideInInspector]public int heartIndex = -1;
-    [SerializeField] public VisualEffect m_anticipation;
-    [SerializeField] public VisualEffect m_detonation;
-    
+    [SerializeField] private VisualEffect m_anticipation;
+    [SerializeField] private VisualEffect m_detonation;
+
     private Coroutine m_anticipationCo;
     
     // Start is called before the first frame update
@@ -45,5 +47,11 @@ public class HeartIdentifier : MonoBehaviour
             }
             yield return null;
         }
+    }
+    
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 }

@@ -8,10 +8,9 @@ namespace Synchronizers
     {
         
         [SerializeField,Tooltip("The prefab of the hearts that will be spawned on server connection")] private GameObject m_heartPrefabs;
-        [SerializeField,Tooltip("The prefab of the area around a heart \n WARNING : Will be rescaled leave at 1,1,1 in prefab")] private GameObject m_heartRangePrefab;
 
         /// <summary/> the gameobjects that will represent the hearts on the pc side
-        private GameObject[] m_hearts;
+        public GameObject[] m_hearts;
         
         /// <summary>
         /// Awake is called as soon as the object is set active
@@ -25,7 +24,7 @@ namespace Synchronizers
             ClientManager.OnReceiveHeartBreak += SynchronizeHeartBreak;
         }
 
-        private void Reset(GameEnd p_p_gameend) {
+        private void Reset(GameEnd p_gameend) {
 
             //Destroy them all （￣ｗ￣）Ψ
             foreach (GameObject heart in m_hearts) {
@@ -50,9 +49,6 @@ namespace Synchronizers
             {
                 //Todo : set a rotation
                 hearts.Add(Instantiate(m_heartPrefabs, p_initialData.heartPositions[i], m_heartPrefabs.transform.rotation));
-                GameObject radius = Instantiate(m_heartRangePrefab, p_initialData.heartPositions[i],m_heartRangePrefab.transform.rotation);
-                radius.transform.localScale = p_initialData.heartRange * 2f * Vector3.one;
-                radius.transform.parent = hearts[i].transform;
                 
                 // Giving them a heart identifier component
                 if (hearts[i].TryGetComponent( out HeartIdentifier hi))
