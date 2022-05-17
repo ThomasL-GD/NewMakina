@@ -49,6 +49,9 @@ namespace Network.Connexion_Menu {
 
         public delegate void NewTargetDelegator(Transform p_newTarget);
         public delegate void NewSensitiveTargetDelegator(AttackSensitiveButton p_newTarget);
+        
+        public delegate void LocalShot(bool p_hit);
+        public static LocalShot OnLocalShot;
 
         public static NewTargetDelegator SetNewTargetForAll;
         public static NewSensitiveTargetDelegator SetNewSensitiveTargetForAll;
@@ -125,6 +128,7 @@ namespace Network.Connexion_Menu {
                             break; }
                     }
                     
+                    OnLocalShot?.Invoke(hitTheTarget);
                     StartCoroutine(ShotDownLaser(handPosition, direction, hitTheTarget));
                     
                     if (!hitTheTarget) return;
@@ -159,6 +163,7 @@ namespace Network.Connexion_Menu {
                             break;
                     }
 
+                    OnLocalShot?.Invoke(hit);
                     StartCoroutine(ShotDownLaser(handPosition, hitInfo.point - handPosition, hit));
                 }
 

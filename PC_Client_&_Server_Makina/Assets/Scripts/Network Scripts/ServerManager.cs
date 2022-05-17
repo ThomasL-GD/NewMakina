@@ -530,7 +530,7 @@ public class ServerManager : MonoBehaviour
         if (m_vrPlayerHealth <= 0)
             EndGame(ClientConnection.PcPlayer);
     }
-    private void CheckHeartDestroyRange() //Nice s̶h̶o̶t̶ Code !
+    private void CheckHeartDestroyRange()
     {
         Vector2 horizontalPlayerPosition = new Vector2(m_pcTransformBuffer.position.x, m_pcTransformBuffer.position.z);
         float playerHeight = m_pcTransformBuffer.position.y;

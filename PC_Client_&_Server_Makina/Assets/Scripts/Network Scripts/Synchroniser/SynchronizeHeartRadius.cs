@@ -8,6 +8,7 @@ public class SynchronizeHeartRadius : Synchronizer<SynchronizeHeartRadius>
     [SerializeField] private TextMeshProUGUI m_heartRadiusFeedback;
     [SerializeField] private AudioSource m_heartBreakingAudioSource;
 
+    private int m_indexOfLastTouchedHeart = 0;
     private float m_maxHeartTime;
     // Start is called before the first frame update
     void Awake()
@@ -26,19 +27,19 @@ public class SynchronizeHeartRadius : Synchronizer<SynchronizeHeartRadius>
         m_heartRadiusFeedback.enabled = false;
         m_heartRadiusFeedback.text = "";
         m_heartBreakingAudioSource.Stop();
-        if(SynchronizeHearts.Instance.m_hearts.Length !=0)
-            SynchronizeHearts.Instance.m_hearts[indexOflastTouchedHeart].GetComponent<HeartIdentifier>().StopAnticipation();
+        if(SynchronizeHearts.Instance.m_hearts.Length !=0 && SynchronizeHearts.Instance.m_hearts[m_indexOfLastTouchedHeart] != null) {
+            SynchronizeHearts.Instance.m_hearts[m_indexOfLastTouchedHeart].GetComponent<HeartIdentifier>().StopAnticipation();
+        }
     }
 
 
-    private int indexOflastTouchedHeart = 0;
     private void ReceiveHeartConquerStart(HeartConquerStart p_heartconquerstart)
     {
         if(m_heartRadiusFeedback.enabled == false) m_heartBreakingAudioSource.Play();
-        indexOflastTouchedHeart = p_heartconquerstart.index;
+        m_indexOfLastTouchedHeart = p_heartconquerstart.index;
         
         if(SynchronizeHearts.Instance.m_hearts.Length !=0)
-            SynchronizeHearts.Instance.m_hearts[indexOflastTouchedHeart].GetComponent<HeartIdentifier>().StartAnticipation(m_maxHeartTime);
+            SynchronizeHearts.Instance.m_hearts[m_indexOfLastTouchedHeart].GetComponent<HeartIdentifier>().StartAnticipation(m_maxHeartTime);
         
         m_heartRadiusFeedback.enabled = true;
         string timer = p_heartconquerstart.time.ToString();

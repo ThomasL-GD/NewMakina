@@ -194,6 +194,14 @@ namespace Grabbabble_Type_Beat {
             m_objectHeld = p_whoAmIEvenCatching;
             p_whoAmIEvenCatching.BeGrabbed(transform, m_grabbedItemsPositionInHand);
         }
+
+
+        public OVRInput.Controller GetHandSide() {
+            if (m_grabInput.HasFlag(OVRInput.Axis1D.PrimaryIndexTrigger)) return OVRInput.Controller.LTouch;
+            if (m_grabInput.HasFlag(OVRInput.Axis1D.SecondaryIndexTrigger)) return OVRInput.Controller.RTouch;
+
+            return OVRInput.Controller.None;
+        }
     }
 
 }
