@@ -179,7 +179,6 @@ namespace Synchronizers {
                     m_isLoading = false;
 
                 }
-                
             }
         }
 
