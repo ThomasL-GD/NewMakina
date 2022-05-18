@@ -19,6 +19,9 @@ public class ElevatorBehavior : MonoBehaviour {
     private bool m_goingUp = true;
 
     private int m_index;
+        
+    public delegate void ElevatorLocalActivation(OVRInput.Controller p_handUsed);
+    public static ElevatorLocalActivation OnElevatorLocalActivation;
     
     /// <summary/> The elevators speed in m/s
     private float m_speed = 10f;
@@ -75,6 +78,7 @@ public class ElevatorBehavior : MonoBehaviour {
     private void OnTriggerEnter(Collider p_other) {
         if (p_other.gameObject.layer == VrHandBehaviour.s_layer) {
             MyNetworkManager.singleton.SendVrData(new ElevatorActivation(){index = m_index});
+            OnElevatorLocalActivation?.Invoke(p_other.gameObject.GetComponent<VrHandBehaviour>().GetHandSide());
         }
     }
 }

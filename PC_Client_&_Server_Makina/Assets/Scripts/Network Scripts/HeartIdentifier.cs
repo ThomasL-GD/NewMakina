@@ -31,7 +31,6 @@ public class HeartIdentifier : MonoBehaviour
         Debug.Log("heyyy");
     }
     
-    // Start is called before the first frame update
     public void StartAnticipation(float p_dt,float p_timer = 2f)
     {
         if(!gameObject.activeSelf) return;
