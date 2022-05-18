@@ -23,7 +23,8 @@ namespace Grabbabble_Type_Beat {
         [SerializeField] [Range(0.1f,100f)] private float m_pullRadius;
         [SerializeField] private LayerMask m_layersThatPulls;
         private bool m_isThereAnObjectPulled = false;
-        private Vector3 m_pulledObjectOriginalPos; 
+        private Vector3 m_pulledObjectOriginalPos;
+        private GrabbableObject m_lastScriptAimedAt = null;
 
         public AnimationBoolChange OnGrabItemChange;
         [CanBeNull] public GrabbableObject m_objectHeld {
@@ -55,7 +56,6 @@ namespace Grabbabble_Type_Beat {
         private static readonly int IsClosed = Animator.StringToHash("IsClosed");
         private static readonly int IsGrabbing = Animator.StringToHash("IsGrabbing");
         public static int s_layer = -1;
-        private static readonly int ActivatableFeedback = Shader.PropertyToID("_ActivatableFeedback");
 
         private void Start() {
         
@@ -96,18 +96,27 @@ namespace Grabbabble_Type_Beat {
                     
                     // ReSharper disable once CommentTypo
                     if (!bestPick.transform.TryGetComponent(out GrabbableObject script)) return; //If a grabbable object is in the aimline of this hand
-                    Shader.SetGlobalVector(ActivatableFeedback, script.transform.position);
+                    if(m_lastScriptAimedAt != script) {
+                        script.ChangeMaterial(true);
+                        m_lastScriptAimedAt = script;
+                    }
                             
                     if(m_isPressingTrigger) StartCoroutine(Pull(script)); //If the trigger is pressed, we start the pulling
                     
                 }
                 else {
-                    Shader.SetGlobalVector(ActivatableFeedback, Vector4.zero);
+                    if(m_lastScriptAimedAt != null) {
+                        m_lastScriptAimedAt.ChangeMaterial(false);
+                        m_lastScriptAimedAt = null;
+                    }
                 }
             }
             else if (m_objectHeld != null) { //We keep going if an item is held
                 
-                Shader.SetGlobalVector(ActivatableFeedback, Vector4.zero);
+                if(m_lastScriptAimedAt != null) {
+                    m_lastScriptAimedAt.ChangeMaterial(false);
+                    m_lastScriptAimedAt = null;
+                }
 
                 if (m_isPressingTrigger) return; //We keep going if the trigger is NOT PRESSED anymore
             
@@ -119,6 +128,9 @@ namespace Grabbabble_Type_Beat {
         /// <summary>Will progressively attract a Grabbable object towards the hand while the appropriate trigger is pressed </summary>
         /// <param name="p_objectPulled">The object that is pulled</param>
         IEnumerator Pull(GrabbableObject p_objectPulled) {
+            
+            p_objectPulled.ChangeMaterial(true);
+            m_lastScriptAimedAt = null;
 
             m_isThereAnObjectPulled = true;
             Vector3 position = p_objectPulled.transform.position;
@@ -140,12 +152,9 @@ namespace Grabbabble_Type_Beat {
                 
                 elapsedTime += Time.deltaTime;
                 Vector3 position1 = p_objectPulled.transform.position;
-                Shader.SetGlobalVector(ActivatableFeedback, position1);
 
-                Transform transform1;
-                (transform1 = p_objectPulled.transform).Translate((transform.position - position1).normalized * m_pullSpeed * Time.deltaTime);
+                p_objectPulled.transform.Translate((transform.position - position1).normalized * m_pullSpeed * Time.deltaTime);
                 
-                Shader.SetGlobalVector(ActivatableFeedback, transform1.position);
 
                 if (m_objectHeld != null) {
                     isPulling = false;
@@ -157,8 +166,9 @@ namespace Grabbabble_Type_Beat {
             }
 
             m_isThereAnObjectPulled = false;
-            Shader.SetGlobalVector(ActivatableFeedback, Vector4.zero);
+            p_objectPulled.ChangeMaterial(false);
             
+            //Throw that midair
             // p_objectPulled.BeGrabbed(p_objectPulled.transform.parent, Vector3.zero);
             // p_objectPulled.BeLetGo(m_grabInput);
 
