@@ -56,12 +56,12 @@ VisualEffect:
       - m_Value: 0.0000001
         m_Name: Height Close In factor
         m_Overridden: 1
-      - m_Value: 50
+      - m_Value: 30
         m_Name: Spawn Radius
         m_Overridden: 1
     m_Vector2f:
       m_Array:
-      - m_Value: {x: 10, y: 20}
+      - m_Value: {x: 10, y: 10}
         m_Name: Risin Speed
         m_Overridden: 1
     m_Vector3f:
@@ -81,7 +81,7 @@ VisualEffect:
       - m_Value:
           serializedVersion: 2
           key0: {r: 0.9999999, g: 0.9999999, b: 0.9999999, a: 0}
-          key1: {r: 1.4980392, g: 1.0352942, b: 0.4, a: 1}
+          key1: {r: 0.24528301, g: 0.17555751, b: 0.07983268, a: 1}
           key2: {r: 0, g: 0, b: 0, a: 0.8}
           key3: {r: 0, g: 0, b: 0, a: 0}
           key4: {r: 0, g: 0, b: 0, a: 0}
@@ -199,7 +199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b1ad5c7ac6613149a11bc963f3de69c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxDisplacement: 50.14
+  m_maxDisplacement: 30
 --- !u!114 &908931947190354174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,5 +212,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8ca0e9d08324fa48b955226dab50289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_timeBeforeDestroy: 10
+  m_timeBeforeDestroy: 8
   m_vfx: {fileID: 5121222459972451190}

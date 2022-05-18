@@ -50,6 +50,9 @@ namespace Network.Connexion_Menu {
         public delegate void NewTargetDelegator(Transform p_newTarget);
         public delegate void NewSensitiveTargetDelegator(AttackSensitiveButton p_newTarget);
         
+        public delegate void LocalCharge(bool p_isActuallyCancelling, GameObject p_source);
+        public static LocalCharge OnLocalCharge;
+        
         public delegate void LocalShot(bool p_hit);
         public static LocalShot OnLocalShot;
 
@@ -80,6 +83,7 @@ namespace Network.Connexion_Menu {
 
             if (OVRInput.Get(m_input) < m_upTriggerValue) { //Let go
                 OnLaserLoad?.Invoke(IsLoading, false);
+                OnLocalCharge?.Invoke(true, gameObject);
                 m_isShooting = false;
                 m_line.enabled = false;
                 m_elapsedHoldingTime = 0f;
@@ -174,6 +178,7 @@ namespace Network.Connexion_Menu {
             
             else if (m_isShooting) { //Holding
                 OnLaserLoad?.Invoke(IsLoading, true);
+                OnLocalCharge?.Invoke(false, gameObject);
                 m_line.enabled = true;
                 m_elapsedHoldingTime += Time.deltaTime;
                 float ratio = m_elapsedHoldingTime / m_laserLoadingTime;

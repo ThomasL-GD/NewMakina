@@ -7,6 +7,11 @@ using Network.Connexion_Menu;
 using Synchronizers;
 
 public class HapticsManager : Synchronizer<HapticsManager> {
+    
+    [Header("Laser Charge (must last as long as the charging time")]
+    [SerializeField] private AnimationCurve m_laserChargeStrength;
+    [SerializeField] private AnimationCurve m_laserChargeFrequency;
+    private HapticCommand m_chargeCommand = null;
 
     [Header("Laser Shot And Miss")]
     [SerializeField] private AnimationCurve m_laserShotAndMissStrength;
@@ -24,6 +29,13 @@ public class HapticsManager : Synchronizer<HapticsManager> {
     [SerializeField] private AnimationCurve m_beaconActivationStrength;
     [SerializeField] private AnimationCurve m_beaconActivationFrequency;
 
+#if UNITY_EDITOR
+    [Header("Debug")]
+    [SerializeField] private OVRInput.Button m_buttonToTest;
+    [SerializeField] private AnimationCurve m_buttonStrength;
+    [SerializeField] private AnimationCurve m_buttonFrequency;
+#endif
+
     private class HapticCommand {
         public AnimationCurve strength;
         public AnimationCurve frequency;
@@ -32,14 +44,35 @@ public class HapticsManager : Synchronizer<HapticsManager> {
     }
 
     private List<HapticCommand> m_commandList = new List<HapticCommand>();
+    /// <summary>For optimization of LateUpdate, is true when all haptics were turned of last frame</summary>
+    private bool m_wasOffLastFrame = true;
     
     // Start is called before the first frame update
     void Start() {
         MyNetworkManager.OnLaserShootingUpdate += NetworkShotHaptic;
+        MyNetworkManager.OnLaserAimingUpdate += NetworkChargeHaptic;
         MyNetworkManager.OnReceiveBeaconDetectionUpdate += NetworkBeaconActivationHaptic;
         LocalLaser.OnLocalShot += ShotHaptic;
+        LocalLaser.OnLocalCharge += ChargeHaptic;
         ElevatorBehavior.OnElevatorLocalActivation += ElevatorHaptic;
     }
+
+    private void NetworkChargeHaptic(Laser p_laser) {
+        ChargeHaptic(p_laser.laserState == LaserState.CancelAiming, MyNetworkManager.singleton.gameObject);
+    }
+
+    private void ChargeHaptic(bool p_isCancelingCharge, GameObject p_source) {
+        Debug.Log($"call charge {p_isCancelingCharge} haptic from {p_source}",p_source);
+        if (p_isCancelingCharge) { //If the charging is canceled
+            m_commandList.Remove(m_chargeCommand);
+            m_chargeCommand = null;
+        }
+        else if (m_chargeCommand == null) { //If the charging is started
+            m_chargeCommand = new HapticCommand() {controllersAffected = OVRInput.Controller.RTouch, frequency = m_laserChargeFrequency, strength = m_laserChargeStrength, time = 0f};
+            m_commandList.Add(m_chargeCommand);
+        }
+    }
+
     /// <summary>Add a command of beacon detection haptic from network</summary>
     private void NetworkBeaconActivationHaptic(BeaconDetectionUpdate p_beaconDetection) {
         if (!p_beaconDetection.playerDetected) return;
@@ -61,8 +94,26 @@ public class HapticsManager : Synchronizer<HapticsManager> {
     /// <param name="p_laser">The message sent by the server<br/>We only use the hit boolean</param>
     private void NetworkShotHaptic(Laser p_laser) => ShotHaptic(p_laser.hit);
 
+#if UNITY_EDITOR
+    private void Update() {
+        if (OVRInput.GetDown(m_buttonToTest)) {
+            m_commandList.Add(new HapticCommand(){controllersAffected = OVRInput.Controller.RTouch | OVRInput.Controller.LTouch, time = 0f, frequency = m_buttonFrequency, strength = m_buttonStrength});
+        }
+        Debug.Log($"Haptics queue length : {m_commandList.Count}");
+    }
+#endif
+
     private void LateUpdate() {
-        if (m_commandList.Count < 1) return;
+        if (m_commandList.Count < 1) {
+            
+            if (m_wasOffLastFrame) return;
+            
+            OVRInput.SetControllerVibration(0f, 0f, OVRInput.Controller.All);
+            m_wasOffLastFrame = true;
+            return;
+        }
+
+        m_wasOffLastFrame = false;
 
         List<byte> indexesToRemove = new List<byte>();
         float leftBiggestStrengthSoFar = 0f;
@@ -97,8 +148,8 @@ public class HapticsManager : Synchronizer<HapticsManager> {
         if(indexesToRemove.Count < 1) return; //Then, we remove from the list every terminated hapticCommand
 
         for (int i = indexesToRemove.Count - 1; i >= 0; i--) { // We go through the list backwards so we can remove the biggest indexes first thus avoiding index shifting issues
+            if (m_commandList[indexesToRemove[i]] == m_chargeCommand) m_chargeCommand = null;
             m_commandList.RemoveAt(indexesToRemove[i]);
         }
-        
     }
 }
