@@ -69,7 +69,8 @@ namespace Synchronizers
         private void SynchronizeHeartBreak(HeartBreak p_heartbreak)
         {
             int index = p_heartbreak.index;
-            if(m_hearts.Length > index)Destroy(m_hearts[index]);
+            if(m_hearts.Length > index) m_hearts[index].GetComponent<HeartIdentifier>().Break();
+            
             SynchronizeInitialData.Instance.LoseVrHealth();
         }
     }
