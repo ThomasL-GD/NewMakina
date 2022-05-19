@@ -62,7 +62,6 @@ public class HapticsManager : Synchronizer<HapticsManager> {
     }
 
     private void ChargeHaptic(bool p_isCancelingCharge, GameObject p_source) {
-        Debug.Log($"call charge {p_isCancelingCharge} haptic from {p_source}",p_source);
         if (p_isCancelingCharge) { //If the charging is canceled
             m_commandList.Remove(m_chargeCommand);
             m_chargeCommand = null;
@@ -76,20 +75,17 @@ public class HapticsManager : Synchronizer<HapticsManager> {
     /// <summary>Add a command of beacon detection haptic from network</summary>
     private void NetworkBeaconActivationHaptic(BeaconDetectionUpdate p_beaconDetection) {
         if (!p_beaconDetection.playerDetected) return;
-        Debug.Log($"call Beacon haptic");
         m_commandList.Add(new HapticCommand(){strength = m_beaconActivationStrength, frequency = m_beaconActivationFrequency, time = 0f, controllersAffected = OVRInput.Controller.RTouch | OVRInput.Controller.LTouch});
     }
 
     /// <summary>Will add an elevator trigger haptic command</summary>
     private void ElevatorHaptic(OVRInput.Controller p_handUsed) {
-        Debug.Log($"call Elevator haptic");
         m_commandList.Add(new HapticCommand(){strength = m_elevatorStrength, frequency = m_elevatorFrequency, time = 0f, controllersAffected = p_handUsed});
     }
 
     /// <summary>Will add a shot haptic command</summary>
     /// <param name="p_hit">true if the shot kills and false if it missed</param>
     private void ShotHaptic(bool p_hit) {
-        Debug.Log($"call Shot haptic");
         m_commandList.Add(p_hit  ?  new HapticCommand(){strength = m_laserShotAndKillStrength, frequency = m_laserShotAndKillFrequency, time = 0f, controllersAffected = OVRInput.Controller.RTouch}  :  new HapticCommand(){strength = m_laserShotAndMissStrength, frequency = m_laserShotAndMissFrequency, time = 0f, controllersAffected = OVRInput.Controller.RTouch});
     }
 
@@ -102,7 +98,6 @@ public class HapticsManager : Synchronizer<HapticsManager> {
         if (OVRInput.GetDown(m_buttonToTest)) {
             m_commandList.Add(new HapticCommand(){controllersAffected = OVRInput.Controller.RTouch | OVRInput.Controller.LTouch, time = 0f, frequency = m_buttonFrequency, strength = m_buttonStrength});
         }
-        Debug.Log($"Haptics queue length : {m_commandList.Count}");
     }
 #endif
 
