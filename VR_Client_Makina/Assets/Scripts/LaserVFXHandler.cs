@@ -4,10 +4,11 @@ using CustomMessages;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class LaserVFXHandler : MonoBehaviour
-{
+public class LaserVFXHandler : MonoBehaviour {
+    
     //------------------------- PUBLIC VARIABLES -------------------------//
     public Action<Laser, float> m_delegatedAction;
+    public Action<bool> m_deepImpact;
     
     //------------------------- PRIVATE VARIABLES -------------------------//
     [SerializeField] private VisualEffect m_laserTrail;
@@ -27,34 +28,14 @@ public class LaserVFXHandler : MonoBehaviour
     private void OnEnable() => m_delegatedAction += HandleLaserVFX;
     
     private void OnDisable() => m_delegatedAction -= HandleLaserVFX;
-
-    [ContextMenu("test")]
-    void testFunction() => StartCoroutine(TestCoco());
-
-    IEnumerator TestCoco()
-    {
-        m_delegatedAction -= HandleLaserVFX;
-        m_delegatedAction += HandleLaserVFX;
-        float waitTime = 6f;
-        float timer = 0f;
-        
-        while (timer < waitTime)
-        {
-            timer += Time.deltaTime;
-            m_delegatedAction(new Laser(){laserState = LaserState.Aiming}, timer / waitTime);
-            yield return null;
-        }
-        
-        m_delegatedAction(new Laser(){laserState = LaserState.Shooting, hitPosition = new Vector3(-0.0500000007f,77.3000031f,241f), hit = true}, timer / waitTime);
-    }
     
     /// <summary/> Method to handle the VFX for the laser
     /// <param name="p_laser"> The laser sent by the player</param>
     /// <param name="p_chargedLvl"> The charged amount of the laser from 0 to 1</param>
-    private void HandleLaserVFX(Laser p_laser, float p_chargedLvl)
-    {
-        switch (p_laser.laserState)
-        {
+    private void HandleLaserVFX(Laser p_laser, float p_chargedLvl) {
+        
+        switch (p_laser.laserState) {
+            
             case LaserState.Aiming:
                 SetParent(m_parent);
                 SetFloatInVFXs(m_chargeLevel, p_chargedLvl);
@@ -77,20 +58,18 @@ public class LaserVFXHandler : MonoBehaviour
         }
     }
 
-    void SetFloatInVFXs(String p_paramName, float p_value)
-    {
+    private void SetFloatInVFXs(String p_paramName, float p_value) {
         m_laserBall.SetFloat(p_paramName, p_value);
         m_laserTrail.SetFloat(p_paramName, p_value);
     }
 
-    void SendEventInVFXs(String p_eventName)
-    {
+    private void SendEventInVFXs(String p_eventName) {
         m_laserBall.SendEvent(p_eventName);
         m_laserTrail.SendEvent(p_eventName);
     }
 
-    void SetParent(Transform p_parent)
-    {
+    private void SetParent(Transform p_parent) {
+        
         m_laserBall.transform.parent = p_parent;
         m_laserTrail.transform.parent = p_parent;
         
@@ -104,9 +83,9 @@ public class LaserVFXHandler : MonoBehaviour
         transform2.position = p_parent.position;
         transform2.rotation = p_parent.rotation;
     }
-    
-    IEnumerator YeetBall(Vector3 p_hitPosition, bool p_hit)
-    {
+
+    private IEnumerator YeetBall(Vector3 p_hitPosition, bool p_hit) {
+        
         Vector3 initalPosition = m_laserBall.transform.position;
         while (m_laserBall.transform.position != p_hitPosition)
         {
@@ -117,7 +96,7 @@ public class LaserVFXHandler : MonoBehaviour
         m_explosionEffect.transform.position = p_hitPosition;
         m_explosionEffect.SendEvent("Explode");
 
-        
+        m_deepImpact?.Invoke(p_hit);
         m_laserBall.transform.position = initalPosition;
         SetFloatInVFXs(m_chargeLevel, 0f);
         SendEventInVFXs(m_stop);
@@ -126,13 +105,12 @@ public class LaserVFXHandler : MonoBehaviour
         StartCoroutine(KillEffect());
     }
 
-    IEnumerator KillEffect()
-    {
+    private IEnumerator KillEffect() {
+        
         m_killEffect.SendEvent("Start");
         
         float timer = 0f;
-        while (timer<1f)
-        {
+        while (timer<1f) {
             m_killEffect.SetVector3("Hand", m_parent.position);
             yield return null;
             timer += Time.deltaTime;
@@ -140,12 +118,11 @@ public class LaserVFXHandler : MonoBehaviour
         
         m_killEffect.SendEvent("Stop");
     }
-    
-    IEnumerator InverseLerp(String p_paramName, float p_initialValue)
-    {
+
+    private IEnumerator InverseLerp(String p_paramName, float p_initialValue) {
+        
         float value = p_initialValue;
-        while (value != 0f)
-        {
+        while (value != 0f) {
             yield return null;
             value -= Time.deltaTime * m_fadeOutSpeed;
             value = Mathf.Max(value, 0f);

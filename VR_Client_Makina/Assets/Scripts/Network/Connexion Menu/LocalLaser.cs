@@ -9,22 +9,14 @@ using UnityEngine.Serialization;
 namespace Network.Connexion_Menu {
 
     [RequireComponent(typeof(LineRenderer))]
-    public class LocalLaser : MonoBehaviour {
-        
-        [Header("Line Colors")]
-        [SerializeField] private Color m_firstColor = Color.yellow;
-        [SerializeField] private Color m_lastColor = Color.white;
-        
-        [Header("prefabs")]
-        [SerializeField] private GameObject m_laserShotPrefab;
-        [SerializeField] private GameObject m_prefabParticlesWhenKill;
-        [SerializeField] private GameObject m_prefabParticlesWallHit;
-        
-        private LineRenderer m_line = null;
-        
+    public class LocalLaser : MonoBehaviour{
+
         [Header("Input")]
         [SerializeField] private OVRInput.Axis1D m_input;
         [SerializeField] [Range(0.01f, 1f)]/**/ private float m_upTriggerValue;
+
+        [Header("Feedback")]
+        [SerializeField] private LaserVFXHandler m_laserVFXHandler;
         
         [Header("Timings & size")]
         [SerializeField] [Range(0.1f, 5f)] [Tooltip("The time needed to hold before actually shooting")] private float m_laserLoadingTime;
@@ -52,9 +44,6 @@ namespace Network.Connexion_Menu {
         
         public delegate void LocalCharge(bool p_isActuallyCancelling, GameObject p_source);
         public static LocalCharge OnLocalCharge;
-        
-        public delegate void LocalShot(bool p_hit);
-        public static LocalShot OnLocalShot;
 
         public static NewTargetDelegator SetNewTargetForAll;
         public static NewSensitiveTargetDelegator SetNewSensitiveTargetForAll;
@@ -67,8 +56,6 @@ namespace Network.Connexion_Menu {
 
         // Start is called before the first frame update
         private void Start() {
-            m_line = GetComponent<LineRenderer>();
-            m_line.enabled = false;
             MyNetworkManager.OnReceiveInitialData += DestroyMyself;
             MyNetworkManager.OnReceiveGameEnd += ActiveMe;
             SetNewTargetForAll += SetNewTarget;
@@ -84,8 +71,9 @@ namespace Network.Connexion_Menu {
             if (OVRInput.Get(m_input) < m_upTriggerValue) { //Let go
                 OnLaserLoad?.Invoke(IsLoading, false);
                 OnLocalCharge?.Invoke(true, gameObject);
+                if (m_isShooting && m_laserVFXHandler != null) m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.CancelAiming}, m_elapsedHoldingTime / m_laserLoadingTime);
+                
                 m_isShooting = false;
-                m_line.enabled = false;
                 m_elapsedHoldingTime = 0f;
             }
 
@@ -132,7 +120,6 @@ namespace Network.Connexion_Menu {
                             break; }
                     }
                     
-                    OnLocalShot?.Invoke(hitTheTarget);
                     StartCoroutine(ShotDownLaser(handPosition, direction, hitTheTarget));
                     
                     if (!hitTheTarget) return;
@@ -147,7 +134,7 @@ namespace Network.Connexion_Menu {
                 }
                 else if (m_transformTarget == null) {
                     
-                    bool hitSmth = Physics.Raycast(handPosition, handForward.normalized, out RaycastHit hitInfo, 10000f, m_whatDoIHitMask, QueryTriggerInteraction.Ignore);
+                    bool hitSmth = Physics.Raycast(handPosition, handForward.normalized, out RaycastHit hitInfo, 100000f, m_whatDoIHitMask, QueryTriggerInteraction.Ignore);
 
                     bool hit;
                     switch (hitSmth) {
@@ -159,7 +146,6 @@ namespace Network.Connexion_Menu {
                             }
                             else hit = false;
 
-                            m_line.enabled = false;
                             break;
                         }
                         case false:
@@ -167,33 +153,21 @@ namespace Network.Connexion_Menu {
                             break;
                     }
 
-                    OnLocalShot?.Invoke(hit);
                     StartCoroutine(ShotDownLaser(handPosition, hitInfo.point - handPosition, hit));
                 }
 
 
                 m_shutDown = true;
-                m_line.enabled = false;
             }
             
             else if (m_isShooting) { //Holding
                 OnLaserLoad?.Invoke(IsLoading, true);
                 OnLocalCharge?.Invoke(false, gameObject);
-                m_line.enabled = true;
                 m_elapsedHoldingTime += Time.deltaTime;
-                float ratio = m_elapsedHoldingTime / m_laserLoadingTime;
-                m_line.materials[0].color = new Color(((m_firstColor.r * (1-ratio)) + (m_lastColor.r * ratio)), ((m_firstColor.g * (1-ratio)) + (m_lastColor.g * ratio)), ((m_firstColor.b * (1-ratio)) + (m_lastColor.b * ratio)));
-
-                m_line.widthMultiplier = m_initialLaserSize * (1 - ratio) + (m_endLaserSize * ratio);
-
-                //Setting the right length for the laser aiming previsualization
-                Vector3 forward = transform.forward;
-                Vector3 position = transform.position;
-                bool isHitting = Physics.Raycast(position, forward, out RaycastHit ray, Mathf.Infinity, m_whatDoIHitMask);
-                m_line.SetPosition(1, position + (forward * (isHitting ? ray.distance : 100000f)));
-                m_line.SetPosition(0, position);
+                if (m_laserVFXHandler != null) m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.Aiming}, m_elapsedHoldingTime);
             }
             else if (OVRInput.Get (m_input) >= m_upTriggerValue) { // If the player press the trigger hard enough
+                if (m_laserVFXHandler != null) m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.Aiming}, 0f);
                 OnLaserLoad?.Invoke(IsLoading, true);
                 m_isShooting = true;
                 m_elapsedHoldingTime = 0f;
@@ -203,41 +177,13 @@ namespace Network.Connexion_Menu {
 
         IEnumerator ShotDownLaser(Vector3 p_startPos, Vector3 p_distance, bool p_isHitting) {
             
-            m_line.enabled = false;
-
-            GameObject instantiate = Instantiate(m_laserShotPrefab);
-
-            instantiate.transform.position = p_startPos;
-            LineRenderer line = instantiate.GetComponent<LineRenderer>();
-            line.useWorldSpace = true;
-            line.SetPosition(0, p_startPos);
-            line.SetPosition(1, p_startPos + p_distance);
-            
-            if(p_isHitting){ //If the player is hit, we make a cool FX coz player rewarding and other arguable design reasons
-                GameObject particles = Instantiate(m_prefabParticlesWhenKill, p_startPos + p_distance, new Quaternion(0, 0, 0, 0));
-                bool isFound = particles.TryGetComponent(out ParticleSystem comp);
-                StartCoroutine(ParticleStopper(particles, isFound ? comp.main.duration : 5f));
-            }
-            else if (p_distance.magnitude < 10000f && !p_isHitting) {
-                GameObject particles = Instantiate(m_prefabParticlesWallHit, p_startPos + p_distance, new Quaternion(0, 0, 0, 0));
-                bool isFound = particles.TryGetComponent(out ParticleSystem comp);
-                StartCoroutine(ParticleStopper(particles, isFound ? comp.main.duration : 5f));
-            }
-            
+            if (m_laserVFXHandler != null) m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.Shooting, hit = p_isHitting, hitPosition = p_startPos + p_distance, length = p_distance.magnitude, origin = p_startPos}, 0f);
             
             yield return new WaitForSeconds(m_laserDuration);
-            
-            
-            Destroy(instantiate);
-            
+
             m_elapsedHoldingTime = 0f;
             m_isShooting = false;
             m_shutDown = false;
-        }
-
-        IEnumerator ParticleStopper(GameObject p_particles, float p_time) {
-            yield return new WaitForSeconds(p_time);
-            Destroy(p_particles);
         }
 
         private void SetNewTarget(Transform p_newTarget) {
