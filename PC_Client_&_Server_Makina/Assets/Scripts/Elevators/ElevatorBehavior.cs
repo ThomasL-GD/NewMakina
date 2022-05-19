@@ -9,6 +9,7 @@ public class ElevatorBehavior : MonoBehaviour
     
     [SerializeField, Tooltip("The top position that the elevator will go to")] private float m_topPosition;
 
+    [SerializeField] private Transform m_elevatorCage = null;
     [SerializeField] private Light m_light;
     [SerializeField] private Color m_lightColorOff = Color.green;
     [SerializeField] private Color m_lightColorOn = Color.red;
@@ -35,8 +36,9 @@ public class ElevatorBehavior : MonoBehaviour
                 Debug.LogWarning("No AudioSource Serialized here, this elevator will thus make no sound at all", this);
             }
         }
+        if(m_elevatorCage == null) Debug.LogError("No elevator transform serialized here ! Prefabs exists for a reason you know...", this);
 #endif
-        float posY = transform.position.y;
+        float posY = m_elevatorCage.position.y;
         m_bottomPosition = posY;
         m_topPosition = posY + m_topPosition;
     }
@@ -45,25 +47,25 @@ public class ElevatorBehavior : MonoBehaviour
     {
         if(!m_activated) return;
         
-        transform.position += (m_goingUp ? Vector3.up : Vector3.down) * m_speed * Time.deltaTime;
+        m_elevatorCage.position += (m_goingUp ? Vector3.up : Vector3.down) * m_speed * Time.deltaTime;
 
-        if (m_goingUp && transform.position.y > m_topPosition)
+        if (m_goingUp && m_elevatorCage.position.y > m_topPosition)
         {
             m_goingUp = false;
             m_activated = false;
             m_light.color = m_lightColorOff;
-            Vector3 pos = transform.position;
-            transform.position = new Vector3(pos.x, m_topPosition, pos.z);
+            Vector3 pos = m_elevatorCage.position;
+            m_elevatorCage.position = new Vector3(pos.x, m_topPosition, pos.z);
             return;
         }
 
-        if (!m_goingUp && transform.position.y < m_bottomPosition)
+        if (!m_goingUp && m_elevatorCage.position.y < m_bottomPosition)
         {
             m_goingUp = true;
             m_activated = false;
             m_light.color = m_lightColorOff;
-            Vector3 pos = transform.position;
-            transform.position = new Vector3(pos.x, m_bottomPosition, pos.z);
+            Vector3 pos = m_elevatorCage.position;
+            m_elevatorCage.position = new Vector3(pos.x, m_bottomPosition, pos.z);
         }
     }
     
@@ -87,9 +89,9 @@ public class ElevatorBehavior : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        TryGetComponent(out BoxCollider boxCollider);
+        m_elevatorCage.TryGetComponent(out BoxCollider boxCollider);
         Vector3 box = Quaternion.Euler(-90, 0, 0) * boxCollider.size;
-        Vector3 origin = transform.position + Quaternion.Euler(-90, 0, 0) * boxCollider.center;
+        Vector3 origin = m_elevatorCage.position + Quaternion.Euler(-90, 0, 0) * boxCollider.center;
         Gizmos.DrawWireCube(origin + Vector3.up * m_topPosition, box);
     }
 }
