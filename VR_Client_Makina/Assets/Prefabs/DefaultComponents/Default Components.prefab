@@ -409,7 +409,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8968881240480327283
 Transform:
   m_ObjectHideFlags: 0
@@ -2823,10 +2823,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8907849920664484147}
     m_Modifications:
-    - target: {fileID: 5865232735784959965, guid: bfaa9ecd2230aa948ad1727f55e8f63e, type: 3}
-      propertyPath: m_text
-      value: 
-      objectReference: {fileID: 3089555205620326428}
     - target: {fileID: 8704895006966500736, guid: bfaa9ecd2230aa948ad1727f55e8f63e, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -2925,17 +2921,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bfaa9ecd2230aa948ad1727f55e8f63e, type: 3}
---- !u!114 &3089555205620326428 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1800678646117255698, guid: bfaa9ecd2230aa948ad1727f55e8f63e, type: 3}
-  m_PrefabInstance: {fileID: 3611048691315911182}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &5391083925970446222 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8704895006966500736, guid: bfaa9ecd2230aa948ad1727f55e8f63e, type: 3}
@@ -3006,6 +2991,10 @@ PrefabInstance:
     - target: {fileID: 495136632409972669, guid: 0aa8a13b116b9ad42bd7584cd9a27946, type: 3}
       propertyPath: m_Name
       value: Connect Pill
+      objectReference: {fileID: 0}
+    - target: {fileID: 495136632409972669, guid: 0aa8a13b116b9ad42bd7584cd9a27946, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0aa8a13b116b9ad42bd7584cd9a27946, type: 3}
@@ -3161,10 +3150,6 @@ PrefabInstance:
       propertyPath: m_prefabDeployedBeacon
       value: 
       objectReference: {fileID: 7893307315791997466, guid: b36229a91cd079a448977c4100bcc686, type: 3}
-    - target: {fileID: 5783733579950633026, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
-      propertyPath: m_stickToSpawnPosition
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5783733579950633026, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
       propertyPath: m_prefabDropDownFeedback
       value: 

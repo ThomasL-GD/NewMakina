@@ -163,7 +163,7 @@ MonoBehaviour:
   m_inflateTime: 0.2
   m_undetectedColor: {r: 1, g: 0, b: 0, a: 1}
   m_detectedColor: {r: 0, g: 1, b: 0, a: 1}
-  m_beaconDetectSound: {fileID: 0}
+  m_beaconDetectSound: {fileID: 8300000, guid: e2f9393d409fc1147a96c3e9a3a606e2, type: 3}
   m_prefabDropDownFeedback: {fileID: 0}
 --- !u!114 &5783733579950633025
 MonoBehaviour:
@@ -309,7 +309,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.15
       inSlope: 1.033376
       outSlope: 1.033376
       tangentMode: 0
@@ -319,9 +319,18 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1.5
       value: 0.8
-      inSlope: 0.53333336
-      outSlope: 0.53333336
-      tangentMode: 34
+      inSlope: 0.34183574
+      outSlope: 0.34183574
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.501
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0
@@ -333,9 +342,9 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 0.6666667
-      outSlope: 0.6666667
+      value: 0.15
+      inSlope: 0.56666666
+      outSlope: 0.56666666
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
@@ -343,8 +352,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1.5
       value: 1
-      inSlope: 0.6666667
-      outSlope: 0.6666667
+      inSlope: 0.56666666
+      outSlope: 0.56666666
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -525,7 +534,7 @@ MonoBehaviour:
       outWeight: 0.51953053
     - serializedVersion: 3
       time: 0.12991515
-      value: 0.015389685
+      value: 0
       inSlope: -23.518412
       outSlope: -23.518412
       tangentMode: 0
