@@ -1,26 +1,14 @@
 using System;
-using System.Collections;
 using Animation.AnimationDelegates;
 using CustomMessages;
 using Network;
 using Network.Connexion_Menu;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 namespace Synchronizers {
-    public class SynchronizeLaser : Synchronizer<SynchronizeLaser>
-    {
+    public class SynchronizeLaser : Synchronizer<SynchronizeLaser> {
         
-        [SerializeField] private LineRenderer m_laserAiming;
         [SerializeField] private LayerMask m_layersThatCollidesWithLaser;
-        
-        [Header("Colors")]
-        [SerializeField] private Color m_firstColor = Color.yellow;
-        [SerializeField] private Color m_lastColor = Color.white;
-        
-        [Header("Size")]
-        [SerializeField] [Range(0f,50f)] private float m_initialLaserSize;
-        [SerializeField] [Range(0f,50f)] private float m_endLaserSize;
         
         [Header("Input")]
         [SerializeField] [Range(0.01f,1f)]/**/ private float m_upTriggerValue;
@@ -30,17 +18,14 @@ namespace Synchronizers {
         [Header("Timings")]
         [SerializeField] [Range(0.1f,5f)] private float m_laserLoadingTime; //TODO : move that to initial data
         private float m_elapsedTime = 0f;
-        
-        [Header("Prefabs")]
-        [SerializeField] private GameObject m_laserPrefab;
-
-        [SerializeField] private GameObject m_prefabParticlesWhenKill = null;
-        [SerializeField] private GameObject m_prefabParticlesWallHit = null;
 
         [Header("Sounds")]
         [SerializeField] private AudioSource m_audioSource;
         [SerializeField] [Tooltip("If true, nice shot :)\nIf false, crippling emptiness...")] private bool m_niceShotQuestionMark = true;
         [SerializeField] private AudioClip m_niceShotSound = null;
+
+        [Header("Feedback")]
+        [SerializeField] private LaserVFXHandler m_laserVFXHandler = null;
 
         private bool m_isLoading = false;
 
@@ -57,8 +42,6 @@ namespace Synchronizers {
             MyNetworkManager.OnLaserAimingUpdate += SynchroniseLaserAiming;
             MyNetworkManager.OnLaserShootingUpdate += SynchroniseLaserAiming;
             MyNetworkManager.OnLaserShootingUpdate += SynchroniseShot;
-
-            m_laserAiming.enabled = false;
         }
 
         /// <summary/> Function called when the client receives the initial data
@@ -75,7 +58,7 @@ namespace Synchronizers {
         /// </summary>
         /// <param name="p_laser">The message sent by the server</param>
         private void SynchroniseLaserAiming(Laser p_laser) {
-            m_laserAiming.enabled = p_laser.laserState == LaserState.Aiming;
+            
             switch (p_laser.laserState) {
                 case LaserState.Aiming:
                     OnLaserLoad?.Invoke(IsLoading, false);
@@ -100,21 +83,10 @@ namespace Synchronizers {
         private void SynchroniseShot(Laser p_laser) {
             if (p_laser.length == 0f) p_laser.length = 10000f;
             
-            GameObject instantiate = Instantiate(m_laserPrefab);
+            Debug.Log($"hitPos : {p_laser.origin}   origin : {p_laser.origin}    length : {p_laser.length}    forwardRot : {p_laser.rotation * Vector3.forward}");
+            if(m_laserVFXHandler != null)m_laserVFXHandler.m_delegatedAction(new Laser(){hit = p_laser.hit, hitPosition = p_laser.origin + p_laser.length * (p_laser.rotation * Vector3.forward)}, 0f);
 
-            instantiate.transform.position = p_laser.origin;
-            instantiate.transform.rotation = p_laser.hit? Quaternion.LookRotation(p_laser.hitPosition - p_laser.origin, Vector3.up) : p_laser.rotation;
-            instantiate.GetComponent<LineRenderer>().SetPosition(1,  Vector3.forward*p_laser.length);
-
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (p_laser.length != 10000f && !p_laser.hit) {
-                GameObject particles = Instantiate(m_prefabParticlesWallHit, p_laser.origin + (instantiate.transform.rotation * Vector3.forward *p_laser.length ), new Quaternion(0, 0, 0, 0));
-                StartCoroutine(ParticleStopper(particles));
-            }
-            
             if(p_laser.hit){ //If the player is hit, we make a cool FX coz player rewarding and other arguable design reasons
-                GameObject particles = Instantiate(m_prefabParticlesWhenKill, p_laser.hitPosition, new Quaternion(0, 0, 0, 0));
-                StartCoroutine(ParticleStopper(particles));
                 
                 if (m_niceShotQuestionMark) { // Audio Feedback
                     m_audioSource.Stop();
@@ -124,10 +96,9 @@ namespace Synchronizers {
                 
                 SynchronizeInitialData.instance.LosePcHealth();
             }
-            
-            RaycastHit hit;
+
             Transform transform1 = transform;
-            bool hasRaycastHit = Physics.Raycast(transform1.position, transform1.forward, out hit, 1000f, 1 << 7);
+            bool hasRaycastHit = Physics.Raycast(transform1.position, transform1.forward, out RaycastHit hit, 1000f, 1 << 7);
             if (hasRaycastHit && hit.transform.gameObject.TryGetComponent(out AttackSensitiveButton script)) script.OnBeingActivated();
         }
 
@@ -141,54 +112,31 @@ namespace Synchronizers {
                 m_isLoading = true;
                 m_isTriggerPressed = true;
                 m_elapsedTime = 0f;
+                if(m_laserVFXHandler != null)m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.Aiming}, 0f);
             }
 
-            if (OVRInput.Get(m_input) < m_upTriggerValue) {
+            if (OVRInput.Get(m_input) < m_upTriggerValue) { //let go of the trigger
                 
                 MyNetworkManager.singleton.SendVrData<VrLaser>(new VrLaser(){laserState = LaserState.CancelAiming});
                 OnLaserLoad?.Invoke(IsLoading, false);
+                
+                if(m_isTriggerPressed && m_laserVFXHandler != null) m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.CancelAiming}, m_elapsedTime / m_laserLoadingTime);
+                
                 m_isTriggerPressed = false;
                 m_isLoading = false;
-                m_laserAiming.enabled = false;
                 m_elapsedTime = 0f;
             }
-            
-            if (m_isLoading && m_isTriggerPressed){
-            
-                m_laserAiming.enabled = true;
+
+            if (!m_isLoading || !m_isTriggerPressed) return; // Holding
                 m_elapsedTime += Time.deltaTime;
-                float ratio = m_elapsedTime / m_laserLoadingTime;
-                ratio = Mathf.Clamp(ratio, 0f, 1f);
-                m_laserAiming.materials[0].color = new Color(((m_firstColor.r * (1-ratio)) + (m_lastColor.r * ratio)), ((m_firstColor.g * (1-ratio)) + (m_lastColor.g * ratio)), ((m_firstColor.b * (1-ratio)) + (m_lastColor.b * ratio)));
+                if(m_laserVFXHandler != null)m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.Aiming}, m_elapsedTime / m_laserLoadingTime);
 
-                m_laserAiming.widthMultiplier = m_initialLaserSize * (1 - ratio) + (m_endLaserSize * ratio);
-
-                //Setting the right length for the laser aiming previsualization
-                Vector3 forward = Synchronizer<SynchronizeSendVrRig>.Instance.m_rightHand.forward;
-                Vector3 position = Synchronizer<SynchronizeSendVrRig>.Instance.m_rightHand.position;
-                bool isHitting = Physics.Raycast(position, forward, out RaycastHit ray, Mathf.Infinity, m_layersThatCollidesWithLaser);
-                m_laserAiming.SetPosition(1, position + (forward * (isHitting ? ray.distance : 100000f)));
-                m_laserAiming.SetPosition(0, position);
-
-                if (m_elapsedTime > m_laserLoadingTime) {
-                    
-                    m_laserAiming.enabled = false;
+                if (!(m_elapsedTime > m_laserLoadingTime)) return; // shooting
+            
                     m_elapsedTime = 0f;
-                    
+                            
                     MyNetworkManager.singleton.SendVrData<VrLaser>(new VrLaser(){laserState = LaserState.Shooting});
                     m_isLoading = false;
-
-                }
-            }
-        }
-
-        /// <summary>
-        /// Auto destroying particles when they're done
-        /// </summary>
-        /// <param name="p_particleSystem">The gameobject containing the particles system</param>
-        IEnumerator ParticleStopper(GameObject p_particleSystem) {
-            yield return new WaitForSeconds(p_particleSystem.GetComponent<ParticleSystem>().main.startLifetime.constant);
-            Destroy(p_particleSystem);
         }
     }
 }

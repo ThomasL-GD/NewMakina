@@ -597,8 +597,8 @@ MonoBehaviour:
   autoCreatePlayer: 0
   playerSpawnMethod: 0
   spawnPrefabs: []
-  m_localHost: 1
-  m_IPadress: 10.31.240.229
+  m_localHost: 0
+  m_IPadress: 10.31.241.112
   m_autoconnexionTimeInterval: 10.1
 --- !u!114 &3611048692802888146
 MonoBehaviour:
@@ -3082,6 +3082,10 @@ PrefabInstance:
       propertyPath: m_explosionTimeOnceTouchingTheGround
       value: 0.99
       objectReference: {fileID: 0}
+    - target: {fileID: 3738830432197085450, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
+      propertyPath: m_laserVFXHandler
+      value: 
+      objectReference: {fileID: 3239565818246937715}
     - target: {fileID: 5783733579950633025, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
       propertyPath: m_text
       value: 
@@ -3298,6 +3302,10 @@ PrefabInstance:
       propertyPath: m_laserAiming
       value: 
       objectReference: {fileID: 8011280134283621429}
+    - target: {fileID: 5783733579950633033, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
+      propertyPath: m_laserVFXHandler
+      value: 
+      objectReference: {fileID: 3239565818246937715}
     - target: {fileID: 5783733579950633034, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
       propertyPath: m_Name
       value: Synchronizer (plz let it be alone)
@@ -3448,6 +3456,10 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 3925877575601267190, guid: dce19f08d91541c489495dd83b7da24c, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3925877575601267194, guid: dce19f08d91541c489495dd83b7da24c, type: 3}
       propertyPath: m_synchronizeLaser
       value: 
@@ -3510,6 +3522,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dce19f08d91541c489495dd83b7da24c, type: 3}
+--- !u!114 &3239565818246937715 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8650217582137789620, guid: dce19f08d91541c489495dd83b7da24c, type: 3}
+  m_PrefabInstance: {fileID: 6124474371583144135}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c696efc70cfea724f8a3333a18f36153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &3606631557653752214 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7418506893780851025, guid: dce19f08d91541c489495dd83b7da24c, type: 3}

@@ -7,6 +7,8 @@ using Network.Connexion_Menu;
 using Synchronizers;
 
 public class HapticsManager : Synchronizer<HapticsManager> {
+
+    [SerializeField] private LaserVFXHandler m_laserVFXHandler = null;
     
     [Header("Laser Charge (must last as long as the charging time")]
     [SerializeField] private AnimationCurve m_laserChargeStrength;
@@ -49,12 +51,13 @@ public class HapticsManager : Synchronizer<HapticsManager> {
     
     // Start is called before the first frame update
     void Start() {
-        MyNetworkManager.OnLaserShootingUpdate += NetworkShotHaptic;
+        //MyNetworkManager.OnLaserShootingUpdate += NetworkShotHaptic;
         MyNetworkManager.OnLaserAimingUpdate += NetworkChargeHaptic;
         MyNetworkManager.OnReceiveBeaconDetectionUpdate += NetworkBeaconActivationHaptic;
-        LocalLaser.OnLocalShot += ShotHaptic;
+        //LocalLaser.OnLocalShot += ShotHaptic;
         LocalLaser.OnLocalCharge += ChargeHaptic;
         ElevatorBehavior.OnElevatorLocalActivation += ElevatorHaptic;
+        m_laserVFXHandler.m_deepImpact += ShotHaptic;
     }
 
     private void NetworkChargeHaptic(Laser p_laser) {

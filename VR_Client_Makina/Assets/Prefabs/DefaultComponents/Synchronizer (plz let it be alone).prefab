@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 1661527278798300204}
   - component: {fileID: 6459845886493274506}
   - component: {fileID: 3738830432197085450}
+  - component: {fileID: 6395972039275196087}
   m_Layer: 0
   m_Name: Synchronizer (plz let it be alone)
   m_TagString: Untagged
@@ -72,23 +73,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf22ad0a9ffc0744896bece452a80f7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_laserAiming: {fileID: 0}
   m_layersThatCollidesWithLaser:
     serializedVersion: 2
     m_Bits: 896
-  m_firstColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  m_lastColor: {r: 1, g: 1, b: 1, a: 1}
-  m_initialLaserSize: 8.8
-  m_endLaserSize: 0.001
   m_upTriggerValue: 0.66
   m_input: 2
   m_laserLoadingTime: 1.5
-  m_laserPrefab: {fileID: 5777138034286177843, guid: e2cb3604f1d3e5e46b7298c10065f9e7, type: 3}
-  m_prefabParticlesWhenKill: {fileID: 6186801345535467989, guid: 119ea4ac7361edb49996679ff68e6819, type: 3}
-  m_prefabParticlesWallHit: {fileID: 6027568845842637197, guid: 4a34f0e0f9120c7488999a80f7c6b0a8, type: 3}
   m_audioSource: {fileID: 0}
   m_niceShotQuestionMark: 1
   m_niceShotSound: {fileID: 8300000, guid: 40acfb257e1855345b2222c5a5a63ab9, type: 3}
+  m_laserVFXHandler: {fileID: 0}
 --- !u!114 &5783733579950633029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -304,21 +298,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5d96fbeb6956594eba1d54487b86427, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_laserVFXHandler: {fileID: 0}
   m_laserChargeStrength:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.15
-      inSlope: 1.033376
-      outSlope: 1.033376
+      value: 0.19687301
+      inSlope: 0.5389661
+      outSlope: 0.5389661
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.049312685
+      outWeight: 0.09072762
     - serializedVersion: 3
       time: 1.5
-      value: 0.8
+      value: 0.57067096
       inSlope: 0.34183574
       outSlope: 0.34183574
       tangentMode: 1
@@ -343,17 +338,17 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0.15
-      inSlope: 0.56666666
-      outSlope: 0.56666666
+      inSlope: 0.32274666
+      outSlope: 0.32274666
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1.5
-      value: 1
-      inSlope: 0.56666666
-      outSlope: 0.56666666
+      value: 0.63412
+      inSlope: 0.32274666
+      outSlope: 0.32274666
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -692,3 +687,16 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6395972039275196087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5783733579950633034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60f3c1b25c294d941a3a761a3900ec62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_customLitSettings: {fileID: 11400000, guid: 58555d8da53fdb64094cd5e50fd41663, type: 2}
