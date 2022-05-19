@@ -16,7 +16,7 @@ public class RotateAndBob : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(Vector3.forward * (m_rotationSpeed * Time.deltaTime));
+        transform.Rotate(Vector3.up * (m_rotationSpeed * Time.deltaTime));
         transform.position = m_ogPos + Vector3.up * Mathf.Cos((Time.time / Mathf.PI) * m_bobSpeed) * m_bobIntensity;
     }
 }
