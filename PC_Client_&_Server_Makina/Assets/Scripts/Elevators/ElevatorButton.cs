@@ -8,12 +8,8 @@ public class ElevatorButton : MonoBehaviour
 {
     [SerializeField] private ElevatorBehavior m_elevator;
     [SerializeField] float m_minActivationDistance = 3f;
-    [SerializeField] private Animator m_animator;
-    
+
     private bool m_inRange;
-
-    private static readonly int Switch = Animator.StringToHash("Switch");
-
     // Update is called once per frame
     void Update()
     {
@@ -24,7 +20,6 @@ public class ElevatorButton : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.F))
             {
                 m_elevator.ButtonActivateElevator();
-                m_animator.SetTrigger(Switch);
             }
         }
         else if(CameraAndUISingleton.elevatorButtonFeedback.activeSelf) CameraAndUISingleton.elevatorButtonFeedback.SetActive(false);
