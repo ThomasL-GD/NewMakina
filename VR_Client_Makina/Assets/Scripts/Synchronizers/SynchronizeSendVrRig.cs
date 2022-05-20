@@ -7,7 +7,7 @@ namespace Synchronizers {
     public class SynchronizeSendVrRig : Synchronizer<SynchronizeSendVrRig> {
 
         [Header("VR elements to track")]
-        [SerializeField] private Transform m_head;
+        [SerializeField] public Transform m_head;
         [SerializeField] private Transform m_leftHand;
         [SerializeField] public Transform m_rightHand;
 

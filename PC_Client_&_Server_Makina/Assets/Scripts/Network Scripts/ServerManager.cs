@@ -840,7 +840,8 @@ public class ServerManager : MonoBehaviour
             // Packing the values in a neat little message
             m_laserBuffer.origin = startingPoint;
             m_laserBuffer.rotation = m_vrTransformBuffer.rotationRightHand;
-            m_laserBuffer.hitPosition = hit ? direction.normalized * rayHit.distance : hitSmth ? rayHit.point: direction.normalized * 500f;
+            //TODO : Next line ain't clean...
+            m_laserBuffer.hitPosition = hit ? /*direction.normalized * rayHit.distance*/ rayHit.point : hitSmth ? rayHit.point: direction.normalized * 500f;
             m_laserBuffer.hit = hit;
         }
         //preparing to send the message
