@@ -13,7 +13,7 @@ public class LaserVFXHandler : MonoBehaviour {
     //------------------------- PRIVATE VARIABLES -------------------------//
     [SerializeField] private VisualEffect m_laserTrail;
     [SerializeField] private VisualEffect m_laserBall;
-    [SerializeField] private  string m_start = "Ss";
+    [SerializeField] private string m_start = "Ss";
     [SerializeField] private string m_stop = "Stop";
     [SerializeField] private string m_chargeLevel = "ChargeLevel";
     [SerializeField] private float m_ballSpeed = 200f;

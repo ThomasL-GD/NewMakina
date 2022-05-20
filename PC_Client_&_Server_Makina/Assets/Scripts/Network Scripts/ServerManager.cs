@@ -766,8 +766,7 @@ public class ServerManager : MonoBehaviour
         //TODO bring this verification to the server loop
         
         // If the laser is being aimed forgo the collision calculation and just send the message 
-        if (m_laserBuffer.laserState == LaserState.Shooting)
-        {
+        if (m_laserBuffer.laserState == LaserState.Shooting) {
 
             // Or une parallel line distance operations to check wether the player's pivot point is within the range of the laser's radius
 
@@ -792,14 +791,15 @@ public class ServerManager : MonoBehaviour
             
             bool hit;
             const float valueIfNoHit = 0f; //BE WARY THE VR NEEDS TO KNOW WHICH VALUE THIS IS AND WE DON'T SEND IT THROUGH NETWORK!
-            float distance = 500f;
+            float distanceFromHitToTarget = 0f;
+
             switch (hitAWall) {
                 case false : { //If there's no wall between
                     // So we measure the distance of the player's position from the line of the laser
-                    distance = Vector3.Cross(direction, playerPos - startingPoint).magnitude;
+                    distanceFromHitToTarget = Vector3.Cross(direction, playerPos - startingPoint).magnitude;
 
                     //if the distance between the line of fire and the player's position is blablablbalalboom... he ded
-                    hit = distance <= m_laserRadius && Vector3.Angle(playerPos - startingPoint, direction) < 90f;
+                    hit = distanceFromHitToTarget <= m_laserRadius && Vector3.Angle(playerPos - startingPoint, direction) < 90f;
 
                     if (hit) {
                         // todo : yeah it's not a feature Blue.. nice try..
@@ -815,6 +815,7 @@ public class ServerManager : MonoBehaviour
                 case true : {
                     m_laserBuffer.length = hitSmth ? rayHit.distance : valueIfNoHit;
                     hit = false;
+                    
                     break; }
             }
 
@@ -824,8 +825,8 @@ public class ServerManager : MonoBehaviour
                 Vector3 leurePosition = m_leureBuffer.position + Vector3.up * m_laserCheckOffset / 2f;
                 laserCriticalPath = (leurePosition + Vector3.up * m_laserCheckOffset / 2f) - startingPoint;
 
-                distance = Vector3.Cross(direction, leurePosition - startingPoint).magnitude;
-                hitLeure = distance <= m_laserRadius && Vector3.Angle(leurePosition - startingPoint, direction) < 90f;
+                distanceFromHitToTarget = Vector3.Cross(direction, leurePosition - startingPoint).magnitude;
+                hitLeure = distanceFromHitToTarget <= m_laserRadius && Vector3.Angle(leurePosition - startingPoint, direction) < 90f;
 
                 
                 if (hitLeure && !Physics.Raycast(startingPoint, laserCriticalPath.normalized, out hited, laserCriticalPath.magnitude, m_playerLayers, QueryTriggerInteraction.Ignore)) 
@@ -839,7 +840,7 @@ public class ServerManager : MonoBehaviour
             // Packing the values in a neat little message
             m_laserBuffer.origin = startingPoint;
             m_laserBuffer.rotation = m_vrTransformBuffer.rotationRightHand;
-            m_laserBuffer.hitPosition = hit ? direction*distance: hited.point;
+            m_laserBuffer.hitPosition = hit ? direction.normalized * rayHit.distance : hitSmth ? rayHit.point: direction.normalized * 500f;
             m_laserBuffer.hit = hit;
         }
         //preparing to send the message
