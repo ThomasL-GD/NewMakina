@@ -792,7 +792,7 @@ public class ServerManager : MonoBehaviour
             
             bool hit;
             const float valueIfNoHit = 0f; //BE WARY THE VR NEEDS TO KNOW WHICH VALUE THIS IS AND WE DON'T SEND IT THROUGH NETWORK!
-            float distance;
+            float distance = 500f;
             switch (hitAWall) {
                 case false : { //If there's no wall between
                     // So we measure the distance of the player's position from the line of the laser
@@ -839,7 +839,7 @@ public class ServerManager : MonoBehaviour
             // Packing the values in a neat little message
             m_laserBuffer.origin = startingPoint;
             m_laserBuffer.rotation = m_vrTransformBuffer.rotationRightHand;
-            m_laserBuffer.hitPosition = hitLeure?m_leureBuffer.position:m_pcTransformBuffer.position;
+            m_laserBuffer.hitPosition = hit ? direction*distance: hited.point;
             m_laserBuffer.hit = hit;
         }
         //preparing to send the message
