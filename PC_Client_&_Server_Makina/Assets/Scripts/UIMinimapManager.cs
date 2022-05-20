@@ -28,7 +28,7 @@ public class UIMinimapManager : MonoBehaviour {
     [Header("Elevators")]
     [SerializeField] [Tooltip("The prefab of an UI elevator\nMust have a Rect Transform")] private GameObject m_uiElevatorPrefab = null;
     [SerializeField] [Tooltip("The proportion taken by this element\n0 means nothing and 1 means all the size of the map canvas")] private Vector2 m_elevatorsAnchorRatio = new Vector2(0.1f, 0.2f);
-    private Transform m_elevatorParent = null;
+    private RectTransform m_elevatorParent = null;
     
     [Header("VR Hearts")]
     [SerializeField] [Tooltip("The prefab of a Vr Heart\nMust have a Rect Transform")] private GameObject m_uiVrHeartPrefab = null;
@@ -84,9 +84,13 @@ public class UIMinimapManager : MonoBehaviour {
         m_beaconAnchorRatio = 1 / (m_mapRealSize / p_initialData.beaconRange);
 
         //Instantiate and place every elevator
-        m_elevatorParent = Instantiate(new GameObject(), m_mapElement).transform;
+        m_elevatorParent = Instantiate(new GameObject(), m_mapElement).AddComponent<RectTransform>();
+        m_elevatorParent.position = Vector3.zero;
+        m_elevatorParent.anchorMin = Vector2.zero;
+        m_elevatorParent.anchorMax = Vector2.one;
         m_elevatorParent.gameObject.name = "UI Elevators";
         foreach (Vector3 elevatorPos in SynchroniseElevators.Instance.elevatorPositions) {
+            Debug.Log($"elevator instantiated : {RatioOnMap(elevatorPos)}");
             PlaceAnchors(Instantiate(m_uiElevatorPrefab, m_elevatorParent).GetComponent<RectTransform>(), RatioOnMap(elevatorPos), m_elevatorsAnchorRatio);
         }
         
