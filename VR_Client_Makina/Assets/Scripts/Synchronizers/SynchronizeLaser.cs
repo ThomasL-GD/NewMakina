@@ -83,8 +83,8 @@ namespace Synchronizers {
         private void SynchroniseShot(Laser p_laser) {
             if (p_laser.length == 0f) p_laser.length = 10000f;
             
-            Debug.Log($"hitPos : {p_laser.origin}   origin : {p_laser.origin}    length : {p_laser.length}    forwardRot : {p_laser.rotation * Vector3.forward}");
-            if(m_laserVFXHandler != null)m_laserVFXHandler.m_delegatedAction(new Laser(){hit = p_laser.hit, hitPosition = p_laser.origin + p_laser.length * (p_laser.rotation * Vector3.forward)}, 0f);
+            Debug.Log($"hit position : {p_laser.hitPosition}    hit : {p_laser.hit}", this);
+            if(m_laserVFXHandler != null)m_laserVFXHandler.m_delegatedAction(new Laser(){hit = p_laser.hit, hitPosition = p_laser.hitPosition}, 0f);
 
             if(p_laser.hit){ //If the player is hit, we make a cool FX coz player rewarding and other arguable design reasons
                 
