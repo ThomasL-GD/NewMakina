@@ -5,13 +5,10 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 
-namespace Synchronizers
-{
-    public class SynchronizeLaser : Synchronizer<SynchronizeLaser>
-    {
-        [SerializeField] private LineRenderer m_lazerPreshot;
-        [SerializeField] private GameObject m_laserPrefab;
+namespace Synchronizers {
+    public class SynchronizeLaser : Synchronizer<SynchronizeLaser> {
 
+        [SerializeField] private LaserVFXHandler m_laserVFXHandler;
         [SerializeField] private Volume m_volume;
         [SerializeField] private Transform m_rightHand;
         [SerializeField] private Transform m_pcPlayer;
@@ -19,34 +16,48 @@ namespace Synchronizers
         [SerializeField, Tooltip("transition speed in weight per second")] private float m_smoothTransitionSpeed;
 
         private float m_targetIntensity;
+        private float m_elapsedChargingTime = 0f;
+        private float m_lastTimeLaserReceived = 0f;
 
         /// <summary/> Awake is called before Start
-        private void Awake()
-        {
+        private void Awake() {
             // base.Awake();
             ClientManager.OnReceiveLaserPreview += SynchroniseLaserPreshot;
-            ClientManager.OnReceiveLaser += SynchroniseLaserPreshot;
             ClientManager.OnReceiveLaser += SynchroniseShot;
             ClientManager.OnReceiveInitialData += ReceiveInitialData;
-
-            m_lazerPreshot.enabled = false;
         }
 
         private void ReceiveInitialData(InitialData pitialData) {
-            m_lazerPreshot.enabled = false;
+            
         }
 
         /// <summary/> This function checks wether the laser is aiming or shooting and changing it's state based on that
         /// <param name="p_laser"> The message sent by the server </param>
-        private void SynchroniseLaserPreshot(Laser p_laser) => m_lazerPreshot.enabled = p_laser.laserState == LaserState.Aiming;
+        private void SynchroniseLaserPreshot(Laser p_laser) {
+            switch (p_laser.laserState) {
+                case LaserState.Aiming: {
+                    if (m_elapsedChargingTime == 0f) m_lastTimeLaserReceived = Time.time;
+                    m_elapsedChargingTime += Time.time - m_lastTimeLaserReceived;
+                    m_laserVFXHandler.m_delegatedAction?.Invoke(new Laser(){laserState = LaserState.Aiming}, m_elapsedChargingTime);
+                    break;
+                }
+                case LaserState.CancelAiming when m_elapsedChargingTime != 0f:
+                    m_laserVFXHandler.m_delegatedAction?.Invoke(new Laser(){laserState = LaserState.CancelAiming}, m_elapsedChargingTime);
+                    m_elapsedChargingTime = 0f;
+                    break;
+                case LaserState.Shooting:
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
 
 
-        private void Update()
-        {
+        private void Update() {
+            
             float intensity = m_volume.weight;
             intensity = Mathf.MoveTowards(intensity, m_targetIntensity, m_smoothTransitionSpeed * Time.deltaTime);
             m_volume.weight = intensity;
-            if (!m_lazerPreshot.enabled)
+            if (m_elapsedChargingTime == 0f)
             {
                 m_volume.weight = 0f;
                 m_targetIntensity = 0f;
@@ -64,12 +75,11 @@ namespace Synchronizers
             m_targetIntensity = Mathf.Max(1f - distance,0f);
         }
         
-        /// <summary/> This function is called when the laser is shooting and instantiates the shot
+        /// <summary/> This function is called when the laser is shooting and gives the message to the VFX
         /// <param name="p_laser"> The message sent by the server </param>
-        private void SynchroniseShot(Laser p_laser)
-        {
-            // Instantiating the shot
-            Instantiate(m_laserPrefab,p_laser.origin,p_laser.rotation);
+        private void SynchroniseShot(Laser p_laser) {
+            m_elapsedChargingTime = 0f;
+            m_laserVFXHandler.m_delegatedAction?.Invoke(p_laser, m_elapsedChargingTime);
         }
     }
 }
