@@ -110,13 +110,13 @@ namespace Network.Connexion_Menu {
                             hitTheTarget = distance <= m_laserRadius && Vector3.Angle(targetPos - handPosition, handForward) < 90f;
 
                             //Giving the 
-                            direction = hitTheTarget ? (laserCriticalPath) : (hitSmth ? hitInfo.point - handPosition : handForward * 10000f);
+                            direction = hitTheTarget ? (laserCriticalPath) : (hitSmth ? hitInfo.point - handPosition : handForward * 1000f);
 
                             break; }
 
                         case true : { //If there's a wall between the target and the hand
                             hitTheTarget = false;
-                            direction = hitSmth ? hitInfo.point - handPosition : handForward * 10000f;
+                            direction = hitSmth ? hitInfo.point - handPosition : handForward * 1000f;
                             break; }
                     }
                     
@@ -153,7 +153,7 @@ namespace Network.Connexion_Menu {
                             break;
                     }
 
-                    StartCoroutine(ShotDownLaser(handPosition, hitInfo.point == Vector3.zero ? handPosition + handForward.normalized * 10000f : hitInfo.point - handPosition, hit));
+                    StartCoroutine(ShotDownLaser(handPosition, hitInfo.point == Vector3.zero ? handPosition + handForward.normalized * 1000f : hitInfo.point - handPosition, hit));
                 }
 
 
