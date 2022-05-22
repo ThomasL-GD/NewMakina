@@ -16,9 +16,10 @@ namespace Grabbabble_Type_Beat {
         [SerializeField] private Vector3 m_grabbedItemsPositionInHand;
 
         [Header("Pull")]
-        [SerializeField] private bool m_pull = true;
+        [SerializeField] [Tooltip("If false, will disable the entire feature")] private bool m_pull = true;
+        [SerializeField] [Tooltip("When you let go the trigger while pulling an object from afar, will :\nIf true : Throw the object depending on the hand movement\nIf false : The object will go back to its original position")] private bool m_throwMidair = true;
         [SerializeField] [Range(10f,100000f)] private float m_pullMaxDistance;
-        [SerializeField] [Range(0.1f,100f)] private float m_pullSpeed;
+        [SerializeField] [Range(0.1f,500f)] private float m_pullSpeed;
         [SerializeField] [Range(0.1f,100f)] private float m_pullRadius;
         [SerializeField] private LayerMask m_layersThatPulls;
         private bool m_isThereAnObjectPulled = false;
@@ -168,8 +169,11 @@ namespace Grabbabble_Type_Beat {
             p_objectPulled.ChangeMaterial(false);
             
             //Throw that midair
-            // p_objectPulled.BeGrabbed(p_objectPulled.transform.parent, Vector3.zero);
-            // p_objectPulled.BeLetGo(m_grabInput);
+            if(m_throwMidair){
+                p_objectPulled.BeGrabbed(p_objectPulled.transform.parent, Vector3.zero);
+                p_objectPulled.BeLetGo(m_grabInput);
+                isPushing = false;
+            }
 
             while (isPushing) {
             

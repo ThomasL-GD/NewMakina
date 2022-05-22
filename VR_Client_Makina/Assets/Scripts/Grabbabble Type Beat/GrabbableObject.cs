@@ -83,7 +83,7 @@ namespace Grabbabble_Type_Beat {
             if (!m_isGrabbable) return;
         
             if (p_other.gameObject.layer == VrHandBehaviour.s_layer && p_other.TryGetComponent(out VrHandBehaviour script)) {
-                if (script.isFree) {
+                if (script.isFree && !m_isCaught) {
                     script.Catch(this);
                 }
             }
