@@ -153,7 +153,7 @@ namespace Network.Connexion_Menu {
                             break;
                     }
 
-                    StartCoroutine(ShotDownLaser(handPosition, hitInfo.point - handPosition, hit));
+                    StartCoroutine(ShotDownLaser(handPosition, hitInfo.point == Vector3.zero ? handPosition + handForward.normalized * 10000f : hitInfo.point - handPosition, hit));
                 }
 
 
