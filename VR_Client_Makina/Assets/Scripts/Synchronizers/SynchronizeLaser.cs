@@ -32,7 +32,7 @@ namespace Synchronizers {
         public AnimationBoolChange OnLaserLoad;
         public AnimationTrigger OnLaserShot;
 
-        private static readonly int IsLoading = Animator.StringToHash("IsLoading");
+        private static readonly int IsLoading = Animator.StringToHash("IsAiming");
         private static readonly int IsShooting = Animator.StringToHash("IsShooting");
 
         // Start is called before the first frame update
@@ -61,11 +61,8 @@ namespace Synchronizers {
             
             switch (p_laser.laserState) {
                 case LaserState.Aiming:
-                    OnLaserLoad?.Invoke(IsLoading, false);
                     break;
                 case LaserState.Shooting:
-                    OnLaserLoad?.Invoke(IsLoading, false);
-                    OnLaserShot?.Invoke(IsShooting);
                     break;
                 case LaserState.CancelAiming:
                     break;
@@ -85,7 +82,9 @@ namespace Synchronizers {
             
             Debug.Log($"hit position : {p_laser.hitPosition}    hit : {p_laser.hit}", this);
             if(m_laserVFXHandler != null)m_laserVFXHandler.m_delegatedAction(new Laser(){hit = p_laser.hit, hitPosition = p_laser.hitPosition, laserState = p_laser.laserState}, 0f);
-
+            OnLaserLoad?.Invoke(IsLoading, false);
+            OnLaserShot?.Invoke(IsShooting);
+            
             if(p_laser.hit){ //If the player is hit, we make a cool FX coz player rewarding and other arguable design reasons
                 
                 if (m_niceShotQuestionMark) { // Audio Feedback
@@ -113,6 +112,7 @@ namespace Synchronizers {
                 m_isTriggerPressed = true;
                 m_elapsedTime = 0f;
                 if(m_laserVFXHandler != null)m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.Aiming}, 0f);
+                OnLaserLoad?.Invoke(IsLoading, true);
             }
 
             if (OVRInput.Get(m_input) < m_upTriggerValue) { //let go of the trigger

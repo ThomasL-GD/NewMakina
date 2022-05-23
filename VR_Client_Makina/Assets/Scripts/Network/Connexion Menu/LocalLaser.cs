@@ -8,7 +8,6 @@ using UnityEngine.Serialization;
 
 namespace Network.Connexion_Menu {
 
-    [RequireComponent(typeof(LineRenderer))]
     public class LocalLaser : MonoBehaviour{
 
         [Header("Input")]
@@ -51,7 +50,7 @@ namespace Network.Connexion_Menu {
         public AnimationBoolChange OnLaserLoad;
         public AnimationTrigger OnLaserShot;
 
-        private static readonly int IsLoading = Animator.StringToHash("IsLoading");
+        private static readonly int IsLoading = Animator.StringToHash("IsAiming");
         private static readonly int IsShooting = Animator.StringToHash("IsShooting");
 
         // Start is called before the first frame update
