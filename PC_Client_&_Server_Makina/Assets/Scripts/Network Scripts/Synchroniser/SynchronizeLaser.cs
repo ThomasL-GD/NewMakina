@@ -13,6 +13,7 @@ namespace Synchronizers {
         [SerializeField] private Transform m_rightHand;
         [SerializeField] private Transform m_pcPlayer;
         [SerializeField] private float m_shotSensibleRange = 5f;
+        [SerializeField] private float m_supposedChargeTime = 1.5f; //TODO : That is so trash, move that to initial data for the love of zombie jesus
         [SerializeField, Tooltip("transition speed in weight per second")] private float m_smoothTransitionSpeed;
 
         private float m_targetIntensity;
@@ -38,16 +39,17 @@ namespace Synchronizers {
                 case LaserState.Aiming: {
                     if (m_elapsedChargingTime == 0f) m_lastTimeLaserReceived = Time.time;
                     m_elapsedChargingTime += Time.time - m_lastTimeLaserReceived;
-                    m_laserVFXHandler.m_delegatedAction?.Invoke(new Laser(){laserState = LaserState.Aiming}, m_elapsedChargingTime);
+                    m_laserVFXHandler.m_delegatedAction?.Invoke(new Laser(){laserState = LaserState.Aiming}, m_elapsedChargingTime / m_supposedChargeTime);
                     break;
                 }
                 case LaserState.CancelAiming when m_elapsedChargingTime != 0f:
-                    m_laserVFXHandler.m_delegatedAction?.Invoke(new Laser(){laserState = LaserState.CancelAiming}, m_elapsedChargingTime);
+                    m_laserVFXHandler.m_delegatedAction?.Invoke(new Laser(){laserState = LaserState.CancelAiming}, m_elapsedChargingTime / m_supposedChargeTime);
                     m_elapsedChargingTime = 0f;
                     break;
                 case LaserState.Shooting:
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    Debug.LogWarning("How ?! How could I receive a laserAim delegate with a shooting laserState ?!", this);
+                    break;
             }
         }
 
@@ -79,7 +81,7 @@ namespace Synchronizers {
         /// <param name="p_laser"> The message sent by the server </param>
         private void SynchroniseShot(Laser p_laser) {
             m_elapsedChargingTime = 0f;
-            m_laserVFXHandler.m_delegatedAction?.Invoke(p_laser, m_elapsedChargingTime);
+            m_laserVFXHandler.m_delegatedAction?.Invoke(p_laser, 0f);
         }
     }
 }

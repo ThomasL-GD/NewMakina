@@ -88,6 +88,12 @@ public class UIMinimapManager : MonoBehaviour {
         m_elevatorParent.position = Vector3.zero;
         m_elevatorParent.anchorMin = Vector2.zero;
         m_elevatorParent.anchorMax = Vector2.one;
+        m_elevatorParent.anchoredPosition = Vector2.zero;
+        m_elevatorParent.localPosition = Vector3.zero;
+        m_elevatorParent.position = Vector3.zero;
+        m_elevatorParent.offsetMin = Vector2.zero;
+        m_elevatorParent.offsetMax = Vector2.zero;
+        m_elevatorParent.anchoredPosition = Vector2.zero;
         m_elevatorParent.gameObject.name = "UI Elevators";
         foreach (Vector3 elevatorPos in SynchroniseElevators.Instance.elevatorPositions) {
             Debug.Log($"elevator instantiated : {RatioOnMap(elevatorPos)}");
