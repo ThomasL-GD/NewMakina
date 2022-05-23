@@ -8,6 +8,8 @@ namespace Synchronizers {
     public class SynchronizerHearts : Synchronizer<SynchronizerHearts> {
         
         [SerializeField] [Tooltip("The prefab of the hearts that will be spawned on server connection")] private GameObject m_heartPrefabs;
+        [SerializeField] private Transform[] m_UiLives;
+        private int m_livesLeft = 0;
 
         [SerializeField] private AudioSource m_audioSource;
         [SerializeField] private AudioClip m_heartDestroyedSound = null;
@@ -59,6 +61,8 @@ namespace Synchronizers {
                 }
             }
 
+            m_livesLeft = p_initialData.healthVrPlayer;
+
             // Saving the list
             m_hearts = hearts.ToArray();
         }
@@ -97,7 +101,9 @@ namespace Synchronizers {
             
             StopCoroutine(flash);
             heart.GetComponent<LineRenderer>().enabled = false;
-            
+            m_UiLives[m_livesLeft-1].gameObject.SetActive(false);
+            m_livesLeft--;
+
             //Destroying the heart game object
             //Destroy(heart); 
         }
@@ -110,6 +116,7 @@ namespace Synchronizers {
             while (p_heartLineRenderer != null)
             {
                 p_heartLineRenderer.enabled = !p_heartLineRenderer.enabled;
+                m_UiLives[m_livesLeft-1].gameObject.SetActive(!m_UiLives[m_livesLeft-1].gameObject.activeSelf);
                 yield return new WaitForSeconds(m_heartLaserFlashPhase);
             }
         }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1701524832266796532}
   - component: {fileID: 1701524832266796535}
   - component: {fileID: 1701524832266796534}
+  - component: {fileID: 2960914434938501362}
   m_Layer: 0
   m_Name: Makimain R
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1701524832266796536}
-  m_LocalRotation: {x: -0.70710677, y: -0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -51,7 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_animators:
   - {fileID: 5568851226773889167}
-  m_localLaser: {fileID: 0}
+  m_localLaser: {fileID: 2960914434938501362}
   m_synchronizeLaser: {fileID: 0}
   m_vrHand: {fileID: 1701524832266796532}
 --- !u!114 &1701524832266796532
@@ -90,7 +91,7 @@ CapsuleCollider:
   m_Radius: 0.06
   m_Height: 0.228
   m_Direction: 2
-  m_Center: {x: 0.01, y: 0.04, z: -0.06}
+  m_Center: {x: 0.01, y: 0.04, z: 0.01}
 --- !u!54 &1701524832266796534
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -107,6 +108,31 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2960914434938501362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1701524832266796536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea2baeb4068614349a208c0eda09bf18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_input: 2
+  m_upTriggerValue: 0.58
+  m_laserVFXHandler: {fileID: 0}
+  m_laserLoadingTime: 1.5
+  m_laserDuration: 0.55
+  m_initialLaserSize: 9
+  m_endLaserSize: 0.01
+  m_laserRadius: 0
+  m_targetThatIsSensitive: {fileID: 0}
+  m_target: {fileID: 0}
+  m_whatDoIHitMask:
+    serializedVersion: 2
+    m_Bits: 896
 --- !u!1 &7571086205992148716
 GameObject:
   m_ObjectHideFlags: 0
@@ -131,7 +157,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7571086205992148716}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0.0107}
+  m_LocalPosition: {x: -0, y: 0, z: 0.0803}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -171,7 +197,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 478a89845a3eafb47935edc89558da59, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.161
+      value: -0.0914
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 478a89845a3eafb47935edc89558da59, type: 3}
       propertyPath: m_LocalRotation.w
