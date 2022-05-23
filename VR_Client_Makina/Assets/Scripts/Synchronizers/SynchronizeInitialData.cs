@@ -9,9 +9,6 @@ namespace Synchronizers
     public class SynchronizeInitialData : Synchronizer<SynchronizeInitialData>
     {
 
-        [SerializeField,Tooltip("the TMP Text element that keeps track of the PC player's health")] private TextMeshPro m_pcPlayerHealthText;
-        [SerializeField,Tooltip("the TMP Text element that keeps track of the VR player's health")] private TextMeshPro m_vrPlayerHealthText;
-
         /// <summary/> The PC Health data saved localy
         private int m_pcHealth;
         
@@ -37,9 +34,6 @@ namespace Synchronizers
                 Debug.LogWarning("BROOOOOOOOOOOOOOOOOOO ! There are too many Singletons broda", this);
             }
             
-            
-            m_pcPlayerHealthText.enabled = false;
-            m_vrPlayerHealthText.enabled = false;
         }
 
         /// <summary/> Function called when the client received the initial data
@@ -71,22 +65,13 @@ namespace Synchronizers
 
         [ContextMenu("test")]
         /// <summary/> Updates both player's health on the PC GUI based on the local variables
-        private void UpdateHealthText()
-        {
-            m_pcPlayerHealthText.text = $"Enemy lives : {m_vrHealth}";
-            m_vrPlayerHealthText.text = $"Hearts : {m_pcHealth}";
-
+        private void UpdateHealthText() {
             if(m_healtheedbackCoroutine != null) StopCoroutine(m_healtheedbackCoroutine);
             m_healtheedbackCoroutine = StartCoroutine(ShowHealthText());
         }
 
-        IEnumerator ShowHealthText()
-        {
-            m_pcPlayerHealthText.enabled = true;
-            m_vrPlayerHealthText.enabled = true;
+        IEnumerator ShowHealthText() {
             yield return new WaitForSeconds(m_showHealthTime);
-            m_pcPlayerHealthText.enabled = false;
-            m_vrPlayerHealthText.enabled = false;
         }
     }
 }
