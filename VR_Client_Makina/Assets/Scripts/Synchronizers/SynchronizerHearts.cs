@@ -90,10 +90,13 @@ namespace Synchronizers {
             m_hearts[p_index].heartObject.GetComponent<HeartIdentifier>().Detonate();
             
             // Starting the Coroutine called to make the heart beacon flash
-            StartCoroutine(FlashMyHeart(heart.GetComponent<LineRenderer>()));
+            Coroutine flash = StartCoroutine(FlashMyHeart(heart.GetComponent<LineRenderer>()));
             
             // Waiting for the destruction time
             yield return new WaitForSeconds(m_heartDestructionTime);
+            
+            StopCoroutine(flash);
+            heart.GetComponent<LineRenderer>().enabled = false;
             
             //Destroying the heart game object
             //Destroy(heart); 

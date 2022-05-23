@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 6459845886493274506}
   - component: {fileID: 3738830432197085450}
   - component: {fileID: 6395972039275196087}
+  - component: {fileID: 3611048692519340846}
   m_Layer: 0
   m_Name: Synchronizer (plz let it be alone)
   m_TagString: Untagged
@@ -68,7 +69,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5783733579950633034}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf22ad0a9ffc0744896bece452a80f7d, type: 3}
   m_Name: 
@@ -113,6 +114,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &5783733579950633027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,7 +132,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_heartPrefabs: {fileID: 1392772383475821737, guid: be8f4e1bc2d318a4caad43b62a2163ea, type: 3}
-  m_heartRangePrefab: {fileID: 0}
   m_audioSource: {fileID: 0}
   m_heartDestroyedSound: {fileID: 8300000, guid: a6f5d3b53fcdf9342b13c0abc931c9d9, type: 3}
   m_heartDestructionTime: 6
@@ -151,14 +156,14 @@ MonoBehaviour:
   m_stickToSpawnPosition: 0
   m_maxSlotsLoading: 1
   m_dropDown: 0
-  m_prefabBeaconAmmo: {fileID: 0}
-  m_prefabDeployedBeacon: {fileID: 0}
+  m_prefabBeaconAmmo: {fileID: 6606253773114217689, guid: 1828515427f5cff448da50184b7adf33, type: 3}
+  m_prefabDeployedBeacon: {fileID: 7893307315791997466, guid: b36229a91cd079a448977c4100bcc686, type: 3}
   m_range: 20
-  m_inflateTime: 0.2
-  m_undetectedColor: {r: 1, g: 0, b: 0, a: 1}
-  m_detectedColor: {r: 0, g: 1, b: 0, a: 1}
+  m_inflateTime: 0.178
+  m_undetectedColor: {r: 0, g: 0, b: 0, a: 1}
+  m_detectedColor: {r: 1, g: 1, b: 1, a: 1}
   m_beaconDetectSound: {fileID: 8300000, guid: e2f9393d409fc1147a96c3e9a3a606e2, type: 3}
-  m_prefabDropDownFeedback: {fileID: 0}
+  m_prefabDropDownFeedback: {fileID: 5155275930683169883, guid: 652058eb3f88af74797b4974bbae9634, type: 3}
 --- !u!114 &5783733579950633025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,6 +183,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &5783733579950633030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,8 +196,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4dfe9da88aa9324887c562d163056d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_pcPlayerHealthText: {fileID: 0}
-  m_vrPlayerHealthText: {fileID: 0}
   m_showHealthTime: 3
 --- !u!114 &2047781738407387244
 MonoBehaviour:
@@ -209,19 +213,17 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  m_stickToSpawnPosition: 0
+  m_stickToSpawnPosition: 1
   m_maxSlotsLoading: 1
   m_dropDown: 0
   m_prefabBomb: {fileID: 3341839070961395165, guid: aa38a4b808199ec4c8e8c389850e7e1d, type: 3}
-  m_colorWhenAlmostExploding: {r: 1, g: 0, b: 0, a: 1}
+  m_colorWhenAlmostExploding: {r: 1, g: 0.2554821, b: 0, a: 1}
   m_prefabFxBoomHit: {fileID: 2578695409718655044, guid: 7f12a1289625b5848b0eeca163c0fcbd, type: 3}
   m_prefabFxBoomMiss: {fileID: 2578695409718655044, guid: a8f0e125f8b772b4ab22e300ebffc0c7, type: 3}
   m_audioSource: {fileID: 0}
   m_niceShotQuestionMark: 1
-  m_niceShotSound: {fileID: 0}
-  m_prefabDropDownFeedback: {fileID: 0}
+  m_niceShotSound: {fileID: 8300000, guid: 40acfb257e1855345b2222c5a5a63ab9, type: 3}
+  m_prefabDropDownFeedback: {fileID: 5155275930683169883, guid: 652058eb3f88af74797b4974bbae9634, type: 3}
 --- !u!114 &434578376286307432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,6 +237,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_elevators:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -270,7 +276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_prefabTpPoint: {fileID: 5780574956763540240, guid: a6f8cd8a9d1197d459bf8799a02af2cf, type: 3}
-  m_particlesSpeed: 15.9
+  m_particlesSpeed: 30.9
   m_prefabParticles: {fileID: 7130397999828551174, guid: fd9bcf479ebec7d4db0faaecd1844c47, type: 3}
   m_soundWhenRollback: {fileID: 0}
 --- !u!114 &6459845886493274506
@@ -700,3 +706,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_customLitSettings: {fileID: 11400000, guid: 58555d8da53fdb64094cd5e50fd41663, type: 2}
+--- !u!114 &3611048692519340846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5783733579950633034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 996db782a76fd5545906202588a1e6d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_leure: {fileID: 0}
