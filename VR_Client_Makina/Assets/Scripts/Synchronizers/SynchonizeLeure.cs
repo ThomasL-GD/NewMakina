@@ -2,10 +2,13 @@ using CustomMessages;
 using Network;
 using Synchronizers;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class SynchonizeLeure : Synchronizer<SynchonizeLeure>
 {
     [SerializeField] private GameObject m_leure;
+
+    [SerializeField] private VisualEffect m_deathFX;
     // Start is called before the first frame update
     void Awake()
     {
@@ -23,6 +26,8 @@ public class SynchonizeLeure : Synchronizer<SynchonizeLeure>
 
     void ReceiveDestroyLeure(DestroyLeure p_destroyLeure)
     {
+        m_deathFX.transform.position = m_leure.transform.position;
+        m_deathFX.SendEvent("StartLeureDeath");
         m_leure.SetActive(false);
         m_leure.transform.position = Vector3.down * 1000f;
     }
