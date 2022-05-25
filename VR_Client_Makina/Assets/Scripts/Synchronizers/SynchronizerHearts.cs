@@ -9,7 +9,8 @@ namespace Synchronizers {
         
         [SerializeField] [Tooltip("The prefab of the hearts that will be spawned on server connection")] private GameObject m_heartPrefabs;
         [SerializeField] private Transform[] m_UiLives;
-        private int m_livesLeft = 0;
+        private byte m_livesLeft = 0;
+        private bool m_hpInUiAreWorking = false;
 
         [SerializeField] private AudioSource m_audioSource;
         [SerializeField] private AudioClip m_heartDestroyedSound = null;
@@ -61,7 +62,17 @@ namespace Synchronizers {
                 }
             }
 
-            m_livesLeft = p_initialData.healthVrPlayer;
+            m_hpInUiAreWorking = p_initialData.healthVrPlayer <= m_UiLives.Length;
+
+            if (m_hpInUiAreWorking) {
+                m_livesLeft = (byte) p_initialData.healthVrPlayer;
+
+                for (var i = 0; i < m_UiLives.Length; i++) {
+                    m_UiLives[i].gameObject.SetActive(i <= m_livesLeft); //Setting active as many UI hearts as the number of lives
+                }
+            }
+            
+            
 
             // Saving the list
             m_hearts = hearts.ToArray();
@@ -101,8 +112,10 @@ namespace Synchronizers {
             
             StopCoroutine(flash);
             heart.GetComponent<LineRenderer>().enabled = false;
-            if(m_livesLeft >= 1)m_UiLives[m_livesLeft-1].gameObject.SetActive(false);
-            m_livesLeft--;
+            if(m_hpInUiAreWorking) {
+                m_UiLives[m_livesLeft - 1].gameObject.SetActive(false);
+                m_livesLeft--;
+            }
 
             //Destroying the heart game object
             //Destroy(heart); 
@@ -116,7 +129,7 @@ namespace Synchronizers {
             while (p_heartLineRenderer != null)
             {
                 p_heartLineRenderer.enabled = !p_heartLineRenderer.enabled;
-                if(m_livesLeft >= 1)m_UiLives[m_livesLeft-1].gameObject.SetActive(!m_UiLives[m_livesLeft-1].gameObject.activeSelf);
+                if(m_hpInUiAreWorking)m_UiLives[m_livesLeft-1].gameObject.SetActive(!m_UiLives[m_livesLeft-1].gameObject.activeSelf);
                 yield return new WaitForSeconds(m_heartLaserFlashPhase);
             }
         }
