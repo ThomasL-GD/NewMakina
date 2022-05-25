@@ -28,7 +28,7 @@ namespace Synchronizers {
             ClientManager.OnReceiveInitialData += ReceiveInitialData;
         }
 
-        private void ReceiveInitialData(InitialData pitialData) {
+        private void ReceiveInitialData(InitialData p_initialData) {
             
         }
 
@@ -59,8 +59,7 @@ namespace Synchronizers {
             float intensity = m_volume.weight;
             intensity = Mathf.MoveTowards(intensity, m_targetIntensity, m_smoothTransitionSpeed * Time.deltaTime);
             m_volume.weight = intensity;
-            if (m_elapsedChargingTime == 0f)
-            {
+            if (m_elapsedChargingTime == 0f) {
                 m_volume.weight = 0f;
                 m_targetIntensity = 0f;
                 return;
