@@ -101,7 +101,7 @@ namespace Synchronizers {
             
             StopCoroutine(flash);
             heart.GetComponent<LineRenderer>().enabled = false;
-            m_UiLives[m_livesLeft-1].gameObject.SetActive(false);
+            if(m_livesLeft >= 1)m_UiLives[m_livesLeft-1].gameObject.SetActive(false);
             m_livesLeft--;
 
             //Destroying the heart game object
@@ -116,7 +116,7 @@ namespace Synchronizers {
             while (p_heartLineRenderer != null)
             {
                 p_heartLineRenderer.enabled = !p_heartLineRenderer.enabled;
-                m_UiLives[m_livesLeft-1].gameObject.SetActive(!m_UiLives[m_livesLeft-1].gameObject.activeSelf);
+                if(m_livesLeft >= 1)m_UiLives[m_livesLeft-1].gameObject.SetActive(!m_UiLives[m_livesLeft-1].gameObject.activeSelf);
                 yield return new WaitForSeconds(m_heartLaserFlashPhase);
             }
         }
