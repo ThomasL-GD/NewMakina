@@ -20,12 +20,14 @@ public class SynchonizeLeure : Synchronizer<SynchonizeLeure>
     // Update is called once per frame
     void ReceiveSpawnLeure(SpawnLeure p_spawnLeure)
     {
+        Debug.Log("DECOY  spawn");
         m_leure.transform.position = Vector3.down * 1000f;
         m_leure.SetActive(true);
     }
 
-    void ReceiveDestroyLeure(DestroyLeure p_destroyLeure)
-    {
+    void ReceiveDestroyLeure(DestroyLeure p_destroyLeure) {
+        
+        Debug.Log("DECOY MOTHERFUCKIN DEATH");
         m_deathFX.transform.position = m_leure.transform.position;
         m_deathFX.SendEvent("StartLeureDeath");
         m_leure.SetActive(false);

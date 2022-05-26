@@ -222,7 +222,10 @@ namespace Network {
 
         private void ReceiveSpawnLeure(SpawnLeure p_spawnLeure) => OnReceiveSpawnLeure?.Invoke(p_spawnLeure);
 
-        private void ReceiveDestroyLeure(DestroyLeure p_destroyLeure) => OnReceiveDestroyLeure?.Invoke(p_destroyLeure);
+        private void ReceiveDestroyLeure(DestroyLeure p_destroyLeure){
+            Debug.Log("Received DestroyLeure");
+            OnReceiveDestroyLeure?.Invoke(p_destroyLeure);
+        }
 
         private void ReceiveLeureTransform(LeureTransform p_leureTransform) => OnReceiveLeureTransform?.Invoke(p_leureTransform);
 

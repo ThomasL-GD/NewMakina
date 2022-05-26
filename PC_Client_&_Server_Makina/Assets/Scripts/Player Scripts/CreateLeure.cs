@@ -59,14 +59,17 @@ public class CreateLeure : AbstractMechanic
         UIManager.Instance.StartLeureCooldown();
         yield return new WaitForSeconds(m_leureLifeTime);
 
+        Debug.Log("Decoy natural death");
         DestroyLeure();
     }
 
     private void DestroyLeure(DestroyLeure p_message)
     {
-        DestroyLeure();
+        Debug.Log("Decoy network death");
+        DestroyLeure(false);
     }
-    private void DestroyLeure()
+    
+    private void DestroyLeure(bool p_mustSendNetworkMessage = true)
     {
         StopCoroutine(m_killLeureCoroutine);
         StopCoroutine(m_soundCoroutine); // We stop the sound in case the decoy was destroyed before the first sound is done playing
@@ -75,11 +78,13 @@ public class CreateLeure : AbstractMechanic
         m_invisibilityEndSound.Play();
         
         Destroy(m_leure);
-        NetworkClient.Send(new DestroyLeure());
+        Debug.Log("Decoy death");
+        if(p_mustSendNetworkMessage)NetworkClient.Send(new DestroyLeure());
         NetworkClient.Send(new PcInvisibility{isInvisible = false});
 
         foreach (var cd in m_coolDownScripts)cd.StartReloading();
     }
+    
     void ResetCooldown()
     {
         m_canSpawnLeure = true;

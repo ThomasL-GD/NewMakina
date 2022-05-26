@@ -37,8 +37,13 @@ namespace Synchronizers {
         private void SynchroniseLaserPreshot(Laser p_laser) {
             switch (p_laser.laserState) {
                 case LaserState.Aiming: {
-                    if (m_elapsedChargingTime == 0f) m_lastTimeLaserReceived = Time.time;
-                    m_elapsedChargingTime += Time.time - m_lastTimeLaserReceived;
+                    if (m_elapsedChargingTime == 0f) {
+                        m_lastTimeLaserReceived = Time.time;
+                        m_elapsedChargingTime = 0.01f;
+                    }
+                    else {
+                        m_elapsedChargingTime += Time.time - m_lastTimeLaserReceived;
+                    }
                     m_laserVFXHandler.m_delegatedAction?.Invoke(new Laser(){laserState = LaserState.Aiming}, m_elapsedChargingTime / m_supposedChargeTime);
                     break;
                 }
