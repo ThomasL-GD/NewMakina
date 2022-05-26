@@ -833,6 +833,7 @@ public class ServerManager : MonoBehaviour
                 {
                     if(m_flashCoroutine != null)StopCoroutine(m_flashCoroutine);
                     m_flashCoroutine = StartCoroutine(Flash(m_flashDuration));
+                    Debug.Log("Vr killed the DECOY");
                     SendToBothClients(new DestroyLeure());
                 }
             }
@@ -1072,13 +1073,14 @@ public class ServerManager : MonoBehaviour
         OnServerTick -= SendLeureTransform;
         m_vrNetworkConnection?.Send(m_leureBuffer);
     }
-    private void SendDestroyLeure()
-    {
+    private void SendDestroyLeure() {
+        OnServerTick -= SendDestroyLeure;
         m_vrNetworkConnection?.Send(new DestroyLeure());
     }
     private void SendSpawnLeure()
     {
         m_vrNetworkConnection?.Send(new SpawnLeure());
+        OnServerTick -= SendSpawnLeure;
     }
 
     private void SendPotentialSpawnPoints() {
