@@ -53,22 +53,24 @@ public class ServerManager : MonoBehaviour
     [SerializeField] [Tooltip("Do not edit this value, it id for debug only.\nYou can remove this SerializeField if everything is working fine")] private bool m_isInTutorial = false;
     
     /// <summary/> The custom variables added onto the Network Manager
-    [Header("Laser :")]
-    [Header("Game Settings")]
+    [Header("Laser")]
     [SerializeField, Tooltip("The radius of the VR laser")] private float f_laserRadius = 20f;
     private float m_laserRadius = 20f;
-    
-    [SerializeField, Tooltip("The speed of the elevators in m/s")] private float f_elevatorSpeed = 5.8f;
-    private float m_elevatorSpeed = 5.8f;
-    
-    [SerializeField, Tooltip("The speed of the elevators in m/s")] private float f_elevatorWaitTime = 1f;
-    private float m_elevatorWaitTime = 1f;
     
     [SerializeField, Tooltip("The offset of the raycast shot to the player to check if the lazer hit")] private float f_laserCheckOffset = 2f;
     private float m_laserCheckOffset = 2f;
 
     [SerializeField] private LayerMask f_playerLayers;
     private LayerMask m_playerLayers;
+    
+    
+    [Header("Elevators")]
+    
+    [SerializeField, Tooltip("The speed of the elevators in m/s")] private float f_elevatorSpeed = 5.8f;
+    private float m_elevatorSpeed = 5.8f;
+    
+    [SerializeField, Tooltip("The speed of the elevators in m/s")] private float f_elevatorWaitTime = 1f;
+    private float m_elevatorWaitTime = 1f;
     
 
     [Header("Hearts")]
@@ -79,6 +81,15 @@ public class ServerManager : MonoBehaviour
     private int m_vrPlayerHealth = 3;
     [SerializeField, Tooltip("The amount of times the PC player has to eliminated to lose")] private int f_pcPlayerHealth = 3;
     private int m_pcPlayerHealth = 3;
+    
+    [Header("Heart Radius")] [Header(" ")]
+    [SerializeField, Range(0f,100f)]private float f_heartZoneRadius = 5f;
+    private float m_heartZoneRadius = 0f;
+    
+    private float m_heartTimer = 0f;
+    
+    [SerializeField, Range(0f,100f)] private float f_heartDestroyTime = 5f;
+    private float m_heartDestroyTime = 0f;
 
     
     [Header("Beacons")]
@@ -100,6 +111,9 @@ public class ServerManager : MonoBehaviour
     private float m_beaconRange = 400f;
 
     [Header(" ")] [Header("Bombs")] [Header(" ")]
+    [SerializeField, Tooltip("If false, will play the game without the bombs feature"), Range(0f, 120f)] private bool f_isUsingBombs = true;
+    private bool m_isUsingBombs = true;
+    
     [SerializeField, Tooltip("The interval at which the bomb spawn"), Range(0f, 120f)] private float f_bombRespawnTime = 30f;
     private float m_bombRespawnTime = 30f;
     [SerializeField, Tooltip("The maximum amount of bombs"), Range(1, 5)] private int f_maxBombs = 1;
@@ -120,15 +134,6 @@ public class ServerManager : MonoBehaviour
     [SerializeField, Tooltip("the minimum and maximum dot product from the look angle to clamp")]private Vector2 f_flashClamp;
     private Vector2 m_flashClamp;
     private int m_currentBombAmount = 0;
-    
-    [Header(" ")] [Header("Heart Radius")] [Header(" ")]
-    [SerializeField, Range(0f,100f)]private float f_heartZoneRadius = 5f;
-    private float m_heartZoneRadius = 0f;
-    
-    private float m_heartTimer = 0f;
-    
-    [SerializeField, Range(0f,100f)] private float f_heartDestroyTime = 5f;
-    private float m_heartDestroyTime = 0f;
     
     [Header("Respawn")]
     [SerializeField, Range(0f,100f)] private ushort f_numberOfSpawnPointsToDisplay = 3;
@@ -276,6 +281,10 @@ public class ServerManager : MonoBehaviour
     /// </summary>
     private void StartGame()
     {
+        
+        m_isUsingBombs = f_isUsingBombs;
+        
+        
         //Setting up senders
         OnServerTick += SendVrTransform;
         OnServerTick += SendPcTransform;
@@ -283,7 +292,7 @@ public class ServerManager : MonoBehaviour
         OnServerTick += SendPcInvisbility;
         OnServerTick += SendBeaconsPositions;
         OnServerTick += BeaconDetectionCheck;
-        OnServerTick += SendBombPositions;
+        if(m_isUsingBombs)OnServerTick += SendBombPositions;
         OnServerTick += CheckHealths;
         OnServerTick += CheckHeartDestroyRange;
         
@@ -392,7 +401,7 @@ public class ServerManager : MonoBehaviour
             m_firstTime = false;
         }
         m_spawnInitialBeacons = StartCoroutine(SpawnInitialBeacons());
-        m_spawnBombs = StartCoroutine(BombSpawnTimer());
+        if(m_isUsingBombs)m_spawnBombs = StartCoroutine(BombSpawnTimer());
     }
 
     private void EndGame(ClientConnection p_winner = ClientConnection.PcPlayer)

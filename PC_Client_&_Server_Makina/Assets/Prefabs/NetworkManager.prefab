@@ -31,6 +31,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -47,26 +48,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39b2515ea9cd24b45add3d611e6eb66e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_tickrate: 30
-  m_laserRadius: 5
-  m_laserChargeTime: 1
-  m_heartTransforms:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  m_vrPlayerHealth: 3
-  m_pcPlayerHealth: 10
-  m_beaconSpawnPositions:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  m_beaconRespawnTime: 30
-  m_beaconLifeTime: 29
-  m_beaconRange: 100
+  f_tickrate: 30
+  m_isInTutorial: 0
+  f_laserRadius: 20
+  f_laserCheckOffset: 2
+  f_playerLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  f_elevatorSpeed: 5.8
+  f_elevatorWaitTime: 1
+  f_heartTransforms: []
+  f_vrPlayerHealth: 3
+  f_pcPlayerHealth: 3
+  f_heartZoneRadius: 5
+  f_heartDestroyTime: 5
+  f_initialBeacons: 2
+  f_initialBeaconSpawnDelay: 10
+  f_beaconRespawnTime: 30
+  f_beaconLifeTime: 10
+  f_maxBeacons: 3
+  f_beaconRange: 400
+  f_isUsingBombs: 1
+  f_bombRespawnTime: 30
+  f_maxBombs: 2
+  f_bombExplosionRange: 50
+  f_bomDetonationTime: 1
+  f_flairRaiseSpeed: 30
+  f_flairDetonationTime: 2
+  f_flashDuration: 5
+  f_flashClamp: {x: 0, y: 0}
+  f_numberOfSpawnPointsToDisplay: 3
 --- !u!114 &7405762300650092719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,7 +90,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5bb93a40cdb7034abe331e9351b0906, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_player: {fileID: 0}
+  m_playerObject: {fileID: 0}
+  m_isInGame: 0
 --- !u!114 &7405762300650092881
 MonoBehaviour:
   m_ObjectHideFlags: 0

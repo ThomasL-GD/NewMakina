@@ -7,6 +7,7 @@ using UnityEngine;
 public class ElevatorButton : MonoBehaviour
 {
     [SerializeField] private ElevatorBehavior m_elevator;
+    [SerializeField] private KeyCode m_keyToActivate = KeyCode.Mouse0;
     [SerializeField] float m_minActivationDistance = 3f;
     [SerializeField] private Animator m_animator;
     
@@ -21,7 +22,7 @@ public class ElevatorButton : MonoBehaviour
                     m_minActivationDistance;
         if(m_inRange)
         {
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(m_keyToActivate))
             {
                 m_elevator.ButtonActivateElevator();
                 m_animator.SetTrigger(Switch);
