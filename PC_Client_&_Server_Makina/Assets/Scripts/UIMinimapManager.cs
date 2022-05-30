@@ -306,7 +306,6 @@ public class UIMinimapManager : MonoBehaviour {
                     float rescaleFactor = (1f - (((p_elementData.originalRatioOnMap - p_playerPositionRatio).magnitude - (1f/(2f*m_mapZoom))) * p_scaleFactor)); //Rescale this element the farther it gets depending on p_scaleFactor
                     if (rescaleFactor > 0f) p_anchorRatio *= rescaleFactor;
                     else p_anchorRatio = Vector2.zero;
-                    Debug.Log($"Complex operation   one minus = {(((p_elementData.originalRatioOnMap - p_playerPositionRatio).magnitude - 1f) * p_scaleFactor)}    scale factor * mag = {((p_elementData.originalRatioOnMap - p_playerPositionRatio).magnitude - 1f) * p_scaleFactor}    magnitude -1 = {(p_elementData.originalRatioOnMap - p_playerPositionRatio).magnitude - 1f}");
                     PlaceAnchors(p_elementData.rectTransform, p_playerPositionRatio + ((p_elementData.originalRatioOnMap - p_playerPositionRatio).normalized * (1f / (m_mapZoom * 2f))), p_anchorRatio);
                 }
                 break;
