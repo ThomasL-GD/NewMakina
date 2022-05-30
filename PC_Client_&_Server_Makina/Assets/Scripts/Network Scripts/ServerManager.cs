@@ -111,7 +111,7 @@ public class ServerManager : MonoBehaviour
     private float m_beaconRange = 400f;
 
     [Header(" ")] [Header("Bombs")] [Header(" ")]
-    [SerializeField, Tooltip("If false, will play the game without the bombs feature"), Range(0f, 120f)] private bool f_isUsingBombs = true;
+    [SerializeField, Tooltip("If false, will play the game without the bombs feature")] private bool f_isUsingBombs = true;
     private bool m_isUsingBombs = true;
     
     [SerializeField, Tooltip("The interval at which the bomb spawn"), Range(0f, 120f)] private float f_bombRespawnTime = 30f;

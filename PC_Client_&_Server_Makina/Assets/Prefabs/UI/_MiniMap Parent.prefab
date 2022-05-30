@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5818218129353352166}
   - component: {fileID: 4278440989723603635}
-  - component: {fileID: 6221704533871553929}
   - component: {fileID: 587784943038598907}
   - component: {fileID: 7221178118646133474}
+  - component: {fileID: 8158213588428766185}
+  - component: {fileID: 2632073540204087911}
   m_Layer: 5
   m_Name: _MiniMap Parent
   m_TagString: Untagged
@@ -50,20 +51,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 443932585566286549}
   m_CullTransparentMesh: 1
---- !u!114 &6221704533871553929
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 443932585566286549}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding: {x: 0, y: 0, z: 0, w: 0}
-  m_Softness: {x: 0, y: 0}
 --- !u!114 &587784943038598907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,18 +79,67 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mapZoom: 3
   m_mapRealSize: 500
+  m_mapShape: 1
+  m_playerRotation: 0
   m_mapElement: {fileID: 6170765363649126406}
   m_playerElement: {fileID: 4152417719192746116}
   m_vrPlayerElement: {fileID: 9113800001540022864}
   m_vrAnchorRatio: {x: 0.2, y: 0.2}
   m_uiElevatorPrefab: {fileID: 4957033386553800585, guid: 7c45163981c56c44d92493abdaa7ad28, type: 3}
   m_elevatorsAnchorRatio: {x: 0.1, y: 0.2}
+  m_elevatorsStickToTheEdges: 1
+  m_elevatorsEdgeScaleFactor: 5
   m_uiVrHeartPrefab: {fileID: 4539529624648881730, guid: 9a7e52ea801bd2140b360796e91a2727, type: 3}
   m_vrHeartAnchorRatio: {x: 0.1, y: 0.2}
   m_heartDestroyBlinkTotalTime: 2.12
-  m_heartDestroyBlinkTiming: 0.501
+  m_heartDestroyBlinkTiming: 0.5
+  m_heartsStickToTheEdges: 1
+  m_heartsEdgeScaleFactor: 1
   m_prefabBeaconEmpty: {fileID: 2147959968426151158, guid: d0b0eb349c52886488e689fc8ba92f2b, type: 3}
   m_prefabBeaconDetecting: {fileID: 1162523461285351762, guid: 5a926d69777a8544598b8d57416ffbec, type: 3}
+--- !u!114 &8158213588428766185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 443932585566286549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowMaskGraphic: 1
+--- !u!114 &2632073540204087911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 443932585566286549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.003921569}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: b965d95431acd74479191298c8b04234, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &618572063508696305
 GameObject:
   m_ObjectHideFlags: 0
