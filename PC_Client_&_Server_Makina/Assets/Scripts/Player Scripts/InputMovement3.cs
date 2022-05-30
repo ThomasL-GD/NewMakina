@@ -634,19 +634,25 @@ namespace Player_Scripts
         /// <summary/> Updating the camera's position
         void UpdateCameraPosition(bool p_snapped)
         {
+            Vector3 position = transform.position;
             if(!m_smoothStepping  || !p_snapped && !m_smoothing)
             {
-                m_cameraParentTr.position = transform.position;
+                m_cameraParentTr.position = position;
                 return;
             }
 
+            if (Vector3.Distance(m_cameraParentTr.position, position) > 1f)
+            {
+                m_cameraParentTr.position = position;
+                return;
+            }
+            
         
             m_smoothing = true;
-            Vector3 targetPosition = transform.position;
-            Vector3 startingPosition = new Vector3(targetPosition.x, m_cameraParentTr.position.y, targetPosition.z);
-            float movementSpeed = m_smoothingSpeed * (Vector3.Distance(startingPosition, targetPosition) + 1f);
+            Vector3 startingPosition = new Vector3(position.x, m_cameraParentTr.position.y, position.z);
+            float movementSpeed = m_smoothingSpeed * (Vector3.Distance(startingPosition, position) + 1f);
             
-            m_cameraParentTr.position = Vector3.MoveTowards(startingPosition, targetPosition,movementSpeed * Time.deltaTime);
+            m_cameraParentTr.position = Vector3.MoveTowards(startingPosition, position,movementSpeed * Time.deltaTime);
             if (transform.position == m_cameraParentTr.position) m_smoothing = false;
         }
 
