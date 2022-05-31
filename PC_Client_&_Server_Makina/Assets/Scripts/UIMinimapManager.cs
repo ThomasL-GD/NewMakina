@@ -55,6 +55,15 @@ public class UIMinimapManager : MonoBehaviour {
     /// <summary>Reminder : this anchor ratio does not work like the others</summary>
     private float m_beaconAnchorRatio;
     private List<UIBeaconData> m_beaconDatas = new List<UIBeaconData>();
+    
+    [Space, Header("Floor Dimming")]
+    [SerializeField] [Range(-100f, 1000f)] [Tooltip("The maximum height the player can be to be considered at the bottom floor and he minimal height the player can be to be considered at the middle floor")] private float m_heightBetweenBottomAndMiddleFloor = 30f;
+    [SerializeField] [Range(-100f, 1000f)] [Tooltip("The maximum height the player can be to be considered at the middle floor and he minimal height the player can be to be considered at the top floor")] private float m_heightBetweenMiddleAndTopFloor = 60f;
+
+    [SerializeField] [Tooltip("The mask that will show when the player is NOT at the bottom floor")] private RectTransform m_bottomFloorDimmer = null;
+    [SerializeField] [Tooltip("The mask that will show when the player is NOT at the middle floor")] private RectTransform m_middleFloorDimmer = null;
+    [SerializeField] [Tooltip("The mask that will show when the player is NOT at the top floor")] private RectTransform m_topFloorDimmer = null;
+    
 
     private bool m_isInGame = false;
     
@@ -107,6 +116,10 @@ public class UIMinimapManager : MonoBehaviour {
         m_beaconDatas = new List<UIBeaconData>();
         m_heartDatas = new UIElementData[p_initialData.heartPositions.Length];
         m_elevatorDatas = new UIElementData[SynchroniseElevators.Instance.elevatorPositions.Length];
+        
+        if(m_bottomFloorDimmer != null)m_bottomFloorDimmer.gameObject.SetActive(false);
+        if(m_middleFloorDimmer != null)m_middleFloorDimmer.gameObject.SetActive(false);
+        if(m_topFloorDimmer != null)m_topFloorDimmer.gameObject.SetActive(false);
         #endregion
 
         m_beaconAnchorRatio = 1 / (m_mapRealSize / p_initialData.beaconRange);
@@ -216,6 +229,12 @@ public class UIMinimapManager : MonoBehaviour {
             m_mapElement.pivot = Vector2.one - playerPositionRatio;
             m_mapElement.localRotation = Quaternion.Euler(0, 0, playerRotationY);
         }
+        #endregion
+
+        #region Floor Dimmers
+            if(m_bottomFloorDimmer != null)m_bottomFloorDimmer.gameObject.SetActive(playerPosition.y < m_heightBetweenBottomAndMiddleFloor);
+            if(m_middleFloorDimmer != null)m_middleFloorDimmer.gameObject.SetActive(playerPosition.y >= m_heightBetweenBottomAndMiddleFloor && playerPosition.y <= m_heightBetweenMiddleAndTopFloor);
+            if(m_topFloorDimmer != null)m_topFloorDimmer.gameObject.SetActive(playerPosition.y > m_heightBetweenMiddleAndTopFloor);
         #endregion
         
         playerPositionRatio = Vector2.one - playerPositionRatio; // We get a more correct player ratio for other elements that will read it

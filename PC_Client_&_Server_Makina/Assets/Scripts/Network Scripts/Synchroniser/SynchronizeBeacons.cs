@@ -28,8 +28,8 @@ namespace Synchronizers {
 
             public Beacons(GameObject p_beaconPrefabInstance, float p_id, Vector3? p_position = null, bool p_detected = false, int p_BitMaskIndex = -1)
             {
-                p_beaconPrefabInstance.name += p_id.ToString();
                 beaconPrefabInstance = Instantiate(p_beaconPrefabInstance);
+                beaconPrefabInstance.name += p_id.ToString();
                 beaconPrefabInstance.transform.position = p_position?? Vector3.zero;
                 
                 ID = p_id;

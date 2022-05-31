@@ -587,7 +587,7 @@ public class ServerManager : MonoBehaviour
     /// <param name="p_ID"> The unique ID of the beacon </param>
     void AddBeacon(float p_ID)
     {
-        List<BeaconData> beaconList = (m_beaconsPositionsBuffer.data == null) ? new List<BeaconData>() :m_beaconsPositionsBuffer.data.ToList() ;
+        List<BeaconData> beaconList = (m_beaconsPositionsBuffer.data == null) ? new List<BeaconData>() : m_beaconsPositionsBuffer.data.ToList() ;
         
         beaconList.Add(new BeaconData(){beaconID = p_ID,detectingPlayer = false,isActive = false});
 
