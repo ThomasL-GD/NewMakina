@@ -44,7 +44,9 @@ namespace Synchronizers {
         /// I should add that this documentation is very well made (ღゝ◡╹)ノ♡</summary>
         /// <param name="p_initialdata">The message sent by the server, NO SHiT !</param>
         private void ReceiveInitialData(InitialData p_initialdata) {
-            m_player.transform.position = m_spawnPoints[Random.Range(0, m_spawnPoints.Length)].position;
+            Vector3 spawnPos = m_spawnPoints[Random.Range(0, m_spawnPoints.Length)].position;
+            FadeToBlack.FadeToBlackNow?.Invoke(m_player.transform, spawnPos);
+            
             m_numberOfSpawnPointsToSend = p_initialdata.numberOfSpawnPointsToDisplay;
         }
 
