@@ -3,6 +3,7 @@ using CustomMessages;
 using Network;
 using Network.Connexion_Menu;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Tutorial {
 
@@ -35,7 +36,6 @@ namespace Tutorial {
             foreach (MeshRenderer meshRenderer in m_renderers) {
                 meshRenderer.enabled = true;
             }
-            LocalLaser.SetNewSensitiveTargetForAll?.Invoke(this);
             LocalBeaconFeedback.fakePcPlayerTarget = this;
         }
 
@@ -66,7 +66,6 @@ namespace Tutorial {
         private void GuessIllDie() {
             GetComponent<Emerge>().OnEmergeDone -= StartRunning;
             m_isRunning = false;
-            LocalLaser.SetNewSensitiveTargetForAll?.Invoke(null);
             LocalBeaconFeedback.fakePcPlayerTarget = null;
             TutorialManager.singleton.StartCoroutine(TutorialManager.singleton.NextStep());
         }
