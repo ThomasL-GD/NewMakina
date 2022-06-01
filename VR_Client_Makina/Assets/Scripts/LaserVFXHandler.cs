@@ -37,6 +37,7 @@ public class LaserVFXHandler : MonoBehaviour {
         switch (p_laser.laserState) {
             
             case LaserState.Aiming:
+                if(m_yeetRoutine != null) StopCoroutine(m_yeetRoutine);
                 SetParent(m_parent);
                 SetFloatInVFXs(m_chargeLevel, p_chargedLvl);
                 SendEventInVFXs(m_start);
