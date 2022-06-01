@@ -12,7 +12,7 @@ namespace Network.Connexion_Menu {
 
         [Header("Input")]
         [SerializeField] private OVRInput.Axis1D m_input;
-        [SerializeField] [Range(0.01f, 1f)]/**/ private float m_upTriggerValue;
+        [SerializeField] [Range(0.01f, 1f)] private float m_upTriggerValue;
 
         [Header("Feedback")]
         [SerializeField] private LaserVFXHandler m_laserVFXHandler;
@@ -20,33 +20,23 @@ namespace Network.Connexion_Menu {
         [Header("Timings & size")]
         [SerializeField] [Range(0.1f, 5f)] [Tooltip("The time needed to hold before actually shooting")] private float m_laserLoadingTime;
         [SerializeField] [Range(0.1f, 5f)] [Tooltip("The time the laser feedback will stay alive")] private float m_laserDuration;
-        [SerializeField] [Range(0f, 50f)] [Tooltip("The size of the laser at the very beginning of loading")] private float m_initialLaserSize;
-        [SerializeField] [Range(0f, 50f)] [Tooltip("The size of the laser at the very beginning of loading")] private float m_endLaserSize;
         [SerializeField] [Range(0f, 50f)] [Tooltip("The radius of the auto-aim")] private float m_laserRadius;
+        [SerializeField] [Range(100f, 10000f)] [Tooltip("The max range of a laser shot")] private float m_laserMaxRange = 1000f;
 
         private bool m_isShooting = false;
         private bool m_shutDown = false;
         private float m_elapsedHoldingTime = 0f;
-
-        [HideInInspector] public AttackSensitiveButton m_targetThatIsSensitive = null;
-        [HideInInspector] public Transform m_target = null;
-        private Transform m_transformTarget => (m_targetThatIsSensitive == null) ? m_target : m_targetThatIsSensitive.transform;
         
 
         [Header("Layer Masks")]
-        [FormerlySerializedAs("m_mask"), SerializeField] LayerMask m_whatDoIHitMask = ~(1 << 7);
+        [FormerlySerializedAs("m_mask"), SerializeField, Tooltip("Every Layer that is taken nto account when firing a laser")] LayerMask m_whatDoIHitMask = ~(1 << 7);
+        [SerializeField, Tooltip("The layer(s) that are considered as targets")] LayerMask m_targetLayers = ~(1 << 7);
 
         private bool m_isActive = true;
-
-        public delegate void NewTargetDelegator(Transform p_newTarget);
-        public delegate void NewSensitiveTargetDelegator(AttackSensitiveButton p_newTarget);
         
         public delegate void LocalCharge(bool p_isActuallyCancelling, GameObject p_source);
         public static LocalCharge OnLocalCharge;
-
-        public static NewTargetDelegator SetNewTargetForAll;
-        public static NewSensitiveTargetDelegator SetNewSensitiveTargetForAll;
-
+        
         public AnimationBoolChange OnLaserLoad;
         public AnimationTrigger OnLaserShot;
 
@@ -57,8 +47,8 @@ namespace Network.Connexion_Menu {
         private void Start() {
             MyNetworkManager.OnReceiveInitialData += DestroyMyself;
             MyNetworkManager.OnReceiveGameEnd += ActiveMe;
-            SetNewTargetForAll += SetNewTarget;
-            SetNewSensitiveTargetForAll += SetNewSensitiveTarget;
+
+            m_whatDoIHitMask |= m_targetLayers; //adding the targets to the main layer mask so we don't ignore the target layer in case the game designer didn't put them in
         }
 
         // Update is called once per frame
@@ -85,77 +75,34 @@ namespace Network.Connexion_Menu {
                 
                 Vector3 handForward = transform.forward;
                 Vector3 handPosition = transform.position;
-                
-                if(m_transformTarget != null) {
 
-                    //Setting the right length for the laser aiming previsualization
-                    Vector3 targetPos = m_transformTarget.position;
-                    Vector3 laserCriticalPath = targetPos - handPosition;
+                Vector3 direction;
+                bool hit;
 
-                    // Hitboxes Verification (blame Blue)
-                    bool hitAWall = Physics.Raycast(handPosition, laserCriticalPath.normalized, out RaycastHit wallHitInfo, laserCriticalPath.magnitude, m_whatDoIHitMask, QueryTriggerInteraction.Ignore);
-                
-                    
-                    bool hitSmth = Physics.Raycast(handPosition, handForward.normalized, out RaycastHit hitInfo, 10000f, m_whatDoIHitMask, QueryTriggerInteraction.Ignore);
-                    
-                    bool hitTheTarget;
-                    Vector3 direction;
-                    switch (hitAWall) {
-                        case false : { //If there's no wall between
-                            // So we measure the distance of the player's position from the line of the laser
-                            float distance = Vector3.Cross(handForward, targetPos - handPosition).magnitude;
+                bool targetHit = Physics.SphereCast(new Ray(handPosition, handForward.normalized), m_laserRadius, out RaycastHit targetHitInfo, m_laserMaxRange, m_targetLayers);
 
-                            //if the distance between the line of fire and the player's position is blablablbalalboom... he ded
-                            hitTheTarget = distance <= m_laserRadius && Vector3.Angle(targetPos - handPosition, handForward) < 90f;
+                if (targetHit) {
+                    bool hitAWall = Physics.Raycast(handPosition, (targetHitInfo.point - handPosition).normalized, out RaycastHit wallHitInfo, (targetHitInfo.point - handPosition).magnitude, m_whatDoIHitMask, QueryTriggerInteraction.Ignore);
 
-                            //Giving the 
-                            direction = hitTheTarget ? (laserCriticalPath) : (hitSmth ? hitInfo.point - handPosition : handForward * 1000f);
-
-                            break; }
-
-                        case true : { //If there's a wall between the target and the hand
-                            hitTheTarget = false;
-                            direction = hitSmth ? hitInfo.point - handPosition : handForward * 1000f;
-                            break; }
-                    }
-                    
-                    StartCoroutine(ShotDownLaser(handPosition, direction, hitTheTarget));
-                    
-                    if (!hitTheTarget) return;
-                        if (m_targetThatIsSensitive != null) m_targetThatIsSensitive.OnBeingActivated();
-                        else{
-                            if(hitInfo.transform.gameObject.TryGetComponent(out AttackSensitiveButton script)) script.OnBeingActivated();
-#if UNITY_EDITOR
-                            else Debug.LogError("No script found on target ???");
-#endif
-                        }
+                    if (!hitAWall || wallHitInfo.collider.gameObject == targetHitInfo.collider.gameObject) { //Hit without any obstacle
                         
-                }
-                else if (m_transformTarget == null) {
-                    
-                    bool hitSmth = Physics.Raycast(handPosition, handForward.normalized, out RaycastHit hitInfo, 100000f, m_whatDoIHitMask, QueryTriggerInteraction.Ignore);
+                        if(targetHitInfo.transform.gameObject.TryGetComponent(out AttackSensitiveButton script)) script.OnBeingActivated();
 
-                    bool hit;
-                    switch (hitSmth) {
-                        case true: {
-                            m_shutDown = true;
-                            if (hitInfo.transform.gameObject.TryGetComponent(out AttackSensitiveButton script)) {
-                                hit = true;
-                                script.OnBeingActivated();
-                            }
-                            else hit = false;
-
-                            break;
-                        }
-                        case false:
-                            hit = false;
-                            break;
+                        direction = targetHitInfo.point - handPosition;
+                        hit = true;
                     }
-
-                    StartCoroutine(ShotDownLaser(handPosition, hitInfo.point == Vector3.zero ? handPosition + handForward.normalized * 1000f : hitInfo.point - handPosition, hit));
+                    else { //there is an obstacle on the way
+                        direction = wallHitInfo.point - handPosition;
+                        hit = false;
+                    }
                 }
-
-
+                else { //If there's no target hit
+                    direction = handPosition + handForward * m_laserMaxRange;
+                    hit = false;
+                }
+                
+                StartCoroutine(ShotDownLaser(handPosition, direction, hit));
+                
                 m_shutDown = true;
             }
             
@@ -185,21 +132,8 @@ namespace Network.Connexion_Menu {
             m_shutDown = false;
         }
 
-        private void SetNewTarget(Transform p_newTarget) {
-            m_target = p_newTarget;
-        }
-
-        private void SetNewSensitiveTarget(AttackSensitiveButton p_newTarget) {
-            m_targetThatIsSensitive = p_newTarget;
-        }
-
         private void DestroyMyself(InitialData p_initialData) => m_isActive = false;
 
         private void ActiveMe(GameEnd p_gameEnd) => m_isActive = true;
-
-        private void OnDestroy() {
-            SetNewTargetForAll -= SetNewTarget;
-            SetNewSensitiveTargetForAll -= SetNewSensitiveTarget;
-        }
     }
 }
