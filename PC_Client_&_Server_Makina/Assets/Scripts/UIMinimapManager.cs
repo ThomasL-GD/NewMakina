@@ -232,9 +232,9 @@ public class UIMinimapManager : MonoBehaviour {
         #endregion
 
         #region Floor Dimmers
-            if(m_bottomFloorDimmer != null)m_bottomFloorDimmer.gameObject.SetActive(playerPosition.y < m_heightBetweenBottomAndMiddleFloor);
-            if(m_middleFloorDimmer != null)m_middleFloorDimmer.gameObject.SetActive(playerPosition.y >= m_heightBetweenBottomAndMiddleFloor && playerPosition.y <= m_heightBetweenMiddleAndTopFloor);
-            if(m_topFloorDimmer != null)m_topFloorDimmer.gameObject.SetActive(playerPosition.y > m_heightBetweenMiddleAndTopFloor);
+            if(m_bottomFloorDimmer != null)m_bottomFloorDimmer.gameObject.SetActive(!(playerPosition.y < m_heightBetweenBottomAndMiddleFloor));
+            if(m_middleFloorDimmer != null)m_middleFloorDimmer.gameObject.SetActive(!(playerPosition.y >= m_heightBetweenBottomAndMiddleFloor && playerPosition.y <= m_heightBetweenMiddleAndTopFloor));
+            if(m_topFloorDimmer != null)m_topFloorDimmer.gameObject.SetActive(!(playerPosition.y > m_heightBetweenMiddleAndTopFloor));
         #endregion
         
         playerPositionRatio = Vector2.one - playerPositionRatio; // We get a more correct player ratio for other elements that will read it
