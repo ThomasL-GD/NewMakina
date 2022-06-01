@@ -1168,6 +1168,7 @@ Transform:
   - {fileID: 3300932795837576209}
   - {fileID: 4746853022665992247}
   - {fileID: 1332402302232181509}
+  - {fileID: 6612660620465125872}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2582,6 +2583,73 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6060156903864494812, guid: e5f574f67b974df46ba7c545920e1593, type: 3}
   m_PrefabInstance: {fileID: 857677995367189993}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3543425376596423744
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8907849920664484147}
+    m_Modifications:
+    - target: {fileID: 7703448221081390512, guid: 28dba3ab147474b40acd3324bff9623a, type: 3}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7703448221081390512, guid: 28dba3ab147474b40acd3324bff9623a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7703448221081390512, guid: 28dba3ab147474b40acd3324bff9623a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7703448221081390512, guid: 28dba3ab147474b40acd3324bff9623a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7703448221081390512, guid: 28dba3ab147474b40acd3324bff9623a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7703448221081390512, guid: 28dba3ab147474b40acd3324bff9623a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7703448221081390512, guid: 28dba3ab147474b40acd3324bff9623a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7703448221081390512, guid: 28dba3ab147474b40acd3324bff9623a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7703448221081390512, guid: 28dba3ab147474b40acd3324bff9623a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7703448221081390512, guid: 28dba3ab147474b40acd3324bff9623a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7703448221081390512, guid: 28dba3ab147474b40acd3324bff9623a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7703448221081390517, guid: 28dba3ab147474b40acd3324bff9623a, type: 3}
+      propertyPath: m_Name
+      value: Teleport VFX
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 28dba3ab147474b40acd3324bff9623a, type: 3}
+--- !u!4 &6612660620465125872 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7703448221081390512, guid: 28dba3ab147474b40acd3324bff9623a, type: 3}
+  m_PrefabInstance: {fileID: 3543425376596423744}
+  m_PrefabAsset: {fileID: 0}
+--- !u!2083052967 &6612660620465125879 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 7703448221081390519, guid: 28dba3ab147474b40acd3324bff9623a, type: 3}
+  m_PrefabInstance: {fileID: 3543425376596423744}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3611048691315911182
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2781,6 +2849,10 @@ PrefabInstance:
       propertyPath: m_objectToActiveOnReady.Array.data[1]
       value: 
       objectReference: {fileID: 7317458749844307363}
+    - target: {fileID: 1661527278798300204, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
+      propertyPath: m_visualEffect
+      value: 
+      objectReference: {fileID: 6612660620465125879}
     - target: {fileID: 1661527278798300204, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
       propertyPath: m_soundWhenRollback
       value: 
