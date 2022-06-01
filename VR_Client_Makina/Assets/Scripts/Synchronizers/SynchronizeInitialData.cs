@@ -63,8 +63,8 @@ namespace Synchronizers
             UpdateHealthText();
         }
 
-        [ContextMenu("test")]
         /// <summary/> Updates both player's health on the PC GUI based on the local variables
+        [ContextMenu("test")]
         private void UpdateHealthText() {
             if(m_healtheedbackCoroutine != null) StopCoroutine(m_healtheedbackCoroutine);
             m_healtheedbackCoroutine = StartCoroutine(ShowHealthText());

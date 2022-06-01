@@ -105,6 +105,10 @@ public class ClientManager : MonoBehaviour
     /// <summary/> The delegate that will be called each time the client receives a HeartConquerStart message
     public delegate void ReceiveHeartConquerStartDelegator(HeartConquerStart p_heartConquerStart);
     public static ReceiveHeartConquerStartDelegator OnReceiveHeartConquerStart;
+
+    /// <summary/> The delegate that will be called each time the client receives a HeartConquerStart message
+    public delegate void ReceiveVrInitialValuesDelegator(VrInitialValues p_vrInitialValues);
+    public static ReceiveVrInitialValuesDelegator OnReceiveVrInitialValues;
     
     #endregion
     [SerializeField, Tooltip("The player Object to get the player's location")] public GameObject m_playerObject;
@@ -152,6 +156,7 @@ public class ClientManager : MonoBehaviour
         NetworkClient.RegisterHandler<DestroyLeure>(ReceiveDestroyLeure);
         NetworkClient.RegisterHandler<HeartConquerStart>(ReceiveHeartConquerStart);
         NetworkClient.RegisterHandler<HeartConquerStop>(ReceiveHeartConquerStop);
+        NetworkClient.RegisterHandler<VrInitialValues>(ReceiveVrInitialValues);
     }
 
     private void ReceiveHeartConquerStop(HeartConquerStop p_heartConquerStop)=>OnReceiveHeartConquerStop?.Invoke(p_heartConquerStop);
@@ -268,6 +273,11 @@ public class ClientManager : MonoBehaviour
     /// <summary/> The function called when the client receives a message of type DestroyedBeacon
     /// <param name="p_destroyedBeacon"> The message sent by the Server to the Client </param>
     private void ReceiveDestroyedBeacon(DestroyedBeacon p_destroyedBeacon) => OnReceiveDestroyedBeacon?.Invoke(p_destroyedBeacon);
+    
+    
+    /// <summary/> The function called when the client receives a message of type VrInitialValues
+    /// <param name="p_vrInitialValues"> The message sent by the Server to the Client </param>
+    private void ReceiveVrInitialValues(VrInitialValues p_vrInitialValues) => OnReceiveVrInitialValues?.Invoke(p_vrInitialValues);
 
     #endregion
 }

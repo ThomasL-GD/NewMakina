@@ -730,7 +730,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 31.3
+  m_fontSize: 18.7
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -987,7 +987,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 47.4
+  m_fontSize: 27.45
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1383,6 +1383,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4406322237673128448}
   - {fileID: 3639413401851936447}
   m_Father: {fileID: 5860171566799281723}
   m_RootOrder: 2
@@ -3348,6 +3349,37 @@ MonoBehaviour:
   m_InputActionsPerSecond: 10
   m_RepeatDelay: 0.5
   m_ForceModuleActive: 0
+--- !u!1 &7896649940437221280
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4406322237673128448}
+  m_Layer: 0
+  m_Name: Fingertip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4406322237673128448
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7896649940437221280}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1231927653689864200}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8024981866274260379
 GameObject:
   m_ObjectHideFlags: 0
@@ -4922,7 +4954,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 74080f814be7ce34d9b7606ccc90387f, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 74080f814be7ce34d9b7606ccc90387f, type: 3}
       propertyPath: m_LocalScale.x
@@ -4938,7 +4970,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 74080f814be7ce34d9b7606ccc90387f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.7
+      value: -4.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 74080f814be7ce34d9b7606ccc90387f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4946,7 +4978,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 74080f814be7ce34d9b7606ccc90387f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10
+      value: -19.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 74080f814be7ce34d9b7606ccc90387f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5497,6 +5529,10 @@ PrefabInstance:
       propertyPath: m_rightHandVR
       value: 
       objectReference: {fileID: 1231927653689864200}
+    - target: {fileID: 586668069150170728, guid: c1d0f69dad19b50469b9df1f1e46bf20, type: 3}
+      propertyPath: m_fingertipLaser
+      value: 
+      objectReference: {fileID: 4406322237673128448}
     - target: {fileID: 586668069150170729, guid: c1d0f69dad19b50469b9df1f1e46bf20, type: 3}
       propertyPath: m_Name
       value: Synchronizer
@@ -6093,15 +6129,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 74080f814be7ce34d9b7606ccc90387f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.7
+      value: -4.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 74080f814be7ce34d9b7606ccc90387f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.7
+      value: -19.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 74080f814be7ce34d9b7606ccc90387f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 74080f814be7ce34d9b7606ccc90387f, type: 3}
       propertyPath: m_LocalRotation.w

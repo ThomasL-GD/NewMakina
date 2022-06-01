@@ -19,6 +19,10 @@ namespace Synchronizers
 
         [SerializeField] private Transform m_leftHandVR;
         [SerializeField] private Transform m_rightHandVR;
+        
+        /// <summary>The local position of the child of the right hand that determines the point from where the laser is shot </summary>
+        [SerializeField] private Transform m_fingertipLaser;
+        
         private VrHand m_leftScript;
         private VrHand m_rightScript;
         private static readonly int IsGrabbing = Animator.StringToHash("IsGrabbing");
@@ -30,6 +34,11 @@ namespace Synchronizers
         private /*new*/ void Awake() {
             // base.Awake();
             ClientManager.OnReceiveVrTransform += SynchroniseVrTransform;
+            ClientManager.OnReceiveVrInitialValues += PlaceFingertip;
+        }
+
+        private void PlaceFingertip(VrInitialValues p_vrInitialValues) {
+            m_fingertipLaser.localPosition = p_vrInitialValues.fingertipOffset;
         }
 
         private void Start() {

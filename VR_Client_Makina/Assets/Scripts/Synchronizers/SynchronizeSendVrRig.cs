@@ -10,11 +10,14 @@ namespace Synchronizers {
         [SerializeField] public Transform m_head;
         [SerializeField] private Transform m_leftHand;
         [SerializeField] public Transform m_rightHand;
+        [SerializeField] public Transform m_fingertipLaser;
 
         private VrHandBehaviour m_leftScript = null;
         private VrHandBehaviour m_rightScript = null;
 
         private void Start() {
+            MyNetworkManager.OnReceiveInitialData += SendOffsetFingertip;
+            
             if (m_leftHand.TryGetComponent(out VrHandBehaviour lScript)) m_leftScript = lScript;
 #if UNITY_EDITOR
             else Debug.LogError("The left hand doesn't have any hand script on them !");
@@ -42,6 +45,11 @@ namespace Synchronizers {
             }
             
             MyNetworkManager.singleton.SendVrData(new VrTransform() {positionHead = m_head.position, rotationHead = m_head.rotation, positionLeftHand = m_leftHand.position, rotationLeftHand = m_leftHand.rotation, isLeftHandClenched = m_leftScript.m_isPressingTrigger, positionRightHand = m_rightHand.position, rotationRightHand = m_rightHand.rotation, isRightHandClenched = m_rightScript.m_isPressingTrigger});
+        }
+
+        /// <summary>Will send initial vr values that the server has to know when we receive initial data </summary>
+        private void SendOffsetFingertip(InitialData p_initialData) {
+            MyNetworkManager.singleton.SendVrData<VrInitialValues>(new VrInitialValues(){fingertipOffset = m_fingertipLaser.localPosition});
         }
     }
 }

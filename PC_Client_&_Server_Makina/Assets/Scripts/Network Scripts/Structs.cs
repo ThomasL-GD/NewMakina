@@ -75,9 +75,51 @@ namespace CustomMessages {
         public ClientConnection winningClient;
     }
     
-    /// <summary/> The initial data that will went to the clients as they connect
-    public struct InitialData : NetworkMessage
+    public struct RestartGame : NetworkMessage { }
+    
+    public struct ReadyToPlay : NetworkMessage { }
+
+    public struct Tutorial : NetworkMessage {
+        public bool isInTutorial;
+    }
+
+    public struct ElevatorActivation : NetworkMessage
     {
+        public int index;
+    }
+    
+    /// <summary/> The ping sent to the server telling it if the players is visible or invisible
+    public struct PcInvisibility : NetworkMessage
+    {
+        public bool isInvisible;
+    }
+
+    #endregion
+    
+    #region Hearts
+    
+    /// <summary/> The index of a destroyed heart
+    public struct HeartBreak : NetworkMessage
+    {
+        public int index;
+    }
+    
+    /// <summary/> The index of a destroyed heart
+    public struct HeartConquerStart : NetworkMessage
+    {
+        public float time;
+        public int index;
+    }
+    
+    /// <summary/> The index of a destroyed heart
+    public struct HeartConquerStop : NetworkMessage {}
+    
+    #endregion
+    
+    #region InitialData
+    
+    /// <summary/> The initial data that will went to the clients as they connect
+    public struct InitialData : NetworkMessage {
         public int healthPcPlayer;
         public int healthVrPlayer;
         public float beaconRange;
@@ -95,47 +137,13 @@ namespace CustomMessages {
         public float heartConquerTime;
         public ushort numberOfSpawnPointsToDisplay;
     }
-    
-    public struct RestartGame : NetworkMessage
-    {
-        
-    }
-    
-    public struct ReadyToPlay : NetworkMessage {
-        
-    }
 
-    public struct Tutorial : NetworkMessage {
-        public bool isInTutorial;
-    }
-
-    public struct ElevatorActivation : NetworkMessage
-    {
-        public int index;
+    /// <summary>The values the VR has to send to the server at the very beginning so it can have it in memory </summary>
+    public struct VrInitialValues : NetworkMessage {
+        /// <summary>The local position of the fingertip point that is a child of the right hand</summary>
+        public Vector3 fingertipOffset;
     }
     
-    /// <summary/> The index of a destroyed heart
-    public struct HeartBreak : NetworkMessage
-    {
-        public int index;
-    }
-    
-    /// <summary/> The index of a destroyed heart
-        public struct HeartConquerStart : NetworkMessage
-    {
-        public float time;
-        public int index;
-    }
-    
-    /// <summary/> The index of a destroyed heart
-    public struct HeartConquerStop : NetworkMessage {}
-    
-    /// <summary/> The ping sent to the server telling it if the players is visible or invisible
-    public struct PcInvisibility : NetworkMessage
-    {
-        public bool isInvisible;
-    }
-
     #endregion
 
     #region Lazer
