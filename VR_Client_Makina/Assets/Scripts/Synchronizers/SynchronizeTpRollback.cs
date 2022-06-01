@@ -3,6 +3,7 @@ using CustomMessages;
 using Network;
 using Synchronizers;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class SynchronizeTpRollback : Synchronizer<SynchronizeTpRollback> {
 
@@ -12,27 +13,33 @@ public class SynchronizeTpRollback : Synchronizer<SynchronizeTpRollback> {
 
 
     [Header("Particles when tp")]
-    [SerializeField] [Range(0.1f, 50f)] public float m_particlesSpeed = 1f;
-    [SerializeField] private GameObject m_prefabParticles = null;
-    
+    [SerializeField] private VisualEffect m_visualEffect = null;
+
     [Header("Sound")]
     [SerializeField] private AudioSource m_soundWhenRollback;
     
     private void Start() {
 #if UNITY_EDITOR
         if(m_prefabTpPoint == null)Debug.LogError("No tp point prefab serialized here !", this);
-        if(m_prefabParticles == null)Debug.LogError("No particles prefab serialized here !", this);
+        if(m_visualEffect == null)Debug.LogError("No particles prefab serialized here !", this);
 #endif
         MyNetworkManager.OnReceiveRemoveTp += Remove;
         MyNetworkManager.OnReceiveDropTp += PlaceTp;
         MyNetworkManager.OnReceiveTeleported += Teleport;
     }
 
-    private void Teleport(Teleported p_teleported) {
-        GameObject go = Instantiate(m_prefabParticles, p_teleported.teleportOrigin, Quaternion.LookRotation(p_teleported.teleportDestination - p_teleported.teleportOrigin));
-        ParticleSystem.MainModule bob = go.GetComponent<ParticleSystem>().main;
-        m_soundWhenRollback.Play();
-        StartCoroutine(DestroyParticles(bob.duration + bob.startLifetime.constantMax, go));
+    private void Teleport(Teleported p_teleported)
+    {
+        m_visualEffect.transform.position = p_teleported.teleportOrigin + Vector3.up * 3f;
+        Debug.Log(p_teleported.teleportDestination);
+        m_visualEffect.SetVector3("Teleport Position",p_teleported.teleportDestination);
+        m_visualEffect.SendEvent("StartTP");
+    }
+
+    [ContextMenu("test")]
+    private void test()
+    {
+        m_visualEffect.SetVector3("Teleport Position",new Vector3(0,200,0));
     }
 
     private void PlaceTp(DropTp p_tpDrop) {
@@ -45,10 +52,5 @@ public class SynchronizeTpRollback : Synchronizer<SynchronizeTpRollback> {
 #endif
         Destroy(m_tpPoint);
         m_tpPoint = null;
-    }
-
-    IEnumerator DestroyParticles(float p_duration, GameObject p_go) {
-        yield return new WaitForSeconds(p_duration);
-        Destroy(p_go);
     }
 }
