@@ -103,6 +103,7 @@ public class LaserVFXHandler : MonoBehaviour {
         if (!p_hit) yield break;
         m_killEffect.transform.position = p_hitPosition;
         StartCoroutine(KillEffect());
+        m_laserBall.Reinit();
     }
 
     private IEnumerator KillEffect() {
@@ -135,5 +136,6 @@ public class LaserVFXHandler : MonoBehaviour {
             value = Mathf.Max(value, 0f);
             SetFloatInVFXs(p_paramName, value);
         }
+        m_laserBall.Reinit();
     }
 }
