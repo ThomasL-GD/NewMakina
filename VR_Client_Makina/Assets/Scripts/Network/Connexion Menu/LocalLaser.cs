@@ -13,6 +13,7 @@ namespace Network.Connexion_Menu {
         [Header("Input")]
         [SerializeField] private OVRInput.Axis1D m_input;
         [SerializeField] [Range(0.01f, 1f)] private float m_upTriggerValue;
+        [SerializeField] [Tooltip("The origin of the laser\nProbably the fingertip go")] private Transform m_laserOrigin;
 
         [Header("Feedback")]
         [SerializeField] private LaserVFXHandler m_laserVFXHandler;
@@ -73,40 +74,40 @@ namespace Network.Connexion_Menu {
                 OnLaserLoad?.Invoke(IsLoading, false);
                 
                 
-                Vector3 handForward = transform.forward;
-                Vector3 handPosition = transform.position;
+                Vector3 fingertipForward = m_laserOrigin.forward;
+                Vector3 fingertipPosition = m_laserOrigin.position;
 
                 Vector3 direction;
                 bool hit;
 
-                bool targetHit = Physics.SphereCast(new Ray(handPosition, handForward.normalized), m_laserRadius, out RaycastHit targetHitInfo, m_laserMaxRange, m_targetLayers);
+                bool targetHit = Physics.SphereCast(new Ray(fingertipPosition, fingertipForward.normalized), m_laserRadius, out RaycastHit targetHitInfo, m_laserMaxRange, m_targetLayers);
 
                 if (targetHit) {
-                    bool hitAWall = Physics.Raycast(handPosition, (targetHitInfo.point - handPosition).normalized, out RaycastHit wallHitInfo, (targetHitInfo.point - handPosition).magnitude, m_whatDoIHitMask, QueryTriggerInteraction.Ignore);
+                    bool hitAWall = Physics.Raycast(fingertipPosition, (targetHitInfo.point - fingertipPosition).normalized, out RaycastHit wallHitInfo, (targetHitInfo.point - fingertipPosition).magnitude, m_whatDoIHitMask, QueryTriggerInteraction.Ignore);
 
                     if (!hitAWall || wallHitInfo.collider.gameObject == targetHitInfo.collider.gameObject) { //Hit without any obstacle
                         
                         if(targetHitInfo.transform.gameObject.TryGetComponent(out AttackSensitiveButton script)) script.OnBeingActivated();
 
-                        direction = targetHitInfo.point - handPosition;
+                        direction = targetHitInfo.point - fingertipPosition;
                         hit = true;
                     }
                     else { //there is an obstacle on the way
-                        direction = wallHitInfo.point - handPosition;
+                        direction = wallHitInfo.point - fingertipPosition;
                         hit = false;
                     }
                 }
                 else { //If there's no target hit
                     
-                    bool hitAWallButNoTarget = Physics.Raycast(handPosition, handForward.normalized, out RaycastHit wallHitNoTargetInfo, m_laserMaxRange, m_whatDoIHitMask, QueryTriggerInteraction.Ignore);
+                    bool hitAWallButNoTarget = Physics.Raycast(fingertipPosition, fingertipForward.normalized, out RaycastHit wallHitNoTargetInfo, m_laserMaxRange, m_whatDoIHitMask, QueryTriggerInteraction.Ignore);
 
-                    if (hitAWallButNoTarget) direction = wallHitNoTargetInfo.point - handPosition;
-                    else direction = handPosition + handForward * m_laserMaxRange;
+                    if (hitAWallButNoTarget) direction = wallHitNoTargetInfo.point - fingertipPosition;
+                    else direction = fingertipPosition + fingertipForward * m_laserMaxRange;
                     
                     hit = false;
                 }
                 
-                StartCoroutine(ShotDownLaser(handPosition, direction, hit));
+                StartCoroutine(ShotDownLaser(fingertipPosition, direction, hit));
                 
                 m_shutDown = true;
             }

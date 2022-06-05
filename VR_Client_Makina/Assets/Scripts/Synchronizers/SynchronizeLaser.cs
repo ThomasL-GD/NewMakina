@@ -96,8 +96,7 @@ namespace Synchronizers {
                 SynchronizeInitialData.instance.LosePcHealth();
             }
 
-            Transform transform1 = transform;
-            bool hasRaycastHit = Physics.Raycast(transform1.position, transform1.forward, out RaycastHit hit, 1000f, 1 << 7);
+            bool hasRaycastHit = Physics.Raycast(p_laser.origin, p_laser.hitPosition - p_laser.origin, out RaycastHit hit, 1000f, 1 << 7);
             if (hasRaycastHit && hit.transform.gameObject.TryGetComponent(out AttackSensitiveButton script)) script.OnBeingActivated();
         }
 
