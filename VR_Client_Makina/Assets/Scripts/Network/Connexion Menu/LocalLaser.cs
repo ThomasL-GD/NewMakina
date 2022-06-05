@@ -97,7 +97,12 @@ namespace Network.Connexion_Menu {
                     }
                 }
                 else { //If there's no target hit
-                    direction = handPosition + handForward * m_laserMaxRange;
+                    
+                    bool hitAWallButNoTarget = Physics.Raycast(handPosition, handForward.normalized, out RaycastHit wallHitNoTargetInfo, m_laserMaxRange, m_whatDoIHitMask, QueryTriggerInteraction.Ignore);
+
+                    if (hitAWallButNoTarget) direction = wallHitNoTargetInfo.point - handPosition;
+                    else direction = handPosition + handForward * m_laserMaxRange;
+                    
                     hit = false;
                 }
                 
