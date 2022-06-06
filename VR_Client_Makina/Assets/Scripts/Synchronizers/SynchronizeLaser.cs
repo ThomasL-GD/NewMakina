@@ -134,7 +134,9 @@ namespace Synchronizers {
             
                     m_elapsedTime = 0f;
                             
-                    MyNetworkManager.singleton.SendVrData<VrLaser>(new VrLaser(){laserState = LaserState.Shooting});
+                    Debug.Log($"Laser shot : start pos {SynchronizeSendVrRig.Instance.m_fingertipLaser.position},  direction : {SynchronizeSendVrRig.Instance.m_fingertipLaser.rotation.eulerAngles}");
+                    
+                    MyNetworkManager.singleton.SendVrData<VrLaser>(new VrLaser(){laserState = LaserState.Shooting, origin = SynchronizeSendVrRig.Instance.m_fingertipLaser.position, rotation = SynchronizeSendVrRig.Instance.m_fingertipLaser.rotation});
                     m_isLoading = false;
         }
     }

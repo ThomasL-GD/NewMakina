@@ -784,8 +784,10 @@ public class ServerManager : MonoBehaviour
             // Or une parallel line distance operations to check wether the player's pivot point is within the range of the laser's radius
 
             // Mafs
-            Vector3 startingPoint = m_vrTransformBuffer.positionRightHand + m_fingertipOffset;
-            Vector3 direction = m_vrTransformBuffer.rotationRightHand * Vector3.forward;
+            // Vector3 startingPoint = m_vrTransformBuffer.positionRightHand + (m_vrTransformBuffer.rotationRightHand * m_fingertipOffset);
+            // Vector3 direction = m_vrTransformBuffer.rotationRightHand * Vector3.forward;
+            Vector3 startingPoint = p_vrlaser.origin;
+            Vector3 direction = p_vrlaser.rotation * Vector3.forward;
             Vector3 playerPos = m_pcTransformBuffer.position + Vector3.up * m_laserCheckOffset/2f;
             Vector3 laserCriticalPath = (playerPos + Vector3.up * m_laserCheckOffset / 2f) - startingPoint;
             Debug.DrawLine(playerPos,playerPos + Vector3.up * m_laserCheckOffset/2f,Color.red,5f);
@@ -850,6 +852,8 @@ public class ServerManager : MonoBehaviour
                     SendToBothClients(new DestroyLeure());
                 }
             }
+            
+            Debug.Log($"Laser shot : start pos {startingPoint} (detail : {m_vrTransformBuffer.positionRightHand} + {m_vrTransformBuffer.rotationRightHand * m_fingertipOffset}),  direction : {direction}");
             
             // Packing the values in a neat little message
             m_laserBuffer.origin = startingPoint;

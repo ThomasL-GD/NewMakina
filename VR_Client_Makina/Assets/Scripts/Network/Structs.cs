@@ -157,8 +157,11 @@ namespace CustomMessages {
     
     /// <summary/> The ping sent to the server telling it the Vr player has interacted with its laser
     public struct VrLaser : NetworkMessage {
-
+        
         public LaserState laserState;
+        
+        public Vector3 origin;
+        public Quaternion rotation;
     }
 
     /// <summary/> The message sent to the clients giving them laser information updates
