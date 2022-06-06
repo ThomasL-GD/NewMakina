@@ -62,6 +62,9 @@ public class ServerManager : MonoBehaviour
 
     [SerializeField] private LayerMask f_playerLayers;
     private LayerMask m_playerLayers;
+
+    /// <summary>The local position of the child of the right hand that determines the point from where the laser is shot </summary>
+    private Vector3 m_fingertipOffset;
     
     
     [Header("Elevators")]
@@ -213,6 +216,7 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<Teleported>(OnTeleported);
         NetworkServer.RegisterHandler<Tutorial>(OnReceiveTutorial);
         NetworkServer.RegisterHandler<PotentialSpawnPoints>(OnReceivePotentialSpawnpoints);
+        NetworkServer.RegisterHandler<VrInitialValues>(OnReceiveVRInitialValues);
     }
 
 
@@ -780,8 +784,10 @@ public class ServerManager : MonoBehaviour
             // Or une parallel line distance operations to check wether the player's pivot point is within the range of the laser's radius
 
             // Mafs
-            Vector3 startingPoint = m_vrTransformBuffer.positionRightHand;
-            Vector3 direction = m_vrTransformBuffer.rotationRightHand * Vector3.forward;
+            // Vector3 startingPoint = m_vrTransformBuffer.positionRightHand + (m_vrTransformBuffer.rotationRightHand * m_fingertipOffset);
+            // Vector3 direction = m_vrTransformBuffer.rotationRightHand * Vector3.forward;
+            Vector3 startingPoint = p_vrlaser.origin;
+            Vector3 direction = p_vrlaser.rotation * Vector3.forward;
             Vector3 playerPos = m_pcTransformBuffer.position + Vector3.up * m_laserCheckOffset/2f;
             Vector3 laserCriticalPath = (playerPos + Vector3.up * m_laserCheckOffset / 2f) - startingPoint;
             Debug.DrawLine(playerPos,playerPos + Vector3.up * m_laserCheckOffset/2f,Color.red,5f);
@@ -846,6 +852,8 @@ public class ServerManager : MonoBehaviour
                     SendToBothClients(new DestroyLeure());
                 }
             }
+            
+            Debug.Log($"Laser shot : start pos {startingPoint} (detail : {m_vrTransformBuffer.positionRightHand} + {m_vrTransformBuffer.rotationRightHand * m_fingertipOffset}),  direction : {direction}");
             
             // Packing the values in a neat little message
             m_laserBuffer.origin = startingPoint;
@@ -967,7 +975,15 @@ public class ServerManager : MonoBehaviour
         m_potentialSpawnPointsBuffer = p_potentialSpawnPoints;
         OnServerTick += SendPotentialSpawnPoints;
     }
-    
+
+    /// <summary/> function called when the server receives a message of type VrInitialValues
+    /// <param name="p_conn">The connection from which originated the message</param>
+    /// <param name="p_vrInitialValues">The message sent by the Client to the Server</param>
+    private void OnReceiveVRInitialValues(NetworkConnection p_conn, VrInitialValues p_vrInitialValues) {
+        m_fingertipOffset = p_vrInitialValues.fingertipOffset;
+        m_pcNetworkConnection?.Send(new VrInitialValues(){fingertipOffset = m_fingertipOffset});
+    }
+
     #endregion
 
 
