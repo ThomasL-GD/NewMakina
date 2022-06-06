@@ -28,6 +28,7 @@ public class UIMinimapManager : MonoBehaviour {
     [Space]
     [SerializeField] [Tooltip("The object of the map that should move alongside the player")] private RectTransform m_mapElement = null;
     [SerializeField] [Tooltip("The object of the player's character on UI")] private RectTransform m_playerElement = null;
+    [SerializeField] [Tooltip("The object of the minimap's outline if it's a child of the map\nIf not, you can let this field as null")] private RectTransform m_outlineOfTheMinimap = null;
     
     [Header("Vr Head")]
     [SerializeField] [Tooltip("The object of the VR player on UI\nMust be child of the map")] private RectTransform m_vrPlayerElement = null;
@@ -121,6 +122,8 @@ public class UIMinimapManager : MonoBehaviour {
         if(m_middleFloorDimmer != null)m_middleFloorDimmer.gameObject.SetActive(false);
         if(m_topFloorDimmer != null)m_topFloorDimmer.gameObject.SetActive(false);
         #endregion
+        
+        if(m_outlineOfTheMinimap != null)m_outlineOfTheMinimap.SetSiblingIndex(m_outlineOfTheMinimap.parent.childCount);
 
         m_beaconAnchorRatio = 1 / (m_mapRealSize / p_initialData.beaconRange);
         
@@ -238,6 +241,13 @@ public class UIMinimapManager : MonoBehaviour {
         #endregion
         
         playerPositionRatio = Vector2.one - playerPositionRatio; // We get a more correct player ratio for other elements that will read it
+        
+        if(m_outlineOfTheMinimap != null) {
+            PlaceAnchors(m_outlineOfTheMinimap, playerPositionRatio, Vector2.one);
+            if (!m_playerRotation) {
+                m_outlineOfTheMinimap.localRotation = Quaternion.Euler(0, 0, -playerRotationY);
+            }
+        }
 
         if (!m_isInGame) return;
         
@@ -334,7 +344,7 @@ public class UIMinimapManager : MonoBehaviour {
         }
     }
 
-    #region RationOnMap
+    #region RatioOnMap
     /// <summary>Gives a vector2 with both x and y being between 0 and 1 and corresponds to how far this object is from the center (0.5 is the center, 0 is the farthest on one side and 1 is the farthest on the opposite side) given its world position</summary>
     /// <param name="p_worldPosition">Its 3D coordinates</param>
     /// <returns>The ratio on the map</returns>
