@@ -5,6 +5,7 @@ using CustomMessages;
 using Synchronizers;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.XR;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
