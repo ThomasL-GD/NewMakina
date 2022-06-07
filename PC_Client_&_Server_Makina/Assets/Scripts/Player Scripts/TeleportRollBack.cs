@@ -20,6 +20,8 @@ public class TeleportRollBack : AbstractMechanic
     [SerializeField] [Tooltip("The sound played when the rollback is used")] private AudioSource m_rollbackSound;
 
     [SerializeField] private bool m_isTutorial = false;
+
+    [SerializeField] private float m_yeetForce = 20f;
     
     private void Awake()
     {
@@ -36,10 +38,13 @@ public class TeleportRollBack : AbstractMechanic
         UIManager.Instance.ResetTeleportRollbackCooldown();
         if(m_placed) NetworkClient.Send(new RemoveTp());
         m_placed = false;
+        m_thrown = false;
         m_canUse = true;
         if(m_teleportLocation != null) Destroy(m_teleportLocation);
     }
 
+    private bool m_thrown = false;
+    
     // Update is called once per frame
     void Update()
     {
@@ -52,13 +57,25 @@ public class TeleportRollBack : AbstractMechanic
                 return;
             }
 
-            Vector3 position = transform.position;
-
-            m_teleportLocation = Instantiate(m_teleportLocationPrefab, position, transform.rotation);
-            NetworkClient.Send(new DropTp() {tpPosition = position});
-            UIManager.Instance.PlacedTeleporter();
-            m_placed = true;
+            ThrowTP();
         }
+    }
+
+    
+    
+    private void ThrowTP() {
+        m_thrown = true;
+        Transform camera = CameraAndUISingleton.camera.transform;
+        
+        m_teleportLocation = Instantiate(m_teleportLocationPrefab, camera.position, camera.rotation);
+        m_teleportLocation.GetComponent<EnableTPPoint>().m_parentScript = this;
+        m_teleportLocation.GetComponent<Rigidbody>().AddForce(new Vector3(camera.forward.x,0f,camera.forward.z),ForceMode.Impulse);
+    }
+
+    public void SetTPoint(Vector3 p_position) {
+        NetworkClient.Send(new DropTp() {tpPosition = p_position});
+        UIManager.Instance.PlacedTeleporter();
+        m_placed = true;
     }
     
     private void Teleport(Vector3 p_destination)

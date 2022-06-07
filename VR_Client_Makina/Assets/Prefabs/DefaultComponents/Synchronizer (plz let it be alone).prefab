@@ -62,6 +62,7 @@ MonoBehaviour:
   m_head: {fileID: 0}
   m_leftHand: {fileID: 0}
   m_rightHand: {fileID: 0}
+  m_fingertipLaser: {fileID: 0}
 --- !u!114 &5783733579950633033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,6 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_heartPrefabs: {fileID: 1392772383475821737, guid: be8f4e1bc2d318a4caad43b62a2163ea, type: 3}
+  m_UiLives: []
   m_audioSource: {fileID: 0}
   m_heartDestroyedSound: {fileID: 8300000, guid: a6f5d3b53fcdf9342b13c0abc931c9d9, type: 3}
   m_heartDestructionTime: 6
@@ -197,6 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_showHealthTime: 3
+  m_uiPoint: []
 --- !u!114 &2047781738407387244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,7 +265,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 952864cd1aaef3d419b5ffc3d9540d11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_objectToActiveOnReady: {fileID: 0}
+  m_objectToActiveOnReady:
+  - {fileID: 0}
 --- !u!114 &1661527278798300204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,8 +280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_prefabTpPoint: {fileID: 5780574956763540240, guid: a6f8cd8a9d1197d459bf8799a02af2cf, type: 3}
-  m_particlesSpeed: 30.9
-  m_prefabParticles: {fileID: 7130397999828551174, guid: fd9bcf479ebec7d4db0faaecd1844c47, type: 3}
+  m_visualEffect: {fileID: 0}
   m_soundWhenRollback: {fileID: 0}
 --- !u!114 &6459845886493274506
 MonoBehaviour:
@@ -286,7 +289,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5783733579950633034}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 374a04220f30c464bbc5d53d5a562f09, type: 3}
   m_Name: 
@@ -719,3 +722,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_leure: {fileID: 0}
+  m_deathFX: {fileID: 0}

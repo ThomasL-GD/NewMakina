@@ -97,7 +97,7 @@ public class UIMinimapManager : MonoBehaviour {
         ClientManager.OnReceiveHeartBreak += DestroyUIHeart;
         ClientManager.OnReceiveGameEnd += ReceiveGameEnd;
         
-        m_playerElement.gameObject.SetActive(false);
+        //m_playerElement.gameObject.SetActive(false);
     }
 
     private void ReceiveGameEnd(GameEnd p_gameEnd) {
