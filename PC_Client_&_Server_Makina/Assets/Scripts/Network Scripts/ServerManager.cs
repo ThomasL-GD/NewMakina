@@ -849,6 +849,8 @@ public class ServerManager : MonoBehaviour
                     if(m_flashCoroutine != null)StopCoroutine(m_flashCoroutine);
                     m_flashCoroutine = StartCoroutine(Flash(m_flashDuration));
                     Debug.Log("Vr killed the DECOY");
+                    
+                    m_isLeureAliveBuffer = false;
                     SendToBothClients(new DestroyLeure());
                 }
             }
