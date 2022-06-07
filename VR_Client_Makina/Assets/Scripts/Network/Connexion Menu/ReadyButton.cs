@@ -6,6 +6,7 @@ namespace Network.Connexion_Menu {
     public class ReadyButton : AttackSensitiveButton {
 
         [SerializeField] private GameObject m_waitForOtherToBeReadyGameObject = null;
+        [SerializeField] private GameObject[] m_gosToDepopOnShot = null;
 
 
         private void Start() {
@@ -13,10 +14,12 @@ namespace Network.Connexion_Menu {
             if (m_waitForOtherToBeReadyGameObject == null) Debug.LogError("Do your job and serialize ! (^∇^) ( ^∇)(　^)(　　)(^　)(∇^ )(^∇^)", this);
 #endif
             m_waitForOtherToBeReadyGameObject.SetActive(false);
+            foreach (GameObject goToDepop in m_gosToDepopOnShot) goToDepop.SetActive(true);
         }
 
         public override void OnBeingActivated() {
             m_waitForOtherToBeReadyGameObject.SetActive(true);
+            foreach (GameObject goToDepop in m_gosToDepopOnShot) goToDepop.SetActive(false);
             MyNetworkManager.OnReceiveInitialData += EraseFeedback;
             MyNetworkManager.singleton.SendVrData(new ReadyToPlay(){});
         }
