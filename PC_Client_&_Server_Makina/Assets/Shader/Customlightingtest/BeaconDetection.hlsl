@@ -26,11 +26,18 @@ out float distanceFromBeacon, out float distanceFromDetectedBeacon) {
     
     float beaconDistance = 999999;
     
+    float3 position2D  = Position;
+    position2D.y = 0;
+    
     for (uint i = 0; i < 10; i++)
     {
         if((ActiveBitMask & 1<<i) != 1<<i) continue;
-        beaconDistance = min(distance(beaconPositions[i],Position) / min((p_time - beaconTimers[i]) * 10 ,1),beaconDistance);
+        // TODO : make 2D
+        float3 beaconPosition2D = beaconPositions[i];
+        beaconPosition2D.y = 0;
+        beaconDistance = min(distance(beaconPosition2D,position2D) / min((p_time - beaconTimers[i]) * 10 ,1),beaconDistance);
     }
+    
     beaconDistance /= p_Range;
     beaconDistance = 1- beaconDistance;
 
@@ -39,8 +46,14 @@ out float distanceFromBeacon, out float distanceFromDetectedBeacon) {
     for (uint j = 0; j < 10; j++)
     {
         if((ActiveBitMask & 1<<j) == 0 || (p_detectedBeaconBitMask & 1<<j)== 0) continue;
-        beaconDistanceDetected = min(distance(beaconPositions[j],Position),beaconDistanceDetected);
+        // TODO : make 2D
+        
+        float3 beaconPosition2D = beaconPositions[j];
+        beaconPosition2D.y = 0;
+        
+        beaconDistanceDetected = min(distance(beaconPosition2D,position2D),beaconDistanceDetected);
     }
+    
     beaconDistanceDetected /= p_Range;
     beaconDistanceDetected = 1- beaconDistanceDetected;
     
