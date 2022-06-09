@@ -32,6 +32,7 @@ public class UIManager : Synchronizer<UIManager> {
         public Vector2 childMargins;
         public Vector2 offset;
         public GameObject healthElementPrefab;
+        [Range(0f, 10f)] public float timeBeforeDisappearing;
         [HideInInspector] public RectTransform[] healthElements;
     }
 
@@ -192,6 +193,7 @@ public class UIManager : Synchronizer<UIManager> {
     {
         int index = m_vrHealth.healthElements.Length - m_vrHealthIncrementor++;
         m_vrHealth.healthElements[index].GetComponent<Animator>().SetTrigger(m_shatterAnimatorTrigger);
+        StartCoroutine(DepopAfterDelay(m_vrHealth.healthElements[index].transform, m_vrHealth.timeBeforeDisappearing));
     }
     
     private int m_pcHealthIncrementor = 1;
@@ -203,6 +205,14 @@ public class UIManager : Synchronizer<UIManager> {
 
         int index = m_pcHealth.healthElements.Length - m_pcHealthIncrementor++;
         m_pcHealth.healthElements[index].GetComponent<Animator>().SetTrigger(m_heartAnimatorTrigger);
+    }
+
+    /// <summary>Will set unactive an object after a defined time </summary>
+    /// <param name="p_object">The object you want to set unactive</param>
+    /// <param name="p_time">The time after which you want it set unactive</param>
+    IEnumerator DepopAfterDelay(Transform p_object, float p_time) {
+        yield return new WaitForSeconds(p_time);
+        p_object.gameObject.SetActive(false);
     }
 
     #endregion
