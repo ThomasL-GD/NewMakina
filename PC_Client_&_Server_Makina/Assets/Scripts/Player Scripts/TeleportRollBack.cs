@@ -57,7 +57,7 @@ public class TeleportRollBack : AbstractMechanic
                 return;
             }
 
-            ThrowTP();
+            if(m_thrown == false) ThrowTP();
         }
     }
 

@@ -56,8 +56,11 @@ public class CreateLeure : AbstractMechanic
     {
         NetworkClient.Send(new SpawnLeure());
         NetworkClient.Send(new PcInvisibility{isInvisible = true});
-        UIManager.Instance.StartLeureCooldown();
+        
+        UIManager.Instance.SendLeure();
+        
         yield return new WaitForSeconds(m_leureLifeTime);
+        UIManager.Instance.StartLeureCooldown();
 
         Debug.Log("Decoy natural death");
         DestroyLeure();
