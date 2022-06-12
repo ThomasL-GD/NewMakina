@@ -28,7 +28,7 @@ public class UIManager : Synchronizer<UIManager> {
     {
         public RectTransform parent;
         public Vector2 parentMargins;
-        public Vector2 childMargins;
+        public Vector2 healthAdditive;
         public Vector2 offset;
         public GameObject healthElementPrefab;
         [Range(0f, 10f)] public float timeBeforeDisappearing;
@@ -136,6 +136,15 @@ public class UIManager : Synchronizer<UIManager> {
     }
     #endregion
 
+#if UNITY_EDITOR
+    [ContextMenu("test")]
+    void test()
+    {
+        ReceiveInitialData(new InitialData() { healthVrPlayer = 5, healthPcPlayer = 5 });
+    }
+    
+#endif
+    
     #region Health
     private void ReceiveInitialData(InitialData p_message)
     {
@@ -149,59 +158,49 @@ public class UIManager : Synchronizer<UIManager> {
         
         m_vrHealth.healthElements = new RectTransform[healthAmount];
         
-        float ao = Screen.width * 9 / (Screen.height * 16);
-        
         // VR HEALTH
         
-        float divider = (m_vrHealth.parent.anchorMax.x - m_vrHealth.parent.anchorMin.x /*- m_vrHealth.parentMargins.x * 2f*/) / (healthAmount /* * ao*/);
-        
-        
+        float divider = (m_vrHealth.parent.anchorMax.x - m_vrHealth.parent.anchorMin.x - m_vrHealth.parentMargins.x * 2f) / healthAmount;
         
         for (int i = 0; i < m_vrHealth.healthElements.Length; i++) {
 
             RectTransform healthElement = Instantiate(m_vrHealth.healthElementPrefab, m_healthParent).GetComponent<RectTransform>();
 
-            float parentMinX = m_vrHealth.parent.anchorMin.x;
-            Vector2 parentMax = m_vrHealth.parent.anchorMin;
-            
-            healthElement.anchorMin = new Vector2(parentMinX + i * divider, parentMax.y);
-            healthElement.anchorMax = new Vector2(parentMinX + (i+1) * divider, parentMax.y);
+            Vector2 parentMin = m_vrHealth.parent.anchorMin;
+            Vector2 parentMax = m_vrHealth.parent.anchorMax;
 
+            float minX = m_vrHealth.parentMargins.x + parentMin.x + i * divider + m_vrHealth.offset.x - m_vrHealth.healthAdditive.x;
+            float minY = parentMin.y + m_vrHealth.offset.y - m_vrHealth.healthAdditive.y;
+            healthElement.anchorMin = new Vector2(minX, minY);
 
-            /*
-            RectTransform healthElement = Instantiate(m_vrHealth.healthElementPrefab, m_vrHealth.parent).GetComponent<RectTransform>();
-            float left = m_vrHealth.parentMargins.x + (.5f - m_vrHealth.parentMargins.x) * (ao - 1)/2;
+            float maxX = minX + divider + 2f * m_vrHealth.healthAdditive.x;
+            float maxY = parentMax.y + m_vrHealth.healthAdditive.y + m_vrHealth.offset.y;
+            healthElement.anchorMax = new Vector2(maxX, maxY);
             
-            
-            Vector2 anchormin = new Vector2(left + i * divider - m_vrHealth.childMargins.x / ao + m_vrHealth.offset.x / ao, -m_vrHealth.childMargins.y + m_vrHealth.offset.y);
-            Vector2 anchormax = new Vector2(anchormin.x + divider + 2*m_vrHealth.childMargins.x/ao + m_vrHealth.offset.x/ao, m_vrHealth.childMargins.y+ m_vrHealth.offset.y);
-
-                
-            healthElement.anchorMin = anchormin;
-            healthElement.anchorMax = anchormax;
-
-            healthElement.parent = m_healthParent;
-            
-            m_vrHealth.healthElements[i] = healthElement;*/
+            m_vrHealth.healthElements[i] = healthElement;
         }
         
         // PC Health
         
         healthAmount = p_message.healthPcPlayer;
         
-        divider = (m_pcHealth.parent.anchorMax.x - m_pcHealth.parent.anchorMin.x - m_pcHealth.parentMargins.x * 2f) / (healthAmount * ao);
+        divider = (m_pcHealth.parent.anchorMax.x - m_pcHealth.parent.anchorMin.x - m_pcHealth.parentMargins.x * 2f) / healthAmount;
         m_pcHealth.healthElements = new RectTransform[healthAmount];
         
         for (int i = 0; i < m_pcHealth.healthElements.Length; i++) {
-            RectTransform healthElement = Instantiate(m_pcHealth.healthElementPrefab, m_pcHealth.parent).GetComponent<RectTransform>();
-            float left = m_pcHealth.parentMargins.x + (.5f - m_pcHealth.parentMargins.x) * (ao - 1)/2;
-            Vector2 anchormin = new Vector2(left + i * divider - m_pcHealth.childMargins.x / ao + m_pcHealth.offset.x / ao, -m_pcHealth.childMargins.y + m_pcHealth.offset.y);
-            Vector2 anchormax = new Vector2(anchormin.x + divider + 2*m_pcHealth.childMargins.x/ao + m_pcHealth.offset.x/ao, m_pcHealth.childMargins.y+ m_pcHealth.offset.y);
 
-            healthElement.anchorMin = anchormin;
-            healthElement.anchorMax = anchormax;
+            RectTransform healthElement = Instantiate(m_pcHealth.healthElementPrefab, m_healthParent).GetComponent<RectTransform>();
 
-            healthElement.parent = m_healthParent;
+            Vector2 parentMin = m_pcHealth.parent.anchorMin;
+            Vector2 parentMax = m_pcHealth.parent.anchorMax;
+
+            float minX = m_pcHealth.parentMargins.x + parentMin.x + i * divider + m_pcHealth.offset.x - m_pcHealth.healthAdditive.x;
+            float minY = parentMin.y + m_pcHealth.offset.y - m_pcHealth.healthAdditive.y;
+            healthElement.anchorMin = new Vector2(minX, minY);
+
+            float maxX = minX + divider + 2f * m_pcHealth.healthAdditive.x;
+            float maxY = parentMax.y + m_pcHealth.healthAdditive.y + m_pcHealth.offset.y;
+            healthElement.anchorMax = new Vector2(maxX, maxY);
             
             m_pcHealth.healthElements[i] = healthElement;
         }

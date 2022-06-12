@@ -3819,19 +3819,22 @@ MonoBehaviour:
     timerStartValue: 0
   m_vrHealth:
     parent: {fileID: 842083948131466482}
-    parentMargins: {x: 0.42, y: 0.57}
-    childMargins: {x: 0.5, y: 1.75}
-    offset: {x: 0, y: 0.5}
+    parentMargins: {x: 0.03, y: 0}
+    healthAdditive: {x: 1, y: 0.2}
+    offset: {x: 0, y: -0.11}
     healthElementPrefab: {fileID: 5134622101476320961, guid: d6846212de84fe54ca6c3f49b656ac11, type: 3}
     timeBeforeDisappearing: 1.5
     healthElements:
     - {fileID: 0}
     - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   m_pcHealth:
     parent: {fileID: 4471640363768202946}
-    parentMargins: {x: 0.4485, y: 0.51}
-    childMargins: {x: 0.5, y: 0.5}
-    offset: {x: -0.0005, y: 0.1}
+    parentMargins: {x: 0.009, y: 0}
+    healthAdditive: {x: 1, y: 0.03}
+    offset: {x: 0, y: 0.025}
     healthElementPrefab: {fileID: 5134622101476320961, guid: 09384f0dd0d7208438cd1a7619f2bac9, type: 3}
     timeBeforeDisappearing: 5.5
     healthElements:
