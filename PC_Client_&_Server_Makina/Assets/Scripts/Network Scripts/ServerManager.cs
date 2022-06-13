@@ -17,6 +17,8 @@ public class ServerManager : MonoBehaviour
     private delegate void OnSendDataToClients();
     private OnSendDataToClients OnServerTick;
 
+    [SerializeField] public bool m_practice = false;
+    
     #region Buffers
 
     private VrTransform m_vrTransformBuffer = new VrTransform();
