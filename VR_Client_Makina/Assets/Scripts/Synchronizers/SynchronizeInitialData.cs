@@ -24,6 +24,9 @@ namespace Synchronizers
         [SerializeField]private float m_showHealthTime = 3f;
         
         [SerializeField, Tooltip("One of them will be activated every time the VR player gets a kill (in order)")] private Transform[] m_uiPoint;
+
+        [SerializeField] [Tooltip("self explicit plz")] private GameObject[] m_objectToActiveOnStartGame = null;
+        [SerializeField] [Tooltip("self explicit plz")] private GameObject[] m_objectToDesactiveOnStartGame = null;
         
         /// <summary/> Adding functions to the client delegate
         void Awake() => MyNetworkManager.OnReceiveInitialData += ReceiveInitialData;
@@ -46,6 +49,14 @@ namespace Synchronizers
             m_maxPcHealth = p_initialData.healthPcPlayer;
             m_vrHealth = p_initialData.healthVrPlayer;
             UpdateHealthText();
+
+            Transition.a_transitionDone += SetPlayScene;
+            Transition.m_instance.StartTransition();
+        }
+
+        private void SetPlayScene() {
+            foreach (GameObject go in m_objectToActiveOnStartGame) go.SetActive(true);
+            foreach (GameObject go in m_objectToDesactiveOnStartGame) go.SetActive(false);
         }
 
         

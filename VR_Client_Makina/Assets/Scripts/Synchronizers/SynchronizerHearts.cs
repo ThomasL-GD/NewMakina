@@ -17,6 +17,8 @@ namespace Synchronizers {
         [SerializeField] private float m_heartDestructionTime = 6f;
         [SerializeField] private float m_heartLaserFlashPhase = 0.5f;
 
+        private InitialData m_initialDataBuffer;
+
         private class Heart {
             public GameObject heartObject;
         }
@@ -43,14 +45,19 @@ namespace Synchronizers {
         /// <summary/> The function called when the heart heartPositions are updated
         /// <param name="p_initialData"></param>
         private void ReceiveInitialData(InitialData p_initialData) {
+            m_initialDataBuffer = p_initialData;
+            Transition.a_transitionDone += CreateHearts;
+        }
+
+        private void CreateHearts() {
             
             // Making a list of hearts to be able to modify the hearts array
             List<Heart> hearts = new List<Heart>();
             
             // Adding the hearts to the list
-            for (int i = 0; i < p_initialData.heartPositions.Length; i++) {
+            for (int i = 0; i < m_initialDataBuffer.heartPositions.Length; i++) {
 
-                hearts.Add(new Heart(){heartObject = Instantiate(m_heartPrefabs, p_initialData.heartPositions[i], m_heartPrefabs.transform.rotation)});
+                hearts.Add(new Heart(){heartObject = Instantiate(m_heartPrefabs, m_initialDataBuffer.heartPositions[i], m_heartPrefabs.transform.rotation)});
                 
                 
                 if (hearts[i].heartObject.TryGetComponent( out HeartIdentifier hi))
@@ -62,10 +69,10 @@ namespace Synchronizers {
                 }
             }
 
-            m_hpInUiAreWorking = p_initialData.healthVrPlayer <= m_UiLives.Length;
+            m_hpInUiAreWorking = m_initialDataBuffer.healthVrPlayer <= m_UiLives.Length;
 
             if (m_hpInUiAreWorking) {
-                m_livesLeft = (byte) p_initialData.healthVrPlayer;
+                m_livesLeft = (byte) m_initialDataBuffer.healthVrPlayer;
 
                 for (var i = 0; i < m_UiLives.Length; i++) {
                     m_UiLives[i].gameObject.SetActive(i <= m_livesLeft); //Setting active as many UI hearts as the number of lives

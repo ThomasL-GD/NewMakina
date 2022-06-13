@@ -24,7 +24,7 @@ namespace Network.Connexion_Menu {
             MyNetworkManager.singleton.SendVrData(new ReadyToPlay(){});
         }
 
-        private void EraseFeedback(InitialData p_initialdata) {
+        private void EraseFeedback(InitialData p_initialData) {
             m_waitForOtherToBeReadyGameObject.SetActive(false);
         }
     

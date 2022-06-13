@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class RecenterVrRig : MonoBehaviour {
@@ -9,7 +10,7 @@ public class RecenterVrRig : MonoBehaviour {
 
     private void OnEnable() {
         m_startPos = transform.position;
-        SubscribeToRecenter();
+        if (m_recenterOnTransition) Transition.a_transitionDoneInfinite += Recenter;
     }
 
     private void Start() {
@@ -32,11 +33,7 @@ public class RecenterVrRig : MonoBehaviour {
         transform1.position = position;
     }
 
-    private void SubscribeToRecenter() {
-        if(m_recenterOnTransition) {
-            Transition.a_transitionDone += Recenter;
-            Transition.a_transitionDone += SubscribeToRecenter;
-            Transition.a_openToSubscriptions += SubscribeToRecenter;
-        }
+    private void OnDestroy() {
+        Transition.a_transitionDoneInfinite -= Recenter;
     }
 }
