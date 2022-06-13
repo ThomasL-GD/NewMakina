@@ -132,6 +132,8 @@ namespace Player_Scripts
         private float m_headBobPreviousTime;
         private bool m_sprinting;
         private Vector2 m_inputDirection;
+        private Vector2 m_currentMouseDelta = Vector2.zero;
+        private Vector2 m_currentMouseDeltaVelocity = Vector2.zero;
 
 
         // Start is called before the first frame update
@@ -608,14 +610,19 @@ namespace Player_Scripts
     
         #region Camera
 
+        private Vector3 v1 = Vector3.zero;
+        private Vector3 v2 = Vector3.zero;
+        
         /// <summary/> Updating the camera's rotation position
         void UpdateMouseLook()
         {
             // Fetching the player's input
-            Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        
+            Vector2 targetMouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+
+            m_currentMouseDelta = Vector2.SmoothDamp(m_currentMouseDelta, targetMouseDelta, ref m_currentMouseDeltaVelocity, .3f);
+            
             // Calculating the camera's pitch
-            m_cameraPitch -= mouseDelta.y * m_mouseSensitivity;
+            m_cameraPitch -= m_currentMouseDelta.y * m_mouseSensitivity;
         
             //Clamping the pitch to avoid barrel rolls (._.)(.-.)(._.)
             m_cameraPitch = Mathf.Clamp(m_cameraPitch, -90.0f, 90.0f);
@@ -624,7 +631,7 @@ namespace Player_Scripts
             m_cameraTr.localEulerAngles = Vector3.right * m_cameraPitch;
 
             //Calculating the camera's yaw
-            Vector3 cameraYaw = Vector3.up * (mouseDelta.x * m_mouseSensitivity);
+            Vector3 cameraYaw = Vector3.up * (m_currentMouseDelta.x * m_mouseSensitivity);
         
             //Setting the camera and the player's new yaw
             m_cameraParentTr.Rotate(cameraYaw);
