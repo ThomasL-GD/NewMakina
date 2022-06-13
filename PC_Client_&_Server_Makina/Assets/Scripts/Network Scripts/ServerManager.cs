@@ -17,7 +17,7 @@ public class ServerManager : MonoBehaviour
     private delegate void OnSendDataToClients();
     private OnSendDataToClients OnServerTick;
 
-    [SerializeField] public bool m_practice = false;
+    private bool m_practice = false;
     
     #region Buffers
 
@@ -38,6 +38,7 @@ public class ServerManager : MonoBehaviour
     private DropTp m_dropTpBuffer;
     private Teleported m_teleporttedBuffer;
     private PotentialSpawnPoints m_potentialSpawnPointsBuffer;
+    private InitiateLobby m_initiateLobbyBuffer;
     
     private bool m_vrReadyBuffer;
     private bool m_pcReadyBuffer;
@@ -67,8 +68,7 @@ public class ServerManager : MonoBehaviour
 
     /// <summary>The local position of the child of the right hand that determines the point from where the laser is shot </summary>
     private Vector3 m_fingertipOffset;
-    
-    
+
     [Header("Elevators")]
     
     [SerializeField, Tooltip("The speed of the elevators in m/s")] private float f_elevatorSpeed = 5.8f;
@@ -92,6 +92,7 @@ public class ServerManager : MonoBehaviour
     private float m_heartZoneRadius = 0f;
     
     private float m_heartTimer = 0f;
+    private float m_heartTimerStart = 0f;
     
     [SerializeField, Range(0f,100f)] private float f_heartDestroyTime = 5f;
     private float m_heartDestroyTime = 0f;
@@ -219,6 +220,14 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<Tutorial>(OnReceiveTutorial);
         NetworkServer.RegisterHandler<PotentialSpawnPoints>(OnReceivePotentialSpawnpoints);
         NetworkServer.RegisterHandler<VrInitialValues>(OnReceiveVRInitialValues);
+        NetworkServer.RegisterHandler<InitiateLobby>(OnReceiveInitiateLobby);
+    }
+
+    private void OnReceiveInitiateLobby(NetworkConnection p_client, InitiateLobby p_mess)
+    {
+        m_initiateLobbyBuffer = p_mess;
+        m_practice = p_mess.practice;
+        SendToBothClients(m_initiateLobbyBuffer);
     }
 
 
@@ -545,6 +554,9 @@ public class ServerManager : MonoBehaviour
         if (m_vrPlayerHealth <= 0)
             EndGame(ClientConnection.PcPlayer);
     }
+
+    private bool startedTimer = false;
+    
     private void CheckHeartDestroyRange()
     {
         Vector2 horizontalPlayerPosition = new Vector2(m_pcTransformBuffer.position.x, m_pcTransformBuffer.position.z);
@@ -558,7 +570,12 @@ public class ServerManager : MonoBehaviour
             Vector2 horizontalheartPosition = new Vector2(m_heartTransforms[i].position.x,m_heartTransforms[i].position.z);
             if (Vector2.Distance(horizontalPlayerPosition, horizontalheartPosition) < m_heartZoneRadius)
             {
-                m_heartTimer += m_tickDelta;
+                if (!startedTimer)
+                {
+                    startedTimer = true;
+                    m_heartTimerStart = Time.time;
+                }
+                m_heartTimer = Mathf.Abs(Time.time - m_heartTimerStart);
                 SendToBothClients(new HeartConquerStart() {time = m_heartTimer, index =  i});
                 
                 if (m_heartTimer>m_heartDestroyTime)
@@ -574,6 +591,7 @@ public class ServerManager : MonoBehaviour
         if (m_heartTimer == 0) return;
         
         SendToBothClients(new HeartConquerStop());
+        startedTimer = false;
         m_heartTimer = 0f;
     }
     

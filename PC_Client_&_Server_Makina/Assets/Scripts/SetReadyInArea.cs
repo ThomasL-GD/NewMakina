@@ -12,6 +12,8 @@ public class SetReadyInArea : MonoBehaviour
     [SerializeField] private TextMeshProUGUI m_heartRadiusFeedback;
     [SerializeField] private AudioSource m_heartBreakingAudioSource;
     [SerializeField] private HeartVFXHandler m_vfxHandler;
+
+    [SerializeField] private GameObject[] m_healthElements;
     
     // Update is called once per frame
     void Update()
@@ -36,6 +38,10 @@ public class SetReadyInArea : MonoBehaviour
             if (m_timer > m_maxHeartTime)
             {
                 m_heartRadiusFeedback.enabled = false;
+                foreach (var healthElements in m_healthElements) healthElements.SetActive(true);
+                
+
+                
                 return;
             }
             
