@@ -30,7 +30,11 @@ namespace CustomMessages {
     public struct PotentialSpawnPoints : NetworkMessage {
         public Vector3[] position;
     }
-    
+
+    public struct InitiateLobby : NetworkMessage {
+        public bool practice;
+    }
+
     #endregion
     
     #region Tp_Rollback

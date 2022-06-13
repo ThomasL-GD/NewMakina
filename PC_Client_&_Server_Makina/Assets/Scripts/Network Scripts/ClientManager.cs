@@ -110,6 +110,10 @@ public class ClientManager : MonoBehaviour
     public delegate void ReceiveVrInitialValuesDelegator(VrInitialValues p_vrInitialValues);
     public static ReceiveVrInitialValuesDelegator OnReceiveVrInitialValues;
     
+    /// <summary/> The delegate that will be called each time the client receives a InitiateLobby message
+    public delegate void InitiateLobbyDelegator(InitiateLobby p_heartConquerStop);
+    public static InitiateLobbyDelegator OnReceiveInitiateLobby;
+    
     #endregion
     [SerializeField, Tooltip("The player Object to get the player's location")] public GameObject m_playerObject;
 
@@ -157,7 +161,10 @@ public class ClientManager : MonoBehaviour
         NetworkClient.RegisterHandler<HeartConquerStart>(ReceiveHeartConquerStart);
         NetworkClient.RegisterHandler<HeartConquerStop>(ReceiveHeartConquerStop);
         NetworkClient.RegisterHandler<VrInitialValues>(ReceiveVrInitialValues);
+        NetworkClient.RegisterHandler<InitiateLobby>(ReceiveInitiateLobby);
     }
+
+    private void ReceiveInitiateLobby(InitiateLobby p_initiateLobby)=>OnReceiveInitiateLobby?.Invoke(p_initiateLobby);
 
     private void ReceiveHeartConquerStop(HeartConquerStop p_heartConquerStop)=>OnReceiveHeartConquerStop?.Invoke(p_heartConquerStop);
 
