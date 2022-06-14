@@ -63,7 +63,7 @@ public class BeaconBehavior : GrabbablePhysickedObject {
 
         m_synchronizer.SendBeaconActivation(m_index, m_serverID);
         
-        
+        SoundManager.Instance.BeaconHitGround();
     }
 
     protected override void BeingDestroyed() {

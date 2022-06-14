@@ -21,9 +21,6 @@ namespace Synchronizers {
         [SerializeField] private Color m_undetectedColor = Color.red;
         [SerializeField] private Color m_detectedColor = Color.green;
         //[SerializeField] private Color m_unactiveColor = Color.blue;
-        
-        [Header("Sounds")]
-        [SerializeField, Tooltip("The audioclip that will play when the beacon turns active")] private AudioClip m_beaconDetectSound;
 
         
         private int m_beaconBitMaskDetected = 0;
@@ -227,15 +224,8 @@ namespace Synchronizers {
                 return;
             }
 
-            if (!m_beacons[index ?? 0].isDetecting && p_beaconDetectionUpdate.playerDetected) {
-                AudioSource audioSource;
-                
-                //Get the audiosource component or add one
-                audioSource = m_beacons[index ?? 0].deployedBeaconScript.gameObject.TryGetComponent(out AudioSource ad) ? ad : m_beacons[index ?? 0].deployedBeaconScript.gameObject.AddComponent<AudioSource>();
-                
-                audioSource.clip = m_beaconDetectSound;
-                audioSource.Play();
-            }
+            if (!m_beacons[index ?? 0].isDetecting && p_beaconDetectionUpdate.playerDetected)  SoundManager.Instance.BeaconDetectSound();
+            
             m_beacons[index??0].isDetecting = p_beaconDetectionUpdate.playerDetected;
             
             ActualiseColorOfBeacon(index??0);

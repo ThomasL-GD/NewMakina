@@ -1,16 +1,88 @@
+using System;
+using System.Collections;
+using CustomMessages;
+using Network;
 using Synchronizers;
+using UnityEngine;
 
 public class SoundManager : Synchronizer<SoundManager> {
-    
+
+    [Serializable] private struct SoundOptions {
+        public AudioSource audioSource;
+        [Tooltip("If false, will cut the previous sound of this type before playing a new one")] public bool canBePlayedSuperposed;
+
+        public void Play() {
+            if (audioSource == null) return;
+            if (!canBePlayedSuperposed) audioSource.Stop();
+            audioSource.Play();
+        }
+
+        public void Stop() {
+            if (audioSource == null) return;
+            audioSource.Stop();
+        }
+    }
+
+    public static Action<LaserState, bool> a_laser;
+    private Coroutine m_isChargingLaser;
+
+    [SerializeField] private SoundOptions m_heartBreak;
+    [SerializeField] private SoundOptions m_laserShot;
+    [SerializeField] private SoundOptions m_laserLoad;
+    [SerializeField] private SoundOptions m_kill;
+    [SerializeField] private SoundOptions m_killDecoy;
+    [SerializeField] private SoundOptions m_teleport;
+    [SerializeField] private SoundOptions m_beaconGetsActive;
+    [SerializeField] private SoundOptions m_beaconHitGround;
+
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
+        MyNetworkManager.OnReceiveHeartBreak += HeartBreakSound;
+        MyNetworkManager.OnReceiveDestroyLeure += DestroyLeureSound;
+        MyNetworkManager.OnReceiveTeleported += TeleportSound;
+
+        a_laser += LaserSounds;
+    }
+
+    private void HeartBreakSound(HeartBreak p_heartBreak) {
+        m_heartBreak.Play();
+    }
+
+    private void LaserSounds(LaserState p_laserState, bool p_hit) {
+        switch (p_laserState) {
+            
+            case LaserState.Aiming:
+                //m_isChargingLaser = true;
+                break;
+            case LaserState.Shooting:
+                m_laserShot.Play();
+                if(p_hit) m_kill.Play();
+                break;
+            case LaserState.CancelAiming:
+                //m_isChargingLaser = false;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    IEnumerator ChargeSound() {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private void DestroyLeureSound(DestroyLeure p_destroyLeure) {
+        m_killDecoy.Play();
+    }
+
+    private void TeleportSound(Teleported p_teleported) {
+        m_teleport.Play();
+    }
+
+    public void BeaconDetectSound() {
+        m_beaconGetsActive.Play();
+    }
+
+    public void BeaconHitGround() {
+        m_beaconHitGround.Play();
     }
 }
