@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -12,7 +11,9 @@ namespace Tutorial {
         [SerializeField, Tooltip("Let 0 for automatic")] private float m_heightThatIsConsideredUnderground = 0f;
 
         private bool m_isEmerged;
+#pragma warning disable CS0414
         private bool m_isMoving;
+#pragma warning restore CS0414
 
         public delegate void EmergeStateDelegator();
         public EmergeStateDelegator OnEmergeDone;

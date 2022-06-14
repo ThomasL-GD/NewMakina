@@ -77,7 +77,9 @@ namespace CustomMessages {
     
     public struct RestartGame : NetworkMessage { }
     
-    public struct ReadyToPlay : NetworkMessage { }
+    public struct ReadyToFace : NetworkMessage { }
+    
+    public struct ReadyToGoIntoTheBowl : NetworkMessage { }
 
     public struct Tutorial : NetworkMessage {
         public bool isInTutorial;

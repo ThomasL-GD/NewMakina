@@ -17,7 +17,7 @@ public class SetReadyFunction : MonoBehaviour {
     public void SetReady() {
         m_waitForOtherToBeReadyGameObject.SetActive(true);
         MyNetworkManager.OnReceiveInitialData += EraseFeedback;
-        MyNetworkManager.singleton.SendVrData(new ReadyToPlay(){});
+        MyNetworkManager.singleton.SendVrData(new ReadyToFace(){});
     }
 
     private void EraseFeedback(InitialData p_initialdata) {

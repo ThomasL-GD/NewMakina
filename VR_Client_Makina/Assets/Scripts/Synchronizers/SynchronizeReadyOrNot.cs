@@ -10,7 +10,8 @@ namespace Synchronizers {
         [SerializeField] [Tooltip("This will be set unactive once the player needs to confirm their readyness")] private GameObject[] m_objectToDesactiveOnReady = null;
         
         private void Start() {
-            MyNetworkManager.OnReadyToPlay += AppearReadyButton;
+            MyNetworkManager.OnReadyToFace += AppearReadyButton;
+            MyNetworkManager.OnReadyToGoIntoTheBowl += GoInGame;
             MyNetworkManager.OnReceiveInitialData += DisappearReadyButton;
             
             if(m_objectToActiveOnReady == null) {
@@ -21,7 +22,7 @@ namespace Synchronizers {
             foreach (GameObject obj in m_objectToActiveOnReady) obj.SetActive(false);
         }
 
-        private void AppearReadyButton(ReadyToPlay p_ready) {
+        private void AppearReadyButton(ReadyToFace p_ready) {
             foreach (GameObject obj in m_objectToActiveOnReady) obj.SetActive(true);
             foreach (GameObject obj in m_objectToDesactiveOnReady) obj.SetActive(false);
         }
@@ -29,6 +30,10 @@ namespace Synchronizers {
         private void DisappearReadyButton(InitialData p_initialData) {
             foreach (GameObject obj in m_objectToActiveOnReady) obj.SetActive(false);
         }
-    }
 
+        private void GoInGame(ReadyToGoIntoTheBowl p_readyToGoIntoTheBowl) {
+            Transition.a_transitionDone += SynchroniseInitiateLobby.Instance.SetPlayScene;
+            Transition.Instance.StartTransition();
+        }
+    }
 }

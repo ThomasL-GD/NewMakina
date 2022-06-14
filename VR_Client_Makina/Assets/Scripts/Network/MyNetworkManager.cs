@@ -50,9 +50,14 @@ namespace Network {
         public static DropTpDelegator OnReceiveDropTp;
     
 
-        /// <summary/> Is called when we receive new ReadyToPlay data from server
-        public delegate void ReadyOrNotDelegator(ReadyToPlay p_ready);
-        public static ReadyOrNotDelegator OnReadyToPlay;
+        /// <summary/> Is called when we receive new ReadyToFaceReadyToFace data from server
+        public delegate void ReadyOrNotDelegator(ReadyToFace p_ready);
+        public static ReadyOrNotDelegator OnReadyToFace;
+    
+
+        /// <summary/> Is called when we receive new ReadyToFaceReadyToFace data from server
+        public delegate void ReadyToGoIntoTheBowlDelegator(ReadyToGoIntoTheBowl p_ready);
+        public static ReadyToGoIntoTheBowlDelegator OnReadyToGoIntoTheBowl;
     
 
         /// <summary/> Is called when we receive new PcTransform data from server
@@ -199,7 +204,8 @@ namespace Network {
             NetworkClient.RegisterHandler<SpawnLeure>(ReceiveSpawnLeure);
             NetworkClient.RegisterHandler<DestroyLeure>(ReceiveDestroyLeure);
             NetworkClient.RegisterHandler<LeureTransform>(ReceiveLeureTransform);
-            NetworkClient.RegisterHandler<ReadyToPlay>(ReceiveReadyToPlay);
+            NetworkClient.RegisterHandler<ReadyToFace>(ReceiveReadyToPlay);
+            NetworkClient.RegisterHandler<ReadyToGoIntoTheBowl>(ReceiveReadyToGoIntoTheBowl);
             NetworkClient.RegisterHandler<DropTp>(ReceiveDropTp);
             NetworkClient.RegisterHandler<RemoveTp>(ReceiveRemoveTp);
             NetworkClient.RegisterHandler<Teleported>(ReceiveTeleported);
@@ -221,7 +227,9 @@ namespace Network {
 
         private void ReceiveDropTp(DropTp p_dropTp) => OnReceiveDropTp?.Invoke(p_dropTp);
 
-        private void ReceiveReadyToPlay(ReadyToPlay p_readyToPlay) => OnReadyToPlay?.Invoke(p_readyToPlay);
+        private void ReceiveReadyToPlay(ReadyToFace p_readyToFace) => OnReadyToFace?.Invoke(p_readyToFace);
+        
+        private void ReceiveReadyToGoIntoTheBowl(ReadyToGoIntoTheBowl p_readyToGoIntoTheBowl) => OnReadyToGoIntoTheBowl?.Invoke(p_readyToGoIntoTheBowl);
 
         private void ReceiveActivateFlair(ActivateFlair p_activateFlair) => OnReceiveActivateFlair?.Invoke(p_activateFlair);
 

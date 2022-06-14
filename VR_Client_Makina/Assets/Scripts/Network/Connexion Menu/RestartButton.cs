@@ -4,11 +4,11 @@ namespace Network.Connexion_Menu {
 
     public class RestartButton : AttackSensitiveButton {
         public override void OnBeingActivated() {
-            MyNetworkManager.OnReadyToPlay += DeactivateMySelf;
+            MyNetworkManager.OnReadyToFace += DeactivateMySelf;
             MyNetworkManager.singleton.SendVrData(new RestartGame(){});
         }
 
-        private void DeactivateMySelf(ReadyToPlay p_r) {
+        private void DeactivateMySelf(ReadyToFace p_r) {
             gameObject.SetActive(false);
         }
     }

@@ -21,7 +21,7 @@ namespace Network.Connexion_Menu {
             m_waitForOtherToBeReadyGameObject.SetActive(true);
             foreach (GameObject goToDepop in m_gosToDepopOnShot) goToDepop.SetActive(false);
             MyNetworkManager.OnReceiveInitialData += EraseFeedback;
-            MyNetworkManager.singleton.SendVrData(new ReadyToPlay(){});
+            MyNetworkManager.singleton.SendVrData(new ReadyToFace(){});
         }
 
         private void EraseFeedback(InitialData p_initialData) {
@@ -31,7 +31,7 @@ namespace Network.Connexion_Menu {
 #if UNITY_EDITOR
         [ContextMenu("SetReady")]
         private void SetReadyDebug() {
-            MyNetworkManager.singleton.SendVrData(new ReadyToPlay(){});
+            MyNetworkManager.singleton.SendVrData(new ReadyToFace(){});
         }
 #endif
     }
