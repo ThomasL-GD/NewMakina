@@ -26,9 +26,8 @@ public class FadeToBlack : MonoBehaviour
     {
         Color color = m_blackSceen.color;
         float timer = 0f;
-        while (m_blackSceen.color.a != 1)
+        while (timer < 1)
         {
-            
             color.a = Mathf.Min(m_fadeCurve.Evaluate(timer += Time.deltaTime), 1f);
             m_blackSceen.color = color;
             yield return null;
@@ -37,7 +36,7 @@ public class FadeToBlack : MonoBehaviour
         p_player.position = p_position;
         
         timer = 1f;
-        while (m_blackSceen.color.a != 0)
+        while (timer > 0)
         {
             color.a = Mathf.Max(m_fadeCurve.Evaluate(timer -= Time.deltaTime), 0f);
             m_blackSceen.color = color;
