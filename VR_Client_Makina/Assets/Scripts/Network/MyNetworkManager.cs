@@ -132,6 +132,10 @@ namespace Network {
         /// <summary/> The delegate that will be called each time the client receives a PotentialSpawnPoints message
         public delegate void PotentialSpawnPointsDelegator(PotentialSpawnPoints p_potentialSpawnPoints);
         public static PotentialSpawnPointsDelegator OnReceivePotentialSpawnPoints;
+        
+        
+        public delegate void InitiateLobbyDelegator(InitiateLobby p_initiateLobby);
+        public static InitiateLobbyDelegator OnReceiveInitiateLobby;
         #endregion
         
         /// <summary>
@@ -202,6 +206,7 @@ namespace Network {
             NetworkClient.RegisterHandler<HeartConquerStart>(ReceiveHeartConquerStart);
             NetworkClient.RegisterHandler<HeartConquerStop>(ReceiveHeartConquerStop);
             NetworkClient.RegisterHandler<PotentialSpawnPoints>(ReceivePotentialSpawnPoints);
+            NetworkClient.RegisterHandler<InitiateLobby>(ReceiveInitiateLobby);
         
             OnConnection?.Invoke();
         }
@@ -223,7 +228,6 @@ namespace Network {
         private void ReceiveSpawnLeure(SpawnLeure p_spawnLeure) => OnReceiveSpawnLeure?.Invoke(p_spawnLeure);
 
         private void ReceiveDestroyLeure(DestroyLeure p_destroyLeure){
-            Debug.Log("Received DestroyLeure");
             OnReceiveDestroyLeure?.Invoke(p_destroyLeure);
         }
 
@@ -309,6 +313,8 @@ namespace Network {
         private void ReceiveBombExplosion(BombExplosion p_bombExplosion) => OnReceiveBombExplosion?.Invoke(p_bombExplosion); 
         
         private void ReceivePotentialSpawnPoints(PotentialSpawnPoints p_potentialSpawnPoints) => OnReceivePotentialSpawnPoints?.Invoke(p_potentialSpawnPoints);
+        
+        private void ReceiveInitiateLobby(InitiateLobby p_initiateLobby) => OnReceiveInitiateLobby?.Invoke(p_initiateLobby);
 
 
         private IEnumerator ForceConnect() {

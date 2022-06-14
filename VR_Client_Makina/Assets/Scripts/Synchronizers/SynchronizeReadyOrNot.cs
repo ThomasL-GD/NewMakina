@@ -1,4 +1,3 @@
-using System;
 using CustomMessages;
 using Network;
 using UnityEngine;
@@ -8,6 +7,8 @@ namespace Synchronizers {
     public class SynchronizeReadyOrNot : Synchronizer<SynchronizeReadyOrNot> {
 
         [SerializeField] [Tooltip("This will be set active once the player needs to confirm their readyness, so it better have a ReadyButton somewhere")] private GameObject[] m_objectToActiveOnReady = null;
+        [SerializeField] [Tooltip("This will be set unactive once the player needs to confirm their readyness")] private GameObject[] m_objectToDesactiveOnReady = null;
+        
         private void Start() {
             MyNetworkManager.OnReadyToPlay += AppearReadyButton;
             MyNetworkManager.OnReceiveInitialData += DisappearReadyButton;
@@ -22,6 +23,7 @@ namespace Synchronizers {
 
         private void AppearReadyButton(ReadyToPlay p_ready) {
             foreach (GameObject obj in m_objectToActiveOnReady) obj.SetActive(true);
+            foreach (GameObject obj in m_objectToDesactiveOnReady) obj.SetActive(false);
         }
 
         private void DisappearReadyButton(InitialData p_initialData) {
