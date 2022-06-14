@@ -11,9 +11,7 @@ namespace Synchronizers {
         [SerializeField] private Transform[] m_UiLives;
         private byte m_livesLeft = 0;
         private bool m_hpInUiAreWorking = false;
-
-        [SerializeField] private AudioSource m_audioSource;
-        [SerializeField] private AudioClip m_heartDestroyedSound = null;
+        
         [SerializeField] private float m_heartDestructionTime = 6f;
         [SerializeField] private float m_heartLaserFlashPhase = 0.5f;
 
@@ -94,11 +92,6 @@ namespace Synchronizers {
 
             // Synching the data with the feedback
             SynchronizeInitialData.instance.LoseVrHealth();
-            
-            // Audio Feedback
-            m_audioSource.Stop();
-            m_audioSource.clip = m_heartDestroyedSound;
-            m_audioSource.Play();
         }
 
         /// <summary/> The Coroutine called to break a heart 

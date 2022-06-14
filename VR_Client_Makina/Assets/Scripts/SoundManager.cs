@@ -40,9 +40,10 @@ public class SoundManager : Synchronizer<SoundManager> {
         MyNetworkManager.OnReceiveHeartBreak += HeartBreakSound;
         MyNetworkManager.OnReceiveDestroyLeure += DestroyLeureSound;
         MyNetworkManager.OnReceiveTeleported += TeleportSound;
-
-        a_laser += LaserSounds;
     }
+    
+    private void OnEnable() => a_laser += LaserSounds;
+    private void OnDisable() => a_laser -= LaserSounds;
 
     private void HeartBreakSound(HeartBreak p_heartBreak) {
         m_heartBreak.Play();
