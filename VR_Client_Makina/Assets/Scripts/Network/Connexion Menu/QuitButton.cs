@@ -27,6 +27,7 @@ namespace Network.Connexion_Menu {
                 m_resetCoroutine = StartCoroutine(ResetAlreadyShot());
             }
             else {
+                Debug.Log("Quit motherfucker");
                 Application.Quit();
             }
         }
@@ -39,7 +40,7 @@ namespace Network.Connexion_Menu {
         private void Initialize() {
             m_hasAlreadyBeenShotOnce = false;
             m_text.text = m_originalMessage;
-            StopCoroutine(m_resetCoroutine);
+            if(m_resetCoroutine != null)StopCoroutine(m_resetCoroutine);
         }
     }
 }

@@ -40,6 +40,7 @@ namespace Synchronizers
             }
 
             foreach (Transform point in m_uiPoint) point.gameObject.SetActive(false);
+            foreach (GameObject go in m_objectToActiveOnStartGame) go.SetActive(false);
         }
 
         /// <summary/> Function called when the client received the initial data
@@ -51,7 +52,7 @@ namespace Synchronizers
             UpdateHealthText();
 
             Transition.a_transitionDone += SetPlayScene;
-            Transition.m_instance.StartTransition();
+            Transition.Instance.StartTransition();
         }
 
         private void SetPlayScene() {
