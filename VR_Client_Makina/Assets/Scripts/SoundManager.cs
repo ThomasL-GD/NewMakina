@@ -24,7 +24,7 @@ public class SoundManager : Synchronizer<SoundManager> {
     }
 
     public static Action<LaserState, bool> a_laser;
-    private Coroutine m_isChargingLaser;
+    private bool m_isChargingLaser;
 
     [SerializeField] private SoundOptions m_heartBreak;
     [SerializeField] private SoundOptions m_laserShot;
@@ -52,14 +52,16 @@ public class SoundManager : Synchronizer<SoundManager> {
         switch (p_laserState) {
             
             case LaserState.Aiming:
-                //m_isChargingLaser = true;
+                if (m_isChargingLaser) break;
+                StartCoroutine(ChargeSound());
+                m_isChargingLaser = true;
                 break;
             case LaserState.Shooting:
                 m_laserShot.Play();
                 if(p_hit) m_kill.Play();
                 break;
             case LaserState.CancelAiming:
-                //m_isChargingLaser = false;
+                m_isChargingLaser = false;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -67,7 +69,11 @@ public class SoundManager : Synchronizer<SoundManager> {
     }
 
     IEnumerator ChargeSound() {
-        
+        m_laserLoad.Play();
+        while (m_isChargingLaser) {
+            yield return null;
+        }
+        m_laserLoad.Stop();
     }
 
     private void DestroyLeureSound(DestroyLeure p_destroyLeure) {
