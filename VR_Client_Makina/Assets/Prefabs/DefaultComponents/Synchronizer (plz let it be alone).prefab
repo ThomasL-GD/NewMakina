@@ -25,6 +25,8 @@ GameObject:
   - component: {fileID: 3738830432197085450}
   - component: {fileID: 6395972039275196087}
   - component: {fileID: 3611048692519340846}
+  - component: {fileID: 3596748892314206793}
+  - component: {fileID: 4136474034802658885}
   m_Layer: 0
   m_Name: Synchronizer (plz let it be alone)
   m_TagString: Untagged
@@ -81,9 +83,6 @@ MonoBehaviour:
   m_upTriggerValue: 0.66
   m_input: 2
   m_laserLoadingTime: 1.5
-  m_audioSource: {fileID: 0}
-  m_niceShotQuestionMark: 1
-  m_niceShotSound: {fileID: 8300000, guid: 40acfb257e1855345b2222c5a5a63ab9, type: 3}
   m_laserVFXHandler: {fileID: 0}
 --- !u!114 &5783733579950633029
 MonoBehaviour:
@@ -134,8 +133,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_heartPrefabs: {fileID: 1392772383475821737, guid: be8f4e1bc2d318a4caad43b62a2163ea, type: 3}
   m_UiLives: []
-  m_audioSource: {fileID: 0}
-  m_heartDestroyedSound: {fileID: 8300000, guid: a6f5d3b53fcdf9342b13c0abc931c9d9, type: 3}
   m_heartDestructionTime: 6
   m_heartLaserFlashPhase: 0.5
 --- !u!114 &5783733579950633026
@@ -164,7 +161,6 @@ MonoBehaviour:
   m_inflateTime: 0.178
   m_undetectedColor: {r: 0, g: 0, b: 0, a: 1}
   m_detectedColor: {r: 1, g: 1, b: 1, a: 1}
-  m_beaconDetectSound: {fileID: 8300000, guid: e2f9393d409fc1147a96c3e9a3a606e2, type: 3}
   m_prefabDropDownFeedback: {fileID: 5155275930683169883, guid: 652058eb3f88af74797b4974bbae9634, type: 3}
 --- !u!114 &5783733579950633025
 MonoBehaviour:
@@ -200,6 +196,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_showHealthTime: 3
   m_uiPoint: []
+  m_objectToActiveOnStartGame: []
+  m_objectToDesactiveOnStartGame: []
 --- !u!114 &2047781738407387244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,6 +265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_objectToActiveOnReady:
   - {fileID: 0}
+  m_objectToDesactiveOnReady: []
 --- !u!114 &1661527278798300204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,7 +280,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_prefabTpPoint: {fileID: 5780574956763540240, guid: a6f8cd8a9d1197d459bf8799a02af2cf, type: 3}
   m_visualEffect: {fileID: 0}
-  m_soundWhenRollback: {fileID: 0}
 --- !u!114 &6459845886493274506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -723,3 +721,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_leure: {fileID: 0}
   m_deathFX: {fileID: 0}
+--- !u!114 &3596748892314206793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5783733579950633034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5607590a9e7be6645852ebdda8b9e59c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_heartBreak:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_laserShot:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_laserLoad:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_kill:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_killDecoy:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_teleport:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_beaconGetsActive:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_beaconHitGround:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+--- !u!114 &4136474034802658885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5783733579950633034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43e0daefd321406468a86b24b592a9f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

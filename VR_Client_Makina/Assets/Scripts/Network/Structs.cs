@@ -31,10 +31,6 @@ namespace CustomMessages {
         public Vector3[] position;
     }
 
-    public struct InitiateLobby : NetworkMessage {
-        public bool trial;
-    }
-
     #endregion
     
     #region Tp_Rollback
@@ -146,6 +142,11 @@ namespace CustomMessages {
     public struct VrInitialValues : NetworkMessage {
         /// <summary>The local position of the fingertip point that is a child of the right hand</summary>
         public Vector3 fingertipOffset;
+    }
+
+    public struct InitiateLobby : NetworkMessage {
+        public bool trial;
+        public float trialTime;
     }
     
     #endregion

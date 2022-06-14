@@ -14,9 +14,6 @@ public class SynchronizeTpRollback : Synchronizer<SynchronizeTpRollback> {
 
     [Header("Particles when tp")]
     [SerializeField] private VisualEffect m_visualEffect = null;
-
-    [Header("Sound")]
-    [SerializeField] private AudioSource m_soundWhenRollback;
     
     private void Start() {
 #if UNITY_EDITOR

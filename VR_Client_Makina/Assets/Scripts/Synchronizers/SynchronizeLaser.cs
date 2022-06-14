@@ -77,6 +77,7 @@ namespace Synchronizers {
             
             Debug.Log($"hit position : {p_laser.hitPosition}    hit : {p_laser.hit}", this);
             if(m_laserVFXHandler != null)m_laserVFXHandler.m_delegatedAction(new Laser(){hit = p_laser.hit, hitPosition = p_laser.hitPosition, laserState = p_laser.laserState}, 0f);
+            if(p_laser.laserState == LaserState.Shooting)SoundManager.a_laser?.Invoke(LaserState.Shooting, p_laser.hit);
             OnLaserLoad?.Invoke(IsLoading, false);
             OnLaserShot?.Invoke(IsShooting);
             
@@ -101,6 +102,7 @@ namespace Synchronizers {
                 m_elapsedTime = 0f;
                 if(m_laserVFXHandler != null)m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.Aiming}, 0f);
                 OnLaserLoad?.Invoke(IsLoading, true);
+                SoundManager.a_laser?.Invoke(LaserState.Aiming, false);
             }
 
             if (OVRInput.Get(m_input) < m_upTriggerValue) { //let go of the trigger
@@ -108,7 +110,10 @@ namespace Synchronizers {
                 MyNetworkManager.singleton.SendVrData<VrLaser>(new VrLaser(){laserState = LaserState.CancelAiming});
                 OnLaserLoad?.Invoke(IsLoading, false);
                 
-                if(m_isTriggerPressed && m_laserVFXHandler != null) m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.CancelAiming}, m_elapsedTime / m_laserLoadingTime);
+                if(m_isTriggerPressed) {
+                    if(m_laserVFXHandler != null)m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.CancelAiming}, m_elapsedTime / m_laserLoadingTime);
+                    SoundManager.a_laser?.Invoke(LaserState.CancelAiming, false);
+                }
                 
                 m_isTriggerPressed = false;
                 m_isLoading = false;
@@ -118,6 +123,7 @@ namespace Synchronizers {
             if (!m_isLoading || !m_isTriggerPressed) return; // Holding
                 m_elapsedTime += Time.deltaTime;
                 if(m_laserVFXHandler != null)m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.Aiming}, m_elapsedTime / m_laserLoadingTime);
+                SoundManager.a_laser?.Invoke(LaserState.CancelAiming, false);
 
                 if (!(m_elapsedTime > m_laserLoadingTime)) return; // shooting
             
