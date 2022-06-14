@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3837761866233149187}
   - component: {fileID: 9200903866871456404}
   - component: {fileID: 2576165630043192937}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Credits Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 5129636886591049549}
   - component: {fileID: 795420621099408970}
   - component: {fileID: 7591967939383924380}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Play Button (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -398,7 +398,7 @@ GameObject:
   - component: {fileID: 3865308608646067206}
   - component: {fileID: 1112553481858790678}
   - component: {fileID: 5787118452878367769}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Play Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1030,7 +1030,8 @@ GameObject:
   - component: {fileID: 5410290416924801774}
   - component: {fileID: 5410290416924801775}
   - component: {fileID: 5410290416924801772}
-  m_Layer: 0
+  - component: {fileID: 993915430390149453}
+  m_Layer: 7
   m_Name: Quit Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1112,7 +1113,7 @@ MeshCollider:
   m_GameObject: {fileID: 5410290416924801770}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -1132,6 +1133,19 @@ MonoBehaviour:
   m_text: {fileID: 5410290417231327727}
   m_areYouSureMessage: Are you sure you want to quit ?
   m_timeToReset: 15
+--- !u!65 &993915430390149453
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5410290416924801770}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10.000005, y: 0.26, z: 10.000002}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5410290417231327724
 GameObject:
   m_ObjectHideFlags: 0

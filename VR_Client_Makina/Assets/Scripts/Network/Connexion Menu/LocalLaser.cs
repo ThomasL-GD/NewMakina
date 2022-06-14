@@ -61,7 +61,10 @@ namespace Network.Connexion_Menu {
             if (OVRInput.Get(m_input) < m_upTriggerValue) { //Let go
                 OnLaserLoad?.Invoke(IsLoading, false);
                 OnLocalCharge?.Invoke(true, gameObject);
-                if (m_isShooting && m_laserVFXHandler != null) m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.CancelAiming}, m_elapsedHoldingTime / m_laserLoadingTime);
+                if (m_isShooting) {
+                    if(m_laserVFXHandler != null)m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.CancelAiming}, m_elapsedHoldingTime / m_laserLoadingTime);
+                    SoundManager.a_laser?.Invoke(LaserState.CancelAiming, false);
+                }
                 
                 m_isShooting = false;
                 m_elapsedHoldingTime = 0f;
@@ -117,9 +120,11 @@ namespace Network.Connexion_Menu {
                 OnLocalCharge?.Invoke(false, gameObject);
                 m_elapsedHoldingTime += Time.deltaTime;
                 if (m_laserVFXHandler != null) m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.Aiming}, m_elapsedHoldingTime);
+                SoundManager.a_laser?.Invoke(LaserState.Aiming, false);
             }
             else if (OVRInput.Get (m_input) >= m_upTriggerValue) { // If the player press the trigger hard enough
                 if (m_laserVFXHandler != null) m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.Aiming}, 0f);
+                SoundManager.a_laser?.Invoke(LaserState.Aiming, false);
                 OnLaserLoad?.Invoke(IsLoading, true);
                 m_isShooting = true;
                 m_elapsedHoldingTime = 0f;
@@ -130,6 +135,7 @@ namespace Network.Connexion_Menu {
         IEnumerator ShotDownLaser(Vector3 p_startPos, Vector3 p_distance, bool p_isHitting) {
             
             if (m_laserVFXHandler != null) m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.Shooting, hit = p_isHitting, hitPosition = p_startPos + p_distance, length = p_distance.magnitude, origin = p_startPos}, 0f);
+            SoundManager.a_laser?.Invoke(LaserState.Shooting, p_isHitting);
             
             yield return new WaitForSeconds(m_laserDuration);
 
