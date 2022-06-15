@@ -26,7 +26,6 @@ GameObject:
   - component: {fileID: 6395972039275196087}
   - component: {fileID: 3611048692519340846}
   - component: {fileID: 3596748892314206793}
-  - component: {fileID: 4136474034802658885}
   m_Layer: 0
   m_Name: Synchronizer (plz let it be alone)
   m_TagString: Untagged
@@ -196,8 +195,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_showHealthTime: 3
   m_uiPoint: []
-  m_objectToActiveOnStartGame: []
-  m_objectToDesactiveOnStartGame: []
 --- !u!114 &2047781738407387244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,6 +260,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 952864cd1aaef3d419b5ffc3d9540d11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_objectToDesactiveWhenOutOfMenu: []
+  m_objectToActiveOnStartGame: []
+  m_objectToActiveOnLobby: []
   m_objectToActiveOnReady:
   - {fileID: 0}
   m_objectToDesactiveOnReady: []
@@ -757,15 +757,3 @@ MonoBehaviour:
   m_beaconHitGround:
     audioSource: {fileID: 0}
     canBePlayedSuperposed: 0
---- !u!114 &4136474034802658885
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5783733579950633034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43e0daefd321406468a86b24b592a9f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
