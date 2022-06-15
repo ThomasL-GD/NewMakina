@@ -88,11 +88,16 @@ namespace Synchronizers {
             MyNetworkManager.OnReceiveDestroyedBeacon += DestroyBeacon;
             MyNetworkManager.OnReceiveInitialData += SetRangeOfBeacons;
             MyNetworkManager.OnReceiveGameEnd += Reset;
+            MyNetworkManager.OnReceiveInitiateLobby += Reset;
+            MyNetworkManager.OnReadyToGoIntoTheBowl += Reset;
         }
 
-        /// <summary>Is called by the OnReceiveGameEnd and destroys every beacon to be ready to launch a new game </summary>
-        /// <param name="p_p_gameend">The message sent by the server</param>
-        private void Reset(GameEnd p_p_gameend) {
+        private void Reset(GameEnd p_message) => Reset();
+        private void Reset(InitiateLobby p_message) => Reset();
+        private void Reset(ReadyToGoIntoTheBowl p_message) => Reset();
+
+        /// <summary>Is called by the server and destroys every beacon to be ready to launch a new game </summary>
+        private void Reset() {
             
             //Destroying every beacon ψ(` ͜ʖ´)ψ
             for(int i = 0; i < m_beacons.Count; i++) {
