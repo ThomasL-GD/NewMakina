@@ -184,7 +184,14 @@ namespace Synchronizers {
             Shader.SetGlobalInteger(m_beaconDetectionBitMaskShaderID,m_beaconBitMaskDetected);
             //Debug.Log(Convert.ToString (beaconBitMaskDetected, 2));
 
-            foreach (var beaconData in m_beacons) if (beaconData.detected) return;
+            bool playerDetected = false;
+            foreach (var beaconData in m_beacons) {
+                if (!beaconData.detected) continue;
+                    playerDetected = true;
+                    break;
+            }
+            
+            SoundManager.Instance.BeaconDetectSound(playerDetected);
         }
 
         /// <summary/> Destroying the beacon based in the server info

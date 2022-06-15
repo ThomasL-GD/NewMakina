@@ -29,13 +29,14 @@ public class SoundManager : Synchronizer<SoundManager> {
     private bool m_isBreakingAHeart = false;
     private bool m_isInvisible = false;
     private bool m_isInVrAim = false;
+    private bool m_isInBeacon = false;
 
     [SerializeField] private float m_loadVolumeAugmentation = 0.1f;
     [Space]
     [SerializeField] private SoundOptions m_inVrLook;
     [SerializeField] private SoundOptions m_inVrAim;
     [SerializeField] private SoundOptions m_staysInvisible;
-    [SerializeField] private SoundOptions m_isInBeacon;
+    [SerializeField] private SoundOptions m_isInBeaconSound;
     [SerializeField] private SoundOptions m_triggerBeacon;
     [SerializeField] private SoundOptions m_death;
     [SerializeField] private SoundOptions m_respawn;
@@ -130,4 +131,27 @@ public class SoundManager : Synchronizer<SoundManager> {
             if(m_inVrLook.isPlaying) m_inVrLook.Stop();
         }
     }
+
+    #region Beacon
+    public void BeaconDetectSound(bool p_isPlayerDetected) {
+        if (p_isPlayerDetected) {
+            if (m_isInBeacon) return;
+            m_triggerBeacon.Play();
+            StartCoroutine(IsInBeaconSound());
+        }
+        else {
+            m_isInBeacon = false;
+        }
+    }
+
+    IEnumerator IsInBeaconSound() {
+        m_isInBeaconSound.Play();
+        while (m_isInBeacon) {
+            yield return null;
+        }
+        m_isInBeaconSound.Stop();
+    }
+    #endregion
+    
+    
 }
