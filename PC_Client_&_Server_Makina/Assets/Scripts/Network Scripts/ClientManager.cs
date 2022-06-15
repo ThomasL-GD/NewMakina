@@ -91,8 +91,8 @@ public class ClientManager : MonoBehaviour
     public static ActivateBlindDelegator OnReceiveActivateBlind;
         
     /// <summary/> The delegate that will be called each time the client receives a DestroyLeure message
-    public delegate void ReadyDelegator(ReadyToFace p_activateBlind);
-    public static ReadyDelegator OnReceiveReadyToPlay;
+    public delegate void ReadyDelegator(ReadyToFace p_readyToFace);
+    public static ReadyDelegator OnReceiveReadyToFace;
     
     /// <summary/> The delegate that will be called each time the client receives a DestroyLeure message
     public delegate void ReadyToGoIntoTheBowlDelegator(ReadyToGoIntoTheBowl p_readyToGoIntoTheBowl);
@@ -179,7 +179,7 @@ public class ClientManager : MonoBehaviour
 
     private void ReceiveDestroyLeure(DestroyLeure p_destroyLeureMessage) => OnReceiveDestroyLeure?.Invoke(p_destroyLeureMessage);
 
-    private void ReceiveReadyMessage(ReadyToFace p_readyMessage) => OnReceiveReadyToPlay?.Invoke(p_readyMessage);
+    private void ReceiveReadyMessage(ReadyToFace p_readyMessage) => OnReceiveReadyToFace?.Invoke(p_readyMessage);
     
 
     private void ReceiveActivateFlair(ActivateFlair p_activateFlair) => OnReceiveActivateFlair?.Invoke(p_activateFlair);

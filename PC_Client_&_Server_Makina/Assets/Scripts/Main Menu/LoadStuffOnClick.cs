@@ -29,9 +29,14 @@ public class LoadStuffOnClick : MonoBehaviour
         if (clicked) return;
         clicked = true;
         NetworkClient.Send(new InitiateLobby(){trial = m_practice});
+        NetworkClient.Send(new ReadyToFace());
     }
 
-    private void StartFade(InitiateLobby p_initiateLobby) => StartCoroutine(FadeToBlack());
+    private void StartFade(InitiateLobby p_initiateLobby)
+    {
+        Debug.Log("ready to face !");
+        StartCoroutine(FadeToBlack());
+    }
     
 
     IEnumerator FadeToBlack()
@@ -48,11 +53,12 @@ public class LoadStuffOnClick : MonoBehaviour
             yield return null;
         } while (color.a != 1f);
         
+        Debug.Log("fade to black button");
+        
         foreach (GameObject go in m_toEnable) go.SetActive(true);
         
         m_camera.SetActive(false);
-        NetworkClient.Send(new ReadyToFace());
-        
+
         do
         {
             timer -= Time.deltaTime / m_fadeTime;
