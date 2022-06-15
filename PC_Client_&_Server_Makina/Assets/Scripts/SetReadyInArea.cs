@@ -12,7 +12,6 @@ public class SetReadyInArea : MonoBehaviour
     private float m_timer;
     
     [SerializeField] private TextMeshProUGUI m_heartRadiusFeedback;
-    [SerializeField] private AudioSource m_heartBreakingAudioSource;
     [SerializeField] private HeartVFXHandler m_vfxHandler;
 
     [SerializeField] private GameObject[] m_healthElements;
@@ -24,9 +23,6 @@ public class SetReadyInArea : MonoBehaviour
         {
             m_timer += Time.deltaTime;
 
-            
-            if(m_heartRadiusFeedback.enabled == false) m_heartBreakingAudioSource.Play();
-        
             m_heartRadiusFeedback.enabled = true;
             string timer = m_timer.ToString();
             string text = "x,y";
@@ -50,7 +46,6 @@ public class SetReadyInArea : MonoBehaviour
 
         m_heartRadiusFeedback.enabled = false;
         m_heartRadiusFeedback.text = "";
-        m_heartBreakingAudioSource.Stop();
         
         m_timer = 0f;
     }

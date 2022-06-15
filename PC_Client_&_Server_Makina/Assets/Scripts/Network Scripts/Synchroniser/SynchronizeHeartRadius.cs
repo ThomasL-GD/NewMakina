@@ -6,7 +6,6 @@ using UnityEngine;
 public class SynchronizeHeartRadius : Synchronizer<SynchronizeHeartRadius>
 {
     [SerializeField] private TextMeshProUGUI m_heartRadiusFeedback;
-    [SerializeField] private AudioSource m_heartBreakingAudioSource;
 
     private int m_indexOfLastTouchedHeart = 0;
     private float m_maxHeartTime;
@@ -26,7 +25,6 @@ public class SynchronizeHeartRadius : Synchronizer<SynchronizeHeartRadius>
     {
         m_heartRadiusFeedback.enabled = false;
         m_heartRadiusFeedback.text = "";
-        m_heartBreakingAudioSource.Stop();
         if(SynchronizeHearts.Instance.m_hearts.Length !=0 && SynchronizeHearts.Instance.m_hearts[m_indexOfLastTouchedHeart] != null) {
             SynchronizeHearts.Instance.m_hearts[m_indexOfLastTouchedHeart].GetComponent<HeartIdentifier>().StopAnticipation();
         }
@@ -35,7 +33,6 @@ public class SynchronizeHeartRadius : Synchronizer<SynchronizeHeartRadius>
 
     private void ReceiveHeartConquerStart(HeartConquerStart p_heartconquerstart)
     {
-        if(m_heartRadiusFeedback.enabled == false) m_heartBreakingAudioSource.Play();
         m_indexOfLastTouchedHeart = p_heartconquerstart.index;
         
         if(SynchronizeHearts.Instance.m_hearts.Length !=0)

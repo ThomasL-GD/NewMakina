@@ -9,6 +9,9 @@ namespace Synchronizers
         
         [SerializeField,Tooltip("The prefab of the hearts that will be spawned on server connection")] private GameObject m_heartPrefabs;
 
+        [SerializeField] private Transform m_bowl;
+        [SerializeField] private Transform m_lobby;
+        
         /// <summary/> the gameobjects that will represent the hearts on the pc side
         public GameObject[] m_hearts;
         
@@ -48,7 +51,12 @@ namespace Synchronizers
             for (int i = 0; i < p_initialData.heartPositions.Length; i++)
             {
                 //Todo : set a rotation
-                hearts.Add(Instantiate(m_heartPrefabs, p_initialData.heartPositions[i], m_heartPrefabs.transform.rotation));
+                GameObject heart = Instantiate(m_heartPrefabs, p_initialData.heartPositions[i], m_heartPrefabs.transform.rotation);
+                hearts.Add(heart);
+                
+                Transform parent = i < p_initialData.firstLobbyHeartIndex ? m_bowl: m_lobby;
+                
+                heart.transform.SetParent(parent);
                 
                 // Giving them a heart identifier component
                 if (hearts[i].TryGetComponent( out HeartIdentifier hi))

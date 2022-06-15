@@ -10,8 +10,6 @@
          [SerializeField] private Transform m_playerHead;
 
          [SerializeField] private GameObject[] m_invisbilityFeedbacks = null;
-         [SerializeField] private AudioSource m_invisibiltySound;
-         [SerializeField] private AudioSource m_mainMusic;
 
          private void Start() {
              ClientManager.OnReceiveInvisibility += UpdateInvisibility;
@@ -30,10 +28,6 @@
          void UpdateInvisibility(PcInvisibility p_pcInvisibility) 
          {
              foreach (GameObject go in m_invisbilityFeedbacks) go.SetActive(p_pcInvisibility.isInvisible);
-             
-             if(p_pcInvisibility.isInvisible) m_invisibiltySound.Play();
-             
-             m_mainMusic.pitch = p_pcInvisibility.isInvisible ? .3f : 1f;
          }
      }
  }
