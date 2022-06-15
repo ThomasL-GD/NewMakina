@@ -138,6 +138,7 @@ namespace CustomMessages {
         public float heartRange;
         public float heartConquerTime;
         public ushort numberOfSpawnPointsToDisplay;
+        public int firstLobbyHeartIndex;
     }
 
     /// <summary>The values the VR has to send to the server at the very beginning so it can have it in memory </summary>

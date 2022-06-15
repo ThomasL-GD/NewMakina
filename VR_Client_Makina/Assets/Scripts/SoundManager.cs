@@ -61,6 +61,7 @@ public class SoundManager : Synchronizer<SoundManager> {
                 break;
             case LaserState.Shooting:
                 m_laserShot.Play();
+                m_isChargingLaser = false;
                 if(p_hit) m_kill.Play();
                 break;
             case LaserState.CancelAiming:

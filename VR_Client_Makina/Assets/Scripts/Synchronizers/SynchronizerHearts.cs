@@ -7,6 +7,8 @@ using UnityEngine;
 namespace Synchronizers {
     public class SynchronizerHearts : Synchronizer<SynchronizerHearts> {
         
+        [SerializeField] [Tooltip("The parent of the hearts that belong in the arena")] private Transform m_realGameHeartParent;
+        [SerializeField] [Tooltip("The parent of the hearts that belong in the lobbby")] private Transform m_lobbyHeartParent;
         [SerializeField] [Tooltip("The prefab of the hearts that will be spawned on server connection")] private GameObject m_heartPrefabs;
         [SerializeField] private Transform[] m_UiLives;
         private byte m_livesLeft = 0;
@@ -55,13 +57,13 @@ namespace Synchronizers {
             // Adding the hearts to the list
             for (int i = 0; i < m_initialDataBuffer.heartPositions.Length; i++) {
 
-                hearts.Add(new Heart(){heartObject = Instantiate(m_heartPrefabs, m_initialDataBuffer.heartPositions[i], m_heartPrefabs.transform.rotation)});
+                hearts.Add(new Heart(){heartObject = Instantiate(m_heartPrefabs, m_initialDataBuffer.heartPositions[i], m_heartPrefabs.transform.rotation, i < m_initialDataBuffer.firstLobbyHeartIndex ? m_realGameHeartParent : m_lobbyHeartParent)});
                 
                 
-                if (hearts[i].heartObject.TryGetComponent( out HeartIdentifier hi))
+                if (hearts[i].heartObject.TryGetComponent( out HeartIdentifier hi)) {
                     hi.heartIndex = i;
-                else
-                {
+                }
+                else {
                     hi = hearts[i].heartObject.AddComponent<HeartIdentifier>();
                     hi.heartIndex = i;
                 }

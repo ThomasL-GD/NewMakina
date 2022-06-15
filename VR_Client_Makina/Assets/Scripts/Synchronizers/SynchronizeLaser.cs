@@ -123,7 +123,7 @@ namespace Synchronizers {
             if (!m_isLoading || !m_isTriggerPressed) return; // Holding
                 m_elapsedTime += Time.deltaTime;
                 if(m_laserVFXHandler != null)m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.Aiming}, m_elapsedTime / m_laserLoadingTime);
-                SoundManager.a_laser?.Invoke(LaserState.CancelAiming, false);
+                SoundManager.a_laser?.Invoke(LaserState.Aiming, false);
 
                 if (!(m_elapsedTime > m_laserLoadingTime)) return; // shooting
             
