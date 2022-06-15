@@ -43,6 +43,9 @@ public class ServerManager : MonoBehaviour
     private bool m_vrReadyBuffer;
     private bool m_pcReadyBuffer;
     
+    private bool m_vrReadyToBowlBuffer;
+    private bool m_pcReadyToBowlBuffer;
+
     #endregion
     
     
@@ -213,7 +216,8 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<DestroyLeure>(OnDestroyLeure);
         NetworkServer.RegisterHandler<LeureTransform>(OnLeureTransform);
         NetworkServer.RegisterHandler<RestartGame>(OnRestartGame);
-        NetworkServer.RegisterHandler<ReadyToPlay>(OnReadyMessage);
+        NetworkServer.RegisterHandler<ReadyToFace>(OnReadyMessage);
+        NetworkServer.RegisterHandler<ReadyToGoIntoTheBowl>(OnReadyToGoIntoTheBowl);
         NetworkServer.RegisterHandler<DropTp>(OnDropTp);
         NetworkServer.RegisterHandler<RemoveTp>(OnRemoveTp);
         NetworkServer.RegisterHandler<Teleported>(OnTeleported);
@@ -223,10 +227,11 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<InitiateLobby>(OnReceiveInitiateLobby);
     }
 
+
     private void OnReceiveInitiateLobby(NetworkConnection p_client, InitiateLobby p_mess)
     {
         m_initiateLobbyBuffer = p_mess;
-        m_practice = p_mess.practice;
+        m_practice = p_mess.trial;
         SendToBothClients(m_initiateLobbyBuffer);
     }
 
@@ -281,7 +286,7 @@ public class ServerManager : MonoBehaviour
 
     private void SendReady()
     {
-        SendToBothClients(new ReadyToPlay());
+        SendToBothClients(new ReadyToFace());
     }
     
     /// <summary/> DONT FUCKING TOUCH THIS
@@ -353,6 +358,9 @@ public class ServerManager : MonoBehaviour
         m_pcReadyBuffer = false;
         m_vrReadyBuffer = false;
 
+        m_pcReadyToBowlBuffer = false;
+        m_vrReadyToBowlBuffer = false;
+        
         m_gameEnded = false;
         
         // Doing a small checkup
@@ -409,12 +417,11 @@ public class ServerManager : MonoBehaviour
         
         SendToBothClients(initialData);
         
-        
-        
-        if(m_firstTime) {
+        if(m_firstTime)  {
             m_severTick = StartCoroutine(ServerTick());
             m_firstTime = false;
         }
+        
         m_spawnInitialBeacons = StartCoroutine(SpawnInitialBeacons());
         if(m_isUsingBombs)m_spawnBombs = StartCoroutine(BombSpawnTimer());
     }
@@ -706,18 +713,27 @@ public class ServerManager : MonoBehaviour
         if (p_client.client == ClientConnection.VrPlayer) m_vrNetworkConnection = p_conn;
         else if (p_client.client == ClientConnection.PcPlayer) m_pcNetworkConnection = p_conn;
 
-        if (m_vrNetworkConnection != null && m_pcNetworkConnection != null)
-        {
-            SendReady();
-        }
+        if (m_vrNetworkConnection != null && m_pcNetworkConnection != null) SendReady();
     }
 
-    private void OnReadyMessage(NetworkConnection p_connection, ReadyToPlay p_message)
+    private void OnReadyMessage(NetworkConnection p_connection, ReadyToFace p_message)
     {
         if (p_connection == m_vrNetworkConnection) m_vrReadyBuffer = true;
         else if (p_connection == m_pcNetworkConnection) m_pcReadyBuffer = true;
         
         if(m_vrReadyBuffer && m_pcReadyBuffer) StartGame();
+    }
+
+
+    private void OnReadyToGoIntoTheBowl(NetworkConnection p_connection, ReadyToGoIntoTheBowl arg2)
+    {
+        if (p_connection == m_vrNetworkConnection) m_vrReadyToBowlBuffer = true;
+        else if (p_connection == m_pcNetworkConnection) m_pcReadyToBowlBuffer = true;
+
+        if (!m_pcReadyBuffer || !m_vrReadyBuffer) return;
+        
+        StartGame();
+        SendToBothClients(arg2);
     }
     
     

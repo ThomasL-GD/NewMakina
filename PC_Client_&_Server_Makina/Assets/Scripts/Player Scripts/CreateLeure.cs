@@ -32,9 +32,15 @@ public class CreateLeure : AbstractMechanic
     private void Awake()
     {
         foreach (var cd in m_coolDownScripts)cd.OnReloading += ResetCooldown;
-        
-
         ClientManager.OnReceiveDestroyLeure += DestroyLeure;
+
+        ClientManager.OnReceiveReadyToGoIntoTheBowl += ResetStuff;
+    }
+    
+    void ResetStuff(ReadyToGoIntoTheBowl p_mess)
+    {
+        DestroyLeure();
+        ResetCooldown();
     }
 
     // Update is called once per frame
@@ -74,8 +80,8 @@ public class CreateLeure : AbstractMechanic
     
     private void DestroyLeure(bool p_mustSendNetworkMessage = true)
     {
-        StopCoroutine(m_killLeureCoroutine);
-        StopCoroutine(m_soundCoroutine); // We stop the sound in case the decoy was destroyed before the first sound is done playing
+        if(m_killLeureCoroutine != null)StopCoroutine(m_killLeureCoroutine);
+        if(m_soundCoroutine != null)StopCoroutine(m_soundCoroutine); // We stop the sound in case the decoy was destroyed before the first sound is done playing
         
         m_invisibilityLastsSound.Stop();
         m_invisibilityEndSound.Play();

@@ -39,7 +39,7 @@ namespace Synchronizers
             ClientManager.OnReceiveReadyToPlay += ReceiveReady;
         }
 
-        private void ReceiveReady(ReadyToPlay p_activateblind)
+        private void ReceiveReady(ReadyToFace p_activateblind)
         {
             m_waitingForPlayerFeddback.SetActive(false);
             vrConnected = true;
