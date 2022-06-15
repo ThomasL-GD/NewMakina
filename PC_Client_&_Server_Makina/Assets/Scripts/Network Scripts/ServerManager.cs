@@ -227,12 +227,9 @@ public class ServerManager : MonoBehaviour
         NetworkServer.RegisterHandler<InitiateLobby>(OnReceiveInitiateLobby);
     }
 
-
     private void OnReceiveInitiateLobby(NetworkConnection p_client, InitiateLobby p_mess)
     {
         m_initiateLobbyBuffer = p_mess;
-        m_practice = p_mess.trial;
-        SendToBothClients(m_initiateLobbyBuffer);
     }
 
 
@@ -612,6 +609,8 @@ public class ServerManager : MonoBehaviour
         
         AddBeacon(spawnBeacon.beaconID);
         SendToBothClients(spawnBeacon);
+        
+        Debug.Log("Spawn Beacon");
     }
 
     /// <summary/> Function called to add a beacon to the servers local list of beacons
@@ -721,19 +720,27 @@ public class ServerManager : MonoBehaviour
         if (p_connection == m_vrNetworkConnection) m_vrReadyBuffer = true;
         else if (p_connection == m_pcNetworkConnection) m_pcReadyBuffer = true;
         
-        if(m_vrReadyBuffer && m_pcReadyBuffer) StartGame();
+        if(m_vrReadyBuffer && m_pcReadyBuffer)
+        {
+            StartGame();
+            SendToBothClients(m_initiateLobbyBuffer);
+            
+            Debug.Log("Send Initiate Lobby");
+        }
     }
 
 
-    private void OnReadyToGoIntoTheBowl(NetworkConnection p_connection, ReadyToGoIntoTheBowl arg2)
+    private void OnReadyToGoIntoTheBowl(NetworkConnection p_connection, ReadyToGoIntoTheBowl p_readyToGoIntoTheBowl)
     {
         if (p_connection == m_vrNetworkConnection) m_vrReadyToBowlBuffer = true;
         else if (p_connection == m_pcNetworkConnection) m_pcReadyToBowlBuffer = true;
 
-        if (!m_pcReadyBuffer || !m_vrReadyBuffer) return;
+        if (!m_vrReadyToBowlBuffer || !m_pcReadyToBowlBuffer) return;
+        
+        Debug.Log("Both ready to go into bowl");
         
         StartGame();
-        SendToBothClients(arg2);
+        SendToBothClients(p_readyToGoIntoTheBowl);
     }
     
     
@@ -891,7 +898,7 @@ public class ServerManager : MonoBehaviour
                 }
             }
             
-            Debug.Log($"Laser shot : start pos {startingPoint} (detail : {m_vrTransformBuffer.positionRightHand} + {m_vrTransformBuffer.rotationRightHand * m_fingertipOffset}),  direction : {direction}");
+//            Debug.Log($"Laser shot : start pos {startingPoint} (detail : {m_vrTransformBuffer.positionRightHand} + {m_vrTransformBuffer.rotationRightHand * m_fingertipOffset}),  direction : {direction}");
             
             // Packing the values in a neat little message
             m_laserBuffer.origin = startingPoint;

@@ -17,7 +17,7 @@ public class SynchronizeGameEnd : Synchronizer<SynchronizeGameEnd>
     /// </summary>
     void Awake() {
         ClientManager.OnReceiveGameEnd += GameEnd;
-        ClientManager.OnReceiveReadyToPlay += Prepare;
+        ClientManager.OnReceiveReadyToFace += Prepare;
     }
 
     private void Start()

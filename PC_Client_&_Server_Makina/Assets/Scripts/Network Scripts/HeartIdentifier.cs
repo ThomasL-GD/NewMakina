@@ -63,7 +63,6 @@ public class HeartIdentifier : MonoBehaviour
             {
                 m_detonation.SendEvent("Explode");
                 running = false;
-                SynchroniseReady.Instance.StartReady();
                 StopAnticipation();
             }
             yield return null;

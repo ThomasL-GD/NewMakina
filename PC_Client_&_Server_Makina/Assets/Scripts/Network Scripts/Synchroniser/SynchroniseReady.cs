@@ -16,14 +16,8 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
     private bool m_practice;
     private void Awake()
     {
-        ClientManager.OnReceiveReadyToPlay += ReceiveReady;
+        ClientManager.OnReceiveReadyToFace += ReceiveReady;
         ClientManager.OnReceiveInitiateLobby += ReceiveInitiateLobby;
-        ClientManager.OnReceiveReadyToGoIntoTheBowl += ReceiveReadyToGoIntoTheBowl;
-    }
-
-    private void ReceiveReadyToGoIntoTheBowl(ReadyToGoIntoTheBowl p_readytogointothebowl)
-    {
-        throw new System.NotImplementedException();
     }
 
     private void ReceiveInitiateLobby(InitiateLobby p_initiateLobby)
@@ -60,7 +54,7 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
     // Update is called once per frame
     public void StartReady()
     {
-        Debug.Log("huh");
+        Debug.Log("8");
         NetworkClient.Send(new ReadyToGoIntoTheBowl());
         m_readyHeart.SetActive(false);
         m_readyStuff.SetActive(false);
