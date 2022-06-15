@@ -44,6 +44,8 @@ namespace Synchronizers {
             m_maxPcHealth = p_initialData.healthPcPlayer;
             m_vrHealth = p_initialData.healthVrPlayer;
             UpdateHealthText();
+            
+            Debug.Log($"INITIAL DATA RECEPTION CONFIRMED");
         }
 
         
