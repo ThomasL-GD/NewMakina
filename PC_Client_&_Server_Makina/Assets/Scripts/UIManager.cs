@@ -14,6 +14,8 @@ public class UIManager : Synchronizer<UIManager> {
     [SerializeField] private HealthContainer m_vrHealth;
     [SerializeField] private HealthContainer m_pcHealth;
     [SerializeField] private Transform m_healthParent;
+
+    private int m_minimumLobyIndex = 0;
     
     [Serializable]
     private struct UIElementWithReload {
@@ -148,6 +150,8 @@ public class UIManager : Synchronizer<UIManager> {
     #region Health
     private void ReceiveInitialData(InitialData p_message)
     {
+        m_minimumLobyIndex = p_message.firstLobbyHeartIndex;
+        
         foreach (RectTransform t in m_vrHealth.healthElements) Destroy(t);
         foreach (RectTransform t in m_pcHealth.healthElements) Destroy(t);
 
@@ -210,6 +214,8 @@ public class UIManager : Synchronizer<UIManager> {
     private int m_vrHealthIncrementor = 1;
     private void SynchroniseHealthVR(HeartBreak p_heartbreak)
     {
+        if(p_heartbreak.index >= m_minimumLobyIndex) return;
+        
         int index = m_vrHealth.healthElements.Length - m_vrHealthIncrementor++;
         m_vrHealth.healthElements[index].GetComponent<Animator>().SetTrigger(m_shatterAnimatorTrigger);
         StartCoroutine(DepopAfterDelay(m_vrHealth.healthElements[index].transform, m_vrHealth.timeBeforeDisappearing));

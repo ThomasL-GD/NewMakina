@@ -148,7 +148,7 @@ public class ServerManager : MonoBehaviour
     [SerializeField, Range(0f,100f)] private ushort f_numberOfSpawnPointsToDisplay = 3;
     private ushort m_numberOfSpawnPointsToDisplay = 3;
 
-    
+    [SerializeField, Min(0)] private int m_lobbyHeartIndex = 8;
 
     /// <summary/> The positions of the hearts
     private Vector3[] m_heartPositions;
@@ -390,7 +390,7 @@ public class ServerManager : MonoBehaviour
         m_leureBuffer = new LeureTransform();
         m_flairBuffer = new ActivateFlair();
         m_activateBlindBuffer = new ActivateBlind();
-
+        
         #endregion
         
         InitialData initialData = new InitialData() {
@@ -409,7 +409,8 @@ public class ServerManager : MonoBehaviour
             bombExplosionRange = m_bombExplosionRange,
             heartRange = m_heartZoneRadius,
             heartConquerTime = m_heartDestroyTime,
-            numberOfSpawnPointsToDisplay = m_numberOfSpawnPointsToDisplay
+            numberOfSpawnPointsToDisplay = m_numberOfSpawnPointsToDisplay,
+            firstLobbyHeartIndex = m_lobbyHeartIndex
         };
         
         SendToBothClients(initialData);
@@ -534,8 +535,14 @@ public class ServerManager : MonoBehaviour
             BeaconData data = m_beaconsPositionsBuffer.data[i];
             if(!data.isActive)continue;
             
-            bool detected = Vector3.Distance(data.position, m_pcTransformBuffer.position) < m_beaconRange;
-            if (m_isLeureAliveBuffer)detected = detected || Vector3.Distance(data.position, m_leureBuffer.position) < m_beaconRange;
+            Vector3 playerPos2D = new Vector3(m_pcTransformBuffer.position.x,0f,m_pcTransformBuffer.position.z);
+            Vector3 beaconPos2D = new Vector3(m_pcTransformBuffer.position.x,0f,m_pcTransformBuffer.position.z);
+            
+            bool detected = Vector3.Distance(playerPos2D, beaconPos2D) < m_beaconRange;
+
+            Vector3 leurePos2D = new Vector3(m_leureBuffer.position.x, 0f, m_leureBuffer.position.z);
+            
+            if (m_isLeureAliveBuffer)detected = detected || Vector3.Distance(m_leureBuffer.position, beaconPos2D) < m_beaconRange;
 
             if (data.detectingPlayer != detected)
             {
