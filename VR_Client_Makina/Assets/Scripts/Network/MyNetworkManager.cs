@@ -18,6 +18,9 @@ namespace Network {
         [SerializeField] private string m_IPadress = "10.31.240.210";
         [SerializeField] [Range(0.01f, 60f)] private float m_autoconnexionTimeInterval = 10f;
 
+        /// <summary>If true, we are playing rn, if not, we're probably in a a menu or in the lobby</summary>
+        [HideInInspector] public static bool m_isInRealGame = false;
+
         #region delegates
 
         /// <summary/> The delegate that is called when the client's connection is confirmed
@@ -230,7 +233,10 @@ namespace Network {
 
         private void ReceiveReadyToPlay(ReadyToFace p_readyToFace) => OnReadyToFace?.Invoke(p_readyToFace);
         
-        private void ReceiveReadyToGoIntoTheBowl(ReadyToGoIntoTheBowl p_readyToGoIntoTheBowl) => OnReadyToGoIntoTheBowl?.Invoke(p_readyToGoIntoTheBowl);
+        private void ReceiveReadyToGoIntoTheBowl(ReadyToGoIntoTheBowl p_readyToGoIntoTheBowl) {
+            m_isInRealGame = true;
+            OnReadyToGoIntoTheBowl?.Invoke(p_readyToGoIntoTheBowl);
+        }
 
         private void ReceiveActivateFlair(ActivateFlair p_activateFlair) => OnReceiveActivateFlair?.Invoke(p_activateFlair);
 
@@ -323,7 +329,10 @@ namespace Network {
         
         private void ReceivePotentialSpawnPoints(PotentialSpawnPoints p_potentialSpawnPoints) => OnReceivePotentialSpawnPoints?.Invoke(p_potentialSpawnPoints);
         
-        private void ReceiveInitiateLobby(InitiateLobby p_initiateLobby) => OnReceiveInitiateLobby?.Invoke(p_initiateLobby);
+        private void ReceiveInitiateLobby(InitiateLobby p_initiateLobby) {
+            m_isInRealGame = false;
+            OnReceiveInitiateLobby?.Invoke(p_initiateLobby);
+        }
 
 
         private IEnumerator ForceConnect() {
