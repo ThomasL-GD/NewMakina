@@ -20,7 +20,11 @@ public class FadeToBlack : MonoBehaviour
     }
 
     private void Awake() => FadeToBlackNow += FadeAndTp;
-    void FadeAndTp(Transform p_player, Vector3 p_position) => StartCoroutine(FadeInAndOut(p_player, p_position));
+    void FadeAndTp(Transform p_player, Vector3 p_position)
+    {
+        Debug.Log("Fade To Black Now");
+        StartCoroutine(FadeInAndOut(p_player, p_position));
+    }
     
     IEnumerator FadeInAndOut(Transform p_player, Vector3 p_position)
     {
@@ -34,6 +38,7 @@ public class FadeToBlack : MonoBehaviour
         }
 
         p_player.position = p_position;
+        SynchroniseReady.Instance.StartReady();
         
         timer = 1f;
         while (timer > 0)
