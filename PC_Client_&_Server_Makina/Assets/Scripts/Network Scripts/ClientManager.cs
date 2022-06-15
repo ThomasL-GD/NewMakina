@@ -91,8 +91,12 @@ public class ClientManager : MonoBehaviour
     public static ActivateBlindDelegator OnReceiveActivateBlind;
         
     /// <summary/> The delegate that will be called each time the client receives a DestroyLeure message
-    public delegate void ReadyDelegator(ReadyToPlay p_activateBlind);
+    public delegate void ReadyDelegator(ReadyToFace p_activateBlind);
     public static ReadyDelegator OnReceiveReadyToPlay;
+    
+    /// <summary/> The delegate that will be called each time the client receives a DestroyLeure message
+    public delegate void ReadyToGoIntoTheBowlDelegator(ReadyToGoIntoTheBowl p_readyToGoIntoTheBowl);
+    public static ReadyToGoIntoTheBowlDelegator OnReceiveReadyToGoIntoTheBowl;
         
     /// <summary/> The delegate that will be called each time the client receives a DestroyLeure message
     public delegate void DestoyLeureDelegator(DestroyLeure p_activateBlind);
@@ -156,13 +160,16 @@ public class ClientManager : MonoBehaviour
         NetworkClient.RegisterHandler<ActivateFlair>(ReceiveActivateFlair);
         NetworkClient.RegisterHandler<ActivateBlind>(ReceiveActivateBlind);
         NetworkClient.RegisterHandler<DeActivateBlind>(ReceiveDeActivateBlind);
-        NetworkClient.RegisterHandler<ReadyToPlay>(ReceiveReadyMessage);
+        NetworkClient.RegisterHandler<ReadyToFace>(ReceiveReadyMessage);
+        NetworkClient.RegisterHandler<ReadyToGoIntoTheBowl>(ReceiveReadyToGoIntoTheBowl);
         NetworkClient.RegisterHandler<DestroyLeure>(ReceiveDestroyLeure);
         NetworkClient.RegisterHandler<HeartConquerStart>(ReceiveHeartConquerStart);
         NetworkClient.RegisterHandler<HeartConquerStop>(ReceiveHeartConquerStop);
         NetworkClient.RegisterHandler<VrInitialValues>(ReceiveVrInitialValues);
         NetworkClient.RegisterHandler<InitiateLobby>(ReceiveInitiateLobby);
     }
+
+    private void ReceiveReadyToGoIntoTheBowl(ReadyToGoIntoTheBowl p_readyToGoIntoBowl)=>OnReceiveReadyToGoIntoTheBowl?.Invoke(p_readyToGoIntoBowl);
 
     private void ReceiveInitiateLobby(InitiateLobby p_initiateLobby)=>OnReceiveInitiateLobby?.Invoke(p_initiateLobby);
 
@@ -172,7 +179,7 @@ public class ClientManager : MonoBehaviour
 
     private void ReceiveDestroyLeure(DestroyLeure p_destroyLeureMessage) => OnReceiveDestroyLeure?.Invoke(p_destroyLeureMessage);
 
-    private void ReceiveReadyMessage(ReadyToPlay p_readyMessage) => OnReceiveReadyToPlay?.Invoke(p_readyMessage);
+    private void ReceiveReadyMessage(ReadyToFace p_readyMessage) => OnReceiveReadyToPlay?.Invoke(p_readyMessage);
     
 
     private void ReceiveActivateFlair(ActivateFlair p_activateFlair) => OnReceiveActivateFlair?.Invoke(p_activateFlair);

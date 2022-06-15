@@ -27,12 +27,14 @@ public class TeleportRollBack : AbstractMechanic
     {
         m_coolDownScript.OnReloading += Reset;
         ClientManager.OnReceiveReadyToPlay += Reset;
+        ClientManager.OnReceiveReadyToGoIntoTheBowl += Reset;
         SynchronizeRespawn.OnPlayerRespawn += Reset;
         ClientManager.OnReceiveInitialData += Reset;
     }
 
     private void Reset(InitialData p_initialdata) => Reset();
-    private void Reset(ReadyToPlay p_activateblind) => Reset();
+    private void Reset(ReadyToFace p_activateblind) => Reset();
+    private void Reset(ReadyToGoIntoTheBowl p_activateblind) => Reset();
     private void Reset()
     {
         UIManager.Instance.ResetTeleportRollbackCooldown();

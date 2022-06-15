@@ -39,9 +39,6 @@ public class SetReadyInArea : MonoBehaviour
             {
                 m_heartRadiusFeedback.enabled = false;
                 foreach (var healthElements in m_healthElements) healthElements.SetActive(true);
-                
-
-                
                 return;
             }
             

@@ -7,7 +7,9 @@ using UnityEngine;
 
 public class SynchroniseReady : Synchronizer<SynchroniseReady>
 {
+    [SerializeField] private GameObject m_readyHeart;
     [SerializeField] private GameObject m_readyStuff;
+    [SerializeField] private GameObject m_bowl;
     [SerializeField][Tooltip("in seconds")] private float m_practiceTime = 120f;
     [SerializeField] private TextMeshProUGUI m_practiceCountdown;
     
@@ -16,21 +18,28 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
     {
         ClientManager.OnReceiveReadyToPlay += ReceiveReady;
         ClientManager.OnReceiveInitiateLobby += ReceiveInitiateLobby;
+        ClientManager.OnReceiveReadyToGoIntoTheBowl += ReceiveReadyToGoIntoTheBowl;
+    }
+
+    private void ReceiveReadyToGoIntoTheBowl(ReadyToGoIntoTheBowl p_readytogointothebowl)
+    {
+        throw new System.NotImplementedException();
     }
 
     private void ReceiveInitiateLobby(InitiateLobby p_initiateLobby)
     {
-        if (p_initiateLobby.practice)
+        m_readyStuff.SetActive(true);
+        if (p_initiateLobby.trial)
         {
             StartCoroutine(TrialTimmer());
             return;
         }
-        m_readyStuff.SetActive(true);
+        m_readyHeart.SetActive(true);
+        m_bowl.SetActive(false);
     }
 
-
-    private void ReceiveReady(ReadyToPlay p_message) {
-        //m_readyStuff.SetActive(true);
+    private void ReceiveReady(ReadyToFace p_message) {
+        m_readyStuff.SetActive(true);
     }
     
     IEnumerator TrialTimmer()
@@ -45,13 +54,16 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
         }
 
         m_practiceCountdown.text = "";
-        m_readyStuff.SetActive(true);
+        m_readyHeart.SetActive(true);
     }
     
     // Update is called once per frame
     public void StartReady()
     {
-        NetworkClient.Send(new ReadyToPlay());
+        Debug.Log("huh");
+        NetworkClient.Send(new ReadyToGoIntoTheBowl());
+        m_readyHeart.SetActive(false);
         m_readyStuff.SetActive(false);
+        m_bowl.SetActive(true);
     }
 }

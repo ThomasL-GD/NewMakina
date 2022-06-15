@@ -25,7 +25,7 @@ public class SynchronizeGameEnd : Synchronizer<SynchronizeGameEnd>
         m_initialPlayerPosition = SynchronizePlayerPosition.Instance.m_player.position;
     }
 
-    private void Prepare(ReadyToPlay p_readyToPlay) => m_text.gameObject.SetActive(false);
+    private void Prepare(ReadyToFace pReadyToFace) => m_text.gameObject.SetActive(false);
     
     void GameEnd(GameEnd p_gameEnd) {
 

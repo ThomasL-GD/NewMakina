@@ -28,7 +28,7 @@ public class LoadStuffOnClick : MonoBehaviour
         if (!SynchronizeInitialData.vrConnected) return;
         if (clicked) return;
         clicked = true;
-        NetworkClient.Send(new InitiateLobby(){practice = m_practice});
+        NetworkClient.Send(new InitiateLobby(){trial = m_practice});
     }
 
     private void StartFade(InitiateLobby p_initiateLobby) => StartCoroutine(FadeToBlack());
@@ -44,14 +44,14 @@ public class LoadStuffOnClick : MonoBehaviour
             timer = Mathf.Min(1f, timer);
 
             color.a = m_curveIn.Evaluate(timer);
-            
             m_blackScreen.color = color;
             yield return null;
-        } while (color.a != 1f) ;
+        } while (color.a != 1f);
         
         foreach (GameObject go in m_toEnable) go.SetActive(true);
         
         m_camera.SetActive(false);
+        NetworkClient.Send(new ReadyToFace());
         
         do
         {
