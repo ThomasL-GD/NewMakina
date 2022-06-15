@@ -36,20 +36,23 @@ namespace Synchronizers {
 
         void Awake() {
             OnPlayerDeath += ReceiveLaser;
-            ClientManager.OnReceiveInitialData += ReceiveInitialData;
+            ClientManager.OnReceiveReadyToGoIntoTheBowl += ReceiveReadyToGoIntoTheBowl;
+            ClientManager.OnReceiveInitialData += SetInitialValues;
+        }
+
+        private void SetInitialValues(InitialData p_initialdata)
+        {
+            m_numberOfSpawnPointsToSend = p_initialdata.numberOfSpawnPointsToDisplay;
         }
 
         /// <summary>Teleports the player to a random spawn point on start.
         /// Also fetch any data needed in InitialData
         /// I should add that this documentation is very well made (ღゝ◡╹)ノ♡</summary>
-        /// <param name="p_initialdata">The message sent by the server, NO SHiT !</param>
-        private void ReceiveInitialData(InitialData p_initialdata) {
+        /// <param name="p_readyToGoIntoTheBowl">The message sent by the server, NO SHiT !</param>
+        private void ReceiveReadyToGoIntoTheBowl(ReadyToGoIntoTheBowl p_readyToGoIntoTheBowl) {
             Vector3 spawnPos = m_spawnPoints[Random.Range(0, m_spawnPoints.Length)].position;
             FadeToBlack.FadeToBlackNow?.Invoke(m_player.transform, spawnPos);
-            
-            m_numberOfSpawnPointsToSend = p_initialdata.numberOfSpawnPointsToDisplay;
         }
-
 
         /// <summary>
         /// The function called when the synchronizer receives a laser

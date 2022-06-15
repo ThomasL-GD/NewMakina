@@ -36,7 +36,7 @@ namespace Synchronizers
             Reset();
             ClientManager.OnReceiveGameEnd += Reset;
             ClientManager.OnReceiveInitialData += ReceiveInitialData;
-            ClientManager.OnReceiveReadyToPlay += ReceiveReady;
+            ClientManager.OnReceiveReadyToFace += ReceiveReady;
         }
 
         private void ReceiveReady(ReadyToFace p_activateblind)

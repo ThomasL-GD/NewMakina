@@ -26,7 +26,7 @@ public class TeleportRollBack : AbstractMechanic
     private void Awake()
     {
         m_coolDownScript.OnReloading += Reset;
-        ClientManager.OnReceiveReadyToPlay += Reset;
+        ClientManager.OnReceiveReadyToFace += Reset;
         ClientManager.OnReceiveReadyToGoIntoTheBowl += Reset;
         SynchronizeRespawn.OnPlayerRespawn += Reset;
         ClientManager.OnReceiveInitialData += Reset;
