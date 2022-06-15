@@ -64,11 +64,18 @@ namespace Synchronizers {
             ClientManager.OnReceiveInitialData += ReceiveInitialData;
             ClientManager.OnReceiveActivateBeacon += UpdateBeaconActivation;
             ClientManager.OnReceiveGameEnd += Reset;
+            ClientManager.OnReceiveReadyToFace += Reset;
+            ClientManager.OnReceiveReadyToGoIntoTheBowl += Reset;
         }
 
+        private void Reset(ReadyToFace p_readytoface) => Reset();
+        private void Reset(ReadyToGoIntoTheBowl p_readytogointothebowl) => Reset();
+
+        private void Reset(GameEnd p_gameend) => Reset();
+        
         /// <summary>Will destroy all the beacons to be ready to launch another game </summary>
-        /// <param name="p_gameend">The message sent by the server</param>
-        private void Reset(GameEnd p_gameend) {
+        private void Reset()
+        {
             foreach (Beacons beacon in m_beacons) {
                 Destroy(beacon.beaconPrefabInstance);
             }
@@ -138,6 +145,7 @@ namespace Synchronizers {
         {
             for (int i = 0; i < m_beacons.Count; i++)
             {
+                if(i >= p_beaconsPositions.data.Length)Debug.LogWarning($"Heyy {i}");
                 BeaconData data = p_beaconsPositions.data[i];
                 
                 int? index = FindBeaconFromID(i, data.beaconID, "Update Beacon Position");

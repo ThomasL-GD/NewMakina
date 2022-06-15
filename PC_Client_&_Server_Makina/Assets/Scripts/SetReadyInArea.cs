@@ -1,4 +1,6 @@
 using System;
+using CustomMessages;
+using Mirror;
 using Synchronizers;
 using TMPro;
 using UnityEngine;
@@ -37,11 +39,11 @@ public class SetReadyInArea : MonoBehaviour
             m_vfxHandler.StartAnticipation(m_maxHeartTime);
             if (m_timer > m_maxHeartTime)
             {
+                NetworkClient.Send(new ReadyToGoIntoTheBowl());
                 m_heartRadiusFeedback.enabled = false;
                 foreach (var healthElements in m_healthElements) healthElements.SetActive(true);
                 return;
             }
-            
             return;
         }
         m_vfxHandler.StopAnticipation();

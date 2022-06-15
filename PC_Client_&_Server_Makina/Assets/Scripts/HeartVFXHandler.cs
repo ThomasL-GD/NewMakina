@@ -41,7 +41,6 @@ public class HeartVFXHandler : MonoBehaviour
             {
                 m_detonation.SendEvent("Explode");
                 running = false;
-                SynchroniseReady.Instance.StartReady();
                 gameObject.SetActive(false);
                 StopAnticipation();
             }

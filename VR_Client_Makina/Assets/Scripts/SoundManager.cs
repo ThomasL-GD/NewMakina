@@ -26,6 +26,8 @@ public class SoundManager : Synchronizer<SoundManager> {
     public static Action<LaserState, bool> a_laser;
     private bool m_isChargingLaser;
 
+    [SerializeField] private float m_loadVolumeAugmentation = 0.1f;
+    [Space]
     [SerializeField] private SoundOptions m_heartBreak;
     [SerializeField] private SoundOptions m_laserShot;
     [SerializeField] private SoundOptions m_laserLoad;
@@ -54,8 +56,8 @@ public class SoundManager : Synchronizer<SoundManager> {
             
             case LaserState.Aiming:
                 if (m_isChargingLaser) break;
-                StartCoroutine(ChargeSound());
                 m_isChargingLaser = true;
+                StartCoroutine(ChargeSound());
                 break;
             case LaserState.Shooting:
                 m_laserShot.Play();
@@ -71,9 +73,12 @@ public class SoundManager : Synchronizer<SoundManager> {
 
     IEnumerator ChargeSound() {
         m_laserLoad.Play();
+        float initialVolume = m_laserLoad.audioSource.volume;
         while (m_isChargingLaser) {
             yield return null;
+            m_laserLoad.audioSource.volume += m_loadVolumeAugmentation * Time.deltaTime;
         }
+        m_laserLoad.audioSource.volume = initialVolume;
         m_laserLoad.Stop();
     }
 

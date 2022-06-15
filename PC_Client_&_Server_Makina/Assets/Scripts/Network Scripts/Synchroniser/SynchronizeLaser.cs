@@ -79,6 +79,7 @@ namespace Synchronizers {
             distance = Mathf.Clamp(distance, 0f,m_shotSensibleRange) / m_shotSensibleRange;
 
             m_targetIntensity = Mathf.Max(1f - distance,0f);
+            SoundManager.Instance.VrAim(m_targetIntensity > 0f);
         }
         
         /// <summary/> This function is called when the laser is shooting and gives the message to the VFX
