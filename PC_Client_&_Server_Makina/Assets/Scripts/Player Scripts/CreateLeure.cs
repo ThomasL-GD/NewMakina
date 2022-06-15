@@ -1,10 +1,10 @@
+using System;
 using System.Collections;
 using CustomMessages;
 using Mirror;
 using Player_Scripts.Reloading;
 using Synchronizers;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CreateLeure : AbstractMechanic
 {
@@ -19,19 +19,17 @@ public class CreateLeure : AbstractMechanic
     
     [SerializeField] private bool m_isTutorial = false;
     
-    [SerializeField] [Tooltip("The sound played when the invisibility starts")] private AudioSource m_invisibilityBeginSound;
-    [SerializeField] [Tooltip("The sound played when the invisibility is active")] private AudioSource m_invisibilityLastsSound;
-    [SerializeField] [Tooltip("The sound played when the invisibility ends")] private AudioSource m_invisibilityEndSound;
-    
     private bool m_canSpawnLeure = true;
+
+    public static Action a_onLeureSpawn;
 
     private GameObject m_leure;
     private Coroutine m_killLeureCoroutine;
-    private Coroutine m_soundCoroutine;
 
-    private void Awake()
-    {
-        foreach (var cd in m_coolDownScripts)cd.OnReloading += ResetCooldown;
+    private void Awake() {
+        foreach (var cd in m_coolDownScripts) {
+            cd.OnReloading += ResetCooldown;
+        }
         ClientManager.OnReceiveDestroyLeure += DestroyLeure;
 
         ClientManager.OnReceiveReadyToGoIntoTheBowl += ResetStuff;
@@ -53,8 +51,7 @@ public class CreateLeure : AbstractMechanic
             m_leure = Instantiate(m_leurePrefab, transform.position + (transform.forward * m_leureForwardOffset),transform.rotation);
             m_leure.GetComponent<LeurreMovement>().SetSpeedAndGravity(m_speed,m_leureGravity);
             m_killLeureCoroutine = StartCoroutine(KillLeure());
-            
-            m_soundCoroutine = StartCoroutine(PlaySoundThatLastsWhenBeginIsOver());
+            a_onLeureSpawn?.Invoke();
         }
     }
     
@@ -81,10 +78,6 @@ public class CreateLeure : AbstractMechanic
     private void DestroyLeure(bool p_mustSendNetworkMessage = true)
     {
         if(m_killLeureCoroutine != null)StopCoroutine(m_killLeureCoroutine);
-        if(m_soundCoroutine != null)StopCoroutine(m_soundCoroutine); // We stop the sound in case the decoy was destroyed before the first sound is done playing
-        
-        m_invisibilityLastsSound.Stop();
-        m_invisibilityEndSound.Play();
         
         Destroy(m_leure);
         Debug.Log("Decoy death");
@@ -94,20 +87,10 @@ public class CreateLeure : AbstractMechanic
         foreach (var cd in m_coolDownScripts)cd.StartReloading();
     }
     
-    void ResetCooldown()
-    {
+    void ResetCooldown() {
+        if(!m_canSpawnLeure)SoundManager.Instance.ReloadSound();
+        
         m_canSpawnLeure = true;
         UIManager.Instance.ResetLeureCooldown();
-    }
-
-    /// <summary>Will play the m_invisibilityLastsSound once m_invisibilityBeginSound is done playing (plays both in the function)</summary>
-    /// <remarks>I know it is anti-modular but there's no similar uses of this type of things in the script</remarks>
-    IEnumerator PlaySoundThatLastsWhenBeginIsOver() {
-        m_invisibilityBeginSound.Play();
-
-        yield return new WaitForSeconds(m_invisibilityBeginSound.clip.length);
-
-        m_invisibilityLastsSound.loop = true;
-        m_invisibilityLastsSound.Play();
     }
 }

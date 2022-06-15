@@ -1,13 +1,12 @@
+using System;
 using CustomMessages;
 using Mirror;
 using Player_Scripts.Reloading;
 using Synchronizers;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class TeleportRollBack : AbstractMechanic
-{
+public class TeleportRollBack : AbstractMechanic {
+    
     [SerializeField] private KeyCode m_placeOrTeleportKey;
     [SerializeField] private GameObject m_teleportLocationPrefab;
 
@@ -16,16 +15,18 @@ public class TeleportRollBack : AbstractMechanic
     private bool m_canUse = true;
 
     [SerializeField] private ReloadingAbstract m_coolDownScript;
-    
-    [SerializeField] [Tooltip("The sound played when the rollback is used")] private AudioSource m_rollbackSound;
 
     [SerializeField] private bool m_isTutorial = false;
 
     [SerializeField] private float m_yeetForce = 20f;
+
+    public static Action a_onPlaceTpPoint;
+    public static Action a_onTeleportBack;
     
     private void Awake()
     {
         m_coolDownScript.OnReloading += Reset;
+        m_coolDownScript.OnReloading += SoundManager.Instance.ReloadSound;
         ClientManager.OnReceiveReadyToFace += Reset;
         ClientManager.OnReceiveReadyToGoIntoTheBowl += Reset;
         SynchronizeRespawn.OnPlayerRespawn += Reset;
@@ -75,6 +76,8 @@ public class TeleportRollBack : AbstractMechanic
         Physics.IgnoreCollision(m_teleportLocation.GetComponent<Collider>() , gameObject.GetComponent<Collider>());
         
         m_teleportLocation.GetComponent<Rigidbody>().AddForce(new Vector3(camera.forward.x,0f,camera.forward.z) * m_yeetForce,ForceMode.Impulse);
+        
+        a_onPlaceTpPoint?.Invoke();
     }
 
     public void SetTPoint(Vector3 p_position) {
@@ -93,8 +96,8 @@ public class TeleportRollBack : AbstractMechanic
         if(m_placed) NetworkClient.Send(new RemoveTp());
         m_placed = false;
         
-        m_rollbackSound.Play();
-        
         Destroy(m_teleportLocation);
+        
+        a_onTeleportBack?.Invoke();
     }
 }
