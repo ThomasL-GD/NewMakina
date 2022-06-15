@@ -22,9 +22,6 @@ namespace Synchronizers {
 
         [SerializeField] [Tooltip("The time for which the player will be invisible on respawn")]
         private float m_invisibilityTime = 5f;
-        
-        [SerializeField] private AudioSource m_deathSound;
-        [SerializeField] [Tooltip("The sound played when the respawn invisibility ends")] private AudioSource m_invisibilityEndSound;
 
         private ushort m_numberOfSpawnPointsToSend;
 
@@ -71,8 +68,6 @@ namespace Synchronizers {
             //Enabling the feedback and finding the next spawn point
             InputMovement3.instance.m_isDead = true;
             if (ClientManager.singleton.m_isInGame) m_deathFeedback.SetActive(true);
-
-            m_deathSound.Play();
             
             //Todo Make this no cursed for the love of baby jesus
             m_player.transform.position = Vector3.one * -1000f;
@@ -118,8 +113,6 @@ namespace Synchronizers {
 
             //Making the player visible
             NetworkClient.Send(new PcInvisibility() {isInvisible = false});
-            m_invisibilityEndSound.Stop();
-            m_invisibilityEndSound.Play();
         }
 
     }

@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using CustomMessages;
-using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace Synchronizers {

@@ -10,7 +10,6 @@ public class SoundManager : Synchronizer<SoundManager> {
     [Serializable] private struct SoundOptions {
         public AudioSource audioSource;
         [Tooltip("If false, will cut the previous sound of this type before playing a new one")] public bool canBePlayedSuperposed;
-        private bool m_isPlaying;
 
         [HideInInspector] public readonly bool isPlaying => audioSource != null && audioSource.isPlaying;
 
@@ -55,6 +54,14 @@ public class SoundManager : Synchronizer<SoundManager> {
         ClientManager.OnReceiveInvisibility += InvisibilitySounds;
         ClientManager.OnReceiveHeartConquerStart += HeartBreakingSounds;
         ClientManager.OnReceiveHeartConquerStop += HeartBreakingSoundsStop;
+
+        SynchronizeRespawn.OnPlayerDeath += DeathSound;
+        SynchronizeRespawn.OnPlayerRespawn += RespawnSound;
+
+        CreateLeure.a_onLeureSpawn += DecoyApparition;
+
+        TeleportRollBack.a_onTeleportBack += TeleportBackSound;
+        TeleportRollBack.a_onPlaceTpPoint += PlaceTeleportSound;
     }
 
     #region HeartBreak
@@ -100,8 +107,9 @@ public class SoundManager : Synchronizer<SoundManager> {
         m_staysInvisible.Stop();
     }
     #endregion
-
+    
     private void DestroyLeure(DestroyLeure p_activateBlind) => m_decoyDeath.Play();
+    private void DecoyApparition() => m_throwADecoy.Play();
     
     #region VR Aim
     public void VrAim(bool p_isInAim) {
@@ -152,6 +160,12 @@ public class SoundManager : Synchronizer<SoundManager> {
         m_isInBeaconSound.Stop();
     }
     #endregion
+
+    private void DeathSound() => m_death.Play();
+    private void RespawnSound() => m_respawn.Play();
     
-    
+    private void PlaceTeleportSound() => m_placeTpPoint.Play();
+    private void TeleportBackSound() => m_teleport.Play();
+
+    public void ReloadSound() => m_reloadAbility.Play();
 }

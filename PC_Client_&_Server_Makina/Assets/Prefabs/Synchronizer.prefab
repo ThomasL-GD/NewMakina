@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 586668069150170730}
   - component: {fileID: 6328612753638025571}
   - component: {fileID: 8417031006943273845}
+  - component: {fileID: 36164120618376132}
   m_Layer: 0
   m_Name: Synchronizer
   m_TagString: Untagged
@@ -55,6 +56,7 @@ MonoBehaviour:
   m_headVR: {fileID: 0}
   m_leftHandVR: {fileID: 0}
   m_rightHandVR: {fileID: 0}
+  m_fingertipLaser: {fileID: 0}
 --- !u!114 &586668069150170734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,12 +87,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638c4d9cf96b9cb468f429c49e56f1ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_lazerPreshot: {fileID: 0}
-  m_laserPrefab: {fileID: 4955901843613917572, guid: d7229fd039aad9b40b6b6ed6a2a2c8fc, type: 3}
+  m_laserVFXHandler: {fileID: 0}
   m_volume: {fileID: 0}
   m_rightHand: {fileID: 0}
   m_pcPlayer: {fileID: 0}
   m_shotSensibleRange: 20
+  m_supposedChargeTime: 1.5
   m_smoothTransitionSpeed: 0
 --- !u!114 &586668069150170732
 MonoBehaviour:
@@ -166,8 +168,6 @@ MonoBehaviour:
   m_respawnTime: 3
   m_deathFeedback: {fileID: 0}
   m_invisibilityTime: 5
-  m_deathSound: {fileID: 0}
-  m_invisibilityEndSound: {fileID: 0}
 --- !u!114 &6328612753638025571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,3 +201,58 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_elevators: []
+--- !u!114 &36164120618376132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586668069150170729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e4647aa0272cb5469f3509813d4c749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_loadVolumeAugmentation: 0.1
+  m_inVrLook:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_inVrAim:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_staysInvisible:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_isInBeaconSound:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_triggerBeacon:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_death:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_respawn:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_throwADecoy:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_decoyDeath:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_teleport:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_placeTpPoint:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_reloadAbility:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 1
+  m_heartBreak:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
+  m_isBreakingHeart:
+    audioSource: {fileID: 0}
+    canBePlayedSuperposed: 0
