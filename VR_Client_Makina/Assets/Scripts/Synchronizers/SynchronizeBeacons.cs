@@ -117,8 +117,8 @@ namespace Synchronizers {
 
         /// <summary>Just sets maxSlotsForBeacons according to the server's InitialData</summary>
         /// <param name="p_initialData">The message sent by the server</param>
-        protected override void ReceiveInitialData(InitialData p_initialData) {
-            base.ReceiveInitialData(p_initialData);
+        protected void ReceiveInitialData(InitialData p_initialData) {
+            Initialize();
             m_maxSlotsLoading = p_initialData.maximumBeaconCount;
             
             m_beaconBitMaskDetected = 0;

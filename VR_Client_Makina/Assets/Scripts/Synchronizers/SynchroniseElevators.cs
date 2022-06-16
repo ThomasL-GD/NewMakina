@@ -4,13 +4,11 @@ using Synchronizers;
 using UnityEngine;
 
 
-public class SynchroniseElevators : Synchronizer<SynchroniseElevators>
-{
+public class SynchroniseElevators : Synchronizer<SynchroniseElevators> {
+    
     [SerializeField, Tooltip("the elevators to be synchronized (in the same order as on the other side if not big L)")]
     private ElevatorBehavior[] m_elevators;
-    
-    
-    
+
     // Start is called before the first frame update
     void Awake()
     {
