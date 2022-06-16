@@ -91,9 +91,9 @@ public class UIMinimapManager : MonoBehaviour {
         public Vector2 originalRatioOnMap;
     }
 
-    private void Start() {
+    private void Awake() {
         ClientManager.OnReceiveReadyToGoIntoTheBowl += PlaceIcons;
-        ClientManager.OnReceiveReadyToFace += PlaceIcons;
+        ClientManager.OnReceiveInitiateLobby += PlaceIcons;
         ClientManager.OnReceiveInitialData += ReceiveInitialData;
         
         ClientManager.OnReceiveActivateBeacon += PlaceABeacon;
@@ -107,6 +107,7 @@ public class UIMinimapManager : MonoBehaviour {
 
     private void ReceiveInitialData(InitialData p_initialdata)
     {
+        Debug.Log("2");
         m_initialData = p_initialdata;
     }
 
@@ -114,8 +115,9 @@ public class UIMinimapManager : MonoBehaviour {
         m_playerElement.gameObject.SetActive(false);
     }
 
-    private void PlaceIcons(ReadyToFace p_readyToFace)
+    private void PlaceIcons(InitiateLobby p_initiateLobby)
     {
+        Debug.Log("INITIATE LOBBY -----");
         PlaceIcons();
     }
 

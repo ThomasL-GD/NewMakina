@@ -22,12 +22,14 @@ namespace Synchronizers {
 
         protected virtual void Start() {
             Initialize();
-            MyNetworkManager.OnReceiveInitialData += ReceiveInitialData;
+            MyNetworkManager.OnReceiveInitialData += Initialize;
+            MyNetworkManager.OnReceiveInitiateLobby += Initialize;
+            MyNetworkManager.OnReadyToGoIntoTheBowl += Initialize;
         }
 
-        protected virtual void ReceiveInitialData(InitialData p_initialData) {
-            Initialize();
-        }
+        private void Initialize(InitialData p_p) => Initialize();
+        private void Initialize(InitiateLobby p_p) => Initialize();
+        private void Initialize(ReadyToGoIntoTheBowl p_p) => Initialize();
 
         protected void Initialize() {
             m_availblePositions = new bool[m_loadingPositions.Length];

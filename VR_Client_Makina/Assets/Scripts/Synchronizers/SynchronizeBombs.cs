@@ -61,8 +61,8 @@ namespace Synchronizers {
 
         /// <summary>Just sets maxSlotsForBombs according to the server's InitialData</summary>
         /// <param name="p_initialData">The message sent by the server</param>
-        protected override void ReceiveInitialData(InitialData p_initialData) {
-            base.ReceiveInitialData(p_initialData);
+        protected void ReceiveInitialData(InitialData p_initialData) {
+            Initialize();
             m_bombRange = p_initialData.bombExplosionRange;
             m_maxSlotsLoading = p_initialData.maximumBombsCount;
             m_explosionTime = p_initialData.bombDetonationTime;

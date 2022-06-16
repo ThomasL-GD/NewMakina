@@ -415,9 +415,10 @@ public class ServerManager : MonoBehaviour
             firstLobbyHeartIndex = m_lobbyHeartIndex
         };
         
-        SendToBothClients(initialData);
         
         if(m_firstTime)  {
+            SendToBothClients(initialData);
+            
             m_severTick = StartCoroutine(ServerTick());
             m_firstTime = false;
         }
@@ -734,10 +735,9 @@ public class ServerManager : MonoBehaviour
         m_inLobby = true;
         
         StartGame();
+        
         SendToBothClients(m_initiateLobbyBuffer);
-        
         Debug.Log("Send Initiate Lobby");
-        
     }
 
 
