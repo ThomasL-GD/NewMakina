@@ -194,6 +194,8 @@ public class UIManager : Synchronizer<UIManager> {
             healthElement.anchorMax = new Vector2(maxX, maxY);
             
             m_vrHealth.healthElements[i] = healthElement;
+            
+            Debug.Log($"NEW VR HEALTH IN UI PLEASE ! {healthElement.parent}",healthElement);
         }
         
         // PC Health

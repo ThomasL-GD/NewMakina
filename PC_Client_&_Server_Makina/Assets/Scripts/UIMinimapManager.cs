@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using CustomMessages;
 using Synchronizers;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.XR;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
@@ -157,8 +155,6 @@ public class UIMinimapManager : MonoBehaviour {
             heartRect.gameObject.SetActive(p_isInRealGame ? (i < m_initialData.firstLobbyHeartIndex) : (i >= m_initialData.firstLobbyHeartIndex));
         }
         
-        Debug.Log($"Total UI HEARTS : {m_heartDatas.Length}");
-        
         m_playerElement.gameObject.SetActive(true);
 
         m_isInGame = true;
@@ -211,7 +207,6 @@ public class UIMinimapManager : MonoBehaviour {
     #region Destroy Heart
     /// <summary>Destroys a UI heart </summary>
     private void DestroyUIHeart(HeartBreak p_heartBreak) {
-        Debug.Log($"HEART DESTROYED : {p_heartBreak.index}");
         StartCoroutine(BlinkHeart(p_heartBreak.index));
     }
 
