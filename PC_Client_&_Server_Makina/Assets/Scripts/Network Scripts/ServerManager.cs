@@ -46,6 +46,8 @@ public class ServerManager : MonoBehaviour
     private bool m_vrReadyToBowlBuffer;
     private bool m_pcReadyToBowlBuffer;
 
+    private bool m_inLobby;
+    
     #endregion
     
     
@@ -593,7 +595,7 @@ public class ServerManager : MonoBehaviour
                 {
                     m_heartTransforms[i].localScale = Vector3.zero;
                     SendToBothClients(new HeartBreak() {index = i});
-                    m_vrPlayerHealth--;
+                    if(!m_inLobby) m_vrPlayerHealth--;
                 }
                 return;
             }
@@ -726,14 +728,16 @@ public class ServerManager : MonoBehaviour
     {
         if (p_connection == m_vrNetworkConnection) m_vrReadyBuffer = true;
         else if (p_connection == m_pcNetworkConnection) m_pcReadyBuffer = true;
+
+        if (!m_vrReadyBuffer || !m_pcReadyBuffer) return;
         
-        if(m_vrReadyBuffer && m_pcReadyBuffer)
-        {
-            StartGame();
-            SendToBothClients(m_initiateLobbyBuffer);
-            
-            Debug.Log("Send Initiate Lobby");
-        }
+        m_inLobby = true;
+        
+        StartGame();
+        SendToBothClients(m_initiateLobbyBuffer);
+        
+        Debug.Log("Send Initiate Lobby");
+        
     }
 
 
@@ -743,6 +747,8 @@ public class ServerManager : MonoBehaviour
         else if (p_connection == m_pcNetworkConnection) m_pcReadyToBowlBuffer = true;
 
         if (!m_vrReadyToBowlBuffer || !m_pcReadyToBowlBuffer) return;
+        
+        m_inLobby = false;
         
         Debug.Log("Both ready to go into bowl");
         
@@ -868,7 +874,7 @@ public class ServerManager : MonoBehaviour
 
                     if (hit) {
                         // todo : yeah it's not a feature Blue.. nice try..
-                        m_pcPlayerHealth--;
+                        if(!m_inLobby)m_pcPlayerHealth--;
                         m_laserBuffer.length = laserCriticalPath.magnitude;
                     }
                     else {
@@ -940,7 +946,7 @@ public class ServerManager : MonoBehaviour
     {
         //TODO bring this to the server loop
         
-        m_vrPlayerHealth--;
+        if(!m_inLobby) m_vrPlayerHealth--;
         
         m_heartBreakBuffer = p_heartBreak;
         OnServerTick -= SendHeartBreak;
@@ -1000,7 +1006,7 @@ public class ServerManager : MonoBehaviour
         Vector2 bombFlatPosition = new Vector2(p_bombExplosion.position.x,p_bombExplosion.position.z);
         bool hit = Vector2.Distance(pcFlatPosition, bombFlatPosition) < m_bombExplosionRange;
         m_currentBombAmount--;
-        if (hit) m_pcPlayerHealth--;
+        if (hit && !m_inLobby) m_pcPlayerHealth--;
         
         SendToBothClients(new BombExplosion(){position = p_bombExplosion.position, index = p_bombExplosion.index, bombID = p_bombExplosion.bombID, hit = hit});
         if(!m_bombCoroutineRunning)StartCoroutine(BombSpawnTimer());

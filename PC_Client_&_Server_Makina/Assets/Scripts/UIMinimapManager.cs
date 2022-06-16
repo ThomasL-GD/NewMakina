@@ -68,6 +68,8 @@ public class UIMinimapManager : MonoBehaviour {
     
 
     private bool m_isInGame = false;
+
+    private InitialData m_initialData;
     
     private struct UIBeaconData {
         /// <summary>The server ID of this beacon </summary>
@@ -90,7 +92,10 @@ public class UIMinimapManager : MonoBehaviour {
     }
 
     private void Start() {
-        ClientManager.OnReceiveInitialData += PlaceIcons;
+        ClientManager.OnReceiveReadyToGoIntoTheBowl += PlaceIcons;
+        ClientManager.OnReceiveReadyToFace += PlaceIcons;
+        ClientManager.OnReceiveInitialData += ReceiveInitialData;
+        
         ClientManager.OnReceiveActivateBeacon += PlaceABeacon;
         ClientManager.OnReceiveBeaconDetectionUpdate += DetectionUpdate;
         ClientManager.OnReceiveDestroyedBeacon += DestroyBeacon;
@@ -100,12 +105,26 @@ public class UIMinimapManager : MonoBehaviour {
         //m_playerElement.gameObject.SetActive(false);
     }
 
+    private void ReceiveInitialData(InitialData p_initialdata)
+    {
+        m_initialData = p_initialdata;
+    }
+
     private void ReceiveGameEnd(GameEnd p_gameEnd) {
         m_playerElement.gameObject.SetActive(false);
     }
 
+    private void PlaceIcons(ReadyToFace p_readyToFace)
+    {
+        PlaceIcons();
+    }
+
     /// <summary>Will place every object once the game starts, is called when we receive InitialData</summary>
-    private void PlaceIcons(InitialData p_initialData) {
+    private void PlaceIcons(ReadyToGoIntoTheBowl p_readyForBowl)
+    {
+        PlaceIcons();
+    }
+    private void PlaceIcons() {
         
         #region Annihilation
         foreach (UIBeaconData beaconData in m_beaconDatas) {
@@ -116,7 +135,7 @@ public class UIMinimapManager : MonoBehaviour {
         foreach (UIElementData elevatorData in m_elevatorDatas) Destroy(elevatorData.rectTransform.gameObject); 
         
         m_beaconDatas = new List<UIBeaconData>();
-        m_heartDatas = new UIElementData[p_initialData.heartPositions.Length];
+        m_heartDatas = new UIElementData[m_initialData.heartPositions.Length];
         m_elevatorDatas = new UIElementData[SynchroniseElevators.Instance.elevatorPositions.Length];
         
         if(m_bottomFloorDimmer != null)m_bottomFloorDimmer.gameObject.SetActive(false);
@@ -126,7 +145,7 @@ public class UIMinimapManager : MonoBehaviour {
         
         if(m_outlineOfTheMinimap != null)m_outlineOfTheMinimap.SetSiblingIndex(m_outlineOfTheMinimap.parent.childCount);
 
-        m_beaconAnchorRatio = 1 / (m_mapRealSize / p_initialData.beaconRange);
+        m_beaconAnchorRatio = 1 / (m_mapRealSize / m_initialData.beaconRange);
         
         //Instantiate and place every elevator
         for (byte i = 0; i < SynchroniseElevators.Instance.elevatorPositions.Length; i++) {
@@ -138,13 +157,15 @@ public class UIMinimapManager : MonoBehaviour {
         }
         
         //Instantiate and place every heart
-        for (byte i = 0; i < p_initialData.heartPositions.Length; i++) {
+        for (byte i = 0; i < m_initialData.heartPositions.Length; i++) {
             RectTransform heartRect = Instantiate(m_uiVrHeartPrefab, m_mapElement).GetComponent<RectTransform>();
-            Vector2 heartRatioOnMap = RatioOnMap(p_initialData.heartPositions[i]);
+            Vector2 heartRatioOnMap = RatioOnMap(m_initialData.heartPositions[i]);
 
             m_heartDatas[i] = new UIElementData(){rectTransform = heartRect, originalRatioOnMap = heartRatioOnMap};
             PlaceAnchors(heartRect, heartRatioOnMap, m_vrHeartAnchorRatio);
         }
+        
+        Debug.Log($"Total UI HEARTS : {m_heartDatas.Length}");
         
         m_playerElement.gameObject.SetActive(true);
 
@@ -198,6 +219,7 @@ public class UIMinimapManager : MonoBehaviour {
     #region Destroy Heart
     /// <summary>Destroys a UI heart </summary>
     private void DestroyUIHeart(HeartBreak p_heartBreak) {
+        Debug.Log($"HEART DESTROYED : {p_heartBreak.index}");
         StartCoroutine(BlinkHeart(p_heartBreak.index));
     }
 
