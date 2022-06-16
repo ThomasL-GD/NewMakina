@@ -226,8 +226,12 @@ public class UIManager : Synchronizer<UIManager> {
 
     private void SynchroniseHealthPC(Laser p_laser)
     {
+        if (m_pcHealth.healthElements[0] == null) return;
+        if (!m_pcHealth.healthElements[0].gameObject.activeSelf) return;
         if(!p_laser.hit) return;
 
+        
+        
         int index = m_pcHealth.healthElements.Length - m_pcHealthIncrementor++;
         m_pcHealth.healthElements[index].GetComponent<Animator>().SetTrigger(m_heartAnimatorTrigger);
     }
