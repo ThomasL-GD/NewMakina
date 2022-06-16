@@ -257,9 +257,9 @@ namespace Synchronizers {
                     break;
             }
             
-            GameObject go = m_beacons[p_index].deployedBeaconScript.gameObject;
-            Material mat = go.GetComponent<MeshRenderer>().material;
-            mat.SetColor(CodeBeaconColor, newColor);
+            // GameObject go = m_beacons[p_index].deployedBeaconScript.gameObject;
+            // Material mat = go.GetComponent<MeshRenderer>().material;
+            // mat.SetColor(CodeBeaconColor, newColor);
         }
 
         /// <summary> Changes the range of the beacon feedback in the prefab itself </summary>

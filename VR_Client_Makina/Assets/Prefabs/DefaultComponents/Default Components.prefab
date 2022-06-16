@@ -672,7 +672,7 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs: []
   m_localHost: 0
-  m_IPadress: 10.31.240.215
+  m_IPadress: 10.31.240.229
   m_autoconnexionTimeInterval: 10.1
 --- !u!114 &3611048692802888146
 MonoBehaviour:
@@ -995,7 +995,8 @@ GameObject:
   - component: {fileID: 604639381837971104}
   - component: {fileID: 926970742400221155}
   - component: {fileID: 3593861580770464372}
-  m_Layer: 0
+  - component: {fileID: 7221881157058850329}
+  m_Layer: 7
   m_Name: ReadyToGoIntoTheBowl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1010,7 +1011,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5322876003485467254}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 74.4, y: 55.9, z: 1.7}
   m_LocalScale: {x: 9.38, y: 9.38, z: 9.38}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -1115,6 +1116,22 @@ MonoBehaviour:
   - {fileID: 7751552216955879389}
   - {fileID: 7950185474293827598}
   m_messageToSend: 1
+--- !u!114 &7221881157058850329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5322876003485467254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 289fb9d4d407fea4faf9dbcd7932d6d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  axe: 1
+  speed: 1
+  amplitude: 8.1
+  phase: 0
 --- !u!1 &5613580352374269167
 GameObject:
   m_ObjectHideFlags: 0
@@ -3703,14 +3720,38 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8907849920664484147}
     m_Modifications:
+    - target: {fileID: 434578376286307432, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
+      propertyPath: m_elevators.Array.size
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 1469819181140471706, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
       propertyPath: m_objectToActiveOnReady
       value: 
       objectReference: {fileID: 6862777648600303178}
     - target: {fileID: 1469819181140471706, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
+      propertyPath: m_objectToActiveOnLobby.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1469819181140471706, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
       propertyPath: m_objectToActiveOnReady.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1469819181140471706, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
+      propertyPath: m_objectToActiveOnLobby.Array.data[0]
+      value: 
+      objectReference: {fileID: 5322876003485467254}
+    - target: {fileID: 1469819181140471706, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
+      propertyPath: m_objectToActiveOnLobby.Array.data[1]
+      value: 
+      objectReference: {fileID: 1746276180736340414}
+    - target: {fileID: 1469819181140471706, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
+      propertyPath: m_objectToActiveOnLobby.Array.data[2]
+      value: 
+      objectReference: {fileID: 7998774879468857206}
+    - target: {fileID: 1469819181140471706, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
+      propertyPath: m_objectToActiveOnLobby.Array.data[3]
+      value: 
+      objectReference: {fileID: 6040688108489981987}
     - target: {fileID: 1469819181140471706, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
       propertyPath: m_objectToActiveOnReady.Array.data[0]
       value: 
@@ -3725,7 +3766,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1469819181140471706, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
       propertyPath: m_objectToActiveOnStartGame.Array.size
-      value: 12
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 1469819181140471706, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
       propertyPath: m_objectToDesactiveOnReady.Array.data[0]
@@ -3835,6 +3876,10 @@ PrefabInstance:
       propertyPath: m_heartBreak.audioSource
       value: 
       objectReference: {fileID: 2798137058736191279}
+    - target: {fileID: 3596748892314206793, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
+      propertyPath: m_loadVolumeAugmentation
+      value: 0.15
+      objectReference: {fileID: 0}
     - target: {fileID: 3596748892314206793, guid: 02edff2d60808fa4e88e819e10eb1038, type: 3}
       propertyPath: m_beaconHitGround.audioSource
       value: 
@@ -4197,7 +4242,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7358716516191470000, guid: a268fde91c3c34047b52b8581d3401dd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -100
       objectReference: {fileID: 0}
     - target: {fileID: 7358716516191470000, guid: a268fde91c3c34047b52b8581d3401dd, type: 3}
       propertyPath: m_LocalPosition.z
