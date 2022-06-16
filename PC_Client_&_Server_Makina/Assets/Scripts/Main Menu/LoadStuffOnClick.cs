@@ -25,8 +25,12 @@ public class LoadStuffOnClick : MonoBehaviour
     // Update is called once per frame
     void OnMouseDown()
     {
+        Debug.Log("clicked !!!");
         if (!SynchronizeInitialData.vrConnected) return;
         if (clicked) return;
+        
+        Debug.Log("enabled !!!");
+        
         clicked = true;
         NetworkClient.Send(new InitiateLobby(){trial = m_practice});
         NetworkClient.Send(new ReadyToFace());

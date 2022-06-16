@@ -13,6 +13,9 @@ namespace Synchronizers {
 
         [SerializeField] [Tooltip("The player's respawn points")]
         public Transform[] m_spawnPoints;
+        
+        [SerializeField] [Tooltip("The player's respawn points")]
+        public Transform[] m_spawnPointsLobby;
 
         [SerializeField] [Tooltip("The player's respawn Time in seconds")]
         private float m_respawnTime = 3f;
@@ -30,11 +33,18 @@ namespace Synchronizers {
         public static PlayerDeathDelegator OnPlayerDeath;
 
         public static PlayerDeathDelegator OnPlayerRespawn;
+        private bool m_inBowl;
 
         void Awake() {
             OnPlayerDeath += ReceiveLaser;
             ClientManager.OnReceiveReadyToGoIntoTheBowl += ReceiveReadyToGoIntoTheBowl;
             ClientManager.OnReceiveInitialData += SetInitialValues;
+            ClientManager.OnReceiveReadyToFace += OnReadyToGoIntoBowl;
+        }
+
+        private void OnReadyToGoIntoBowl(ReadyToFace p_readytoface)
+        {
+            m_inBowl = false;
         }
 
         private void SetInitialValues(InitialData p_initialdata)
@@ -46,7 +56,9 @@ namespace Synchronizers {
         /// Also fetch any data needed in InitialData
         /// I should add that this documentation is very well made (ღゝ◡╹)ノ♡</summary>
         /// <param name="p_readyToGoIntoTheBowl">The message sent by the server, NO SHiT !</param>
-        private void ReceiveReadyToGoIntoTheBowl(ReadyToGoIntoTheBowl p_readyToGoIntoTheBowl) {
+        private void ReceiveReadyToGoIntoTheBowl(ReadyToGoIntoTheBowl p_readyToGoIntoTheBowl)
+        {
+            m_inBowl = true;
             Vector3 spawnPos = m_spawnPoints[Random.Range(0, m_spawnPoints.Length)].position;
             FadeToBlack.FadeToBlackNow?.Invoke(m_player.transform, spawnPos);
         }
@@ -63,7 +75,9 @@ namespace Synchronizers {
         /// The coroutine called that will handle the player's death
         /// </summary>
         /// <returns> null </returns>
-        IEnumerator DeathLoop() {
+        IEnumerator DeathLoop()
+        {
+            Transform[] spawnPoints = m_inBowl ? m_spawnPoints : m_spawnPointsLobby;
             
             //Enabling the feedback and finding the next spawn point
             InputMovement3.instance.m_isDead = true;
@@ -90,13 +104,13 @@ namespace Synchronizers {
             
             //Creating a pool to pull random indexes from
             List<ushort> availableSpawnPoints = new List<ushort>();
-            for (ushort j = 0; j < m_spawnPoints.Length; j++) availableSpawnPoints.Add(j);
+            for (ushort j = 0; j < spawnPoints.Length; j++) availableSpawnPoints.Add(j);
 
             //Create a list of spawnpoints with no duplicates
             List<Vector3> spawnPointsShownToVR = new List<Vector3>();
             for (int j = 0; j < m_numberOfSpawnPointsToSend; j++) {
                 ushort rand = (ushort)Random.Range(0, availableSpawnPoints.Count);
-                spawnPointsShownToVR.Add(m_spawnPoints[availableSpawnPoints[rand]].position);
+                spawnPointsShownToVR.Add(spawnPoints[availableSpawnPoints[rand]].position);
                 availableSpawnPoints.RemoveAt(rand);
             }
             
