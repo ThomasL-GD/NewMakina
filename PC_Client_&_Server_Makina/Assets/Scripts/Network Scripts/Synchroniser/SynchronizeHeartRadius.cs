@@ -23,6 +23,7 @@ public class SynchronizeHeartRadius : Synchronizer<SynchronizeHeartRadius>
 
     private void ReceiveHeartConquerStop(HeartConquerStop p_heartconquerstop)
     {
+        Debug.Log("yeye");
         m_heartRadiusFeedback.enabled = false;
         m_heartRadiusFeedback.text = "";
         if(SynchronizeHearts.Instance.m_hearts.Length !=0 && SynchronizeHearts.Instance.m_hearts[m_indexOfLastTouchedHeart] != null) {

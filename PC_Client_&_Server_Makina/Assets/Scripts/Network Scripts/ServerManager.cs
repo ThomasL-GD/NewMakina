@@ -7,7 +7,6 @@ using CustomMessages;
 using JetBrains.Annotations;
 
 /// <summary/> The server side manager will handle all of the server side network dealings of the game
-
 public class ServerManager : MonoBehaviour
 {
     //Singleton time ! (╬ ಠ益ಠ)
@@ -539,13 +538,13 @@ public class ServerManager : MonoBehaviour
             if(!data.isActive)continue;
             
             Vector3 playerPos2D = new Vector3(m_pcTransformBuffer.position.x,0f,m_pcTransformBuffer.position.z);
-            Vector3 beaconPos2D = new Vector3(m_pcTransformBuffer.position.x,0f,m_pcTransformBuffer.position.z);
+            Vector3 beaconPos2D = new Vector3(data.position.x,0f,data.position.z);
             
             bool detected = Vector3.Distance(playerPos2D, beaconPos2D) < m_beaconRange;
 
             Vector3 leurePos2D = new Vector3(m_leureBuffer.position.x, 0f, m_leureBuffer.position.z);
             
-            if (m_isLeureAliveBuffer)detected = detected || Vector3.Distance(m_leureBuffer.position, beaconPos2D) < m_beaconRange;
+            if (m_isLeureAliveBuffer) detected = detected || Vector3.Distance(leurePos2D, beaconPos2D) < m_beaconRange;
 
             if (data.detectingPlayer != detected)
             {
@@ -575,7 +574,12 @@ public class ServerManager : MonoBehaviour
     {
         Vector2 horizontalPlayerPosition = new Vector2(m_pcTransformBuffer.position.x, m_pcTransformBuffer.position.z);
         float playerHeight = m_pcTransformBuffer.position.y;
-        for (int i = 0; i < m_heartTransforms.Length; i++)
+        
+        
+        int start = m_inLobby ? m_lobbyHeartIndex : 0;
+        int end = m_inLobby ? m_heartTransforms.Length : m_lobbyHeartIndex;
+        
+        for (int i = start; i < end; i++)
         {
             if(m_heartTransforms[i].localScale == Vector3.zero) continue;
             

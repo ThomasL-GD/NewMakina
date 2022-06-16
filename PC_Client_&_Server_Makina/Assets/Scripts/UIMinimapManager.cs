@@ -109,7 +109,7 @@ public class UIMinimapManager : MonoBehaviour {
 
     private void ReceiveGameEnd(GameEnd p_gameEnd) => m_playerElement.gameObject.SetActive(false);
 
-    private void PlaceIcons(InitiateLobby p_initiateLobby) => PlaceIcons();
+    private void PlaceIcons(InitiateLobby p_initiateLobby) => PlaceIcons(false);
 
     /// <summary>Will place every object once the game starts, is called when we receive ReadyToGoIntoTheBowl</summary>
     private void PlaceIcons(ReadyToGoIntoTheBowl p_readyForBowl) => PlaceIcons();
@@ -154,7 +154,7 @@ public class UIMinimapManager : MonoBehaviour {
             m_heartDatas[i] = new UIElementData(){rectTransform = heartRect, originalRatioOnMap = heartRatioOnMap};
             PlaceAnchors(heartRect, heartRatioOnMap, m_vrHeartAnchorRatio);
             
-            heartRect.gameObject.SetActive(p_isInRealGame ? (i < m_initialData.firstLobbyHeartIndex) : (i > m_initialData.firstLobbyHeartIndex));
+            heartRect.gameObject.SetActive(p_isInRealGame ? (i < m_initialData.firstLobbyHeartIndex) : (i >= m_initialData.firstLobbyHeartIndex));
         }
         
         Debug.Log($"Total UI HEARTS : {m_heartDatas.Length}");

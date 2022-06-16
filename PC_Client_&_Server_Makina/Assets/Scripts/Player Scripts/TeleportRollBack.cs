@@ -71,7 +71,7 @@ public class TeleportRollBack : AbstractMechanic {
         Transform camera = CameraAndUISingleton.camera.transform;
         
         m_teleportLocation = Instantiate(m_teleportLocationPrefab, camera.position, camera.rotation);
-        
+        m_teleportLocation.transform.RotateAround(Vector3.up, 90f);
         m_teleportLocation.GetComponent<EnableTPPoint>().m_parentScript = this;
         Physics.IgnoreCollision(m_teleportLocation.GetComponent<Collider>() , gameObject.GetComponent<Collider>());
         
