@@ -171,7 +171,11 @@ public class ClientManager : MonoBehaviour
 
     private void ReceiveReadyToGoIntoTheBowl(ReadyToGoIntoTheBowl p_readyToGoIntoBowl)=>OnReceiveReadyToGoIntoTheBowl?.Invoke(p_readyToGoIntoBowl);
 
-    private void ReceiveInitiateLobby(InitiateLobby p_initiateLobby)=>OnReceiveInitiateLobby?.Invoke(p_initiateLobby);
+    private void ReceiveInitiateLobby(InitiateLobby p_initiateLobby)
+    {
+        Debug.Log("INITIATE LOBBY ----- CLIENT MANAGER");
+        OnReceiveInitiateLobby?.Invoke(p_initiateLobby);
+    }
 
     private void ReceiveHeartConquerStop(HeartConquerStop p_heartConquerStop)=>OnReceiveHeartConquerStop?.Invoke(p_heartConquerStop);
 
