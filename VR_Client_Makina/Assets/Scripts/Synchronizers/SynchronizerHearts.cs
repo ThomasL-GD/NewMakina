@@ -28,9 +28,12 @@ namespace Synchronizers {
         void Awake()
         {
             MyNetworkManager.OnReceiveInitialData += ReceiveInitialData;
+            MyNetworkManager.OnReadyToGoIntoTheBowl += SetUpUI;
             MyNetworkManager.OnReceiveHeartBreak += ReceiveHeartBreak;
             MyNetworkManager.OnReceiveGameEnd += Reset;
         }
+
+        private void SetUpUI(ReadyToGoIntoTheBowl p_p_ready) => SetUpUI();
 
         /// <summary>Destroy every heart to be ready to launch another game </summary>
         /// <param name="p_gameend">The message sent by the server</param>
@@ -69,20 +72,21 @@ namespace Synchronizers {
                 }
             }
 
+            SetUpUI();
+
+            // Saving the list
+            m_hearts = hearts.ToArray();
+        }
+
+        private void SetUpUI() {
             m_hpInUiAreWorking = m_initialDataBuffer.healthVrPlayer <= m_UiLives.Length;
 
-            if (m_hpInUiAreWorking) {
+            if (!m_hpInUiAreWorking) return;
                 m_livesLeft = (byte) m_initialDataBuffer.healthVrPlayer;
 
                 for (var i = 0; i < m_UiLives.Length; i++) {
                     m_UiLives[i].gameObject.SetActive(i <= m_livesLeft); //Setting active as many UI hearts as the number of lives
                 }
-            }
-            
-            
-
-            // Saving the list
-            m_hearts = hearts.ToArray();
         }
         
         /// <summary/> Will destroy a heart and play the according sound
@@ -114,7 +118,7 @@ namespace Synchronizers {
             
             StopCoroutine(flash);
             heart.GetComponent<LineRenderer>().enabled = false;
-            if(m_hpInUiAreWorking) {
+            if(m_hpInUiAreWorking && m_livesLeft > 0) {
                 m_UiLives[m_livesLeft - 1].gameObject.SetActive(false);
                 m_livesLeft--;
             }

@@ -14,6 +14,8 @@ namespace Synchronizers {
         
         /// <summary/> The VR Health data saved locally
         private int m_vrHealth;
+
+        private InitialData m_initialData;
         
         /// <summary/> The singleton instance of SynchronizeInitialData
         public static SynchronizeInitialData instance;
@@ -24,7 +26,14 @@ namespace Synchronizers {
         [SerializeField, Tooltip("One of them will be activated every time the VR player gets a kill (in order)")] private Transform[] m_uiPoint;
         
         /// <summary/> Adding functions to the client delegate
-        void Awake() => MyNetworkManager.OnReceiveInitialData += ReceiveInitialData;
+        void Awake() {
+            MyNetworkManager.OnReceiveInitialData += ReceiveInitialData;
+            MyNetworkManager.OnReadyToGoIntoTheBowl += Initialize;
+            MyNetworkManager.OnReadyToFace += Initialize;
+        }
+
+        private void Initialize(ReadyToGoIntoTheBowl p_p_ready) => Initialize();
+        private void Initialize(ReadyToFace p_p_ready) => Initialize();
 
         /// <summary/> Singleton type beat
         private void Start() {
@@ -40,19 +49,23 @@ namespace Synchronizers {
         /// <summary/> Function called when the client received the initial data
         /// <param name="p_initialData"> The message sent by the server</param>
         void ReceiveInitialData(InitialData p_initialData) {
-            m_pcHealth = p_initialData.healthPcPlayer;
-            m_maxPcHealth = p_initialData.healthPcPlayer;
-            m_vrHealth = p_initialData.healthVrPlayer;
-            UpdateHealthText();
-            
+            m_initialData = p_initialData;
             Debug.Log($"INITIAL DATA RECEPTION CONFIRMED");
+        }
+
+        private void Initialize() {
+            m_pcHealth = m_initialData.healthPcPlayer;
+            m_maxPcHealth = m_initialData.healthPcPlayer;
+            m_vrHealth = m_initialData.healthVrPlayer;
+            foreach (Transform uiPoint in m_uiPoint) { uiPoint.gameObject.SetActive(false); }
+            UpdateHealthText();
         }
 
         
         /// <summary/> The function called when the PC player looses Health
         /// <param name="p_healthLost"> the amount of health left (default : 1) </param>
         public void LosePcHealth(int p_healthLost = 1) {
-            m_uiPoint[m_maxPcHealth - m_pcHealth].gameObject.SetActive(true);
+            if(m_pcHealth <= m_maxPcHealth)m_uiPoint[m_maxPcHealth - m_pcHealth].gameObject.SetActive(true);
             m_pcHealth -= p_healthLost;
             UpdateHealthText();
         }
