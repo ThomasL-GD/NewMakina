@@ -30,6 +30,7 @@ namespace Synchronizers {
         private GameState m_currentGameState = GameState.Menu;
 
         private InitiateLobby m_initiateLobby;
+        public static GameEnd m_gameEnd { get; private set; } = new GameEnd();
         
         [SerializeField] [Tooltip("This will be set active once the player needs to confirm their readyness, so it better have a ReadyButton somewhere")] private GameObject[] m_objectToActiveOnReady = null;
         [SerializeField] [Tooltip("This will be set unactive once the player needs to confirm their readyness")] private GameObject[] m_objectToDesactiveOnReady = null;
@@ -68,13 +69,19 @@ namespace Synchronizers {
             Transition.Instance.StartTransition();
         }
 
+        public void GoFromEndScreenToMainMenu() {
+            if (m_currentGameState != GameState.EndScreen) return;
+                Transition.a_transitionDone += SetMenu;
+                Transition.Instance.StartTransition();
+        }
+
         IEnumerator UnlockButton(float p_time) {
             Debug.Log("Lobby trial start");
             yield return new WaitForSeconds(p_time);
             Debug.Log("Lobby trial end ?");
             if(m_currentGameState != GameState.Lobby) yield break;
             Debug.Log("Lobby trial definitive end");
-            foreach (GameObject go in m_objectToActiveOnLobbyAfterTimer) go.SetActive(false);
+            foreach (GameObject go in m_objectToActiveOnLobbyAfterTimer) go.SetActive(true);
         }
 
         private void ReceiveInitiateLobby(InitiateLobby p_initiateLobby) {
@@ -91,12 +98,14 @@ namespace Synchronizers {
         }
 
         private void EndGame(GameEnd p_message) {
+            m_gameEnd = p_message;
             StartCoroutine(WaitForEndingScreen());
         }
 
         private void SetLobbyScene() => SetNewScene(GameState.Lobby);
         private void SetGameScene() => SetNewScene(GameState.Game);
         private void SetEndScene() => SetNewScene(GameState.EndScreen);
+        private void SetMenu() => SetNewScene(GameState.Menu);
 
         private void SetNewScene(GameState p_currentState) {
             switch (m_currentGameState) {
