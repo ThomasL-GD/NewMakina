@@ -111,7 +111,7 @@ public class LaserVFXHandler : MonoBehaviour {
         
         float timer = 0f;
         while (timer<1f) {
-            m_killEffect.SetVector3("Hand", m_parent.position);
+            m_killEffect.SetVector3("HandPosition", m_parent.position);
             yield return null;
             timer += Time.deltaTime;
         }
@@ -120,7 +120,7 @@ public class LaserVFXHandler : MonoBehaviour {
         
         
         while (timer<20f) {
-            m_killEffect.SetVector3("Hand", m_parent.position);
+            m_killEffect.SetVector3("HandPosition", m_parent.position);
             yield return null;
             timer += Time.deltaTime;
         }

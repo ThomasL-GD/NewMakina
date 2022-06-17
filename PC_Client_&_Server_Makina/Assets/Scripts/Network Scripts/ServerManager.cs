@@ -231,6 +231,7 @@ public class ServerManager : MonoBehaviour
     private void OnReceiveInitiateLobby(NetworkConnection p_client, InitiateLobby p_mess)
     {
         m_initiateLobbyBuffer = p_mess;
+        m_initiateLobbyBuffer.trialTime = 120f;
     }
 
 
@@ -428,12 +429,13 @@ public class ServerManager : MonoBehaviour
 
     private void EndGame(ClientConnection p_winner = ClientConnection.PcPlayer)
     {
+        m_beaconsPositionsBuffer = new BeaconsPositions();
         m_gameEnded = true;
         
         SendToBothClients( new GameEnd(){winningClient = p_winner});
         
         StopCoroutine(m_spawnInitialBeacons);
-        StopCoroutine(m_spawnBombs);
+        if(m_isUsingBombs)StopCoroutine(m_spawnBombs);
         //Setting up senders
         OnServerTick = null;
     }
@@ -558,6 +560,7 @@ public class ServerManager : MonoBehaviour
     /// <summary/> the function called to check the winning conditions
     private void CheckHealths()
     {
+
         if (m_gameEnded) return;
         if (m_pcPlayerHealth <= 0) {
             EndGame(ClientConnection.VrPlayer);
@@ -878,7 +881,6 @@ public class ServerManager : MonoBehaviour
 
                     if (hit) {
                         // todo : yeah it's not a feature Blue.. nice try..
-                        if(!m_inLobby)m_pcPlayerHealth--;
                         m_laserBuffer.length = laserCriticalPath.magnitude;
                     }
                     else {
@@ -950,7 +952,6 @@ public class ServerManager : MonoBehaviour
     {
         //TODO bring this to the server loop
         
-        if(!m_inLobby) m_vrPlayerHealth--;
         
         m_heartBreakBuffer = p_heartBreak;
         OnServerTick -= SendHeartBreak;
@@ -1088,6 +1089,9 @@ public class ServerManager : MonoBehaviour
     private void SendLaser()
     {
         SendToBothClients(m_laserBuffer);
+        
+        if(!m_inLobby && m_laserBuffer.hit)m_pcPlayerHealth--;
+        
         OnServerTick -= SendLaser;
     }
 
@@ -1107,6 +1111,7 @@ public class ServerManager : MonoBehaviour
     {
         SendToBothClients(m_heartBreakBuffer);
         OnServerTick -= SendHeartBreak;
+        if(!m_inLobby) m_vrPlayerHealth--;
     }
 
     /// <summary>

@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using CustomMessages;
 using Mirror;
 using Synchronizers;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,21 +19,58 @@ public class LoadStuffOnClick : MonoBehaviour
 
     [SerializeField] private bool m_practice;
 
-    private bool clicked = false;
+    [SerializeField] private GameObject m_spotLight;
 
-    private void Awake() => ClientManager.OnReceiveInitiateLobby += StartFade;
+    [SerializeField] private TextMeshPro m_text;
+    
+    private static bool clicked = false;
+    private bool hasClicked = false;
+    private bool dontUse = false;
+
+    private void Awake()
+    {
+        ClientManager.OnReceiveInitiateLobby += StartFade;
+        ClientManager.OnReceiveReadyToFace += StartConnection;
+    }
+
+    private void StartConnection(ReadyToFace p_readytoface)
+    {
+        if(clicked && hasClicked && !dontUse)
+        {
+            NetworkClient.Send(new InitiateLobby() {trial = m_practice});
+            NetworkClient.Send(new ReadyToFace());
+        }
+    }
+
+
+    private void OnMouseOver()
+    {
+        if (clicked) return;
+        m_spotLight.SetActive(true);
+    }
+    
+
+    private void OnMouseExit()
+    {
+        if (clicked) return;
+        m_spotLight.SetActive(false);
+    } 
     
 
     // Update is called once per frame
     void OnMouseDown()
     {
-        Debug.Log("clicked !!!");
-        if (!SynchronizeInitialData.vrConnected) return;
         if (clicked) return;
-        
-        Debug.Log("enabled !!!");
+
+        m_text.text = "waiting for VR player";
         
         clicked = true;
+        hasClicked = true;
+        
+        if (!SynchronizeInitialData.vrConnected) return;
+
+        dontUse = true;
+        
         NetworkClient.Send(new InitiateLobby(){trial = m_practice});
         NetworkClient.Send(new ReadyToFace());
     }
@@ -45,6 +84,7 @@ public class LoadStuffOnClick : MonoBehaviour
 
     IEnumerator FadeToBlack()
     {
+        m_text.text = "";
         Color color = m_blackScreen.color;
         float timer = 0f;
         do

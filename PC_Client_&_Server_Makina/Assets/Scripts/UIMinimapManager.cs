@@ -119,7 +119,7 @@ public class UIMinimapManager : MonoBehaviour {
             Destroy(beaconData.detectingBeacon.gameObject);
             Destroy(beaconData.undetectingBeacon.gameObject);
         }
-        foreach (UIElementData heartData in m_heartDatas) Destroy(heartData.rectTransform.gameObject); 
+        foreach (UIElementData heartData in m_heartDatas) if(heartData.rectTransform != null) Destroy(heartData.rectTransform.gameObject); 
         foreach (UIElementData elevatorData in m_elevatorDatas) Destroy(elevatorData.rectTransform.gameObject); 
         
         m_beaconDatas = new List<UIBeaconData>();

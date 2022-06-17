@@ -11,6 +11,10 @@ public class SynchronizeGameEnd : Synchronizer<SynchronizeGameEnd>
     [SerializeField] private TextMeshProUGUI m_text;
     [SerializeField] private string m_winMessage = "";
     [SerializeField] private string m_loseText = "";
+
+    [SerializeField] private GameObject m_bowl;
+    [SerializeField] private GameObject m_lobby;
+    
     private Vector3 m_initialPlayerPosition;
     /// <summary>
     /// Awake is called before the Start
@@ -29,6 +33,8 @@ public class SynchronizeGameEnd : Synchronizer<SynchronizeGameEnd>
     
     void GameEnd(GameEnd p_gameEnd) {
 
+        
+        
         if (p_gameEnd.winningClient == ClientConnection.PcPlayer) {
             m_text.text = m_winMessage;
         }else if(p_gameEnd.winningClient == ClientConnection.VrPlayer) {
@@ -40,5 +46,7 @@ public class SynchronizeGameEnd : Synchronizer<SynchronizeGameEnd>
         m_text.gameObject.SetActive(true);
 
         SynchronizePlayerPosition.Instance.m_player.position = m_initialPlayerPosition;
+        m_bowl.SetActive(false);
+        m_lobby.SetActive(true);
     }
 }
