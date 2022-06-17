@@ -231,6 +231,7 @@ public class ServerManager : MonoBehaviour
     private void OnReceiveInitiateLobby(NetworkConnection p_client, InitiateLobby p_mess)
     {
         m_initiateLobbyBuffer = p_mess;
+        m_initiateLobbyBuffer.trialTime = 120f;
     }
 
 

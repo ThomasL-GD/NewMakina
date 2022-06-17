@@ -23,21 +23,36 @@ public class LoadStuffOnClick : MonoBehaviour
 
     [SerializeField] private TextMeshPro m_text;
     
-    private bool clicked = false;
+    private static bool clicked = false;
+    private bool hasClicked = false;
+    private bool dontUse = false;
 
-    private void Awake() => ClientManager.OnReceiveInitiateLobby += StartFade;
+    private void Awake()
+    {
+        ClientManager.OnReceiveInitiateLobby += StartFade;
+        ClientManager.OnReceiveReadyToFace += StartConnection;
+    }
+
+    private void StartConnection(ReadyToFace p_readytoface)
+    {
+        if(clicked && hasClicked && !dontUse)
+        {
+            NetworkClient.Send(new InitiateLobby() {trial = m_practice});
+            NetworkClient.Send(new ReadyToFace());
+        }
+    }
 
 
     private void OnMouseOver()
     {
-        if (!SynchronizeInitialData.vrConnected) return;
+        if (clicked) return;
         m_spotLight.SetActive(true);
     }
     
 
     private void OnMouseExit()
     {
-        if (!SynchronizeInitialData.vrConnected) return;
+        if (clicked) return;
         m_spotLight.SetActive(false);
     } 
     
@@ -45,12 +60,17 @@ public class LoadStuffOnClick : MonoBehaviour
     // Update is called once per frame
     void OnMouseDown()
     {
-        if (!SynchronizeInitialData.vrConnected) return;
         if (clicked) return;
 
-        m_text.text = "";
+        m_text.text = "waiting for VR player";
         
         clicked = true;
+        hasClicked = true;
+        
+        if (!SynchronizeInitialData.vrConnected) return;
+
+        dontUse = true;
+        
         NetworkClient.Send(new InitiateLobby(){trial = m_practice});
         NetworkClient.Send(new ReadyToFace());
     }
