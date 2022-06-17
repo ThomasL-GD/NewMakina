@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using CustomMessages;
 using Mirror;
 using Synchronizers;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,19 +19,36 @@ public class LoadStuffOnClick : MonoBehaviour
 
     [SerializeField] private bool m_practice;
 
+    [SerializeField] private GameObject m_spotLight;
+
+    [SerializeField] private TextMeshPro m_text;
+    
     private bool clicked = false;
 
     private void Awake() => ClientManager.OnReceiveInitiateLobby += StartFade;
+
+
+    private void OnMouseOver()
+    {
+        if (!SynchronizeInitialData.vrConnected) return;
+        m_spotLight.SetActive(true);
+    }
+    
+
+    private void OnMouseExit()
+    {
+        if (!SynchronizeInitialData.vrConnected) return;
+        m_spotLight.SetActive(false);
+    } 
     
 
     // Update is called once per frame
     void OnMouseDown()
     {
-        Debug.Log("clicked !!!");
         if (!SynchronizeInitialData.vrConnected) return;
         if (clicked) return;
-        
-        Debug.Log("enabled !!!");
+
+        m_text.text = "";
         
         clicked = true;
         NetworkClient.Send(new InitiateLobby(){trial = m_practice});
@@ -45,6 +64,7 @@ public class LoadStuffOnClick : MonoBehaviour
 
     IEnumerator FadeToBlack()
     {
+        m_text.text = "";
         Color color = m_blackScreen.color;
         float timer = 0f;
         do

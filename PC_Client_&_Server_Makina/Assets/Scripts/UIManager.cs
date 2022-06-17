@@ -76,6 +76,7 @@ public class UIManager : Synchronizer<UIManager> {
     
     private Coroutine m_leureTimerCo;   
     public void SendLeure() {
+        m_leureElement.animator.ResetTrigger(startLeureReloadPropertyId);
         m_leureElement.animator.SetTrigger(startLeureCooldownPropertyId);
     }
     
@@ -154,8 +155,16 @@ public class UIManager : Synchronizer<UIManager> {
     
     #region Health
 
-    private void Initialize(ReadyToFace p_p_readytoface) => Initialize();
-    private void Initialize(ReadyToGoIntoTheBowl p_p_readytowhatever) => Initialize();
+    private void Initialize(ReadyToFace p_p_readytoface)
+    {
+        m_inLobby = true;
+        Initialize();
+    }
+    private void Initialize(ReadyToGoIntoTheBowl p_p_readytowhatever)
+    {
+        m_inLobby = false;
+        Initialize();
+    }
 
     private void ReceiveInitialData(InitialData p_message) {
         m_initialData = p_message;
@@ -237,9 +246,11 @@ public class UIManager : Synchronizer<UIManager> {
     
     private int m_pcHealthIncrementor = 1;
     private static readonly int m_heartAnimatorTrigger = Animator.StringToHash("Consume Heart");
+    private bool m_inLobby;
 
     private void SynchroniseHealthPC(Laser p_laser)
     {
+        if(m_inLobby) return;
         if (m_pcHealth.healthElements[0] == null) return;
         if (!m_pcHealth.healthElements[0].gameObject.activeSelf) return;
         if(!p_laser.hit) return;
