@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using CustomMessages;
+using Mirror;
 using Network;
 using UnityEngine;
 
@@ -10,16 +12,24 @@ namespace Synchronizers {
         private enum GameState {
             Menu,
             Lobby,
-            Game
+            Game,
+            EndScreen
         }
+
+        [SerializeField, Range(0f, 60f)] private float m_timeBeforeGoingInEndScene = 2f;
+        
+        [Space]
 
         [SerializeField] [Tooltip("self explicit plz")] private GameObject[] m_objectToDesactiveWhenOutOfMenu = null;
         
         [SerializeField] [Tooltip("self explicit plz")] private GameObject[] m_objectToActiveOnStartGame = null;
         [SerializeField] [Tooltip("self explicit plz")] private GameObject[] m_objectToActiveOnLobby = null;
+        [SerializeField] [Tooltip("self explicit plz")] private GameObject[] m_objectToActiveOnLobbyAfterTimer = null;
+        [SerializeField] [Tooltip("self explicit plz")] private GameObject[] m_objectToActiveOnGameEnd = null;
 
         private GameState m_currentGameState = GameState.Menu;
 
+        private InitiateLobby m_initiateLobby;
         
         [SerializeField] [Tooltip("This will be set active once the player needs to confirm their readyness, so it better have a ReadyButton somewhere")] private GameObject[] m_objectToActiveOnReady = null;
         [SerializeField] [Tooltip("This will be set unactive once the player needs to confirm their readyness")] private GameObject[] m_objectToDesactiveOnReady = null;
@@ -29,6 +39,7 @@ namespace Synchronizers {
             MyNetworkManager.OnReadyToGoIntoTheBowl += GoInGame;
             MyNetworkManager.OnReceiveInitialData += DisappearReadyButton;
             MyNetworkManager.OnReceiveInitiateLobby += ReceiveInitiateLobby;
+            MyNetworkManager.OnReceiveGameEnd += EndGame;
             
             if(m_objectToActiveOnReady == null) {
                 Debug.LogError("Do your job and serialize ! (^∇^) ( ^∇)(　^)(　　)(^　)(∇^ )(^∇^)", this);
@@ -37,8 +48,10 @@ namespace Synchronizers {
 
             foreach (GameObject go in m_objectToActiveOnStartGame) go.SetActive(false);
             foreach (GameObject go in m_objectToActiveOnLobby) go.SetActive(false);
+            foreach (GameObject go in m_objectToActiveOnGameEnd) go.SetActive(false);
             
             foreach (GameObject obj in m_objectToActiveOnReady) obj.SetActive(false);
+            foreach (GameObject go in m_objectToActiveOnLobbyAfterTimer) go.SetActive(false);
         }
 
         private void AppearReadyButton(ReadyToFace p_ready) {
@@ -51,11 +64,41 @@ namespace Synchronizers {
         }
 
         private void GoInGame(ReadyToGoIntoTheBowl p_readyToGoIntoTheBowl) {
-            Transition.a_transitionDone += SetPlayScene;
+            Transition.a_transitionDone += SetGameScene;
             Transition.Instance.StartTransition();
         }
-        
-        public void SetPlayScene() {
+
+        IEnumerator UnlockButton(float p_time) {
+            Debug.Log("Lobby trial start");
+            yield return new WaitForSeconds(p_time);
+            Debug.Log("Lobby trial end ?");
+            if(m_currentGameState != GameState.Lobby) yield break;
+            Debug.Log("Lobby trial definitive end");
+            foreach (GameObject go in m_objectToActiveOnLobbyAfterTimer) go.SetActive(false);
+        }
+
+        private void ReceiveInitiateLobby(InitiateLobby p_initiateLobby) {
+            m_initiateLobby = p_initiateLobby;
+            Transition.a_transitionDone += SetLobbyScene;
+            Transition.Instance.StartTransition();
+        }
+
+        IEnumerator WaitForEndingScreen() {
+            yield return new WaitForSeconds(m_timeBeforeGoingInEndScene);
+            if (m_currentGameState != GameState.Game) yield break;
+            Transition.a_transitionDone += SetEndScene;
+            Transition.Instance.StartTransition();
+        }
+
+        private void EndGame(GameEnd p_message) {
+            StartCoroutine(WaitForEndingScreen());
+        }
+
+        private void SetLobbyScene() => SetNewScene(GameState.Lobby);
+        private void SetGameScene() => SetNewScene(GameState.Game);
+        private void SetEndScene() => SetNewScene(GameState.EndScreen);
+
+        private void SetNewScene(GameState p_currentState) {
             switch (m_currentGameState) {
                 case GameState.Menu: {
                     foreach (GameObject go in m_objectToDesactiveWhenOutOfMenu) go.SetActive(false);
@@ -63,27 +106,41 @@ namespace Synchronizers {
                 }
                 case GameState.Lobby: {
                     foreach (GameObject go in m_objectToActiveOnLobby) go.SetActive(false);
+                    foreach (GameObject go in m_objectToActiveOnLobbyAfterTimer) go.SetActive(false);
                     break;
                 }
                 case GameState.Game:
+                    foreach (GameObject go in m_objectToActiveOnStartGame) go.SetActive(false);
+                    break;
+                case GameState.EndScreen:
+                    foreach (GameObject go in m_objectToActiveOnGameEnd) go.SetActive(false);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
-            foreach (GameObject go in m_objectToActiveOnStartGame) go.SetActive(true);
-            m_currentGameState = GameState.Game;
-        }
+            switch (p_currentState) {
+                case GameState.Menu: {
+                    foreach (GameObject go in m_objectToDesactiveWhenOutOfMenu) go.SetActive(true);
+                    break;
+                }
+                case GameState.Lobby: {
+                    foreach (GameObject go in m_objectToActiveOnLobby) go.SetActive(true);
+                    if (m_initiateLobby.trial) StartCoroutine(UnlockButton(m_initiateLobby.trialTime));
+                    else foreach (GameObject go in m_objectToActiveOnLobbyAfterTimer) go.SetActive(true);
+                    break;
+                }
+                case GameState.Game:
+                    foreach (GameObject go in m_objectToActiveOnStartGame) go.SetActive(true);
+                    break;
+                case GameState.EndScreen:
+                    foreach (GameObject go in m_objectToActiveOnGameEnd) go.SetActive(true);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
 
-        private void SetLobbyScene() {
-            if(m_currentGameState == GameState.Menu)foreach (GameObject go in m_objectToDesactiveWhenOutOfMenu) go.SetActive(false);
-            foreach (GameObject go in m_objectToActiveOnLobby) go.SetActive(true);
-            m_currentGameState = GameState.Lobby;
-        }
-
-        private void ReceiveInitiateLobby(InitiateLobby p_initiateLobby) {
-            Transition.a_transitionDone += SetLobbyScene;
-            Transition.Instance.StartTransition();
+            m_currentGameState = p_currentState;
         }
     }
 }
