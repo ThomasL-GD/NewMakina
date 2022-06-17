@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 5783733579950633028}
   - component: {fileID: 5783733579950633027}
   - component: {fileID: 5783733579950633026}
-  - component: {fileID: 5783733579950633025}
   - component: {fileID: 5783733579950633030}
   - component: {fileID: 2047781738407387244}
   - component: {fileID: 434578376286307432}
@@ -130,6 +129,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 095ff937312d6bc4faafb50d4a30c3c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_realGameHeartParent: {fileID: 0}
+  m_lobbyHeartParent: {fileID: 0}
   m_heartPrefabs: {fileID: 1392772383475821737, guid: be8f4e1bc2d318a4caad43b62a2163ea, type: 3}
   m_UiLives: []
   m_heartDestructionTime: 6
@@ -161,26 +162,6 @@ MonoBehaviour:
   m_undetectedColor: {r: 0, g: 0, b: 0, a: 1}
   m_detectedColor: {r: 1, g: 1, b: 1, a: 1}
   m_prefabDropDownFeedback: {fileID: 5155275930683169883, guid: 652058eb3f88af74797b4974bbae9634, type: 3}
---- !u!114 &5783733579950633025
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5783733579950633034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96217a142d4bb7c4494b81789fe0f461, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_text: {fileID: 0}
-  m_GOToSetActive:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &5783733579950633030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,9 +241,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 952864cd1aaef3d419b5ffc3d9540d11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_timeBeforeGoingInEndScene: 2
   m_objectToDesactiveWhenOutOfMenu: []
   m_objectToActiveOnStartGame: []
   m_objectToActiveOnLobby: []
+  m_objectToActiveOnLobbyAfterTimer: []
+  m_objectToActiveOnGameEnd: []
   m_objectToActiveOnReady:
   - {fileID: 0}
   m_objectToDesactiveOnReady: []
@@ -733,6 +717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5607590a9e7be6645852ebdda8b9e59c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_loadVolumeAugmentation: 0.1
   m_heartBreak:
     audioSource: {fileID: 0}
     canBePlayedSuperposed: 0

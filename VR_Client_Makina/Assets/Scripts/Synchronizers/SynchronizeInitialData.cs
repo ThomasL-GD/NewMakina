@@ -65,7 +65,7 @@ namespace Synchronizers {
         /// <summary/> The function called when the PC player looses Health
         /// <param name="p_healthLost"> the amount of health left (default : 1) </param>
         public void LosePcHealth(int p_healthLost = 1) {
-            if(m_pcHealth <= m_maxPcHealth)m_uiPoint[m_maxPcHealth - m_pcHealth].gameObject.SetActive(true);
+            if(m_pcHealth >= 0)m_uiPoint[m_maxPcHealth - m_pcHealth].gameObject.SetActive(true);
             m_pcHealth -= p_healthLost;
             UpdateHealthText();
         }

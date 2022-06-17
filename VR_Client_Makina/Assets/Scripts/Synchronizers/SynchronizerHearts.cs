@@ -25,8 +25,7 @@ namespace Synchronizers {
         
         private Heart[] m_hearts;
         
-        void Awake()
-        {
+        void Awake() {
             MyNetworkManager.OnReceiveInitialData += ReceiveInitialData;
             MyNetworkManager.OnReadyToGoIntoTheBowl += SetUpUI;
             MyNetworkManager.OnReceiveHeartBreak += ReceiveHeartBreak;
@@ -135,7 +134,7 @@ namespace Synchronizers {
             while (p_heartLineRenderer != null)
             {
                 p_heartLineRenderer.enabled = !p_heartLineRenderer.enabled;
-                if(m_hpInUiAreWorking)m_UiLives[m_livesLeft-1].gameObject.SetActive(!m_UiLives[m_livesLeft-1].gameObject.activeSelf);
+                if(m_hpInUiAreWorking && m_UiLives[m_livesLeft-1].gameObject != null)m_UiLives[m_livesLeft-1].gameObject.SetActive(!m_UiLives[m_livesLeft-1].gameObject.activeSelf);
                 yield return new WaitForSeconds(m_heartLaserFlashPhase);
             }
         }

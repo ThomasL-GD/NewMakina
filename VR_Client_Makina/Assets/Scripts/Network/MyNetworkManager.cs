@@ -1,4 +1,5 @@
 using System.Collections;
+using System.IO;
 using CustomMessages;
 using Mirror;
 using UnityEngine;
@@ -165,6 +166,7 @@ namespace Network {
             singleton = this;
         
             networkAddress = "";
+            ReadTextFile();
 
             StartCoroutine(ForceConnect());
         }
@@ -350,6 +352,22 @@ namespace Network {
         public void CustomConnect() {
             networkAddress = m_localHost ? "localhost" : m_IPadress;
             StartClient();
+        }
+        
+        void ReadTextFile() {
+#if UNITY_EDITOR
+            StreamReader inp_stm = new StreamReader("Assets/StreamingAssets/ip.txt");
+#else
+            StreamReader inp_stm = new StreamReader(Application.dataPath + "/StreamingAssets/ip.txt");
+#endif
+
+            while(!inp_stm.EndOfStream) {
+                string inp_ln = inp_stm.ReadLine( );
+
+                m_IPadress = inp_ln;
+            }
+
+            inp_stm.Close( );  
         }
     }
 
