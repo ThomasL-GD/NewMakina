@@ -7,8 +7,8 @@ using CustomMessages;
 using JetBrains.Annotations;
 
 /// <summary/> The server side manager will handle all of the server side network dealings of the game
-public class ServerManager : MonoBehaviour
-{
+public class ServerManager : MonoBehaviour {
+    
     //Singleton time ! (╬ ಠ益ಠ)
     public static ServerManager singleton { get; private set; }
     
@@ -194,8 +194,7 @@ public class ServerManager : MonoBehaviour
     /// Here we use it to set the phase of the tickrate so that it can't be changed during runtime
     /// We also use it to register the servers handlers / buffers
     /// </summary>
-    private void Start()
-    {
+    private void Start() {
         // making the tick delta constant
         m_tickDelta = 1f / m_tickrate;
         
@@ -676,8 +675,7 @@ public class ServerManager : MonoBehaviour
         m_leureBuffer = p_leureTransform;
     }
     
-    private void OnRestartGame(NetworkConnection arg1, RestartGame p_restartGame)
-    {
+    private void OnRestartGame(NetworkConnection arg1, RestartGame p_restartGame) {
         if(m_vrNetworkConnection != null && m_pcNetworkConnection !=null) {
             EndGame();
             SendReady();
