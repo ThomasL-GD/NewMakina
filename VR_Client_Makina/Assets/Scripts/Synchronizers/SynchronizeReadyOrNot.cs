@@ -3,6 +3,7 @@ using System.Collections;
 using CustomMessages;
 using Mirror;
 using Network;
+using TMPro;
 using UnityEngine;
 
 namespace Synchronizers {
@@ -24,6 +25,7 @@ namespace Synchronizers {
         
         [SerializeField] [Tooltip("self explicit plz")] private GameObject[] m_objectToActiveOnStartGame = null;
         [SerializeField] [Tooltip("self explicit plz")] private GameObject[] m_objectToActiveOnLobby = null;
+        [SerializeField] [Tooltip("self explicit plz")] private GameObject[] m_objectToActiveOnLobbyDuringTimer = null;
         [SerializeField] [Tooltip("self explicit plz")] private GameObject[] m_objectToActiveOnLobbyAfterTimer = null;
         [SerializeField] [Tooltip("self explicit plz")] private GameObject[] m_objectToActiveOnGameEnd = null;
 
@@ -34,6 +36,8 @@ namespace Synchronizers {
         
         [SerializeField] [Tooltip("This will be set active once the player needs to confirm their readyness, so it better have a ReadyButton somewhere")] private GameObject[] m_objectToActiveOnReady = null;
         [SerializeField] [Tooltip("This will be set unactive once the player needs to confirm their readyness")] private GameObject[] m_objectToDesactiveOnReady = null;
+
+        [Space] [SerializeField] private TextMeshPro m_lobbyTimerText = null;
         
         private void Start() {
             MyNetworkManager.OnReadyToFace += AppearReadyButton;
@@ -53,6 +57,7 @@ namespace Synchronizers {
             
             foreach (GameObject obj in m_objectToActiveOnReady) obj.SetActive(false);
             foreach (GameObject go in m_objectToActiveOnLobbyAfterTimer) go.SetActive(false);
+            foreach (GameObject go in m_objectToActiveOnLobbyDuringTimer) go.SetActive(false);
         }
 
         private void AppearReadyButton(ReadyToFace p_ready) {
@@ -76,11 +81,18 @@ namespace Synchronizers {
         }
 
         IEnumerator UnlockButton(float p_time) {
-            Debug.Log("Lobby trial start");
-            yield return new WaitForSeconds(p_time);
-            Debug.Log("Lobby trial end ?");
+            foreach (GameObject go in m_objectToActiveOnLobbyDuringTimer) go.SetActive(true);
+            string textBeginning = m_lobbyTimerText != null ? m_lobbyTimerText.text : "";
+            float elapsedTime = 0f;
+            
+            while (elapsedTime < p_time) {
+                yield return null;
+                elapsedTime += Time.deltaTime;
+                if (m_lobbyTimerText != null) m_lobbyTimerText.text = textBeginning + elapsedTime + "/" + p_time;
+            }
+            
             if(m_currentGameState != GameState.Lobby) yield break;
-            Debug.Log("Lobby trial definitive end");
+            foreach (GameObject go in m_objectToActiveOnLobbyDuringTimer) go.SetActive(false);
             foreach (GameObject go in m_objectToActiveOnLobbyAfterTimer) go.SetActive(true);
         }
 
@@ -116,6 +128,7 @@ namespace Synchronizers {
                 case GameState.Lobby: {
                     foreach (GameObject go in m_objectToActiveOnLobby) go.SetActive(false);
                     foreach (GameObject go in m_objectToActiveOnLobbyAfterTimer) go.SetActive(false);
+                    foreach (GameObject go in m_objectToActiveOnLobbyDuringTimer) go.SetActive(false);
                     break;
                 }
                 case GameState.Game:
