@@ -37,7 +37,7 @@ namespace Tutorial {
 
         #region singleton
         //Singleton time ! 	(˵ ͡° ͜ʖ ͡°˵)
-        public new static TutorialManager singleton { get; private set; }
+        public static TutorialManager singleton { get; private set; }
 
         public float heightThatIsConsideredUnderground1 {
             get => heightThatIsConsideredUnderground;
