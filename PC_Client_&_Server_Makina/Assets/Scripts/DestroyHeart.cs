@@ -14,13 +14,6 @@ public class DestroyHeart : MonoBehaviour
     [SerializeField][Tooltip("the Key the players should press to destroy a heart")] private KeyCode m_destroyKey;
     
     [SerializeField][Tooltip("the range at which the players can break a heart")] private float m_range = 20f;
-
-    [SerializeField] [Tooltip("The strength at which the player will be thrown from a heart being destroyed")]
-    private float m_yeetStrength = 20f;
-
-    [SerializeField] [Tooltip("The strength at which the player will be thrown upwards from a heart being destroyed")]
-    private float m_upYeetStrength = 20f;
-    
     /// <summary/> Checking on the update if the player can break a heart and doing so if he can
     void Update()
     {

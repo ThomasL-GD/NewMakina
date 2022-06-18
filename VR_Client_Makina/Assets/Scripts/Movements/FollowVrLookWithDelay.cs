@@ -1,8 +1,15 @@
+using System;
 using Synchronizers;
 using UnityEngine;
 
 public class FollowVrLookWithDelay : MonoBehaviour {
 
+    [Flags] private enum Axis {
+        X,
+        Y,
+        Z
+    }
+    
     public float m_distanceFromEyes = 50f;
     public float m_smoothTime = 1f;
     private Vector3 m_currentVelocity;

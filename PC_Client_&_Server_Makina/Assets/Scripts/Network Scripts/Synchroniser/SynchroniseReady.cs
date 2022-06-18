@@ -10,7 +10,6 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
     [SerializeField] private GameObject m_readyHeart;
     [SerializeField] private GameObject m_readyStuff;
     [SerializeField] private GameObject m_bowl;
-    [SerializeField][Tooltip("in seconds")] private float m_practiceTime = 120f;
     [SerializeField] private TextMeshProUGUI m_practiceCountdown;
     
     private bool m_practice;
@@ -25,7 +24,7 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
         m_readyStuff.SetActive(true);
         if (p_initiateLobby.trial)
         {
-            StartCoroutine(TrialTimmer());
+            StartCoroutine(TrialTimmer(p_initiateLobby.trialTime));
             return;
         }
         m_readyHeart.SetActive(true);
@@ -36,14 +35,14 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
         m_readyStuff.SetActive(true);
     }
     
-    IEnumerator TrialTimmer()
+    IEnumerator TrialTimmer(float p_time)
     {
         float startTime = Time.time;
         
-        while (Time.time - startTime < m_practiceTime)
+        while (Time.time - startTime < p_time)
         {
             Debug.Log("Hey");
-            m_practiceCountdown.text = $"Practice ends in {Mathf.CeilToInt(m_practiceTime - (Time.time - startTime))} seconds";
+            m_practiceCountdown.text = $"Practice ends in {Mathf.CeilToInt(p_time - (Time.time - startTime))} seconds";
             yield return null;
         }
 

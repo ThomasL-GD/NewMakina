@@ -4,8 +4,8 @@ using Synchronizers;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class SynchonizeLeure : Synchronizer<SynchonizeLeure>
-{
+public class SynchonizeLeure : Synchronizer<SynchonizeLeure> {
+    
     [SerializeField] private GameObject m_leure;
 
     [SerializeField] private VisualEffect m_deathFX;
@@ -27,6 +27,7 @@ public class SynchonizeLeure : Synchronizer<SynchonizeLeure>
     void ReceiveDestroyLeure(DestroyLeure p_destroyLeure) {
         
         m_deathFX.transform.position = m_leure.transform.position;
+        Debug.Log($"CLOUDS ON : {m_leure.transform.position}");
         m_deathFX.SendEvent("StartLeureDeath");
         m_leure.SetActive(false);
         m_leure.transform.position = Vector3.down * 1000f;

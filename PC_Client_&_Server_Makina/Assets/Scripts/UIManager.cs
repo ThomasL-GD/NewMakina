@@ -16,6 +16,8 @@ public class UIManager : Synchronizer<UIManager> {
     [SerializeField] private Transform m_healthParent;
 
     private int m_minimumLobyIndex = 0;
+
+    private InitialData m_initialData;
     
     [Serializable]
     private struct UIElementWithReload {
@@ -55,11 +57,14 @@ public class UIManager : Synchronizer<UIManager> {
             }
 
         ClientManager.OnReceiveInitialData += ReceiveInitialData;
+        ClientManager.OnReceiveReadyToFace += Initialize;
+        ClientManager.OnReceiveReadyToGoIntoTheBowl += Initialize;
         
         ClientManager.OnReceiveLaser += SynchroniseHealthPC;
         ClientManager.OnReceiveHeartBreak += SynchroniseHealthVR;
     }
-    
+
+
     #region Abilities
 
     // LEURE ___________________________________________________________________________________________________________
@@ -71,6 +76,7 @@ public class UIManager : Synchronizer<UIManager> {
     
     private Coroutine m_leureTimerCo;   
     public void SendLeure() {
+        m_leureElement.animator.ResetTrigger(startLeureReloadPropertyId);
         m_leureElement.animator.SetTrigger(startLeureCooldownPropertyId);
     }
     
@@ -148,9 +154,24 @@ public class UIManager : Synchronizer<UIManager> {
 #endif
     
     #region Health
-    private void ReceiveInitialData(InitialData p_message)
+
+    private void Initialize(ReadyToFace p_p_readytoface)
     {
-        m_minimumLobyIndex = p_message.firstLobbyHeartIndex;
+        m_inLobby = true;
+        Initialize();
+    }
+    private void Initialize(ReadyToGoIntoTheBowl p_p_readytowhatever)
+    {
+        m_inLobby = false;
+        Initialize();
+    }
+
+    private void ReceiveInitialData(InitialData p_message) {
+        m_initialData = p_message;
+    }
+    
+    private void Initialize() {
+        m_minimumLobyIndex = m_initialData.firstLobbyHeartIndex;
         
         foreach (RectTransform t in m_vrHealth.healthElements) Destroy(t);
         foreach (RectTransform t in m_pcHealth.healthElements) Destroy(t);
@@ -158,7 +179,7 @@ public class UIManager : Synchronizer<UIManager> {
         m_vrHealthIncrementor = 1;
         m_pcHealthIncrementor = 1;
         
-        int healthAmount = p_message.healthVrPlayer;
+        int healthAmount = m_initialData.healthVrPlayer;
         
         m_vrHealth.healthElements = new RectTransform[healthAmount];
         
@@ -182,11 +203,13 @@ public class UIManager : Synchronizer<UIManager> {
             healthElement.anchorMax = new Vector2(maxX, maxY);
             
             m_vrHealth.healthElements[i] = healthElement;
+            
+            Debug.Log($"NEW VR HEALTH IN UI PLEASE ! {healthElement.parent}",healthElement);
         }
         
         // PC Health
         
-        healthAmount = p_message.healthPcPlayer;
+        healthAmount = m_initialData.healthPcPlayer;
         
         divider = (m_pcHealth.parent.anchorMax.x - m_pcHealth.parent.anchorMin.x - m_pcHealth.parentMargins.x * 2f) / healthAmount;
         m_pcHealth.healthElements = new RectTransform[healthAmount];
@@ -223,9 +246,11 @@ public class UIManager : Synchronizer<UIManager> {
     
     private int m_pcHealthIncrementor = 1;
     private static readonly int m_heartAnimatorTrigger = Animator.StringToHash("Consume Heart");
+    private bool m_inLobby;
 
     private void SynchroniseHealthPC(Laser p_laser)
     {
+        if(m_inLobby) return;
         if (m_pcHealth.healthElements[0] == null) return;
         if (!m_pcHealth.healthElements[0].gameObject.activeSelf) return;
         if(!p_laser.hit) return;

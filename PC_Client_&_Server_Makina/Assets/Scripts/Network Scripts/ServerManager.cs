@@ -7,7 +7,6 @@ using CustomMessages;
 using JetBrains.Annotations;
 
 /// <summary/> The server side manager will handle all of the server side network dealings of the game
-
 public class ServerManager : MonoBehaviour
 {
     //Singleton time ! (╬ ಠ益ಠ)
@@ -232,6 +231,7 @@ public class ServerManager : MonoBehaviour
     private void OnReceiveInitiateLobby(NetworkConnection p_client, InitiateLobby p_mess)
     {
         m_initiateLobbyBuffer = p_mess;
+        m_initiateLobbyBuffer.trialTime = 120f;
     }
 
 
@@ -429,12 +429,13 @@ public class ServerManager : MonoBehaviour
 
     private void EndGame(ClientConnection p_winner = ClientConnection.PcPlayer)
     {
+        m_beaconsPositionsBuffer = new BeaconsPositions();
         m_gameEnded = true;
         
         SendToBothClients( new GameEnd(){winningClient = p_winner});
         
         StopCoroutine(m_spawnInitialBeacons);
-        StopCoroutine(m_spawnBombs);
+        if(m_isUsingBombs)StopCoroutine(m_spawnBombs);
         //Setting up senders
         OnServerTick = null;
     }
@@ -539,13 +540,13 @@ public class ServerManager : MonoBehaviour
             if(!data.isActive)continue;
             
             Vector3 playerPos2D = new Vector3(m_pcTransformBuffer.position.x,0f,m_pcTransformBuffer.position.z);
-            Vector3 beaconPos2D = new Vector3(m_pcTransformBuffer.position.x,0f,m_pcTransformBuffer.position.z);
+            Vector3 beaconPos2D = new Vector3(data.position.x,0f,data.position.z);
             
             bool detected = Vector3.Distance(playerPos2D, beaconPos2D) < m_beaconRange;
 
             Vector3 leurePos2D = new Vector3(m_leureBuffer.position.x, 0f, m_leureBuffer.position.z);
             
-            if (m_isLeureAliveBuffer)detected = detected || Vector3.Distance(m_leureBuffer.position, beaconPos2D) < m_beaconRange;
+            if (m_isLeureAliveBuffer) detected = detected || Vector3.Distance(leurePos2D, beaconPos2D) < m_beaconRange;
 
             if (data.detectingPlayer != detected)
             {
@@ -559,6 +560,7 @@ public class ServerManager : MonoBehaviour
     /// <summary/> the function called to check the winning conditions
     private void CheckHealths()
     {
+
         if (m_gameEnded) return;
         if (m_pcPlayerHealth <= 0) {
             EndGame(ClientConnection.VrPlayer);
@@ -575,7 +577,12 @@ public class ServerManager : MonoBehaviour
     {
         Vector2 horizontalPlayerPosition = new Vector2(m_pcTransformBuffer.position.x, m_pcTransformBuffer.position.z);
         float playerHeight = m_pcTransformBuffer.position.y;
-        for (int i = 0; i < m_heartTransforms.Length; i++)
+        
+        
+        int start = m_inLobby ? m_lobbyHeartIndex : 0;
+        int end = m_inLobby ? m_heartTransforms.Length : m_lobbyHeartIndex;
+        
+        for (int i = start; i < end; i++)
         {
             if(m_heartTransforms[i].localScale == Vector3.zero) continue;
             
@@ -874,7 +881,6 @@ public class ServerManager : MonoBehaviour
 
                     if (hit) {
                         // todo : yeah it's not a feature Blue.. nice try..
-                        if(!m_inLobby)m_pcPlayerHealth--;
                         m_laserBuffer.length = laserCriticalPath.magnitude;
                     }
                     else {
@@ -946,7 +952,6 @@ public class ServerManager : MonoBehaviour
     {
         //TODO bring this to the server loop
         
-        if(!m_inLobby) m_vrPlayerHealth--;
         
         m_heartBreakBuffer = p_heartBreak;
         OnServerTick -= SendHeartBreak;
@@ -1084,6 +1089,9 @@ public class ServerManager : MonoBehaviour
     private void SendLaser()
     {
         SendToBothClients(m_laserBuffer);
+        
+        if(!m_inLobby && m_laserBuffer.hit)m_pcPlayerHealth--;
+        
         OnServerTick -= SendLaser;
     }
 
@@ -1103,6 +1111,7 @@ public class ServerManager : MonoBehaviour
     {
         SendToBothClients(m_heartBreakBuffer);
         OnServerTick -= SendHeartBreak;
+        if(!m_inLobby) m_vrPlayerHealth--;
     }
 
     /// <summary>

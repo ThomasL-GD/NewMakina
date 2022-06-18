@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using CustomMessages;
 using Synchronizers;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.XR;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
@@ -105,35 +103,23 @@ public class UIMinimapManager : MonoBehaviour {
         //m_playerElement.gameObject.SetActive(false);
     }
 
-    private void ReceiveInitialData(InitialData p_initialdata)
-    {
-        Debug.Log("2");
-        m_initialData = p_initialdata;
-    }
+    private void ReceiveInitialData(InitialData p_initialdata) => m_initialData = p_initialdata;
 
-    private void ReceiveGameEnd(GameEnd p_gameEnd) {
-        m_playerElement.gameObject.SetActive(false);
-    }
+    private void ReceiveGameEnd(GameEnd p_gameEnd) => m_playerElement.gameObject.SetActive(false);
 
-    private void PlaceIcons(InitiateLobby p_initiateLobby)
-    {
-        Debug.Log("INITIATE LOBBY -----");
-        PlaceIcons();
-    }
+    private void PlaceIcons(InitiateLobby p_initiateLobby) => PlaceIcons(false);
 
-    /// <summary>Will place every object once the game starts, is called when we receive InitialData</summary>
-    private void PlaceIcons(ReadyToGoIntoTheBowl p_readyForBowl)
-    {
-        PlaceIcons();
-    }
-    private void PlaceIcons() {
+    /// <summary>Will place every object once the game starts, is called when we receive ReadyToGoIntoTheBowl</summary>
+    private void PlaceIcons(ReadyToGoIntoTheBowl p_readyForBowl) => PlaceIcons();
+
+    private void PlaceIcons(bool p_isInRealGame = true) {
         
         #region Annihilation
         foreach (UIBeaconData beaconData in m_beaconDatas) {
             Destroy(beaconData.detectingBeacon.gameObject);
             Destroy(beaconData.undetectingBeacon.gameObject);
         }
-        foreach (UIElementData heartData in m_heartDatas) Destroy(heartData.rectTransform.gameObject); 
+        foreach (UIElementData heartData in m_heartDatas) if(heartData.rectTransform != null) Destroy(heartData.rectTransform.gameObject); 
         foreach (UIElementData elevatorData in m_elevatorDatas) Destroy(elevatorData.rectTransform.gameObject); 
         
         m_beaconDatas = new List<UIBeaconData>();
@@ -165,9 +151,9 @@ public class UIMinimapManager : MonoBehaviour {
 
             m_heartDatas[i] = new UIElementData(){rectTransform = heartRect, originalRatioOnMap = heartRatioOnMap};
             PlaceAnchors(heartRect, heartRatioOnMap, m_vrHeartAnchorRatio);
+            
+            heartRect.gameObject.SetActive(p_isInRealGame ? (i < m_initialData.firstLobbyHeartIndex) : (i >= m_initialData.firstLobbyHeartIndex));
         }
-        
-        Debug.Log($"Total UI HEARTS : {m_heartDatas.Length}");
         
         m_playerElement.gameObject.SetActive(true);
 
@@ -221,7 +207,6 @@ public class UIMinimapManager : MonoBehaviour {
     #region Destroy Heart
     /// <summary>Destroys a UI heart </summary>
     private void DestroyUIHeart(HeartBreak p_heartBreak) {
-        Debug.Log($"HEART DESTROYED : {p_heartBreak.index}");
         StartCoroutine(BlinkHeart(p_heartBreak.index));
     }
 

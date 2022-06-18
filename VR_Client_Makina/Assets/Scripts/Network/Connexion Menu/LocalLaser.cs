@@ -47,7 +47,7 @@ namespace Network.Connexion_Menu {
         // Start is called before the first frame update
         private void Start() {
             MyNetworkManager.OnReceiveInitialData += DestroyMyself;
-            MyNetworkManager.OnReceiveGameEnd += ActiveMe;
+            //MyNetworkManager.OnReceiveGameEnd += ActiveMe;
 
             m_whatDoIHitMask |= m_targetLayers; //adding the targets to the main layer mask so we don't ignore the target layer in case the game designer didn't put them in
         }
@@ -134,8 +134,8 @@ namespace Network.Connexion_Menu {
 
         IEnumerator ShotDownLaser(Vector3 p_startPos, Vector3 p_distance, bool p_isHitting) {
             
-            if (m_laserVFXHandler != null) m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.Shooting, hit = p_isHitting, hitPosition = p_startPos + p_distance, length = p_distance.magnitude, origin = p_startPos}, 0f);
-            SoundManager.a_laser?.Invoke(LaserState.Shooting, p_isHitting);
+            if (m_laserVFXHandler != null) m_laserVFXHandler.m_delegatedAction(new Laser() {laserState = LaserState.Shooting, hit = false, hitPosition = p_startPos + p_distance, length = p_distance.magnitude, origin = p_startPos}, 0f);
+            SoundManager.a_laser?.Invoke(LaserState.Shooting, false);
             
             yield return new WaitForSeconds(m_laserDuration);
 

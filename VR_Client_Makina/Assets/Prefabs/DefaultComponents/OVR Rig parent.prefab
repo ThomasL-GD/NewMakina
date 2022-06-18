@@ -817,9 +817,9 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 20f347798ff7e604e82e2089a98507f3, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -2576,6 +2576,14 @@ PrefabInstance:
     - target: {fileID: 1701524832266796532, guid: 5300e1fb00c98f0439f0cbf7210f56ff, type: 3}
       propertyPath: m_grabInput
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1701524832266796532, guid: 5300e1fb00c98f0439f0cbf7210f56ff, type: 3}
+      propertyPath: m_grabbedItemsPositionInHand.x
+      value: 0.004
+      objectReference: {fileID: 0}
+    - target: {fileID: 1701524832266796532, guid: 5300e1fb00c98f0439f0cbf7210f56ff, type: 3}
+      propertyPath: m_grabbedItemsPositionInHand.z
+      value: 0.034
       objectReference: {fileID: 0}
     - target: {fileID: 1701524832266796533, guid: 5300e1fb00c98f0439f0cbf7210f56ff, type: 3}
       propertyPath: m_localLaser
