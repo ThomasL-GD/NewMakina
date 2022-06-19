@@ -52,7 +52,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -104,6 +104,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5599259314322564628}
     m_Modifications:
+    - target: {fileID: 7870053064114317922, guid: f896b6e5179ca3c4aa7c8189d70b48ba, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8518831239647300535, guid: f896b6e5179ca3c4aa7c8189d70b48ba, type: 3}
       propertyPath: m_Name
       value: O_V_F_Fence2 Variant
