@@ -1201,6 +1201,7 @@ public class ServerManager : MonoBehaviour {
         int index = p_index;
         float ID = p_beaconID;
         BeaconData[] data = m_beaconsPositionsBuffer.data;
+        if (data == null) return null;
         if ( index < data.Length && data[index].beaconID == ID) return index;
 
         for (int i = 0; i < data.Length; i++) if (data[i].beaconID == ID) return i;

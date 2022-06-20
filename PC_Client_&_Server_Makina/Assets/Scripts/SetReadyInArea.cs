@@ -15,12 +15,15 @@ public class SetReadyInArea : MonoBehaviour
     [SerializeField] private HeartVFXHandler m_vfxHandler;
 
     [SerializeField] private GameObject[] m_healthElements;
+
+    private bool quick = false;
     
     // Update is called once per frame
     void Update()
     {
         if (Vector3.Distance(transform.position, SynchronizePlayerPosition.Instance.m_player.position) <= m_range)
         {
+            quick = true;
             m_timer += Time.deltaTime;
 
             m_heartRadiusFeedback.enabled = true;
@@ -42,6 +45,9 @@ public class SetReadyInArea : MonoBehaviour
             }
             return;
         }
+
+        if (!quick) return;
+        quick = false;
         m_vfxHandler.StopAnticipation();
 
         m_heartRadiusFeedback.enabled = false;

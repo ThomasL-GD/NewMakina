@@ -88,7 +88,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -171,7 +171,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -278,7 +278,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -335,14 +335,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3354991661799440242}
-  m_LocalRotation: {x: -0.0008201997, y: -0.9990062, z: 0.020791754, w: 0.03941485}
+  m_LocalRotation: {x: -0, y: -0.99981177, z: 0.019400178, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.03125, y: 0.03125, z: 0.03125}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3442717995865768523}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 177.623, y: 4.522995, z: -179.812}
+  m_LocalEulerAnglesHint: {x: 177.777, y: 0, z: 180}
 --- !u!108 &8904563726755378664
 Light:
   m_ObjectHideFlags: 0
@@ -476,7 +476,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -607,7 +607,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -690,7 +690,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -773,7 +773,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -812,53 +812,61 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3442717995865768523}
     m_Modifications:
+    - target: {fileID: 1904275273434871086, guid: b16c058139fe66f48a4782b8e825ee0d, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1976516481246779964, guid: b16c058139fe66f48a4782b8e825ee0d, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -5491780849873737984, guid: af907c34d6d189546a171c12632fcc4c, type: 3}
     - target: {fileID: 2374436753976816224, guid: b16c058139fe66f48a4782b8e825ee0d, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2374436753976816224, guid: b16c058139fe66f48a4782b8e825ee0d, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.4418738
+      value: 0.80556
       objectReference: {fileID: 0}
     - target: {fileID: 2374436753976816224, guid: b16c058139fe66f48a4782b8e825ee0d, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.62905836
+      value: 0.80556
       objectReference: {fileID: 0}
     - target: {fileID: 2374436753976816224, guid: b16c058139fe66f48a4782b8e825ee0d, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.4418738
+      value: 0.79858464
       objectReference: {fileID: 0}
     - target: {fileID: 2374436753976816224, guid: b16c058139fe66f48a4782b8e825ee0d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.0056502
+      value: 0.013
       objectReference: {fileID: 0}
     - target: {fileID: 2374436753976816224, guid: b16c058139fe66f48a4782b8e825ee0d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.00079003
+      value: 0.013
       objectReference: {fileID: 0}
     - target: {fileID: 2374436753976816224, guid: b16c058139fe66f48a4782b8e825ee0d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.13918
+      value: 0.436
       objectReference: {fileID: 0}
     - target: {fileID: 2374436753976816224, guid: b16c058139fe66f48a4782b8e825ee0d, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2374436753976816224, guid: b16c058139fe66f48a4782b8e825ee0d, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2374436753976816224, guid: b16c058139fe66f48a4782b8e825ee0d, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.72166353
+      value: 0.020802885
       objectReference: {fileID: 0}
     - target: {fileID: 2374436753976816224, guid: b16c058139fe66f48a4782b8e825ee0d, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.692244
+      value: 0.99978364
       objectReference: {fileID: 0}
     - target: {fileID: 2374436753976816224, guid: b16c058139fe66f48a4782b8e825ee0d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -92.384
+      value: -2.384
       objectReference: {fileID: 0}
     - target: {fileID: 2374436753976816224, guid: b16c058139fe66f48a4782b8e825ee0d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -947,6 +955,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 32d6c17c32a3238419cd985ecf074f0a, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 32d6c17c32a3238419cd985ecf074f0a, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 91fccd16381598e4880bdafe89ca5ff7, type: 2}
@@ -1017,6 +1029,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 437f3925081ec5d4bbf1859002dff9d7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 437f3925081ec5d4bbf1859002dff9d7, type: 3}
+      propertyPath: m_DynamicOccludee
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 437f3925081ec5d4bbf1859002dff9d7, type: 3}

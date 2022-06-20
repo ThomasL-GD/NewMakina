@@ -9,7 +9,8 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
 {
     [SerializeField] private GameObject m_readyHeart;
     [SerializeField] private GameObject m_readyStuff;
-    [SerializeField] private GameObject m_bowl;
+    [SerializeField] private GameObject[] m_bowl;
+    [SerializeField] private GameObject[] m_lobby;
     [SerializeField] private TextMeshProUGUI m_practiceCountdown;
     
     private bool m_practice;
@@ -28,7 +29,9 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
             return;
         }
         m_readyHeart.SetActive(true);
-        m_bowl.SetActive(false);
+
+        foreach (GameObject obj in m_bowl) obj.SetActive(false);
+        foreach (GameObject obj in m_lobby) obj.SetActive(true);
     }
 
     private void ReceiveReady(ReadyToFace p_message) {
@@ -57,6 +60,8 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
         NetworkClient.Send(new ReadyToGoIntoTheBowl());
         m_readyHeart.SetActive(false);
         m_readyStuff.SetActive(false);
-        m_bowl.SetActive(true);
+        
+        foreach (GameObject obj in m_bowl) obj.SetActive(true);
+        foreach (GameObject obj in m_lobby) obj.SetActive(false);
     }
 }

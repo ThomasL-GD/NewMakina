@@ -29,9 +29,7 @@ public class SoundManager : Synchronizer<SoundManager> {
     private bool m_isInvisible = false;
     private bool m_isInVrAim = false;
     private bool m_isInBeacon = false;
-
-    [SerializeField] private float m_loadVolumeAugmentation = 0.1f;
-    [Space]
+    
     [SerializeField] private SoundOptions m_inVrLook;
     [SerializeField] private SoundOptions m_inVrAim;
     [SerializeField] private SoundOptions m_staysInvisible;
@@ -70,8 +68,9 @@ public class SoundManager : Synchronizer<SoundManager> {
     }
 
     private void HeartBreakingSounds(HeartConquerStart p_heartconquerstart) {
-        m_isBreakingAHeart = true;
+        if(m_isBreakingAHeart) return;
         StartCoroutine(IsBreakingHeart());
+        m_isBreakingAHeart = true;
     }
 
     IEnumerator IsBreakingHeart() {

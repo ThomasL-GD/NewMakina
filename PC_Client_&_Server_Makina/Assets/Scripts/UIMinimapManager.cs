@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using CustomMessages;
 using Synchronizers;
 using UnityEngine;
+using UnityEngine.UI;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
@@ -28,6 +29,10 @@ public class UIMinimapManager : MonoBehaviour {
     [SerializeField] [Tooltip("The object of the map that should move alongside the player")] private RectTransform m_mapElement = null;
     [SerializeField] [Tooltip("The object of the player's character on UI")] private RectTransform m_playerElement = null;
     [SerializeField] [Tooltip("The object of the minimap's outline if it's a child of the map\nIf not, you can let this field as null")] private RectTransform m_outlineOfTheMinimap = null;
+    
+    [Header("Game&Lobby")]
+    [SerializeField] [Tooltip("The image of the real game map\nIf not serialized, i will find it")] private Sprite m_gameMapImage = null;
+    [SerializeField] [Tooltip("The image of the lobby game map\nWill be hidden during the real game")] private Sprite m_lobbyMapImage = null;
     
     [Header("Vr Head")]
     [SerializeField] [Tooltip("The object of the VR player on UI\nMust be child of the map")] private RectTransform m_vrPlayerElement = null;
@@ -63,9 +68,14 @@ public class UIMinimapManager : MonoBehaviour {
     [SerializeField] [Tooltip("The mask that will show when the player is NOT at the bottom floor")] private RectTransform m_bottomFloorDimmer = null;
     [SerializeField] [Tooltip("The mask that will show when the player is NOT at the middle floor")] private RectTransform m_middleFloorDimmer = null;
     [SerializeField] [Tooltip("The mask that will show when the player is NOT at the top floor")] private RectTransform m_topFloorDimmer = null;
-    
+    [Space]
+    [SerializeField] [Tooltip("The mask that will show when the player is NOT at the down lobby floor")] private RectTransform m_downLobbyDimmer = null;
+    [SerializeField] [Tooltip("The mask that will show when the player is NOT at the up floor")] private RectTransform m_upLobbyDimmer = null;
+    [SerializeField] [Range(-100f, 1000f)] [Tooltip("The height that differentiate the down from the up floor in the lobby")] private float m_heightBetweenLobbyFloors = 12f;
+
 
     private bool m_isInGame = false;
+    private bool m_isInLobby = false;
 
     private InitialData m_initialData;
     
@@ -157,6 +167,19 @@ public class UIMinimapManager : MonoBehaviour {
         
         m_playerElement.gameObject.SetActive(true);
 
+        m_mapElement.GetComponent<Image>().sprite = p_isInRealGame ? m_gameMapImage : m_lobbyMapImage;
+        
+        if(!p_isInRealGame) { //Dimmers not used are hidden
+            if (m_bottomFloorDimmer != null) m_bottomFloorDimmer.gameObject.SetActive(false);
+            if (m_middleFloorDimmer != null) m_middleFloorDimmer.gameObject.SetActive(false);
+            if (m_topFloorDimmer != null) m_topFloorDimmer.gameObject.SetActive(false);
+        }
+        else { //If is in the real game
+            if (m_upLobbyDimmer != null) m_upLobbyDimmer.gameObject.SetActive(false);
+            if (m_downLobbyDimmer != null) m_downLobbyDimmer.gameObject.SetActive(false);
+        }
+
+        m_isInLobby = !p_isInRealGame;
         m_isInGame = true;
     }
     
@@ -245,9 +268,15 @@ public class UIMinimapManager : MonoBehaviour {
         #endregion
 
         #region Floor Dimmers
-            if(m_bottomFloorDimmer != null)m_bottomFloorDimmer.gameObject.SetActive(!(playerPosition.y < m_heightBetweenBottomAndMiddleFloor));
-            if(m_middleFloorDimmer != null)m_middleFloorDimmer.gameObject.SetActive(!(playerPosition.y >= m_heightBetweenBottomAndMiddleFloor && playerPosition.y <= m_heightBetweenMiddleAndTopFloor));
-            if(m_topFloorDimmer != null)m_topFloorDimmer.gameObject.SetActive(!(playerPosition.y > m_heightBetweenMiddleAndTopFloor));
+            if(!m_isInLobby) {
+                if (m_bottomFloorDimmer != null) m_bottomFloorDimmer.gameObject.SetActive(!(playerPosition.y < m_heightBetweenBottomAndMiddleFloor));
+                if (m_middleFloorDimmer != null) m_middleFloorDimmer.gameObject.SetActive(!(playerPosition.y >= m_heightBetweenBottomAndMiddleFloor && playerPosition.y <= m_heightBetweenMiddleAndTopFloor));
+                if (m_topFloorDimmer != null) m_topFloorDimmer.gameObject.SetActive(!(playerPosition.y > m_heightBetweenMiddleAndTopFloor));
+            }
+            else { //If is in lobby
+                if (m_upLobbyDimmer != null) m_upLobbyDimmer.gameObject.SetActive(playerPosition.y < m_heightBetweenLobbyFloors);
+                if (m_downLobbyDimmer != null) m_downLobbyDimmer.gameObject.SetActive(playerPosition.y >= m_heightBetweenLobbyFloors);
+            }
         #endregion
         
         playerPositionRatio = Vector2.one - playerPositionRatio; // We get a more correct player ratio for other elements that will read it
