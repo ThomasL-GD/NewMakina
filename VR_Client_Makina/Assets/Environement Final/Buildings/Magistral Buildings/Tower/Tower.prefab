@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 7496979430958427364}
   - component: {fileID: 5624591969982059593}
   - component: {fileID: 1550782526038764261}
-  - component: {fileID: 1070914019608527598}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Plane (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+  - {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,20 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1070914019608527598
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 379074703091783615}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1076477203859173749
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,7 +92,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8147121506722375246}
-  m_Layer: 0
+  - component: {fileID: 1930625894762006500}
+  m_Layer: 9
   m_Name: Tower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,6 +124,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1930625894762006500
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1076477203859173749}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 7.62, y: 29.94, z: 6.33}
+  m_Center: {x: 0, y: 14.7, z: 0}
 --- !u!1 &1530227414879893988
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,8 +148,7 @@ GameObject:
   - component: {fileID: 365016289183273385}
   - component: {fileID: 8711980854566739788}
   - component: {fileID: 6702749495656397943}
-  - component: {fileID: 1315884791298544901}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -200,7 +198,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+  - {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -222,20 +220,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1315884791298544901
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1530227414879893988}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &565127770816811331
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -246,18 +230,22 @@ PrefabInstance:
     - target: {fileID: 704613650295499475, guid: 1235f1fc34d96b6449f93ec9ed4d1835, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     - target: {fileID: 704613650295499475, guid: 1235f1fc34d96b6449f93ec9ed4d1835, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     - target: {fileID: 704613650295499475, guid: 1235f1fc34d96b6449f93ec9ed4d1835, type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     - target: {fileID: 1353250399585209094, guid: 1235f1fc34d96b6449f93ec9ed4d1835, type: 3}
       propertyPath: m_Name
       value: TowerFloor1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1353250399585209094, guid: 1235f1fc34d96b6449f93ec9ed4d1835, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1353250399585209094, guid: 1235f1fc34d96b6449f93ec9ed4d1835, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -370,21 +358,25 @@ PrefabInstance:
       value: TowerFloor2 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 5515165438833011774, guid: 72b651c6fc535994081297b5f12ee0d8, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5515165438833011774, guid: 72b651c6fc535994081297b5f12ee0d8, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 6307627517390392811, guid: 72b651c6fc535994081297b5f12ee0d8, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     - target: {fileID: 6307627517390392811, guid: 72b651c6fc535994081297b5f12ee0d8, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     - target: {fileID: 6307627517390392811, guid: 72b651c6fc535994081297b5f12ee0d8, type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72b651c6fc535994081297b5f12ee0d8, type: 3}
 --- !u!4 &6853220490488060699 stripped
@@ -402,11 +394,11 @@ PrefabInstance:
     - target: {fileID: 7013173331729158428, guid: ecf724857efd72f41afa865f85de8757, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     - target: {fileID: 7013173331729158428, guid: ecf724857efd72f41afa865f85de8757, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     - target: {fileID: 8149517651659090547, guid: ecf724857efd72f41afa865f85de8757, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -456,6 +448,10 @@ PrefabInstance:
       value: TowerBase
       objectReference: {fileID: 0}
     - target: {fileID: 8814449973742153929, guid: ecf724857efd72f41afa865f85de8757, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8814449973742153929, guid: ecf724857efd72f41afa865f85de8757, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 27
       objectReference: {fileID: 0}
@@ -476,11 +472,11 @@ PrefabInstance:
     - target: {fileID: 7776125314902335, guid: 343f6be408d899d4c97c20634e4cfe2d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     - target: {fileID: 7776125314902335, guid: 343f6be408d899d4c97c20634e4cfe2d, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     - target: {fileID: 1175594005317046864, guid: 343f6be408d899d4c97c20634e4cfe2d, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -528,6 +524,10 @@ PrefabInstance:
     - target: {fileID: 1953256192238160106, guid: 343f6be408d899d4c97c20634e4cfe2d, type: 3}
       propertyPath: m_Name
       value: TowerFloor6 Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 1953256192238160106, guid: 343f6be408d899d4c97c20634e4cfe2d, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1953256192238160106, guid: 343f6be408d899d4c97c20634e4cfe2d, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -596,17 +596,21 @@ PrefabInstance:
       value: TowerFloor5 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 7648102562129152837, guid: f1bd991f969ef1d4c875ec09a199cd0c, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7648102562129152837, guid: f1bd991f969ef1d4c875ec09a199cd0c, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 8152492458313853584, guid: f1bd991f969ef1d4c875ec09a199cd0c, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     - target: {fileID: 8152492458313853584, guid: f1bd991f969ef1d4c875ec09a199cd0c, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1bd991f969ef1d4c875ec09a199cd0c, type: 3}
 --- !u!4 &3498818751951148100 stripped
@@ -624,15 +628,15 @@ PrefabInstance:
     - target: {fileID: 4727964597994591164, guid: b5667bd7c82c72f458728c96622d7053, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     - target: {fileID: 4727964597994591164, guid: b5667bd7c82c72f458728c96622d7053, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     - target: {fileID: 4727964597994591164, guid: b5667bd7c82c72f458728c96622d7053, type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     - target: {fileID: 5896960256680454355, guid: b5667bd7c82c72f458728c96622d7053, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -680,6 +684,10 @@ PrefabInstance:
     - target: {fileID: 6529628681310614121, guid: b5667bd7c82c72f458728c96622d7053, type: 3}
       propertyPath: m_Name
       value: TowerFloor3 Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 6529628681310614121, guid: b5667bd7c82c72f458728c96622d7053, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6529628681310614121, guid: b5667bd7c82c72f458728c96622d7053, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -748,21 +756,25 @@ PrefabInstance:
       value: TowerFloor4 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 1055468411237185462, guid: b561f06158023354ead7d9d9b0dd83b6, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1055468411237185462, guid: b561f06158023354ead7d9d9b0dd83b6, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 1559717295123568227, guid: b561f06158023354ead7d9d9b0dd83b6, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     - target: {fileID: 1559717295123568227, guid: b561f06158023354ead7d9d9b0dd83b6, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     - target: {fileID: 1559717295123568227, guid: b561f06158023354ead7d9d9b0dd83b6, type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: 435760602a0a796458bf52887956003b, type: 2}
+      objectReference: {fileID: 2100000, guid: 10b039243d866a14eb1a90d6eba2078b, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b561f06158023354ead7d9d9b0dd83b6, type: 3}
 --- !u!4 &8295532778001144147 stripped
