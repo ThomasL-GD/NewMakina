@@ -103,6 +103,8 @@ namespace Synchronizers {
         /// <param name="p_index"> the index of the heart to get destroyed </param>
         /// <returns> null </returns>
         IEnumerator BreakMyHeart(int p_index) {
+
+            if (m_hearts[p_index].heartObject == null) yield break;
             
             // Fetching the heart game object
             GameObject heart = m_hearts[p_index].heartObject;
@@ -110,12 +112,12 @@ namespace Synchronizers {
             m_hearts[p_index].heartObject.GetComponent<HeartIdentifier>().Detonate();
             
             // Starting the Coroutine called to make the heart beacon flash
-            Coroutine flash = StartCoroutine(FlashMyHeart(heart.GetComponent<LineRenderer>()));
+            Coroutine flash = m_livesLeft > 0 ? StartCoroutine(FlashMyHeart(heart.GetComponent<LineRenderer>())) : null;
             
             // Waiting for the destruction time
             yield return new WaitForSeconds(m_heartDestructionTime);
             
-            StopCoroutine(flash);
+            if(m_livesLeft > 0)StopCoroutine(flash);
             heart.GetComponent<LineRenderer>().enabled = false;
             if(m_hpInUiAreWorking && m_livesLeft > 0) {
                 m_UiLives[m_livesLeft - 1].gameObject.SetActive(false);

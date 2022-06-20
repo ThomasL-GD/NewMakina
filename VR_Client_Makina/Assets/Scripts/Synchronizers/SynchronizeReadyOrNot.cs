@@ -88,7 +88,7 @@ namespace Synchronizers {
             while (elapsedTime < p_time) {
                 yield return null;
                 elapsedTime += Time.deltaTime;
-                if (m_lobbyTimerText != null) m_lobbyTimerText.text = textBeginning + elapsedTime + "/" + p_time;
+                if (m_lobbyTimerText != null) m_lobbyTimerText.text = textBeginning + Mathf.Round(elapsedTime) + "/" + Mathf.Round(p_time);
             }
             
             if(m_currentGameState != GameState.Lobby) yield break;
@@ -144,6 +144,7 @@ namespace Synchronizers {
             switch (p_currentState) {
                 case GameState.Menu: {
                     foreach (GameObject go in m_objectToDesactiveWhenOutOfMenu) go.SetActive(true);
+                    if(MyNetworkManager.singleton.m_canSend) foreach (GameObject obj in m_objectToActiveOnReady) obj.SetActive(true);
                     break;
                 }
                 case GameState.Lobby: {
