@@ -160,6 +160,7 @@ public class UIManager : Synchronizer<UIManager> {
         m_inLobby = true;
         Initialize();
     }
+
     private void Initialize(ReadyToGoIntoTheBowl p_p_readytowhatever)
     {
         m_inLobby = false;
@@ -171,6 +172,9 @@ public class UIManager : Synchronizer<UIManager> {
     }
     
     private void Initialize() {
+        
+        Debug.Log("Initialize UI");
+        
         m_minimumLobyIndex = m_initialData.firstLobbyHeartIndex;
         
         foreach (RectTransform t in m_vrHealth.healthElements) Destroy(t);

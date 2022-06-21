@@ -97,6 +97,10 @@ public class ClientManager : MonoBehaviour
     /// <summary/> The delegate that will be called each time the client receives a DestroyLeure message
     public delegate void ReadyToGoIntoTheBowlDelegator(ReadyToGoIntoTheBowl p_readyToGoIntoTheBowl);
     public static ReadyToGoIntoTheBowlDelegator OnReceiveReadyToGoIntoTheBowl;
+    
+    /// <summary/> The delegate that will be called each time the client receives a DestroyLeure message
+    public delegate void RestartGameDelegator(RestartGame p_mess);
+    public static RestartGameDelegator OnRestartGame;
         
     /// <summary/> The delegate that will be called each time the client receives a DestroyLeure message
     public delegate void DestoyLeureDelegator(DestroyLeure p_activateBlind);
@@ -167,7 +171,11 @@ public class ClientManager : MonoBehaviour
         NetworkClient.RegisterHandler<HeartConquerStop>(ReceiveHeartConquerStop);
         NetworkClient.RegisterHandler<VrInitialValues>(ReceiveVrInitialValues);
         NetworkClient.RegisterHandler<InitiateLobby>(ReceiveInitiateLobby);
+        NetworkClient.RegisterHandler<RestartGame>(ReceiveRstart);
     }
+
+    private void ReceiveRstart(RestartGame p_mess) => OnRestartGame?.Invoke(p_mess);
+    
 
     private void ReceiveReadyToGoIntoTheBowl(ReadyToGoIntoTheBowl p_readyToGoIntoBowl)=>OnReceiveReadyToGoIntoTheBowl?.Invoke(p_readyToGoIntoBowl);
 

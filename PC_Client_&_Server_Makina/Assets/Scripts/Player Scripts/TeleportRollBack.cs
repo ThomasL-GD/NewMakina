@@ -3,6 +3,7 @@ using CustomMessages;
 using Mirror;
 using Player_Scripts.Reloading;
 using Synchronizers;
+using TMPro;
 using UnityEngine;
 
 public class TeleportRollBack : AbstractMechanic {
@@ -20,6 +21,8 @@ public class TeleportRollBack : AbstractMechanic {
 
     [SerializeField] private float m_yeetForce = 20f;
 
+    [SerializeField] private TextMeshProUGUI m_teleportTutorialText;
+     
     public static Action a_onPlaceTpPoint;
     public static Action a_onTeleportBack;
     
@@ -63,8 +66,6 @@ public class TeleportRollBack : AbstractMechanic {
             if(m_thrown == false) ThrowTP();
         }
     }
-
-    
     
     private void ThrowTP() {
         m_thrown = true;
@@ -83,11 +84,13 @@ public class TeleportRollBack : AbstractMechanic {
     public void SetTPoint(Vector3 p_position) {
         NetworkClient.Send(new DropTp() {tpPosition = p_position});
         UIManager.Instance.PlacedTeleporter();
+        m_teleportTutorialText.text = "Teleport back to placed point";
         m_placed = true;
     }
     
     private void Teleport(Vector3 p_destination)
     {
+        m_teleportTutorialText.text = "Place a teleport point";
         NetworkClient.Send(new Teleported(){teleportDestination = p_destination, teleportOrigin = transform.position});
         UIManager.Instance.TeleportRollback();
         transform.position = p_destination;

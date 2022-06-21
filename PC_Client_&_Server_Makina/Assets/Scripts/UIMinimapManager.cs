@@ -39,6 +39,7 @@ public class UIMinimapManager : MonoBehaviour {
     [SerializeField] [Tooltip("The proportion taken by this element\n0 means nothing and 1 means all the size of the map canvas")] private Vector2 m_vrAnchorRatio = new Vector2(0.2f, 0.2f);
     
     [Header("Elevators")]
+    [SerializeField] [Tooltip("self explkicit deal with it")] private byte m_firstLobbyElevatorIndex = 13;
     [SerializeField] [Tooltip("The prefab of an UI elevator\nMust have a Rect Transform")] private GameObject m_uiElevatorPrefab = null;
     [SerializeField] [Tooltip("The proportion taken by this element\n0 means nothing and 1 means all the size of the map canvas")] private Vector2 m_elevatorsAnchorRatio = new Vector2(0.1f, 0.2f);
     [SerializeField] [Tooltip("If true, the elevators will stick to the edges of the minimap")] private bool m_elevatorsStickToTheEdges = true;
@@ -152,6 +153,8 @@ public class UIMinimapManager : MonoBehaviour {
 
             m_elevatorDatas[i] = new UIElementData() {rectTransform = elevatorRect, originalRatioOnMap = elevatorRatioOnMap};
             PlaceAnchors(elevatorRect, elevatorRatioOnMap, m_elevatorsAnchorRatio);
+            
+            elevatorRect.gameObject.SetActive(p_isInRealGame ? (i < m_firstLobbyElevatorIndex) : (i >= m_firstLobbyElevatorIndex));
         }
         
         //Instantiate and place every heart

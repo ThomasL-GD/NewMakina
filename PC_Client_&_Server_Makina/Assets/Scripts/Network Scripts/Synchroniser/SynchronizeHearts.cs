@@ -14,7 +14,9 @@ namespace Synchronizers
         
         /// <summary/> the gameobjects that will represent the hearts on the pc side
         public GameObject[] m_hearts;
-        
+
+        private InitialData m_initialData;
+
         /// <summary>
         /// Awake is called as soon as the object is set active
         /// </summary>
@@ -34,7 +36,8 @@ namespace Synchronizers
                 Destroy(heart);
             }
 
-            m_hearts = new GameObject[]{ };
+            m_hearts = new GameObject[]{};
+            SynchronizeInitialDataLocal(m_initialData);
         }
 
         /// <summary>
@@ -43,7 +46,7 @@ namespace Synchronizers
         /// <param name="p_heartTransforms"> the network message </param>
         private void SynchronizeInitialDataLocal(InitialData p_initialData)
         {
-            
+            m_initialData = p_initialData;
             // Creating a list to be able to iterate on the hearts
             List<GameObject> hearts = new List<GameObject>();
             

@@ -165,6 +165,7 @@ public class ServerManager : MonoBehaviour {
 
     private Coroutine m_severTick;
     private Coroutine m_spawnInitialBeacons;
+    private bool m_canSpawnBeacons = true;
     private Coroutine m_spawnBombs;
     
     #endregion
@@ -430,6 +431,7 @@ public class ServerManager : MonoBehaviour {
     {
         m_beaconsPositionsBuffer = new BeaconsPositions();
         m_gameEnded = true;
+        m_canSpawnBeacons = false;
         
         SendToBothClients( new GameEnd(){winningClient = p_winner});
         
@@ -453,12 +455,12 @@ public class ServerManager : MonoBehaviour {
     /// <summary/> Spawns the beacons
     IEnumerator BeaconSpawnTimer()
     {
-        if (/*!NetworkServer.active ||*/ m_currentBeaconAmount >= m_maxBeacons) yield break;
+        if (/*!NetworkServer.active ||*/ m_currentBeaconAmount >= m_maxBeacons || !m_canSpawnBeacons) yield break;
         
         yield return new WaitForSeconds(m_beaconRespawnTime);
 
         
-        if (/*!NetworkServer.active ||*/ m_currentBeaconAmount >= m_maxBeacons) yield break;
+        if (/*!NetworkServer.active ||*/ m_currentBeaconAmount >= m_maxBeacons || !m_canSpawnBeacons) yield break;
 
         SpawnBeacon();
         
@@ -675,10 +677,16 @@ public class ServerManager : MonoBehaviour {
         m_leureBuffer = p_leureTransform;
     }
     
-    private void OnRestartGame(NetworkConnection arg1, RestartGame p_restartGame) {
+    private void OnRestartGame(NetworkConnection p_connection, RestartGame p_restartGame) {
         if(m_vrNetworkConnection != null && m_pcNetworkConnection !=null) {
-            EndGame();
-            SendReady();
+            
+            if (p_connection == m_vrNetworkConnection)
+            {
+                m_vrReadyToBowlBuffer = true;
+                m_pcNetworkConnection.Send(new RestartGame());
+            }
+            
+            m_canSpawnBeacons = true;
         }
     }
 
@@ -921,7 +929,7 @@ public class ServerManager : MonoBehaviour {
             m_laserBuffer.origin = startingPoint;
             m_laserBuffer.rotation = m_vrTransformBuffer.rotationRightHand;
             //TODO : Next line ain't clean...
-            m_laserBuffer.hitPosition = hit ? /*direction.normalized * rayHit.distance*/ rayHit.point : hitSmth ? rayHit.point: direction.normalized * 500f;
+            m_laserBuffer.hitPosition = hit ? /*direction.normalized * rayHit.distance*/ rayHit.point : hitSmth ? rayHit.point : (startingPoint + direction.normalized * 500f);
             m_laserBuffer.hit = hit;
         }
         //preparing to send the message

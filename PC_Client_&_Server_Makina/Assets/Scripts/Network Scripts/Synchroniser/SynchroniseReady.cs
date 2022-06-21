@@ -9,16 +9,28 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
 {
     [SerializeField] private GameObject m_readyHeart;
     [SerializeField] private GameObject m_readyStuff;
+    [SerializeField] private GameObject m_restartStuff;
     [SerializeField] private GameObject[] m_bowl;
     [SerializeField] private GameObject[] m_lobby;
     [SerializeField] private TextMeshProUGUI m_practiceCountdown;
+    [SerializeField] private Transform m_player;
     
-    private bool m_practice;
+    private Vector3 m_initialPos;
+
     private void Awake()
     {
-        ClientManager.OnReceiveReadyToFace += ReceiveReady;
+        m_initialPos = m_player.position;
         ClientManager.OnReceiveInitiateLobby += ReceiveInitiateLobby;
+        ClientManager.OnRestartGame += ReceiveRestartGame;
     }
+
+    private void ReceiveRestartGame(RestartGame p_mess)
+    {
+        m_player.position = m_initialPos;
+        m_restartStuff.SetActive(true);
+    }
+    
+    
 
     private void ReceiveInitiateLobby(InitiateLobby p_initiateLobby)
     {
@@ -34,12 +46,10 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
         foreach (GameObject obj in m_lobby) obj.SetActive(true);
     }
 
-    private void ReceiveReady(ReadyToFace p_message) {
-        m_readyStuff.SetActive(true);
-    }
-    
     IEnumerator TrialTimmer(float p_time)
     {
+        Debug.LogError("Trial Timer Started");
+        m_practiceCountdown.gameObject.SetActive(true);
         float startTime = Time.time;
         
         while (Time.time - startTime < p_time)
@@ -50,6 +60,7 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
         }
 
         m_practiceCountdown.text = "";
+        m_practiceCountdown.gameObject.SetActive(false);
         m_readyHeart.SetActive(true);
     }
     

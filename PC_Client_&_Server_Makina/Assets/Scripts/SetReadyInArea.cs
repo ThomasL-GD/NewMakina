@@ -31,8 +31,8 @@ public class SetReadyInArea : MonoBehaviour
             string text = "x,y";
             text = text.Replace('x',timer[0]);
             char car = timer.Length > 3 ? timer[2] : '0';
-            text = text.Replace('y',car);
-        
+            text = text.Replace('y', car);
+            
 
             m_heartRadiusFeedback.text = $"Setting Ready : {text}/{m_maxHeartTime}";
             m_vfxHandler.StartAnticipation(m_maxHeartTime);
