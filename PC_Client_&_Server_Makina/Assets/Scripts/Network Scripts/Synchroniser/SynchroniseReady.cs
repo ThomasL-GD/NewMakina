@@ -9,7 +9,7 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
 {
     [SerializeField] private GameObject m_readyHeart;
     [SerializeField] private GameObject m_readyStuff;
-    [SerializeField] private GameObject m_restartStuff;
+    [SerializeField] private GameObject[] m_restartStuff;
     [SerializeField] private GameObject[] m_bowl;
     [SerializeField] private GameObject[] m_lobby;
     [SerializeField] private TextMeshProUGUI m_practiceCountdown;
@@ -27,7 +27,7 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
     private void ReceiveRestartGame(RestartGame p_mess)
     {
         m_player.position = m_initialPos;
-        m_restartStuff.SetActive(true);
+        foreach (var go in m_restartStuff) go.SetActive(true);
     }
     
     
