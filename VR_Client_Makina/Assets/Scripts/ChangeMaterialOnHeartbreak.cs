@@ -13,10 +13,14 @@ public class ChangeMaterialOnHeartbreak : MonoBehaviour {
     void Start() {
         MyNetworkManager.OnReceiveHeartBreak += Change;
         MyNetworkManager.OnReceiveInitialData += Reset;
+        MyNetworkManager.OnReadyToGoIntoTheBowl += Reset;
         m_baseMaterial = GetComponent<MeshRenderer>().materials;
     }
 
-    private void Reset(InitialData p_initialData) {
+    private void Reset(ReadyToGoIntoTheBowl p_p_ready) => Reset();
+    private void Reset(InitialData p_initialData) => Reset();
+
+    private void Reset() {
         GetComponent<MeshRenderer>().materials = m_baseMaterial;
         m_isAlreadyChanged = false;
     }

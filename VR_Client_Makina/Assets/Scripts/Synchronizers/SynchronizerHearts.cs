@@ -13,6 +13,7 @@ namespace Synchronizers {
         [SerializeField] private Transform[] m_UiLives;
         private byte m_livesLeft = 0;
         private bool m_hpInUiAreWorking = false;
+        private bool m_hasDestroyedEverything = false;
         
         [SerializeField] private float m_heartDestructionTime = 6f;
         [SerializeField] private float m_heartLaserFlashPhase = 0.5f;
@@ -27,12 +28,18 @@ namespace Synchronizers {
         
         void Awake() {
             MyNetworkManager.OnReceiveInitialData += ReceiveInitialData;
-            MyNetworkManager.OnReadyToGoIntoTheBowl += SetUpUI;
+            MyNetworkManager.OnReadyToGoIntoTheBowl += ReceiveReadyToGoIntoTheBowl;
             MyNetworkManager.OnReceiveHeartBreak += ReceiveHeartBreak;
             MyNetworkManager.OnReceiveGameEnd += Reset;
         }
 
-        private void SetUpUI(ReadyToGoIntoTheBowl p_p_ready) => SetUpUI();
+        private void ReceiveReadyToGoIntoTheBowl(ReadyToGoIntoTheBowl p_p_ready) {
+            if (m_hasDestroyedEverything) {
+                CreateHearts();
+                m_hasDestroyedEverything = false;
+            }
+            SetUpUI();
+        }
 
         /// <summary>Destroy every heart to be ready to launch another game </summary>
         /// <param name="p_gameend">The message sent by the server</param>
@@ -42,6 +49,8 @@ namespace Synchronizers {
             foreach (Heart heart in m_hearts) {
                 Destroy(heart.heartObject);
             }
+
+            m_hasDestroyedEverything = true;
         }
 
         /// <summary/> The function called when the heart heartPositions are updated

@@ -10,8 +10,15 @@ public class ActivateFireworkOnWin : MonoBehaviour
     [SerializeField] private GameObject m_firework; 
 
     // Start is called before the first frame update
-    void Awake() => MyNetworkManager.OnReceiveGameEnd += OnReceiveGameEnd;
-    
+    void Awake() {
+        MyNetworkManager.OnReceiveGameEnd += OnReceiveGameEnd;
+        MyNetworkManager.OnReadyToGoIntoTheBowl += Desactive;
+    }
+
+    private void Desactive(ReadyToGoIntoTheBowl p_p_ready) {
+        m_firework.SetActive(false);
+    }
+
 
     // Update is called once per frame
     void OnReceiveGameEnd(GameEnd p_mess)
