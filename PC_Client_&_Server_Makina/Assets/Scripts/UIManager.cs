@@ -62,6 +62,14 @@ public class UIManager : Synchronizer<UIManager> {
         
         ClientManager.OnReceiveLaser += SynchroniseHealthPC;
         ClientManager.OnReceiveHeartBreak += SynchroniseHealthVR;
+
+        ClientManager.OnRestartGame += RestartReset;
+    }
+
+    private void RestartReset(RestartGame p_mess)
+    {
+        foreach (var vari in m_vrHealth.healthElements) Destroy(vari.gameObject);
+        foreach (var vari in m_pcHealth.healthElements) Destroy(vari.gameObject);
     }
 
 

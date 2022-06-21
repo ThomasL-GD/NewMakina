@@ -63,21 +63,20 @@ public class CreateLeure : AbstractMechanic
         UIManager.Instance.SendLeure();
         
         yield return new WaitForSeconds(m_leureLifeTime);
-        UIManager.Instance.StartLeureCooldown();
 
-        Debug.Log("Decoy natural death");
         DestroyLeure();
     }
 
     private void DestroyLeure(DestroyLeure p_message)
     {
-        Debug.Log("Decoy network death");
         DestroyLeure(false);
     }
     
     private void DestroyLeure(bool p_mustSendNetworkMessage = true)
     {
         if(m_killLeureCoroutine != null)StopCoroutine(m_killLeureCoroutine);
+        
+        UIManager.Instance.StartLeureCooldown();
         
         Destroy(m_leure);
         Debug.Log("Decoy death");
