@@ -18,7 +18,7 @@ namespace Tutorial {
         private static readonly int Grip = Animator.StringToHash("Grip");
 
         // Start is called before the first frame update
-        void Start() {
+        void OnEnable() {
             m_animator = GetComponent<Animator>();
             m_coroutine = StartCoroutine(LoopAnim());
         }
@@ -36,7 +36,12 @@ namespace Tutorial {
 
         private void OnDestroy() {
             m_mustRun = false;
-            StopCoroutine(m_coroutine);
+            if(m_coroutine != null)StopCoroutine(m_coroutine);
+        }
+
+        private void OnDisable() {
+            m_mustRun = false;
+            if(m_coroutine != null)StopCoroutine(m_coroutine);
         }
     }
 }

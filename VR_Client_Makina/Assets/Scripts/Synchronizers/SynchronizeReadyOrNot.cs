@@ -58,6 +58,8 @@ namespace Synchronizers {
             foreach (GameObject obj in m_objectToActiveOnReady) obj.SetActive(false);
             foreach (GameObject go in m_objectToActiveOnLobbyAfterTimer) go.SetActive(false);
             foreach (GameObject go in m_objectToActiveOnLobbyDuringTimer) go.SetActive(false);
+            
+            foreach (GameObject go in m_objectToDesactiveWhenOutOfMenu) go.SetActive(true);
         }
 
         private void AppearReadyButton(ReadyToFace p_ready) {

@@ -132,7 +132,12 @@ MonoBehaviour:
   m_realGameHeartParent: {fileID: 0}
   m_lobbyHeartParent: {fileID: 0}
   m_heartPrefabs: {fileID: 1392772383475821737, guid: be8f4e1bc2d318a4caad43b62a2163ea, type: 3}
-  m_UiLives: []
+  m_UiLives:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   m_heartDestructionTime: 6
   m_heartLaserFlashPhase: 0.5
 --- !u!114 &5783733579950633026
@@ -152,7 +157,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  m_stickToSpawnPosition: 0
+  m_stickToSpawnPosition: 1
   m_maxSlotsLoading: 1
   m_dropDown: 0
   m_prefabBeaconAmmo: {fileID: 6606253773114217689, guid: 1828515427f5cff448da50184b7adf33, type: 3}
@@ -175,7 +180,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_showHealthTime: 3
-  m_uiPoint: []
+  m_uiPoint:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &2047781738407387244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,6 +239,10 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &1469819181140471706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,14 +256,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_timeBeforeGoingInEndScene: 2
-  m_objectToDesactiveWhenOutOfMenu: []
-  m_objectToActiveOnStartGame: []
-  m_objectToActiveOnLobby: []
-  m_objectToActiveOnLobbyAfterTimer: []
-  m_objectToActiveOnGameEnd: []
+  m_objectToDesactiveWhenOutOfMenu:
+  - {fileID: 0}
+  - {fileID: 0}
+  m_objectToActiveOnStartGame:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  m_objectToActiveOnLobby:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  m_objectToActiveOnLobbyDuringTimer:
+  - {fileID: 0}
+  m_objectToActiveOnLobbyAfterTimer:
+  - {fileID: 0}
+  m_objectToActiveOnGameEnd:
+  - {fileID: 0}
   m_objectToActiveOnReady:
   - {fileID: 0}
-  m_objectToDesactiveOnReady: []
+  m_objectToDesactiveOnReady:
+  - {fileID: 0}
+  m_lobbyTimerText: {fileID: 0}
 --- !u!114 &1661527278798300204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -717,7 +758,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5607590a9e7be6645852ebdda8b9e59c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_loadVolumeAugmentation: 0.1
+  m_loadVolumeAugmentation: 0.15
   m_heartBreak:
     audioSource: {fileID: 0}
     canBePlayedSuperposed: 0
@@ -738,7 +779,7 @@ MonoBehaviour:
     canBePlayedSuperposed: 0
   m_beaconGetsActive:
     audioSource: {fileID: 0}
-    canBePlayedSuperposed: 0
+    canBePlayedSuperposed: 1
   m_beaconHitGround:
     audioSource: {fileID: 0}
-    canBePlayedSuperposed: 0
+    canBePlayedSuperposed: 1
