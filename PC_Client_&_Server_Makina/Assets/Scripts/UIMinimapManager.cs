@@ -277,8 +277,8 @@ public class UIMinimapManager : MonoBehaviour {
                 if (m_topFloorDimmer != null) m_topFloorDimmer.gameObject.SetActive(!(playerPosition.y > m_heightBetweenMiddleAndTopFloor));
             }
             else { //If is in lobby
-                if (m_upLobbyDimmer != null) m_upLobbyDimmer.gameObject.SetActive(playerPosition.y < m_heightBetweenLobbyFloors);
-                if (m_downLobbyDimmer != null) m_downLobbyDimmer.gameObject.SetActive(playerPosition.y >= m_heightBetweenLobbyFloors);
+                if (m_upLobbyDimmer != null) m_upLobbyDimmer.gameObject.SetActive(!(playerPosition.y < m_heightBetweenLobbyFloors));
+                if (m_downLobbyDimmer != null) m_downLobbyDimmer.gameObject.SetActive(!(playerPosition.y >= m_heightBetweenLobbyFloors));
             }
         #endregion
         
