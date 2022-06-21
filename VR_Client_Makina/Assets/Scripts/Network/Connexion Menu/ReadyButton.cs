@@ -23,11 +23,19 @@ namespace Network.Connexion_Menu {
 #endif
             m_waitForOtherToBeReadyGameObject.SetActive(false);
             foreach (GameObject goToDepop in m_gosToDepopOnShot) goToDepop.SetActive(true);
+
+            if (m_messageToSend == ReadyType.RestartGame) MyNetworkManager.OnReceiveGameEnd += Reset;
+        }
+
+        private void Reset(GameEnd p_p_gameend) {
+            m_waitForOtherToBeReadyGameObject.SetActive(false);
+            foreach (GameObject goToDepop in m_gosToDepopOnShot) goToDepop.SetActive(true);
         }
 
         public override void OnBeingActivated() {
             m_waitForOtherToBeReadyGameObject.SetActive(true);
             foreach (GameObject goToDepop in m_gosToDepopOnShot) goToDepop.SetActive(false);
+            MyNetworkManager.OnReceiveInitialData -= EraseFeedback;
             MyNetworkManager.OnReceiveInitialData += EraseFeedback;
             switch (m_messageToSend) {
                 case ReadyType.ReadyToFace:

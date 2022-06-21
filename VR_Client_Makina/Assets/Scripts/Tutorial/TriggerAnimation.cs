@@ -20,6 +20,7 @@ namespace Tutorial {
         // Start is called before the first frame update
         void OnEnable() {
             m_animator = GetComponent<Animator>();
+            m_mustRun = true;
             m_coroutine = StartCoroutine(LoopAnim());
         }
 
