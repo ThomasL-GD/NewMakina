@@ -177,7 +177,10 @@ public class ClientManager : MonoBehaviour
     private void ReceiveRstart(RestartGame p_mess) => OnRestartGame?.Invoke(p_mess);
     
 
-    private void ReceiveReadyToGoIntoTheBowl(ReadyToGoIntoTheBowl p_readyToGoIntoBowl)=>OnReceiveReadyToGoIntoTheBowl?.Invoke(p_readyToGoIntoBowl);
+    private void ReceiveReadyToGoIntoTheBowl(ReadyToGoIntoTheBowl p_readyToGoIntoBowl) {
+        OnReceiveReadyToGoIntoTheBowl?.Invoke(p_readyToGoIntoBowl);
+        m_isInGame = true;
+    }
 
     private void ReceiveInitiateLobby(InitiateLobby p_initiateLobby)
     {

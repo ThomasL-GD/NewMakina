@@ -26,11 +26,11 @@ namespace Tutorial {
         IEnumerator LoopAnim() {
             float elapsedTime = 0f;
             while (m_mustRun) {
-                yield return new WaitForFixedUpdate();
-                elapsedTime += Time.fixedDeltaTime;
-
                 if (m_animateTrigger)m_animator.SetFloat(Trigger, m_triggerPosition.Evaluate(elapsedTime));
                 if (m_animateGrip)m_animator.SetFloat(Grip, m_triggerPosition.Evaluate(elapsedTime));
+                
+                yield return new WaitForFixedUpdate();
+                elapsedTime += Time.fixedDeltaTime;
             }
         }
 
