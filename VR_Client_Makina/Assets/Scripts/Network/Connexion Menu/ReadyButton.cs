@@ -8,7 +8,8 @@ namespace Network.Connexion_Menu {
 
         private enum ReadyType {
             ReadyToFace,
-            ReadyToGoInTheBowl
+            ReadyToGoInTheBowl,
+            RestartGame
         }
 
         [SerializeField] private GameObject m_waitForOtherToBeReadyGameObject = null;
@@ -34,6 +35,9 @@ namespace Network.Connexion_Menu {
                     break;
                 case ReadyType.ReadyToGoInTheBowl:
                     MyNetworkManager.singleton.SendVrData(new ReadyToGoIntoTheBowl(){});
+                    break;
+                case ReadyType.RestartGame:
+                    MyNetworkManager.singleton.SendVrData(new RestartGame(){});
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
