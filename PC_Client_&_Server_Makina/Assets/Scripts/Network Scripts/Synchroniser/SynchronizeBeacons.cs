@@ -70,13 +70,12 @@ namespace Synchronizers {
 
         private void Reset(GameEnd p_gameend) => Reset();
         
-        /// <summary>Will destroy all the beacons to be ready to launch another game </summary>
+        /// <summary/> Will destroy all the beacons to be ready to launch another game
         private void Reset()
         {
-            foreach (Beacons beacon in m_beacons) {
-                Destroy(beacon.beaconPrefabInstance);
-            }
-
+            Debug.Log("Beacons -- Cleared");
+            foreach (Beacons beacon in m_beacons) Destroy(beacon.beaconPrefabInstance);
+            
             m_beaconBitMaskDetected = 0b00000000000;
             
             Shader.SetGlobalFloat(m_beaconBitMaskShaderID,0b00000000000);
