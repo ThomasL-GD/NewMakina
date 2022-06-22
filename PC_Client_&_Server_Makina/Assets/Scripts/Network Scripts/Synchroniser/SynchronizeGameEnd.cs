@@ -21,6 +21,7 @@ public class SynchronizeGameEnd : Synchronizer<SynchronizeGameEnd>
         ClientManager.OnReceiveGameEnd += GameEnd;
         ClientManager.OnReceiveReadyToFace += Prepare;
         ClientManager.OnReceiveReadyToGoIntoTheBowl += Prepare;
+        ClientManager.OnRestartGame += Prepare;
     }
 
     private void Start()
@@ -28,8 +29,9 @@ public class SynchronizeGameEnd : Synchronizer<SynchronizeGameEnd>
         m_initialPlayerPosition = SynchronizePlayerPosition.Instance.m_player.position;
     }
     
-    private void Prepare(ReadyToFace pReadyToFace) => Prepare();
-    private void Prepare(ReadyToGoIntoTheBowl pReadyToFace) => Prepare();
+    private void Prepare(RestartGame p_mess) => Prepare();
+    private void Prepare(ReadyToFace p_mess) => Prepare();
+    private void Prepare(ReadyToGoIntoTheBowl p_mess) => Prepare();
     
     private void Prepare()
     {

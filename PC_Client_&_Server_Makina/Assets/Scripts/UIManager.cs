@@ -98,6 +98,7 @@ public class UIManager : Synchronizer<UIManager> {
         int counter = 0;
         int startValue = m_leureElement.timerStartValue;
         m_leureElement.timer.text = startValue.ToString();
+        
         while (counter != startValue)
         {
             yield return new WaitForSeconds(1f);
