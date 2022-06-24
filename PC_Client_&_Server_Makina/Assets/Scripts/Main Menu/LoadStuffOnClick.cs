@@ -20,12 +20,14 @@ public class LoadStuffOnClick : MonoBehaviour
     [SerializeField] private bool m_practice;
 
     [SerializeField] private GameObject m_spotLight;
+    [SerializeField] private GameObject m_prompt;
 
     [SerializeField] private TextMeshPro m_text;
     
     private static bool clicked = false;
     private bool hasClicked = false;
     private bool dontUse = false;
+    private bool temp = false;
 
     private void Awake()
     {
@@ -60,6 +62,13 @@ public class LoadStuffOnClick : MonoBehaviour
     // Update is called once per frame
     void OnMouseDown()
     {
+        if (!temp && !m_practice)
+        {
+            m_prompt.SetActive(true);
+            temp = true;
+            return;
+        }
+
         if (clicked) return;
 
         m_text.text = "waiting for VR player";

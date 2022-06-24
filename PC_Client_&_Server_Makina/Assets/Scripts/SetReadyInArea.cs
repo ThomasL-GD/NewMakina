@@ -17,7 +17,8 @@ public class SetReadyInArea : MonoBehaviour
     [SerializeField] private GameObject[] m_healthElements;
 
     private bool quick = false;
-    
+    [SerializeField] private GameObject m_waitingtext;
+
     // Update is called once per frame
     void Update()
     {
@@ -38,6 +39,8 @@ public class SetReadyInArea : MonoBehaviour
             m_vfxHandler.StartAnticipation(m_maxHeartTime);
             if (m_timer > m_maxHeartTime)
             {
+                if(m_waitingtext != null) m_waitingtext.SetActive(false);
+                
                 NetworkClient.Send(new ReadyToGoIntoTheBowl());
                 m_heartRadiusFeedback.enabled = false;
                 foreach (var healthElements in m_healthElements) healthElements.SetActive(true);

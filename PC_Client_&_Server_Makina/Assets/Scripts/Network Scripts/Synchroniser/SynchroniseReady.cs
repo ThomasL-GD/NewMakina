@@ -14,6 +14,7 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
     [SerializeField] private GameObject[] m_lobby;
     [SerializeField] private TextMeshProUGUI m_practiceCountdown;
     [SerializeField] private Transform m_player;
+    [SerializeField] private GameObject m_waitingtext;
     
     private Vector3 m_initialPos;
 
@@ -34,6 +35,7 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
 
     private void ReceiveInitiateLobby(InitiateLobby p_initiateLobby)
     {
+        m_practiceCountdown.gameObject.SetActive(false);
         m_readyStuff.SetActive(true);
         if (p_initiateLobby.trial)
         {
@@ -59,8 +61,7 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
             yield return null;
         }
 
-        m_practiceCountdown.text = "";
-        m_practiceCountdown.gameObject.SetActive(false);
+        m_practiceCountdown.text = "Go to the center !";
         m_readyHeart.SetActive(true);
     }
     
@@ -68,9 +69,11 @@ public class SynchroniseReady : Synchronizer<SynchroniseReady>
     public void StartReady()
     {
         Debug.Log("8");
+        m_waitingtext.SetActive(false);
         NetworkClient.Send(new ReadyToGoIntoTheBowl());
         m_readyHeart.SetActive(false);
         m_readyStuff.SetActive(false);
+        m_practiceCountdown.gameObject.SetActive(false);
         
         foreach (GameObject obj in m_bowl) obj.SetActive(true);
         foreach (GameObject obj in m_lobby) obj.SetActive(false);

@@ -67,6 +67,7 @@ namespace Synchronizers {
             if (m_elapsedChargingTime == 0f) {
                 m_volume.weight = 0f;
                 m_targetIntensity = 0f;
+                SoundManager.Instance.VrAim(false);
                 return;
             }
             Vector3 startingPoint = m_rightHand.position;

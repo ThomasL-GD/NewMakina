@@ -69,8 +69,8 @@ public class SoundManager : Synchronizer<SoundManager> {
 
     private void HeartBreakingSounds(HeartConquerStart p_heartconquerstart) {
         if(m_isBreakingAHeart) return;
-        StartCoroutine(IsBreakingHeart());
         m_isBreakingAHeart = true;
+        StartCoroutine(IsBreakingHeart());
     }
 
     IEnumerator IsBreakingHeart() {
